@@ -121,6 +121,7 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .rain{stroke:rgba(200,220,255,.55);stroke-width:1.2;animation:rain .7s linear infinite}@keyframes rain{from{transform:translateY(-40px)}to{transform:translateY(60px)}}
 .bfly{animation:bfly 9s ease-in-out infinite alternate}@keyframes bfly{0%{transform:translate(0,0)}33%{transform:translate(40px,-30px)}66%{transform:translate(-20px,-60px)}100%{transform:translate(30px,-10px)}}
 .bw{transform-box:fill-box;transform-origin:center;animation:bw .25s ease-in-out infinite alternate}@keyframes bw{to{transform:scaleX(.3)}}
+.frest{opacity:.55;transform:rotate(-8deg);animation:frest 3s ease-in-out infinite alternate}@keyframes frest{to{transform:translate(4px,1px) rotate(-4deg)}}
 .fj{animation:fj 7s ease-in-out infinite}@keyframes fj{0%,78%{transform:translate(0,4px) rotate(-35deg);opacity:0}80%{transform:translate(0,0) rotate(-40deg);opacity:1}88%{transform:translate(calc(var(--dx)*.5),-26px) rotate(0deg);opacity:1}96%{transform:translate(var(--dx),0) rotate(40deg);opacity:1}100%{transform:translate(var(--dx),4px) rotate(45deg);opacity:0}}
 .fsplash{animation:fspl 7s linear infinite;transform-box:fill-box;transform-origin:center}@keyframes fspl{0%,79%{opacity:0;transform:scale(.3)}81%{opacity:1;transform:scale(.5)}86%{opacity:0;transform:scale(2)}100%{opacity:0}}
 .spinfx{position:absolute;inset:0;z-index:9;display:none;cursor:pointer}.spinfx.on{display:block}.spinfx.out{opacity:0;transition:opacity .35s}
@@ -527,6 +528,9 @@ const TOOLS={
   sag:{name:'Sag',price:20,for:'stubbe',desc:'Fjerner døde stubber og trær.'},
   krukke:{name:'Vannkrukke',price:10,for:'stov',desc:'Vasker bort sand og støv fra fliser og fontener.'},
 };
+const TIERS={rive:[['Rive',15],['Stålrive',45],['Ljå',110]],spade:[['Spade',25],['Hakke',70],['Trillebår',160]],sag:[['Sag',20],['Øks',60],['Tømmersag',140]],krukke:[['Vannkrukke',10],['Bøtte',35],['Messingkanne',90]]};
+const tLvl=k=>S.tools[k]===true?1:(+S.tools[k]||0);
+const SIZE=['','liten','middels','stor'];
 const JUNKNAME={stein:'Steinrester',ugress:'Ugress',stubbe:'Død stubbe',stov:'Sand og støv'};
 const DECOR={
   lykt:{name:'Lyktestolpe',price:20,desc:'Lyser opp hagen om natten.'},
@@ -556,14 +560,20 @@ Object.assign(DECOR,{
 });
 Object.values(DECOR).forEach(d=>{ if(!d.cat) d.cat='pynt'; });
 const WARES={
-  for10:{name:'Fôrsekk (10 fôr)',price:25,desc:'Hver gang du gir dyrene mat, går det med 1 fôr.'},
+  for10:{name:'Høy (10 fôr)',price:25,desc:'Til sauer, kyr og geiter. Hver gang du gir flokken mat, går det med 1.'},
+  korn:{name:'Korn (10 porsjoner)',price:15,desc:'Til hønene. Uten korn legger de ikke egg.'},
+  fiskemat:{name:'Fiskemat (10 porsjoner)',price:10,desc:'Gi fiskene mat i Stell. Mette fisker hopper.'},
   olje:{name:'Lampeolje (5 dager)',price:12,desc:'Lyktene brenner bare når det er olje.'},
   fro:{name:'Frøpose til frukttre',price:30,desc:'Planter et nytt tre i Frukthagen (maks 12).'},
   messing:{name:'Messingverktøy',price:120,desc:'Hvert trykk rydder to ting av samme slag.',once:true},
 };
 const ANIMALS={
-  hone:{name:'To høner',price:30,desc:'Legger egg du samler og selger.'},
-  geit:{name:'Geit',price:50,desc:'Gir melk, og klatrer på steinene.'},
+  lam:{name:'Lam',price:25,desc:'Vokser til en sau på 5 dager med mat. Sauer gir ull.'},
+  kalv:{name:'Kalv',price:45,desc:'Vokser til en ku på 5 dager med mat. Kyr gir melk.'},
+  kje:{name:'Kje',price:30,desc:'Vokser til en geit på 5 dager med mat. Geiter gir melk.'},
+  kylling:{name:'Tre kyllinger',price:20,desc:'Blir til høner på 5 dager med korn. Høner legger egg.'},
+  hone:{name:'To høner',price:30,desc:'Voksne høner som legger egg med en gang, så lenge de får korn.'},
+  geit:{name:'Geit',price:50,desc:'Voksen geit som gir melk med en gang.'},
   fisk:{name:'To fisker',price:40,desc:'Nye arter som hopper i elvene og svømmer i fontenen.'},
 };
 const SKY={
@@ -789,16 +799,16 @@ function shepherdSvg(x,y){
 let junkSeq=0;
 function freeJunkSlot(q){ const used=new Set(S.junk[q].map(j=>j.s)); if(q==='roser') S.roses.forEach(r=>used.add(r.s)); const pool=SLOTS.map((s,i)=>i).filter(i=>(q==='roser'?i<MAXROSE:i>=8)&&!used.has(i)&&SLOTS[i].y>470&&SLOTS[i].y<660); return pool.length?rnd(pool):null; }
 function freeRoseSlot(){ /* roser fyller hele bedet */ const used=new Set(S.roses.map(r=>r.s).concat((S.junk.roser||[]).map(j=>j.s))); for(let i=0;i<MAXROSE;i++) if(!used.has(i)) return i; return null; }
-function addJunk(q,type,n=1){ for(let k=0;k<n;k++){ const s=freeJunkSlot(q); if(s==null) return; S.junk[q].push({id:Date.now().toString(36)+(junkSeq++),type,s}); } }
+function addJunk(q,type,n=1,sz){ for(let k=0;k<n;k++){ const s=freeJunkSlot(q); if(s==null) return; const z=sz||(Math.random()<.5?1:Math.random()<.7?2:3); S.junk[q].push({id:Date.now().toString(36)+(junkSeq++),type,s,z}); } }
 function initJunk(){ if(S.junk) return; S.junk={roser:[],taarn:[],beite:[],frukt:[]};
-  addJunk('roser','stein',4); addJunk('roser','ugress',5); addJunk('roser','stov',2);
-  addJunk('taarn','stein',4); addJunk('taarn','stov',1);
-  addJunk('beite','stein',3); addJunk('beite','ugress',3);
-  addJunk('frukt','stubbe',3); addJunk('frukt','ugress',3); addJunk('frukt','stov',1); save(); }
-function junkSvg(j){ const sl=SLOTS[j.s]; if(!sl) return ''; const s=sl.sc, x=sl.x, y=sl.y; let g='';
+  addJunk('roser','stein',3,1); addJunk('roser','stein',1,2); addJunk('roser','ugress',4,1); addJunk('roser','ugress',1,2); addJunk('roser','stov',2,1);
+  addJunk('taarn','stein',2,1); addJunk('taarn','stein',1,2); addJunk('taarn','stein',1,3); addJunk('taarn','stov',1,1);
+  addJunk('beite','stein',2,1); addJunk('beite','stein',1,3); addJunk('beite','ugress',3,1);
+  addJunk('frukt','stubbe',2,1); addJunk('frukt','stubbe',1,3); addJunk('frukt','ugress',3,1); addJunk('frukt','stov',1,2); save(); }
+function junkSvg(j){ const sl=SLOTS[j.s]; if(!sl) return ''; const z=j.z||1, s=sl.sc*[1,1,1.35,1.75][z], x=sl.x, y=sl.y; let g='';
   if(j.type==='stein') g=rubble(x-12*s,y,s*1.1);
   if(j.type==='ugress') g=`<g>${[-8,-3,2,7].map((dx,k)=>`<path d="M${x+dx*s} ${y} q${-3*s} ${-8*s} ${(k%2?4:-4)*s} ${-14*s}" stroke="#9a9a4a" stroke-width="${2.2*s}" fill="none" stroke-linecap="round"/>`).join('')}<ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${3*s}" fill="#3a3424"/></g>`;
-  if(j.type==='stubbe') g=deadTree(sl);
+  if(j.type==='stubbe') g=deadTree({x,y,sc:s});
   if(j.type==='stov') g=`<g><ellipse cx="${x}" cy="${y-4*s}" rx="${18*s}" ry="${7*s}" fill="#9a8a6a" opacity=".55"/><ellipse cx="${x+8*s}" cy="${y-8*s}" rx="${10*s}" ry="${5*s}" fill="#b4a37f" opacity=".5"/></g>`;
   return `<g class="junk" data-j="${j.id}">${g}<rect x="${x-20*s}" y="${y-28*s}" width="${40*s}" height="${32*s}" fill="transparent"/></g>`; }
 const O='stroke="#1a1030" stroke-width="2" stroke-linejoin="round"';
@@ -867,13 +877,14 @@ function clean(id,e){
   if(!unl('basar')) return toast(`Rydding åpnes etter ${GATE.basar} vers-økter (${S.vs}/${GATE.basar})`);
   const tk=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type);
   if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
-  if(!S.tools[tk]){ toast(`${JUNKNAME[j.type]}: du trenger ${TOOLS[tk].name.toLowerCase()}. Kjøp den i basaren.`); $('shopBtn').classList.add('ping'); return; }
-  haptic(18); S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=1; taskHit('rydd');
+  const need=j.z||1, have=tLvl(tk);
+  if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZE[need][0].toUpperCase()+SIZE[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
+  haptic(18); S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need; taskHit('rydd');
   if(S.upg.messing){ const j2=S.junk[q].find(x=>x.type===j.type); if(j2){ S.junk[q]=S.junk[q].filter(x=>x!==j2); S.cleaned++; S.nur+=1; taskHit('rydd'); } } puff(e); snd.puff(); save(); renderTop(); renderSection(); say(e,keeper());
-  const left=S.junk[q].length; toast(left?`Ryddet. +1 nur · ${left} igjen her`:'Denne delen er ryddet, alhamdulillah. +1 nur');
+  const left=S.junk[q].length; toast(left?`Ryddet. +${need} nur · ${left} igjen her`:`Denne delen er ryddet, alhamdulillah. +${need} nur`);
 }
 function junkLeft(){ return Object.values(S.junk||{}).reduce((n,a)=>n+a.length,0); }
-function canClean(q){ return (S.junk[q]||[]).some(j=>S.tools[Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type)]); }
+function canClean(q){ return (S.junk[q]||[]).some(j=>tLvl(Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type))>=(j.z||1)); }
 
 /* ================= SCENE ================= */
 function cyp(x,b,h,w,cls='sil'){
@@ -1147,11 +1158,33 @@ function weatherLayer(){ const w=weatherToday(); if(w==='regn'){ let r=''; for(l
   if(w==='sommerfugl') return `<g>${[[80,450,'#f2a14e'],[300,500,'#9a7ae0'],[200,420,'#f4f0e8']].map(([x,y,c],k)=>`<g class="bfly" style="animation-delay:-${k*3}s" transform="translate(${x} ${y})"><g class="bw"><path d="M0 0 Q-7 -8 -8 0 Q-6 5 0 1Z M0 0 Q7 -8 8 0 Q6 5 0 1Z" fill="${c}" stroke="#3a2a1a" stroke-width=".4"/></g></g>`).join('')}</g>`; return ''; }
 function rainCheck(){ if(weatherToday()==='regn'&&S.rainWater!==dayStr()&&S.introSeen){ S.rainWater=dayStr(); QUADS.forEach(q=>{ if(restored(q.id)) S.watered[q.id]=dayStr(); }); save(); setTimeout(()=>toast('Det regner i dag. Regnet har vannet hagen for deg.',3500),1200); } }
 const FISH=[['Gullfisk','#f2913a','#ffd27a'],['Koi','#f4f0e8','#e2552f'],['Blåfisk','#3a7ac9','#9fd0ff'],['Sølvfisk','#c8d2dc','#ffffff'],['Regnbuefisk','#e46a8a','#7fd36a'],['Karpe','#c9922e','#6a4a2a']];
-function fishLayer(){ if(!fountainOK()) return ''; const n=Math.min(6,2+(S.fish||0)); let h='';
+function fishLayer(){ if(!fountainOK()) return ''; const n=Math.min(6,2+(S.fish||0)), fed=S.fishFed&&dayDiff(S.fishFed,dayStr())<=2; let h='';
   for(let k=0;k<n;k++){ const [nm,c,c2]=FISH[k%FISH.length], y=480+((k*67)%230), w=14+68*(y-330)/430, x=195+((k%3)-1)*w*.25, dx=(k%2?-1:1)*(18+k*3), d=6+k*1.7;
-    h+=`<g class="fishg" data-f="${k}" transform="translate(${x.toFixed(1)} ${y})"><g class="fj" style="--dx:${dx}px;animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"><g transform="scale(${dx<0?-1:1} 1) scale(${(.8+y/1000).toFixed(2)})"><path d="M-9 0 Q-2 -6 7 0 Q-2 6 -9 0Z" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><path d="M-9 0 l-5 -4 v8Z" fill="${c2}"/><path d="M-2 -4 q2 2 0 4" stroke="${c2}" stroke-width="1" fill="none"/></g></g><ellipse class="fsplash" cx="0" cy="2" rx="7" ry="2" fill="none" stroke="rgba(220,240,255,.8)" style="animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"/><rect x="-16" y="-34" width="${Math.abs(dx)+32}" height="40" fill="transparent" transform="translate(${dx<0?dx:0} 0)"/></g>`; }
+    h+=`<g class="fishg" data-f="${k}" transform="translate(${x.toFixed(1)} ${y})"><g class="${fed?'fj':'frest'}" style="--dx:${dx}px;animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"><g transform="scale(${dx<0?-1:1} 1) scale(${(.8+y/1000).toFixed(2)})"><path d="M-9 0 Q-2 -6 7 0 Q-2 6 -9 0Z" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><path d="M-9 0 l-5 -4 v8Z" fill="${c2}"/><path d="M-2 -4 q2 2 0 4" stroke="${c2}" stroke-width="1" fill="none"/></g></g><ellipse class="fsplash" cx="0" cy="2" rx="7" ry="2" fill="none" stroke="rgba(220,240,255,.8)" style="animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"/><rect x="-16" y="-34" width="${Math.abs(dx)+32}" height="40" fill="transparent" transform="translate(${dx<0?dx:0} 0)"/></g>`; }
   return h; }
-function fishTap(k,e){ const f=FISH[k%FISH.length]; snd.splash(); ripple(e); floatWord(e,f[0]); haptic(6); }
+function fishTap(k,e){ const f=FISH[k%FISH.length]; snd.splash(); ripple(e); haptic(6);
+  if(inStell()&&S.fishFed!==dayStr()){ if((S.fiskemat||0)<=0) return toast('Tom for fiskemat. Kjøp i Basaren (Gård og beite).'); S.fiskemat--; S.fishFed=dayStr(); taskHit('mat'); save(); renderSection(); return toast(`Fiskene fikk mat · ${S.fiskemat} igjen`); }
+  floatWord(e,f[0]); }
+const FENCE=[['Ingen gjerde',0,'Gamle stolper etter stormen.'],['Tregjerde',40,'Holder flokken samlet. Dyrene blir 10 % saktere sultne, og det blir plass til flere.'],['Steingjerde',120,'Lav mur av stein. 20 % saktere sultne og enda mer plass.'],['Pyntet gjerde med port',250,'Hvitt gjerde med lykter på portstolpene. 30 % saktere sultne og plass til en stor flokk.']];
+const FARMX={stall:{name:'Stall',price:150,desc:'Ly for dyrene. De blir 20 % saktere sultne, og det blir plass til 4 dyr til.'},trau:{name:'Vanntrau',price:60,desc:'Friskt vann hele dagen. Dyrene blir 15 % saktere sultne.'}};
+const YOUNG={lam:['sheep','Lam','sau'],kalv:['cows','Kalv','ku'],kje:['goats','Kje','geit'],kylling:['hens','Kylling','høne']};
+const farmCap=()=>10+[0,4,8,12][S.farm.fence||0]+(S.farm.stall?4:0);
+const flockN=()=>{ const F=S.flock; return F.sheep+F.cows+(F.goats||0)+(F.hens||0)+(S.young||[]).length; };
+const hungerMul=()=>(1-.1*(S.farm.fence||0))*(S.farm.stall?.8:1)*(S.farm.trau?.85:1);
+const kornOK=()=>S.kornDay&&dayDiff(S.kornDay,dayStr())<=1;
+function addYoung(t,n=1){ for(let i=0;i<n;i++){ if(flockN()>=farmCap()) return false; S.young.push({t,g:0}); } return true; }
+function growYoung(){ let grown=[]; S.young.forEach(y=>{ if(y.t==='kylling'?kornOK():S.flock.hunger>=40) y.g++; });
+  S.young=S.young.filter(y=>{ if(y.g>=5){ S.flock[YOUNG[y.t][0]]=(S.flock[YOUNG[y.t][0]]||0)+1; grown.push(YOUNG[y.t][2]); return false; } return true; });
+  if(grown.length) logEvent(`På beitet har ${grown.length===1?'et ungdyr':grown.length+' ungdyr'} vokst opp: ${grown.join(', ')}.`); }
+function fenceSvg(){ const L=S.farm.fence||0, bx1=74,bx2=316,by=462, fx1=18,fx2=372,fy=736;
+  const lerp=(a,b,t)=>a+(b-a)*t, posts=[]; for(let k=0;k<=8;k++){ const t=k/8; posts.push([lerp(bx1,bx2,t),by,.55],[lerp(fx1,fx2,t),fy,1.2]); } for(let k=1;k<6;k++){ const t=k/6; posts.push([lerp(bx1,fx1,t),lerp(by,fy,t),lerp(.55,1.2,t)],[lerp(bx2,fx2,t),lerp(by,fy,t),lerp(.55,1.2,t)]); }
+  if(L===0) return `<g opacity=".8">${posts.filter((p,i)=>i%3===0).map(([x,y,sc])=>`<path d="M${x} ${y} l${2*sc} ${-16*sc}" stroke="#5a3a1a" stroke-width="${3*sc}"/>`).join('')}</g>`;
+  const edges=[[[bx1,by,.55],[bx2,by,.55]],[[fx1,fy,1.2],[fx1+130,fy,1.2]],[[fx2-130,fy,1.2],[fx2,fy,1.2]],[[bx1,by,.55],[fx1,fy,1.2]],[[bx2,by,.55],[fx2,fy,1.2]]];
+  if(L===1) return `<g>${edges.map(([a,b])=>[10,18].map(h=>`<path d="M${a[0]} ${a[1]-h*a[2]} L${b[0]} ${b[1]-h*b[2]}" stroke="#7a5230" stroke-width="${2.4*(a[2]+b[2])/2}"/>`).join('')).join('')}${posts.filter(([x,y])=>!(y===fy&&x>fx1+130&&x<fx2-130)).map(([x,y,sc])=>`<rect x="${x-2*sc}" y="${y-24*sc}" width="${4*sc}" height="${24*sc}" fill="#6a4426" stroke="#3a2414" stroke-width=".5"/>`).join('')}</g>`;
+  if(L===2) return `<g>${edges.map(([a,b])=>`<path d="M${a[0]} ${a[1]} L${b[0]} ${b[1]} L${b[0]} ${b[1]-14*b[2]} L${a[0]} ${a[1]-14*a[2]}Z" fill="#9a8a72" stroke="#5a4a3a" stroke-width=".8"/>`+Array.from({length:6},(_,k)=>{ const t=(k+.5)/6, x=lerp(a[0],b[0],t), y=lerp(a[1],b[1],t), sc=lerp(a[2],b[2],t); return `<path d="M${x} ${y} v${-14*sc}" stroke="#6a5a48" stroke-width=".6"/>`; }).join('')).join('')}</g>`;
+  return `<g>${edges.map(([a,b])=>[8,16,24].map(h=>`<path d="M${a[0]} ${a[1]-h*a[2]} L${b[0]} ${b[1]-h*b[2]}" stroke="#f2ece0" stroke-width="${2*(a[2]+b[2])/2}"/>`).join('')).join('')}${posts.filter(([x,y])=>!(y===fy&&x>fx1+130&&x<fx2-130)).map(([x,y,sc])=>`<rect x="${x-2.4*sc}" y="${y-28*sc}" width="${4.8*sc}" height="${28*sc}" fill="#fbf5e8" stroke="#b08a4a" stroke-width=".6"/><circle cx="${x}" cy="${y-30*sc}" r="${2.2*sc}" fill="#e7c26b"/>`).join('')}${[fx1+130,fx2-130].map(x=>`<rect x="${x-4}" y="${fy-44}" width="8" height="44" fill="#fbf5e8" stroke="#b08a4a"/><path d="M${x-6} ${fy-46} h12 l-2 -6 h-8Z" fill="#c9922e"/><circle cx="${x}" cy="${fy-56}" r="4" fill="#ffd98a"/><circle cx="${x}" cy="${fy-56}" r="14" fill="url(#lglow)" opacity="calc(.4 + .6*var(--glow))"/>`).join('')}</g>`; }
+function farmExtras(){ let h=''; if(S.farm.stall) h+=`<g transform="translate(316 474)"><path d="M-30 0 V-26 L0 -44 L30 -26 V0Z" fill="#8a4a2a" stroke="#3a1a0a" stroke-width="1"/><path d="M-34 -24 L0 -48 L34 -24" fill="none" stroke="#5a2a14" stroke-width="4" stroke-linecap="round"/><path d="M-10 0 V-18 H10 V0Z" fill="#3a1a0a"/><path d="M-10 -18 L10 0 M10 -18 L-10 0" stroke="#c9922e" stroke-width="1"/></g>`;
+  if(S.farm.trau) h+=`<g transform="translate(262 712)"><path d="M-26 -10 H26 L22 4 H-22Z" fill="#7a5230" stroke="#3a2414"/><ellipse cx="0" cy="-10" rx="25" ry="3" fill="#6fa9d6"/></g>`; return h; }
 function renderSection(){
   const q=QUADS[curQ], ok=restored(q.id);
   drawHorizon();
@@ -1165,14 +1198,15 @@ function renderSection(){
     if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en sure',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
   if(q.id==='beite'){
     if(!ok){ h+=rubble(90,600,1.4)+rubble(260,640,1.6)+`<path d="M60 560 l40 -6 M110 552 l30 4 M250 570 l50 -8" stroke="#5a4a3a" stroke-width="3"/>`; }
-    else { const F=S.flock, sl=SLOTS.filter(s=>s.y>470&&s.y<650).concat(SLOTS.filter(s=>s.y>=650)).slice(0,F.sheep+F.cows+F.goats+F.hens), L2=[]; let k=0;
-      for(let i=0;i<F.goats&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="goat">${goatSvg(sl[k].x,sl[k].y,sl[k].sc*.85,k)}</g>`]);
-      for(let i=0;i<F.hens&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="hen">${henSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)}</g>`]);
+    else { const F=S.flock, sl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(0,(F.sheep||0)+(F.cows||0)+(F.goats||0)+(F.hens||0)), L2=[]; let k=0;
+      for(let i=0;i<(F.goats||0)&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="goat">${goatSvg(sl[k].x,sl[k].y,sl[k].sc*.85,k)}</g>`]);
+      for(let i=0;i<(F.hens||0)&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="hen">${henSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)}</g>`]);
       for(let i=0;i<F.cows&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="cow">${cowSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)}</g>`]);
       for(let i=0;i<F.sheep&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="sheep">${sheepSvg(sl[k].x,sl[k].y,sl[k].sc*.95,k)}</g>`]);
-      h+=`<g id="flock" style="cursor:pointer">${depth(L2)}<g class="keeper">${shepherdSvg(60,650)}</g></g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
+      const ysl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(k); (S.young||[]).forEach((y,i)=>{ const q2=ysl[i]; if(!q2) return; const f={lam:sheepSvg,kalv:cowSvg,kje:goatSvg,kylling:henSvg}[y.t], sc={lam:.6,kalv:.5,kje:.55,kylling:.5}[y.t]; L2.push([q2.y,`<g class="ani" data-a="${YOUNG[y.t][0]==='hens'?'hen':YOUNG[y.t][0]==='cows'?'cow':YOUNG[y.t][0]==='goats'?'goat':'sheep'}">${f(q2.x,q2.y,q2.sc*sc,i+20)}</g>`]); });
+      h+=fenceSvg()+farmExtras()+`<g id="flock" style="cursor:pointer">${depth(L2)}<g class="keeper">${shepherdSvg(60,650)}</g></g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
       if(inStell()&&S.picks.length){ const p0=SLOTS[S.picks[0].s]; if(p0) b+=beacon(p0.x,p0.y-24,'Trykk for å samle',-18); }
-      h+=`<g transform="translate(120 404)"><rect width="150" height="5" rx="2.5" fill="rgba(255,255,255,.15)"/><rect width="${1.5*F.hunger}" height="5" rx="2.5" fill="${F.hunger<25?'#e0806a':'#e7c26b'}"/><text x="75" y="-6" text-anchor="middle" font-size="11" fill="#d8d1e6">Mett ${Math.round(F.hunger)}% · ${S.feed} fôr</text></g>`;
+      h+=`<g transform="translate(120 404)"><rect width="150" height="5" rx="2.5" fill="rgba(255,255,255,.15)"/><rect width="${1.5*F.hunger}" height="5" rx="2.5" fill="${F.hunger<25?'#e0806a':'#e7c26b'}"/><text x="75" y="-6" text-anchor="middle" font-size="11" fill="#d8d1e6">Mett ${Math.round(F.hunger)}% · ${S.feed} høy${F.hens||(S.young||[]).some(y=>y.t==='kylling')?` · ${S.korn||0} korn`:''} · ${flockN()}/${farmCap()} dyr</text></g>`;
       if(inStell()&&F.hunger<100) b+=beacon(300,446,'Gi mat: trykk på dyrene',-16);
       else if(F.hunger<35&&!S.active) b+=beacon(250,600,'Sultne. Gi mat i neste økt'); } }
   if(q.id==='frukt'){ const sl=SLOTS.filter(s=>s.y>440&&(s.x<170||s.x>220)).filter((s,i)=>i%2===0);
@@ -1181,9 +1215,10 @@ function renderSection(){
       const ri=S.fruit.findIndex((t,i)=>sl[i]&&t.st>=3&&t.h==='ok'&&S.harvested[i]!==dayStr()); if(ri>=0) b+=beacon(sl[ri].x,sl[ri].y-70*sl[ri].sc,'Trykk for å høste'); } }
   const J=(S.junk[q.id]||[]), D=S.decor.filter(d=>d.q===q.id);
   h=depth(J.map(j=>[SLOTS[j.s]?SLOTS[j.s].y:0,junkSvg(j)]).concat(D.map(d=>{const sp=SPOTS[d.spot];return [sp.y,decoSvg(d.type,sp.x,sp.y,sp.sc,d.id)];})))+h;
-  if(inStell()&&J.length){ const fj=J.find(j=>S.tools[Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type)]); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
+  if(inStell()&&J.length){ const fj=J.find(j=>tLvl(Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type))>=(j.z||1)); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
   if(ok && inStell() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
+  else if(inStell()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,`${countDamage(q.id)} skadet · trykk for tawbah`);
   if(!S.active && !busy) b+=starBeacon(195,200);
   if(S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
@@ -1375,7 +1410,7 @@ $('items').addEventListener('click',e=>{
   if(e.target.closest('.egg')||e.target.closest('[onclick]')) return;
   const q=QUADS[curQ].id;
   const pc=e.target.closest('.perch'); if(pc) return perchTap(pc);
-  const fg=e.target.closest('.fishg'); if(fg&&!inStell()) return fishTap(+fg.dataset.f,e);
+  const fg=e.target.closest('.fishg'); if(fg) return fishTap(+fg.dataset.f,e);
   const kp=e.target.closest('.keeper'); if(kp&&!(inStell()&&q==='beite')) return keeperTap(e);
   const an=e.target.closest('.ani'); if(an&&!inStell()) return animalTap(an.dataset.a,an,e);
   const rz=e.target.closest('.rz'); if(rz&&!S.active&&!e.target.closest('.junk')) { const p=S.roses[+rz.dataset.r]; if(p&&p.h!=='dmg') return roseTap(+rz.dataset.r); }
@@ -1399,11 +1434,11 @@ function inStell(){ return !!(S.active&&sess&&verses&&sess.ph===2); }
 function grains(e){ for(let i=0;i<8;i++){ const g=document.createElement('i'); g.className='grain'; g.style.left=(e.clientX+(Math.random()-.5)*30)+'px'; g.style.top=(e.clientY-30+Math.random()*10)+'px'; g.style.animationDelay=(i*40)+'ms'; stage.appendChild(g); setTimeout(()=>g.remove(),1400);} }
 function feed(e){
   if(!inStell()){ toast(S.active?'Dyrene får mat i «Stell»-delen':'Dyrene får mat mens verset står i himmelen. Trykk på himmelen.'); return; }
-  if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast('Tom for fôr. Kjøp en fôrsekk i basaren.'); }
-  S.feed--; taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); save(); renderSection();
+  if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast('Tomt for høy. Kjøp høy i Basaren (Gård og beite).'); }
+  S.feed--; if(((S.flock.hens||0)||(S.young||[]).some(y=>y.t==='kylling'))&&(S.korn||0)>0&&S.kornDay!==dayStr()){ S.korn--; S.kornDay=dayStr(); toast('Hønene fikk korn',1200); } taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); save(); renderSection();
   say(e,rnd(['– sauene','– kua','– flokken']));
   const fl=$('flock'); if(fl){ fl.classList.add('joy'); setTimeout(()=>{ const f2=$('flock'); if(f2) f2.classList.remove('joy'); },1800); }
-  if(F.hunger>=100) toast('Flokken er mett, alhamdulillah'); else toast(`${S.feed} fôr igjen`,1400);
+  if(F.hunger>=100) toast('Flokken er mett, alhamdulillah'); else toast(`${S.feed} høy igjen`,1400);
 }
 function water(e){
   const q=QUADS[curQ].id;
@@ -1426,7 +1461,7 @@ function harvest(i){
 /* ================= VARER FRA BEITET ================= */
 const PICK_SLOTS=()=>SLOTS.map((s,i)=>i).filter(i=>SLOTS[i].y>470&&SLOTS[i].y<630);
 function produce(day){ const F=S.flock, add=(type,n)=>{ for(let i=0;i<n&&S.picks.length<14;i++){ const used=new Set(S.picks.map(p=>p.s)); const pool=PICK_SLOTS().filter(i=>!used.has(i)); if(!pool.length) return; S.picks.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),type,s:rnd(pool),day}); } };
-  add('ull',Math.ceil(F.sheep/2)); add('melk',F.cows+F.goats); add('egg',F.hens); }
+  add('ull',Math.ceil(F.sheep/2)); add('melk',F.cows+F.goats); add('egg',kornOK()?F.hens:0); }
 function pickSvg(p){ const sl=SLOTS[p.s]; if(!sl) return ''; const x=sl.x, y=sl.y, s=sl.sc; let g='';
   if(p.type==='ull') g=`<circle cx="${x-4*s}" cy="${y-4*s}" r="${5*s}" fill="#fbf5e8" stroke="#1a1030" stroke-width="1.2"/><circle cx="${x+3*s}" cy="${y-6*s}" r="${5.5*s}" fill="#fbf5e8" stroke="#1a1030" stroke-width="1.2"/><circle cx="${x}" cy="${y-2*s}" r="${4.5*s}" fill="#fbf5e8"/>`;
   if(p.type==='melk') g=`<path d="M${x-7*s} ${y-14*s} h${14*s} l${-2*s} ${14*s} h${-10*s}Z" fill="#a8b4c4" stroke="#1a1030" stroke-width="1.2"/><ellipse cx="${x}" cy="${y-14*s}" rx="${7*s}" ry="${2.2*s}" fill="#fffdf6" stroke="#1a1030" stroke-width="1"/><path d="M${x-7*s} ${y-12*s} q${7*s} ${-12*s} ${14*s} 0" fill="none" stroke="#6a6074" stroke-width="1"/>`;
@@ -1763,7 +1798,7 @@ function disaster(reason){
     const prot=has('roser',{Flom:'sluse',Sandstorm:'sandvegg',Gresshopper:'fuglehus'}[type]);
     if(prot){ if(type==='Gresshopper'){ n=Math.floor(n/2); } else { logEvent(`${reason}: ${type} kom mot Rosehagen, men ${DECOR[{Flom:'sluse',Sandstorm:'sandvegg'}[type]].name.toLowerCase()} stoppet den.`); return; } }
     ok.slice(0,n).forEach(i=>{S.roses[i].h='dmg';S.roses[i].dd=dayStr();});
-    addJunk('roser',type==='Gresshopper'?'ugress':type==='Sandstorm'?'stov':'stein',2); if(fountainOK()) addJunk(rnd(['taarn','beite']),'stov',1);
+    addJunk('roser',type==='Gresshopper'?'ugress':type==='Sandstorm'?'stov':'stein',2,rnd([2,3])); if(fountainOK()) addJunk(rnd(['taarn','beite']),'stov',1);
     logEvent(n?`${reason}: ${type} i Rosehagen. ${n} roser ble skadet.`:`${reason}: ${type}. −5 nur.`); if(!n) S.nur-=5; }
   else { const ok=S.fruit.map((t,i)=>t.h==='ok'?i:-1).filter(i=>i>=0); const n=Math.min(ok.length,1+Math.floor(Math.random()*2));
     const n2=has('frukt','fuglehus')?Math.floor(n/2):n; ok.sort(()=>Math.random()-.5).slice(0,n2).forEach(i=>{S.fruit[i].h='dmg';S.fruit[i].dd=dayStr();}); addJunk('frukt','ugress',2);
@@ -1771,7 +1806,7 @@ function disaster(reason){
     logEvent(n?`${reason}: Gresshopper i Frukthagen. ${n} tre${n>1?'r':''} ble skadet.`:`${reason}: Gresshopper. −5 nur.`); if(!n) S.nur-=5; }
 }
 const has=(q,type)=>S.decor.some(d=>d.q===q&&d.type===type);
-function flockTick(){ const F=S.flock, days=(Date.now()-F.ts)/864e5; if(days>0.01){ F.hunger=Math.max(0,F.hunger-days*(has('beite','hund')?15:30)); F.ts=Date.now(); } }
+function flockTick(){ const F=S.flock, days=(Date.now()-F.ts)/864e5; if(days>0.01){ F.hunger=Math.max(0,F.hunger-days*(has('beite','hund')?15:30)*hungerMul()); F.ts=Date.now(); } }
 function dailyCheck(){
   flockTick();
   if(!S.hud||S.hud.day!==dayStr()) S.hud={day:dayStr(),show:Math.random()<.12,seen:false};
@@ -1781,6 +1816,7 @@ function dailyCheck(){
     addJunk(rnd(['roser'].concat(['taarn','beite','frukt'].filter(q=>restored(q)))),'ugress',2);
     if(S.oil>0){ S.oil--; if(S.oil===0) logEvent('Lampeoljen er brukt opp. Lyktene slukner til du kjøper mer.'); }
     if(restored('beite')&&S.flock.hunger>=40) produce(d);
+    if(restored('beite')){ growYoung(); if((S.flock.hens||0)>=2&&kornOK()&&Math.random()<.15&&addYoung('kylling')) logEvent('En kylling har klekket på beitet.'); }
     if(S.doneDays.includes(d)&&S.decor.some(x=>x.type==='bikube')){ S.goods.honning++; }
     if(!S.doneDays.includes(d)&&dis<3){ disaster(`Forsømt ${d.slice(8)}.${d.slice(5,7)}`); dis++; }
     if(S.nur<0&&dis<3){ disaster('Tom for nur'); dis++; }
@@ -1960,7 +1996,7 @@ function finish(refl){
     for(const q of ['beite','frukt']) if(S.vs===AT[q]){ S.seenRest[q]='new'; logEvent(`${QUADS.find(x=>x.id===q).name} er gjenopprettet.`); msgs.push(`${QUADS.find(x=>x.id===q).name} er gjenopprettet`); }
   }
   if(restored('beite')&&S.flock.hunger>=80&&S.stats.sessions-S.flock.lastBirthS>=3){ const F=S.flock; F.lastBirthS=S.stats.sessions;
-    if(Math.random()<.25&&F.cows<4){F.cows++;logEvent('En kalv er født på beitet.');msgs.push('en kalv er født');} else if(F.sheep<10){F.sheep++;logEvent('Et lam er født på beitet.');msgs.push('et lam er født');} }
+    if(flockN()<farmCap()){ if(Math.random()<.25){ addYoung('kalv'); logEvent('En kalv er født på beitet.'); msgs.push('en kalv er født'); } else { addYoung('lam'); logEvent('Et lam er født på beitet.'); msgs.push('et lam er født'); } } else msgs.push('beitet er fullt: bygg gjerde eller stall for å få plass til flere'); }
   if(restored('frukt')){ if(!doneToday()){ const g=S.fruit.filter(t=>t.h==='ok'&&t.st<3); if(g.length) rnd(g).st++; }
     if(!S.fruit.length||(S.vs-AT.frukt)%4===0){ if(S.fruit.length<12&&a.kind!=='hifz'){ const type=FRUITS[S.fruit.length%FRUITS.length]; S.fruit.push({type,st:1,h:'ok'}); msgs.push(`et ${FRUITNAME[type].toLowerCase()} er plantet`);} } }
   markDone(); endSessionUI();
@@ -2103,13 +2139,22 @@ function updatePings(){ $('megBtn').classList.toggle('ping',S.stats.sessions>=3&
 
 /* --- Basar --- */
 let shopTab='varer';
-const TABS=[['varer','Varer'],['vern','Vern og dyr'],['pynt','Pynt og bygg'],['marked','Marked'],['lager','Lager']];
+const TABS=[['varer','Varer'],['gard','Gård og beite'],['vern','Vern'],['pynt','Pynt og bygg'],['marked','Marked'],['lager','Lager']];
 const row=(thumb,name,desc,btn)=>`<div class="si">${thumb}<div class="tx"><b>${name}</b><small>${desc}</small></div>${btn}</div>`;
 const buyBtn=(attr,price,owned)=>owned?'<button class="buy own" disabled>Eid</button>':`<button class="buy" ${attr} ${S.nur<price?'disabled':''}>${price} nur</button>`;
 const LN='stroke="#1a1030" stroke-width="2" stroke-linejoin="round"';
 function ico(k){ let g='';
   switch(k){
    case 'for10': g=`<path d="M-18 24 Q-24 -2 -14 -16 L14 -16 Q24 -2 18 24Z" fill="#d9b27a" ${LN}/><path d="M-14 -16 Q0 -24 14 -16" fill="none" ${LN}/><path d="M-6 -20 l-4 -12 M0 -21 v-13 M6 -20 l4 -12" stroke="#e7c26b" stroke-width="3" stroke-linecap="round"/>`; break;
+   case 'korn': g=`<path d="M-16 24 Q-22 0 -12 -12 L12 -12 Q22 0 16 24Z" fill="#e8d4a0" ${LN}/>${[-6,0,6].map(x=>`<path d="M${x} -12 V-30" stroke="#c9922e" stroke-width="2"/><ellipse cx="${x}" cy="-30" rx="3" ry="6" fill="#e7c26b"/>`).join('')}`; break;
+   case 'fiskemat': g=`<rect x="-14" y="-16" width="28" height="38" rx="4" fill="#3a7ac9" ${LN}/><path d="M-8 4 Q0 -4 8 4 Q0 12 -8 4Z M-8 4 l-5 -4 v8Z" fill="#f2913a"/>`; break;
+   case 'lam': g=`<g transform="translate(0 14) scale(1.4)">${sheepSvg(0,0,.6,0)}</g>`; break;
+   case 'kalv': g=`<g transform="translate(0 14) scale(1.4)">${cowSvg(0,0,.55,0)}</g>`; break;
+   case 'kje': g=`<g transform="translate(0 14) scale(1.4)">${goatSvg(0,0,.6,0)}</g>`; break;
+   case 'kylling': g=`${[-12,0,12].map(x=>`<circle cx="${x}" cy="10" r="7" fill="#f2d94e" ${LN}/><path d="M${x+6} 8 l4 1 l-4 2Z" fill="#e7a040"/>`).join('')}`; break;
+   case 'gjerde': g=`${[-20,-6,8,22].map(x=>`<rect x="${x-3}" y="-18" width="6" height="40" fill="#7a5230" ${LN}/>`).join('')}<path d="M-26 -6 H28 M-26 8 H28" stroke="#7a5230" stroke-width="5"/>`; break;
+   case 'stall': g=`<path d="M-24 22 V-4 L0 -22 L24 -4 V22Z" fill="#8a4a2a" ${LN}/><path d="M-8 22 V6 H8 V22Z" fill="#3a1a0a"/>`; break;
+   case 'trau': g=`<path d="M-26 0 H26 L20 18 H-20Z" fill="#7a5230" ${LN}/><ellipse cx="0" cy="0" rx="25" ry="4" fill="#6fa9d6"/>`; break;
    case 'olje': g=`<path d="M-22 6 Q-20 22 0 22 Q20 22 24 4 L30 -2 L20 0 Q14 -8 0 -8 Q-16 -8 -22 6Z" fill="#c9a14a" ${LN}/><path d="M24 -6 q4 -12 -2 -18 q6 10 -6 12Z" fill="#ffcf7a"/><circle cx="24" cy="-10" r="12" fill="#ffd27a" opacity=".3"/>`; break;
    case 'fro': g=`<ellipse cx="0" cy="18" rx="22" ry="7" fill="#8a6a48" ${LN}/><path d="M0 16 V-6" stroke="#3f8a4c" stroke-width="4"/><path d="M0 -2 Q-18 -6 -16 -22 Q-2 -18 0 -2Z M0 -6 Q16 -12 18 -26 Q2 -24 0 -6Z" fill="#5ea84f" ${LN}/>`; break;
    case 'messing': g=`<path d="M0 -30 V14" stroke="#8a5a2e" stroke-width="5" stroke-linecap="round"/><path d="M-18 14 h36" stroke="#e7b84a" stroke-width="6" stroke-linecap="round"/>`+[-15,-7,1,9,17].map(x=>`<path d="M${x} 14 v12" stroke="#e7b84a" stroke-width="3.4" stroke-linecap="round"/>`).join(''); break;
@@ -2136,9 +2181,17 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
   const lockNote=(f,what)=>`<div class="card" style="margin:6px 0"><b style="color:var(--gold2)">${what}</b><p style="margin:4px 0 0">Åpnes etter ${GATE[f]} vers-økter (${Math.min(S.vs,GATE[f])}/${GATE[f]}).</p></div>`;
   const decoRows=cat=>Object.entries(DECOR).filter(([k,d])=>d.cat===cat).map(([k,d])=>row(decoThumb(k),d.name,d.desc+(S.inv[k]?` · ${S.inv[k]} på lager`:''),buyBtn(`data-deco="${k}"`,d.price))).join('');
   if(shopTab==='varer'){ body='<h4>Forbruk</h4>'+Object.entries(WARES).map(([k,w])=>row(ico(k),w.name,w.desc+(k==='fro'&&!restored('frukt')?' Frukthagen må være gjenopprettet først.':''),buyBtn(`data-ware="${k}"`,w.price,w.once&&S.upg[k]))).join('');
-    body+='<h4>Verktøy</h4>'+Object.entries(TOOLS).map(([k,t])=>{ const n=Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>j.type===t.for).length,0); return row(toolThumb(k),t.name,t.desc+(n?` ${n} å rydde i hagen nå.`:''),buyBtn(`data-tool="${k}"`,t.price,S.tools[k])); }).join(''); }
-  if(shopTab==='vern'){ body=unl('vern')?'<h4>Vern og nytte</h4>'+decoRows('vern'):lockNote('vern','Vern og nytte');
-    body+='<h4>Dyr</h4>'+(restored('beite')?'':'<p>Beitet må være gjenopprettet før du kan kjøpe dyr dit.</p>')+Object.entries(ANIMALS).map(([k,a])=>row(ico(k),a.name,a.desc,(k!=='fisk'&&!restored('beite'))?'<button class="buy" disabled>Låst</button>':buyBtn(`data-animal="${k}"`,a.price))).join('')+(unl('vern')?decoRows('dyr'):''); }
+    body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur.</p>'+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>j.type===t.for&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} (rydder ${SIZE[L+1]}e ting).`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
+  if(shopTab==='vern'){ body=unl('vern')?'<h4>Vern og nytte</h4>'+decoRows('vern')+'<h4>Flere dyr</h4>'+decoRows('dyr'):lockNote('vern','Vern og nytte'); }
+  if(shopTab==='gard'){ const rb=restored('beite'), F=S.flock;
+    body=`<p style="font-size:13px">Flokken: ${F.sheep} sauer, ${F.cows} kyr, ${F.goats||0} geiter, ${F.hens||0} høner${(S.young||[]).length?`, ${S.young.length} ungdyr`:''} · plass til ${farmCap()} · ${S.fish||0} fisker</p>`;
+    body+='<h4>Fôr</h4>'+['for10','korn','fiskemat'].map(k=>{ const w=WARES[k]; const have=k==='for10'?S.feed:k==='korn'?(S.korn||0):(S.fiskemat||0); return row(ico(k),w.name,w.desc+` Du har ${have}.`,buyBtn(`data-ware="${k}"`,w.price)); }).join('');
+    body+='<h4>Ungdyr som vokser</h4><p style="font-size:12.5px;color:var(--muted)">Ungdyr er billigere, men må få mat i 5 dager før de blir voksne og gir ull, melk eller egg.</p>'+['lam','kje','kalv','kylling'].map(k=>row(ico(k),ANIMALS[k].name,ANIMALS[k].desc,rb?buyBtn(`data-animal="${k}"`,ANIMALS[k].price):'<button class="buy" disabled>Låst</button>')).join('');
+    body+='<h4>Voksne dyr</h4>'+['hone','geit','fisk'].map(k=>row(ico(k),ANIMALS[k].name,ANIMALS[k].desc,(k!=='fisk'&&!rb)?'<button class="buy" disabled>Låst</button>':buyBtn(`data-animal="${k}"`,ANIMALS[k].price))).join('');
+    const fl=S.farm.fence||0, nf=FENCE[fl+1];
+    body+=`<h4>Gjerde rundt beitet</h4><p style="font-size:13px">Nå: <b style="color:var(--gold2)">${FENCE[fl][0]}</b>.</p>`+(nf?row(ico('gjerde'),nf[0],nf[2],rb?buyBtn('data-fence="1"',nf[1]):'<button class="buy" disabled>Låst</button>'):'<p>Du har det fineste gjerdet.</p>');
+    body+='<h4>Gårdsbygg</h4>'+Object.entries(FARMX).map(([k,x])=>row(ico(k),x.name,x.desc,rb?buyBtn(`data-farm="${k}"`,x.price,S.farm[k]):'<button class="buy" disabled>Låst</button>')).join('');
+    if(!rb) body+='<p style="font-size:12.5px;color:var(--muted)">Beitet må være gjenopprettet før du kan kjøpe dyr og bygg dit.</p>'; }
   if(shopTab==='pynt'){ body='<h4>Pynt</h4>'+decoRows('pynt')+'<h4>Læring</h4>'+decoRows('laer');
     if(unl('bygg')){ const pct=restorePct();
       body+='<h4>Bygg</h4>'+decoRows('bygg')+'<h4>Himmel</h4>'+Object.entries(SKY).map(([k,t])=>row(ico(k),t.name,t.desc,buyBtn(`data-sky="${k}"`,t.price,S.themes[k]))).join('');
@@ -2157,12 +2210,14 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
   Q$('[data-ware]').forEach(b=>b.onclick=()=>{ const k=b.dataset.ware, w=WARES[k];
     if(k==='fro'&&(!restored('frukt')||S.fruit.length>=12)) return toast(restored('frukt')?'Frukthagen er full':'Frukthagen er ikke gjenopprettet ennå');
     if(!pay(w.price)) return;
-    if(k==='for10') S.feed+=10; if(k==='olje') S.oil+=5; if(k==='messing') S.upg.messing=true;
+    if(k==='for10') S.feed+=10; if(k==='korn') S.korn=(S.korn||0)+10; if(k==='fiskemat') S.fiskemat=(S.fiskemat||0)+10; if(k==='olje') S.oil+=5; if(k==='messing') S.upg.messing=true;
     if(k==='fro'){ const type=rnd(['sitron','mandel'].concat(FRUITS)); S.fruit.push({type:FRUITS.includes(type)?type:'oliven',st:1,h:'ok'}); }
     done(`${w.name} kjøpt`); });
-  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const t=TOOLS[b.dataset.tool]; if(!pay(t.price)) return; S.tools[b.dataset.tool]=true; done(`${t.name} kjøpt. Du rydder i «Stell».`); });
+  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const k=b.dataset.tool, L=tLvl(k), nx=TIERS[k][L]; if(!nx||!pay(nx[1])) return; S.tools[k]=L+1; done(L?`Oppgradert til ${nx[0].toLowerCase()}. Nå kan du rydde ${SIZE[L+1]}e ting.`:`${nx[0]} kjøpt. Du rydder i «Stell».`); });
   Q$('[data-deco]').forEach(b=>b.onclick=()=>{ const k=b.dataset.deco, d=DECOR[k]; if(!pay(d.price)) return; S.inv[k]=(S.inv[k]||0)+1; done(`${d.name} er lagt på lageret`,'lager'); });
-  Q$('[data-animal]').forEach(b=>b.onclick=()=>{ const k=b.dataset.animal, a=ANIMALS[k]; if(!pay(a.price)) return; if(k==='hone') S.flock.hens+=2; if(k==='geit') S.flock.goats++; if(k==='fisk') S.fish+=2; done(`${a.name} er på plass`); });
+  Q$('[data-fence]').forEach(b=>b.onclick=()=>{ const nf=FENCE[(S.farm.fence||0)+1]; if(!nf||!pay(nf[1])) return; S.farm.fence=(S.farm.fence||0)+1; logEvent(`${nf[0]} er satt opp rundt beitet.`); done(`${nf[0]} er satt opp`,'gard'); });
+  Q$('[data-farm]').forEach(b=>b.onclick=()=>{ const k=b.dataset.farm; if(!pay(FARMX[k].price)) return; S.farm[k]=true; logEvent(`${FARMX[k].name} er bygget på beitet.`); done(`${FARMX[k].name} er bygget`,'gard'); });
+  Q$('[data-animal]').forEach(b=>b.onclick=()=>{ const k=b.dataset.animal, a=ANIMALS[k]; if(!pay(a.price)) return; if(k!=='fisk'&&flockN()+(k==='hone'?2:k==='kylling'?3:1)>farmCap()){ S.nur+=a.price; return toast('Beitet er fullt. Bygg et bedre gjerde eller en stall for å få plass.'); } if(k==='hone') S.flock.hens+=2; if(k==='geit') S.flock.goats++; if(k==='fisk') S.fish+=2; if(YOUNG[k]) addYoung(k,k==='kylling'?3:1); done(`${a.name} er på plass`,'gard'); });
   Q$('[data-sky]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sky; if(!pay(SKY[k].price)) return; S.themes[k]=true; applyThemes(); done(`${SKY[k].name} er lagt til himmelen`); });
   Q$('[data-palace]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.palace; if(!pay(PALACE[i].price)) return; S.palace=i+1; logEvent(`Palasset: ${PALACE[i].name} er ferdig.`); done(`${PALACE[i].name} er bygget`,'bygg'); });
   Q$('[data-sell]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sell; S.nur+=S.goods[k]*GOODS[k].p; S.goods[k]=0; taskHit('selg'); done('Solgt','marked'); });
@@ -2358,8 +2413,9 @@ function openNur(){ const row=(a,b)=>`<tr><td style="padding:4px 8px 4px 0">${a}
   <p>Nur betyr <b>lys</b>. I Rawdah er det lyset du samler når du er med Koranen og steller hagen. Nur er hagens valuta. Den kan bare tjenes, aldri kjøpes for ekte penger. Du har <b style="color:var(--gold2)">${S.nur} nur</b>.</p>
   <h4>Slik tjener du nur</h4><table style="width:100%;font-size:14px;border-collapse:collapse">${row('Hovedøkt med vers','10 (15 for sjeldne)')}${row('Hifz-økt i Lysets tårn','15')}${row('Kort økt','4')}${row('Dagens ord','3')}${row('Hver av Dagens oppgaver','5, bonus 10 for alle tre')}${row('Vanne fra elva','2')}${row('Rydde én ting','1')}${row('Al-Khwarizmis oppgave','5 om dagen')}${row('Selge ull, melk, egg, frukt og honning','på Markedet')}</table>
   <h4>Hva du bruker nur på</h4><ul style="padding-left:18px;font-size:14px;line-height:1.55">
-  <li><b>Det hagen trenger:</b> fôr til dyrene (${WARES.for10.price}) og lampeolje til lyktene (${WARES.olje.price}). Går fôret tomt, blir dyrene sultne. Går oljen tom, slukner lyktene.</li>
-  <li><b>Verktøy</b> for å rydde etter stormen: rive, spade, sag og vannkrukke (${TOOLS.krukke.price}–${TOOLS.spade.price}).</li>
+  <li><b>Det hagen trenger:</b> høy til flokken, korn til hønene, fiskemat og lampeolje. Går fôret tomt, blir dyrene sultne. Uten korn legger hønene ikke egg.</li>
+  <li><b>Verktøy i tre nivåer:</b> rive, spade, sag og vannkrukke rydder små ting. Store steinblokker og tykke stubber krever oppgraderinger som hakke, trillebår og tømmersag.</li>
+  <li><b>Gården:</b> ungdyr som vokser opp, gjerde i tre nivåer, stall og vanntrau. Bedre gjerde gir plass til flere dyr.</li>
   <li><b>Vern</b> mot katastrofer: fuglehus, sandvegg, sluse og gjeterhund.</li>
   <li><b>Dyr:</b> høner, geiter og nye fisker.</li>
   <li><b>Pynt og bygg:</b> lykter, benker, fontener, påfugl, paviljong og mer. Du plasserer dem selv.</li>
@@ -2554,7 +2610,7 @@ function automationHTML(url){
 function renderTop(){ $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
 function renderAll(){ updateGates(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
 stage.classList.toggle('showtl',!!S.settings.tl); $('aTl').classList.toggle('on',!!S.settings.tl); $('qTlB').classList.toggle('on',!!S.settings.tl);
-S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
+S.farm=S.farm||{fence:0,stall:false,trau:false}; S.young=S.young||[]; S.korn=S.korn??0; S.fiskemat=S.fiskemat??5; S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
 S.roses.forEach((p,i)=>{ if(p.s==null) p.s=i; }); initJunk(); applySky(); drawStatic(); dailyCheck(); rainCheck(); renderAll();
 fetchSurahList().then(m=>{ surahMeta=m; renderAll(); }).catch(()=>{});
 setInterval(()=>{ applySky(); flockTick(); if(view==='over') renderCarpet(); },60e3);
