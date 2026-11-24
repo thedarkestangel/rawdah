@@ -111,6 +111,26 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .cs span{font-family:Amiri,serif;font-size:12px;color:var(--muted);display:block}
 .cs.hit b{width:22px;height:22px;opacity:1;filter:drop-shadow(0 0 8px #ffd98a)}
 .cs.hit span{color:var(--gold);font-size:14px}
+.bnc{transform-box:fill-box;transform-origin:50% 100%;animation:bnc .7s ease}@keyframes bnc{0%,100%{transform:none}30%{transform:translateY(-9px) scale(1.06,.94)}60%{transform:translateY(0) scale(.96,1.04)}}
+.fanup{animation:fanup 1.2s ease!important}@keyframes fanup{0%{transform:scale(.6)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+.fword{position:absolute;z-index:8;transform:translate(-50%,-100%);font:700 15px Inter,system-ui,sans-serif;color:#fff8e0;text-shadow:0 1px 6px rgba(0,0,0,.8);pointer-events:none;animation:fword 1.4s ease-out forwards}@keyframes fword{to{transform:translate(-50%,-160%);opacity:0}}
+.kbub{position:absolute;z-index:8;transform:translate(-50%,-100%);background:#fbf4e4;color:#3a2414;border:1px solid #b08a4a;border-radius:14px;padding:8px 12px;max-width:230px;text-align:center;pointer-events:none;animation:tIn .3s ease;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.kbub b{display:block;font-size:14px}.kbub span{display:block;font-size:12.5px;margin-top:2px}.kbub i{display:block;font-size:11px;opacity:.7;margin-top:3px}
+.rip{position:absolute;z-index:6;width:10px;height:10px;margin:-5px 0 0 -5px;border:2px solid rgba(220,240,255,.85);border-radius:50%;pointer-events:none;animation:rip 1.3s ease-out forwards}@keyframes rip{to{transform:scale(7,3);opacity:0}}
+.pb{transform-box:fill-box}.pb.fly{animation:pfly 9s ease forwards}@keyframes pfly{0%{transform:none}25%{transform:translate(160px,-260px);opacity:0}80%{transform:translate(-120px,-200px);opacity:0}100%{transform:none;opacity:1}}
+.rain{stroke:rgba(200,220,255,.55);stroke-width:1.2;animation:rain .7s linear infinite}@keyframes rain{from{transform:translateY(-40px)}to{transform:translateY(60px)}}
+.bfly{animation:bfly 9s ease-in-out infinite alternate}@keyframes bfly{0%{transform:translate(0,0)}33%{transform:translate(40px,-30px)}66%{transform:translate(-20px,-60px)}100%{transform:translate(30px,-10px)}}
+.bw{transform-box:fill-box;transform-origin:center;animation:bw .25s ease-in-out infinite alternate}@keyframes bw{to{transform:scaleX(.3)}}
+.fj{animation:fj 7s ease-in-out infinite}@keyframes fj{0%,78%{transform:translate(0,4px) rotate(-35deg);opacity:0}80%{transform:translate(0,0) rotate(-40deg);opacity:1}88%{transform:translate(calc(var(--dx)*.5),-26px) rotate(0deg);opacity:1}96%{transform:translate(var(--dx),0) rotate(40deg);opacity:1}100%{transform:translate(var(--dx),4px) rotate(45deg);opacity:0}}
+.fsplash{animation:fspl 7s linear infinite;transform-box:fill-box;transform-origin:center}@keyframes fspl{0%,79%{opacity:0;transform:scale(.3)}81%{opacity:1;transform:scale(.5)}86%{opacity:0;transform:scale(2)}100%{opacity:0}}
+.spinfx{position:absolute;inset:0;z-index:9;display:none;cursor:pointer}.spinfx.on{display:block}.spinfx.out{opacity:0;transition:opacity .35s}
+.spinfx svg{position:absolute;inset:0}
+.fxcard{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) scale(.85);opacity:0;transition:all .45s cubic-bezier(.2,1.4,.4,1);text-align:center;padding:18px 34px;border-radius:22px;background:rgba(10,8,30,.82);border:1px solid rgba(231,194,107,.55);box-shadow:0 0 40px rgba(255,217,138,.35);min-width:200px}
+.fxcard.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.fxcard .fa{font-family:Amiri,serif;font-size:46px;color:#ffe6a6;line-height:1.2;text-shadow:0 0 18px rgba(255,217,138,.5)}
+.fxcard .fn{font-family:var(--serif);font-size:26px;color:#f2e6c8;margin-top:2px}.fxcard .fs{font-size:13px;color:var(--gold);margin-top:6px;letter-spacing:.5px}
+.fxsp{animation:fxsp .9s ease-out forwards}@keyframes fxsp{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.fxpop{animation:fxpop .6s ease-out}@keyframes fxpop{from{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.3)}}
 .fall{position:absolute;width:6px;height:6px;border-radius:50%;background:#fff5d6;box-shadow:0 0 12px 4px #ffd98a;pointer-events:none;display:none;z-index:4}
 .verse{position:absolute;left:6%;right:6%;top:calc(var(--safe-t) + 104px);text-align:center;pointer-events:none;z-index:3;display:none}
 .verse.on{display:block}
@@ -391,6 +411,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
     <button class="arrow r" id="nextQ" aria-label="Neste del"><svg viewBox="0 0 20 20"><path d="M7 3l7 7-7 7"/></svg></button>
     <div class="cons" id="cons"></div>
     <div class="fall" id="fall"></div>
+    <div class="spinfx" id="spinFx"></div>
     <button class="tap" id="tap" aria-label="Trykk på himmelen"></button>
     <div class="verse" id="verse"><div class="panel"><div class="ar" id="ar"></div><div class="translit" id="tl"></div><div class="ref" id="ref"></div></div><div class="tr" id="tr"></div></div>
   </div>
@@ -398,7 +419,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
   <!-- ===== toppbar ===== -->
   <div class="top">
     <button class="ib" id="homeBtn" aria-label="Oversikt" style="display:none"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 4v16M4 12h16"/></svg><span class="ibl">Oversikt</span></button>
-    <span class="chip"><b id="rest">0%</b>·<b id="nur">0</b> nur</span>
+    <span class="chip" id="nurChip" style="cursor:pointer"><b id="rest">0%</b>·<b id="nur">0</b> nur</span>
     <span class="sp"></span>
     <button class="ib" id="shopBtn" aria-label="Basar"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="ibl">Basar</span></button>
     <button class="ib" id="wordBtn" aria-label="Dagens ord"><svg viewBox="0 0 24 24"><path d="M5 21V10a7 7 0 0 1 14 0v11"/><path d="M9 21v-7a3 3 0 0 1 6 0v7"/></svg><span class="ibl">Ord</span></button>
@@ -533,7 +554,7 @@ const WARES={
 const ANIMALS={
   hone:{name:'To høner',price:30,desc:'Legger egg du samler og selger.'},
   geit:{name:'Geit',price:50,desc:'Gir melk, og klatrer på steinene.'},
-  fisk:{name:'To gullfisker',price:40,desc:'Svømmer i dammen midt i hagen.'},
+  fisk:{name:'To fisker',price:40,desc:'Nye arter som hopper i elvene og svømmer i fontenen.'},
 };
 const SKY={
   sommerfugl:{name:'Sommerfugler',price:25,desc:'Flyr over blomstene om dagen.'},
@@ -1087,6 +1108,35 @@ function eggTap(id){ if(S.active||busy) return; const e=EGGS.find(x=>x.id===id);
 function eggCards(m){ const E=EGGS.filter(e=>e.mons.includes(m.id)); if(!E.length) return '';
   return `<h4>Fra reisen</h4>`+E.map(e=>`<div class="card" style="display:flex;gap:10px;align-items:center;margin-top:6px">${eggArt(e.id,64,50)}<div style="flex:1"><b style="color:var(--gold2);font-size:14px">${esc(e.name)}</b><p style="margin:2px 0 6px;font-size:12.5px;color:var(--muted)">Hærfuglen tok den med hjem. Den hører hjemme i ${QUADS.find(q=>q.id===e.q).name}.</p><button class="btn ${S.eggs&&S.eggs[e.id]?'ghost':''}" style="margin:0;padding:8px" data-eggt="${e.id}">${S.eggs&&S.eggs[e.id]?'Ta bort fra hagen':'Sett i hagen'}</button></div></div>`).join(''); }
 function eggToggleWire(after){ $('sheet').querySelectorAll('[data-eggt]').forEach(b=>b.onclick=()=>{ const id=b.dataset.eggt, e=EGGS.find(x=>x.id===id); S.eggs=S.eggs||{}; S.flock.goats=+S.flock.goats||0; S.flock.hens=+S.flock.hens||0; S.eggs[id]=!S.eggs[id]; save(); renderAll(); toast(S.eggs[id]?`${e.name} står nå i ${QUADS.find(q=>q.id===e.q).name}`:`${e.name} er lagt i Lageret`); after(); }); }
+/* ---- Levende hage: trykk på dyr, roser, vann, fugler og gjeteren ---- */
+function bounce(g,cls='bnc'){ if(!g) return; g.classList.remove(cls); void g.getBoundingClientRect(); g.classList.add(cls); setTimeout(()=>g.classList.remove(cls),900); }
+function floatWord(e,txt){ const d=document.createElement('div'); d.className='fword'; d.textContent=txt; d.style.left=e.clientX+'px'; d.style.top=(e.clientY-24)+'px'; stage.appendChild(d); setTimeout(()=>d.remove(),1400); }
+const SAY={sheep:['Bææ!','Mææ!'],cow:['Møø!','Mø-ø-ø!'],goat:['Mæ-æ-æ!','Bæ!'],hen:['Klukk klukk!','Kakk!']};
+function animalTap(a,g,e){ bounce(g); haptic(8); floatWord(e,rnd(SAY[a]||['!']));
+  if(a==='hen') snd.cluck(); else if(a==='cow') snd.moo(); else snd.bleat(a==='goat'?520:null); }
+const GREET=[['As-salāmu ʿalaykum!','Fred være med deg.'],['Bismillāh','I Guds navn. Godt å se deg i hagen.'],['Alḥamdulillāh','Takk og lov for en ny dag.'],['Subḥān Allāh','Se hvor vakkert det vokser!'],['Rabbi zidnī ʿilmā','Herre, øk meg i kunnskap. (20:114)'],['Lā ḥawla wa lā quwwata illā billāh','Det finnes ingen styrke uten hos Gud.'],['Bārak Allāhu fīk','Gud velsigne deg for at du kom.']];
+function keeperTap(e){ const [a,n]=rnd(GREET); haptic(8); snd.chime([440,554],.05); const old=document.getElementById('kpB'); if(old) old.remove();
+  const d=document.createElement('div'); d.id='kpB'; d.className='kbub'; d.innerHTML=`<b>${esc(a)}</b><span>${esc(n)}</span><i>${esc(keeper())}</i>`; d.style.left=Math.min(Math.max(e.clientX,120),stage.clientWidth-120)+'px'; d.style.top=(e.clientY-20)+'px'; stage.appendChild(d); setTimeout(()=>d.remove(),4200); }
+async function roseTap(i){ const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN ROSE FRA ${esc((p.day||'').split('-').reverse().join('.'))}</p><h3>${esc(cat.name)}${p.rare?' · sjelden':''}</h3><div id="rzV"><p style="color:var(--muted)">Henter verset …</p></div><button class="btn ghost" id="rzPlay">Hør verset</button>`);
+  let vs=null; try{ vs=await fetchVerse(p.ref); }catch(e){}
+  const el=$('rzV'); if(!el) return;
+  el.innerHTML=vs?`<div class="card"><p style="font-family:var(--ar);font-size:24px;line-height:1.9;text-align:center;direction:rtl;margin:0">${esc(vs.map(v=>v.ar).join(' '))}</p><p style="font-size:12px;color:var(--muted);text-align:center;margin:4px 0">${esc(vs[0].surahName)} · ${esc(p.ref)}</p><p style="margin:6px 0 0;font-size:14.5px">${esc(vs.map(v=>v.no).join(' '))}</p></div><p style="font-size:12.5px;color:var(--muted)">Denne rosen ble plantet den dagen du fikk dette verset.</p>`:`<p>Verset ${esc(p.ref)}. Fikk ikke hentet teksten akkurat nå.</p>`;
+  $('rzPlay').onclick=()=>{ if(vs){ unlockAudio(); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); } }; }
+function ripple(e){ snd.splash(); for(let k=0;k<3;k++){ const r=document.createElement('i'); r.className='rip'; r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px'; r.style.animationDelay=(k*.18)+'s'; stage.appendChild(r); setTimeout(()=>r.remove(),1600); } }
+function perchLayer(q){ const P={roser:[[78,404],[312,404]],taarn:[[150,396],[250,398]],beite:[[96,404],[286,470]],frukt:[[104,430],[296,420]]}[q]||[];
+  return P.map(([x,y],k)=>`<g class="perch" data-k="${k}" transform="translate(${x} ${y})"><path d="M-8 0 h16" stroke="#6a4a2a" stroke-width="1.6"/><g class="pb"><ellipse cx="0" cy="-5" rx="5.5" ry="4.2" fill="${['#c44a3a','#3a6ab0','#d9a040','#4a8a4a'][(k+q.length)%4]}"/><circle cx="4" cy="-9" r="2.8" fill="${['#c44a3a','#3a6ab0','#d9a040','#4a8a4a'][(k+q.length)%4]}"/><path d="M6.5 -9 l3 1 l-3 1Z" fill="#e7a040"/><path d="M-5 -5 l-5 -2 l1 4Z" fill="#2a2030"/></g><rect x="-14" y="-18" width="28" height="22" fill="transparent"/></g>`).join(''); }
+function perchTap(g){ const b=g.querySelector('.pb'); if(!b||b.classList.contains('fly')) return; snd.chirp(); b.classList.add('fly'); setTimeout(()=>b.classList.remove('fly'),9000); }
+function weatherToday(){ const d=dayStr(), n=parseInt(d.replace(/-/g,''),10), se=season(); if(se!=='vinter'&&(n*7919)%100<16) return 'regn'; if((se==='var'||se==='sommer')&&skyKey==='dag') return 'sommerfugl'; return null; }
+function weatherLayer(){ const w=weatherToday(); if(w==='regn'){ let r=''; for(let k=0;k<60;k++){ const x=(k*53)%400-5, y=(k*97)%760; r+=`<path class="rain" d="M${x} ${y} l-3 12" style="animation-delay:-${(k%10)/10}s"/>`; } return `<g class="rainL">${r}</g>`; }
+  if(w==='sommerfugl') return `<g>${[[80,450,'#f2a14e'],[300,500,'#9a7ae0'],[200,420,'#f4f0e8']].map(([x,y,c],k)=>`<g class="bfly" style="animation-delay:-${k*3}s" transform="translate(${x} ${y})"><g class="bw"><path d="M0 0 Q-7 -8 -8 0 Q-6 5 0 1Z M0 0 Q7 -8 8 0 Q6 5 0 1Z" fill="${c}" stroke="#3a2a1a" stroke-width=".4"/></g></g>`).join('')}</g>`; return ''; }
+function rainCheck(){ if(weatherToday()==='regn'&&S.rainWater!==dayStr()&&S.introSeen){ S.rainWater=dayStr(); QUADS.forEach(q=>{ if(restored(q.id)) S.watered[q.id]=dayStr(); }); save(); setTimeout(()=>toast('Det regner i dag. Regnet har vannet hagen for deg.',3500),1200); } }
+const FISH=[['Gullfisk','#f2913a','#ffd27a'],['Koi','#f4f0e8','#e2552f'],['Blåfisk','#3a7ac9','#9fd0ff'],['Sølvfisk','#c8d2dc','#ffffff'],['Regnbuefisk','#e46a8a','#7fd36a'],['Karpe','#c9922e','#6a4a2a']];
+function fishLayer(){ if(!fountainOK()) return ''; const n=Math.min(6,2+(S.fish||0)); let h='';
+  for(let k=0;k<n;k++){ const [nm,c,c2]=FISH[k%FISH.length], y=480+((k*67)%230), w=14+68*(y-330)/430, x=195+((k%3)-1)*w*.25, dx=(k%2?-1:1)*(18+k*3), d=6+k*1.7;
+    h+=`<g class="fishg" data-f="${k}" transform="translate(${x.toFixed(1)} ${y})"><g class="fj" style="--dx:${dx}px;animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"><g transform="scale(${dx<0?-1:1} 1) scale(${(.8+y/1000).toFixed(2)})"><path d="M-9 0 Q-2 -6 7 0 Q-2 6 -9 0Z" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><path d="M-9 0 l-5 -4 v8Z" fill="${c2}"/><path d="M-2 -4 q2 2 0 4" stroke="${c2}" stroke-width="1" fill="none"/></g></g><ellipse class="fsplash" cx="0" cy="2" rx="7" ry="2" fill="none" stroke="rgba(220,240,255,.8)" style="animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"/><rect x="-16" y="-34" width="${Math.abs(dx)+32}" height="40" fill="transparent" transform="translate(${dx<0?dx:0} 0)"/></g>`; }
+  return h; }
+function fishTap(k,e){ const f=FISH[k%FISH.length]; snd.splash(); ripple(e); floatWord(e,f[0]); haptic(6); }
 function renderSection(){
   const q=QUADS[curQ], ok=restored(q.id);
   drawHorizon();
@@ -1094,18 +1144,18 @@ function renderSection(){
   $('chan').classList.toggle('dry',!flowing()); $('chan').setAttribute('opacity',flowing()?1:.3);
   $('secTitle').innerHTML=`<div class="a">${q.ar}</div><div class="n">${q.name}</div><div class="s">${esc(sectionSub(q.id))}</div>`;
   let h='', b='';
-  if(q.id==='roser'){ h+=depth(S.roses.map(p=>[SLOTS[p.s].y,roseSvg(p,SLOTS[p.s])]));
+  if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`]));
     if(!S.roses.length) b+=beacon(110,560,'Hver økt planter en rose her',24); }
   if(q.id==='taarn'){ const Lr=hifzLearned(); h+=depth(SLOTS.filter(s=>s.x<150||s.x>240).slice(0,Math.min(Lr.length,20)).map((sl,i)=>[sl.y,cyp(sl.x,sl.y,(36+Lr[i].lv*10)*sl.sc,9*sl.sc,'bush2')]))+towerScene();
     if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en sure',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
   if(q.id==='beite'){
     if(!ok){ h+=rubble(90,600,1.4)+rubble(260,640,1.6)+`<path d="M60 560 l40 -6 M110 552 l30 4 M250 570 l50 -8" stroke="#5a4a3a" stroke-width="3"/>`; }
     else { const F=S.flock, sl=SLOTS.filter(s=>s.y>470&&s.y<650).concat(SLOTS.filter(s=>s.y>=650)).slice(0,F.sheep+F.cows+F.goats+F.hens), L2=[]; let k=0;
-      for(let i=0;i<F.goats&&k<sl.length;i++,k++) L2.push([sl[k].y,goatSvg(sl[k].x,sl[k].y,sl[k].sc*.85,k)]);
-      for(let i=0;i<F.hens&&k<sl.length;i++,k++) L2.push([sl[k].y,henSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)]);
-      for(let i=0;i<F.cows&&k<sl.length;i++,k++) L2.push([sl[k].y,cowSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)]);
-      for(let i=0;i<F.sheep&&k<sl.length;i++,k++) L2.push([sl[k].y,sheepSvg(sl[k].x,sl[k].y,sl[k].sc*.95,k)]);
-      h+=`<g id="flock" style="cursor:pointer">${depth(L2)}${shepherdSvg(60,650)}</g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
+      for(let i=0;i<F.goats&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="goat">${goatSvg(sl[k].x,sl[k].y,sl[k].sc*.85,k)}</g>`]);
+      for(let i=0;i<F.hens&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="hen">${henSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)}</g>`]);
+      for(let i=0;i<F.cows&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="cow">${cowSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)}</g>`]);
+      for(let i=0;i<F.sheep&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="sheep">${sheepSvg(sl[k].x,sl[k].y,sl[k].sc*.95,k)}</g>`]);
+      h+=`<g id="flock" style="cursor:pointer">${depth(L2)}<g class="keeper">${shepherdSvg(60,650)}</g></g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
       if(inStell()&&S.picks.length){ const p0=SLOTS[S.picks[0].s]; if(p0) b+=beacon(p0.x,p0.y-24,'Trykk for å samle',-18); }
       h+=`<g transform="translate(120 404)"><rect width="150" height="5" rx="2.5" fill="rgba(255,255,255,.15)"/><rect width="${1.5*F.hunger}" height="5" rx="2.5" fill="${F.hunger<25?'#e0806a':'#e7c26b'}"/><text x="75" y="-6" text-anchor="middle" font-size="11" fill="#d8d1e6">Mett ${Math.round(F.hunger)}% · ${S.feed} fôr</text></g>`;
       if(inStell()&&F.hunger<100) b+=beacon(300,446,'Gi mat: trykk på dyrene',-16);
@@ -1123,8 +1173,8 @@ function renderSection(){
   if(!S.active && !busy) b+=starBeacon(195,200);
   if(S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
-  if(inStell()&&q.id!=='beite') h+=`<g class="helper">${shepherdSvg(318,660)}</g>`;
-  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+h+LL.front+EG.sky; }
+  if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
+  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+weatherLayer(); }
   $('items').innerHTML=h; $('beacons').innerHTML=b;
   $('prevQ').style.visibility=curQ>0?'visible':'hidden'; $('nextQ').style.visibility=curQ<3?'visible':'hidden';
 }
@@ -1309,10 +1359,15 @@ $('vSec').addEventListener('touchend',e=>{ if(tx==null) return; const dx=e.chang
 $('items').addEventListener('click',e=>{
   if(e.target.closest('.egg')||e.target.closest('[onclick]')) return;
   const q=QUADS[curQ].id;
+  const pc=e.target.closest('.perch'); if(pc) return perchTap(pc);
+  const fg=e.target.closest('.fishg'); if(fg&&!inStell()) return fishTap(+fg.dataset.f,e);
+  const kp=e.target.closest('.keeper'); if(kp&&!(inStell()&&q==='beite')) return keeperTap(e);
+  const an=e.target.closest('.ani'); if(an&&!inStell()) return animalTap(an.dataset.a,an,e);
+  const rz=e.target.closest('.rz'); if(rz&&!S.active&&!e.target.closest('.junk')) { const p=S.roses[+rz.dataset.r]; if(p&&p.h!=='dmg') return roseTap(+rz.dataset.r); }
   if(e.target.closest('.hud')){ S.hud.seen=true; save(); unlockAudio(); toast('Hærfuglen har med seg et budskap',2200); return setTimeout(()=>startSession({kind:'spin',cat:'sjelden',ref:'27:20-22',q:QUADS[curQ].id}),900); }
   const pk=e.target.closest('.pick'); if(pk) return collect(pk.dataset.p,e);
   const jn=e.target.closest('.junk'); if(jn) return clean(jn.dataset.j,e);
-  const dc=e.target.closest('.deco'); if(dc&&dc.dataset.d) return decoMenu(dc.dataset.d);
+  const dc=e.target.closest('.deco'); if(dc&&dc.dataset.d){ const d=S.decor.find(x=>x.id===dc.dataset.d); if(d&&d.type==='pafugl'&&!(dc._t&&Date.now()-dc._t<2500)){ dc._t=Date.now(); const f=dc.querySelector('.fan'); bounce(f,'fanup'); snd.chirp(); return toast('Trykk igjen for å flytte påfuglen',1600); } return decoMenu(dc.dataset.d); }
   if(q==='beite'&&e.target.closest('#flock')) return feed(e);
   const f=e.target.closest('.fruit'); if(f) return harvest(+f.dataset.i);
   if(q==='taarn') return openHifz();
@@ -1337,7 +1392,7 @@ function feed(e){
 }
 function water(e){
   const q=QUADS[curQ].id;
-  if(!inStell()){ toast('Du vanner mens verset står i himmelen'); return; }
+  if(!inStell()){ if(fountainOK()) return ripple(e); toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
   if(!fountainOK()){ toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
   if(S.watered[q]===dayStr()){ toast('Denne delen er vannet i dag'); return; }
   S.watered[q]=dayStr(); S.nur+=2; taskHit('vann'); let fixed=0;
@@ -1400,8 +1455,12 @@ const snd=(()=>{ let ctx=null, master=null, amb=null, noiseBuf=null, timers=[], 
     puff(){ if(!on()||!ac()) return; const t=ctx.currentTime, s=ctx.createBufferSource(), f=ctx.createBiquadFilter(), g=ctx.createGain(); s.buffer=noise(); f.type='lowpass'; f.frequency.value=900; s.connect(f); f.connect(g); g.connect(master); env(g,t,.01,.18,.25); s.start(t); s.stop(t+.4); },
     pop(){ if(!on()||!ac()) return; const t=ctx.currentTime, o=ctx.createOscillator(), g=ctx.createGain(); o.frequency.setValueAtTime(600,t); o.frequency.exponentialRampToValueAtTime(1200,t+.08); o.connect(g); g.connect(master); env(g,t,.005,.12,.12); o.start(t); o.stop(t+.2); },
     coin(){ if(!on()||!ac()) return; const t=ctx.currentTime; tone(988,t,.15,'triangle',.09); tone(1319,t+.08,.35,'triangle',.09); },
-    bleat(){ if(!on()||!ac()) return; const t=ctx.currentTime, o=ctx.createOscillator(), v=ctx.createOscillator(), vg=ctx.createGain(), f=ctx.createBiquadFilter(), g=ctx.createGain();
-      o.type='sawtooth'; o.frequency.value=330+Math.random()*80; v.frequency.value=7; vg.gain.value=18; v.connect(vg); vg.connect(o.frequency); f.type='bandpass'; f.frequency.value=1100; f.Q.value=2; o.connect(f); f.connect(g); g.connect(master); env(g,t,.04,.07,.45); o.start(t); v.start(t); o.stop(t+.55); v.stop(t+.55); },
+    moo(){ if(!on()||!ac()) return; const t=ctx.currentTime, o=ctx.createOscillator(), f=ctx.createBiquadFilter(), g=ctx.createGain(); o.type='sawtooth'; o.frequency.setValueAtTime(120,t); o.frequency.linearRampToValueAtTime(150,t+.25); o.frequency.linearRampToValueAtTime(110,t+.9); f.type='lowpass'; f.frequency.value=600; o.connect(f); f.connect(g); g.connect(master); env(g,t,.08,.12,.9); o.start(t); o.stop(t+1.1); },
+    cluck(){ if(!on()||!ac()) return; const t=ctx.currentTime; [0,.12,.22].forEach(d=>{ const o=ctx.createOscillator(), g=ctx.createGain(); o.type='square'; o.frequency.setValueAtTime(900,t+d); o.frequency.exponentialRampToValueAtTime(500,t+d+.06); o.connect(g); g.connect(master); env(g,t+d,.004,.05,.07); o.start(t+d); o.stop(t+d+.1); }); },
+    chirp(){ if(!on()||!ac()) return; const t=ctx.currentTime; [0,.1,.2].forEach(d=>{ const o=ctx.createOscillator(), g=ctx.createGain(); o.frequency.setValueAtTime(3000,t+d); o.frequency.exponentialRampToValueAtTime(4200,t+d+.06); o.connect(g); g.connect(master); env(g,t+d,.005,.05,.07); o.start(t+d); o.stop(t+d+.1); }); },
+    splash(){ if(!on()||!ac()) return; const t=ctx.currentTime, s=ctx.createBufferSource(), f=ctx.createBiquadFilter(), g=ctx.createGain(); s.buffer=noise(); f.type='bandpass'; f.frequency.setValueAtTime(1800,t); f.frequency.exponentialRampToValueAtTime(500,t+.4); f.Q.value=1.2; s.connect(f); f.connect(g); g.connect(master); env(g,t,.01,.16,.45); s.start(t); s.stop(t+.6); },
+    bleat(fr){ if(!on()||!ac()) return; const t=ctx.currentTime, o=ctx.createOscillator(), v=ctx.createOscillator(), vg=ctx.createGain(), f=ctx.createBiquadFilter(), g=ctx.createGain();
+      o.type='sawtooth'; o.frequency.value=fr||330+Math.random()*80; v.frequency.value=7; vg.gain.value=18; v.connect(vg); vg.connect(o.frequency); f.type='bandpass'; f.frequency.value=1100; f.Q.value=2; o.connect(f); f.connect(g); g.connect(master); env(g,t,.04,.07,.45); o.start(t); v.start(t); o.stop(t+.55); v.stop(t+.55); },
   }; return api; })();
 document.addEventListener('pointerdown',()=>snd.gesture(),{passive:true});
 
@@ -1736,26 +1795,41 @@ function special(){ const hj=hijri();
   if(hj&&hj.m===12&&hj.d<=10) return 'hijja';
   if(new Date().getDay()===5) return 'jumua';
   return null; }
+/* ---- Stjerneanimasjoner: tre varianter, så temaet stort ---- */
+const anim=(ms,fn)=>new Promise(res=>{ const t0=performance.now(); (function st(now){ if(spinSkip){ fn(1); return res(); } const k=Math.min(1,(now-t0)/ms); fn(k); if(k<1) requestAnimationFrame(st); else res(); })(t0); });
+const ease=k=>1-Math.pow(1-k,3), wait=ms=>new Promise(r=>{ const t0=Date.now(); (function w(){ if(spinSkip||Date.now()-t0>=ms) return r(); setTimeout(w,40); })(); });
+let spinSkip=false;
+const scrollSvg=(s=1)=>`<g transform="scale(${s})"><rect x="-9" y="-5" width="18" height="10" rx="2" fill="#f4ead2" stroke="#b08a4a" stroke-width=".8"/><circle cx="-9" cy="0" r="5" fill="#e8d8b0" stroke="#b08a4a" stroke-width=".8"/><circle cx="9" cy="0" r="5" fill="#e8d8b0" stroke="#b08a4a" stroke-width=".8"/><path d="M-3 -5 V5" stroke="#b0283a" stroke-width="2"/></g>`;
+async function spinFx(cat,spName){
+  const box=$('spinFx'); spinSkip=false; box.classList.add('on'); box.onclick=()=>{ spinSkip=true; };
+  const v=window.__fxV||rnd(['star','hud','gjeter']);
+  box.innerHTML=`<svg viewBox="0 0 390 760" preserveAspectRatio="xMidYMax slice" width="100%" height="100%"><defs><radialGradient id="fxG"><stop offset="0" stop-color="#fff3c4"/><stop offset=".35" stop-color="#ffd98a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient></defs><g id="fxL"></g></svg><div class="fxcard" id="fxCard"></div>`;
+  const L=box.querySelector('#fxL'), cx=195, cy=300;
+  if(v==='star'){ snd.chime([784,988],.05);
+    L.innerHTML=`<path id="fxTr" stroke="#fff3c4" stroke-width="3" stroke-linecap="round" opacity=".8" fill="none"/><g id="fxS"><circle r="34" fill="url(#fxG)"/><circle r="6" fill="#fff"/></g>`;
+    const x0=-20,y0=40; await anim(1300,k=>{ const e=ease(k), x=x0+(cx-x0)*e, y=y0+(cy-y0)*e; $('fxS').setAttribute('transform',`translate(${x} ${y})`); const t=Math.max(0,e-.25); $('fxTr').setAttribute('d',`M${x0+(cx-x0)*t} ${y0+(cy-y0)*t} L${x} ${y}`); });
+    L.innerHTML+=Array.from({length:14},(_,k)=>{ const a=k/14*Math.PI*2; return `<circle class="fxsp" cx="${cx}" cy="${cy}" r="2.4" fill="#ffe6a6" style="--dx:${(Math.cos(a)*70).toFixed(0)}px;--dy:${(Math.sin(a)*70).toFixed(0)}px"/>`; }).join('');
+    snd.chime([392,523,659],.08); await wait(500); }
+  if(v==='hud'){ snd.hoopoe(.32);
+    L.innerHTML=`<g id="fxH">${hudSvg(0,0).replace('class="hud"','')}<g transform="translate(26 -6)">${scrollSvg(.8)}</g></g>`;
+    await anim(1500,k=>{ const e=ease(k), x=430-(430-cx)*e, y=150+(cy-150)*e+Math.sin(k*Math.PI*3)*-10; $('fxH').setAttribute('transform',`translate(${x} ${y}) scale(-1.4 1.4)`); });
+    L.innerHTML+=`<circle cx="${cx}" cy="${cy}" r="60" fill="url(#fxG)" class="fxpop"/>`; snd.chime([523,659],.07); await wait(600); }
+  if(v==='gjeter'){
+    L.innerHTML=`<g transform="translate(250 332)"><path d="M0 0 V-80" stroke="#6a4a2a" stroke-width="3"/><path d="M-12 -80 h24 l-3 18 h-18Z" fill="#c9922e" stroke="#6a4010" stroke-width=".8"/><circle cy="-70" r="26" fill="url(#fxG)"/><g id="fxScr" transform="translate(0 -70)">${scrollSvg(1)}</g></g><g id="fxP"></g>`;
+    await anim(1300,k=>{ const x=-40+(215+40)*ease(k); $('fxP').innerHTML=`<g transform="translate(${x} 332) scale(1.5)">${shepherdSvg(0,0)}</g>`; });
+    await anim(500,k=>{ $('fxScr').setAttribute('transform',`translate(${-30*k} ${-70+10*k})`); });
+    snd.chime([523,659,784],.07); await wait(400); }
+  $('fxCard').innerHTML=`<div class="fa">${esc(cat.ar)}</div><div class="fn"># ${esc(cat.name)}</div>${spName?`<div class="fs">${esc(spName)}</div>`:cat.rare?'<div class="fs">Et sjeldent vers</div>':''}`;
+  $('fxCard').classList.add('on'); haptic([20,40,30]); await wait(1700);
+  box.classList.add('out'); await new Promise(r=>setTimeout(r,350)); box.className='spinfx'; box.innerHTML=''; box.onclick=null; }
 function spin(force){
   if(busy||S.active) return; busy=true; unlockAudio();
   if(view!=='sec') enterQuad(curQ);
   let cat=force?catById(force):chooseCat(), ref=cat.id==='hele'?String(1+Math.floor(Math.random()*6236)):rnd(cat.refs), sp=special(), spName='';
   if(!force&&sp&&Math.random()<.4){ ref=rnd(SPECIAL[sp].refs); spName=SPECIAL[sp].name; if(cat.id==='hele') cat=CATS[0]; }
   curRec=rnd(Object.keys(EVERYAYAH)); const pre=fetchVerse(ref).catch(()=>null);
-  $('cons').classList.add('on'); $('vSec').classList.add('swirl'); $('beacons').innerHTML='';
-  const idx=CATS.indexOf(cat), el=$('cons').children[idx], f=$('fall');
-  [...$('cons').children].forEach(c=>c.classList.remove('hit'));
-  setTimeout(()=>{
-    const r=el.getBoundingClientRect(), x1=r.left+r.width/2, y1=r.top+5, x0=x1+(Math.random()<.5?-1:1)*150, y0=-20;
-    f.style.display='block'; const t0=performance.now();
-    (function step(now){ const k=Math.min(1,(now-t0)/1500), e=1-Math.pow(1-k,3);
-      f.style.left=(x0+(x1-x0)*e-3)+'px'; f.style.top=(y0+(y1-y0)*e-3)+'px';
-      if(k<1) return requestAnimationFrame(step);
-      f.style.display='none'; el.classList.add('hit'); haptic([20,40,30]); snd.chime([392,523],.08); $('vSec').classList.remove('swirl');
-      toast(spName?`${spName} · ${cat.name}`:`${cat.name}${cat.rare?' · et sjeldent vers':''}`,2200);
-      setTimeout(()=>{ $('cons').classList.remove('on'); busy=false; startSession({kind:'spin',cat:cat.id,ref,q:QUADS[curQ].id,short:pendingShort&&!force},pre); pendingShort=false; },1500);
-    })(t0);
-  },500);
+  $('vSec').classList.add('swirl'); $('beacons').innerHTML='';
+  spinFx(cat,spName).then(()=>{ $('vSec').classList.remove('swirl'); busy=false; startSession({kind:'spin',cat:cat.id,ref,q:QUADS[curQ].id,short:pendingShort&&!force},pre); pendingShort=false; });
 }
 $('tap').onclick=()=>{ if(!S.active) spin(); };
 
@@ -2259,11 +2333,27 @@ const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"
 const scholar=(x,y)=>`<g transform="translate(${x} ${y})"><ellipse cx="0" cy="1" rx="12" ry="2.5" fill="rgba(0,0,0,.25)"/><path d="M-9 0 Q-9 -10 -4 -13 H4 Q9 -10 9 0Z" fill="#efe4cc" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-17" r="4" fill="#c58c5c"/><path d="M-4.4 -18 Q0 -24 4.4 -18Z" fill="#fff"/><path d="M-6 -6 L0 -9 L6 -6 L0 -4Z" fill="#7a2a2a"/><path d="M0 -9 V-4" stroke="#e7c26b" stroke-width=".6"/></g>`;
 const camel=(x,y,s,c='#2a1a10')=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="#d9b25f" stroke-width="${c==='#2a1a10'?0:.8}"><path d="M-14 -10 Q-12 -20 -4 -18 Q0 -26 6 -18 Q10 -18 12 -14 L16 -22 Q19 -24 20 -20 L16 -10 Q12 -8 10 -10 L10 0 H8 L7 -8 H-8 L-9 0 H-11 L-12 -9Z"/><path d="M-4 -24 h6 v-4 h-6Z" fill="#b0283a"/></g>`;
 const birdV=(x,y,s)=>`<path d="M${x-6*s} ${y} Q${x-3*s} ${y-4*s} ${x} ${y} Q${x+3*s} ${y-4*s} ${x+6*s} ${y}" fill="none" stroke="#2a1a3a" stroke-width="${1.3*s}" stroke-linecap="round"/>`;
+function openNur(){ const row=(a,b)=>`<tr><td style="padding:4px 8px 4px 0">${a}</td><td style="padding:4px 0;text-align:right;color:var(--gold2);white-space:nowrap">${b}</td></tr>`;
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">NŪR · نور</p><h3>Hva er nur?</h3>
+  <p>Nur betyr <b>lys</b>. I Rawdah er det lyset du samler når du er med Koranen og steller hagen. Nur er hagens valuta. Den kan bare tjenes, aldri kjøpes for ekte penger. Du har <b style="color:var(--gold2)">${S.nur} nur</b>.</p>
+  <h4>Slik tjener du nur</h4><table style="width:100%;font-size:14px;border-collapse:collapse">${row('Hovedøkt med vers','10 (15 for sjeldne)')}${row('Hifz-økt i Lysets tårn','15')}${row('Kort økt','4')}${row('Dagens ord','3')}${row('Hver av Dagens oppgaver','5, bonus 10 for alle tre')}${row('Vanne fra elva','2')}${row('Rydde én ting','1')}${row('Al-Khwarizmis oppgave','5 om dagen')}${row('Selge ull, melk, egg, frukt og honning','på Markedet')}</table>
+  <h4>Hva du bruker nur på</h4><ul style="padding-left:18px;font-size:14px;line-height:1.55">
+  <li><b>Det hagen trenger:</b> fôr til dyrene (${WARES.for10.price}) og lampeolje til lyktene (${WARES.olje.price}). Går fôret tomt, blir dyrene sultne. Går oljen tom, slukner lyktene.</li>
+  <li><b>Verktøy</b> for å rydde etter stormen: rive, spade, sag og vannkrukke (${TOOLS.krukke.price}–${TOOLS.spade.price}).</li>
+  <li><b>Vern</b> mot katastrofer: fuglehus, sandvegg, sluse og gjeterhund.</li>
+  <li><b>Dyr:</b> høner, geiter og nye fisker.</li>
+  <li><b>Pynt og bygg:</b> lykter, benker, fontener, påfugl, paviljong og mer. Du plasserer dem selv.</li>
+  <li><b>Himmelen:</b> sommerfugler, stjerneskudd og nordlys.</li>
+  <li><b>Palasset</b> i fire trinn, det store målet når hagen er gjenopprettet.</li></ul>
+  <p style="font-size:13px;color:var(--muted)">Forlater du en økt i mer enn 5 minutter, mister du 5 nur. Alt kjøpes i Basaren (veske-ikonet øverst).</p>
+  <button class="btn" id="nurShop">Gå til Basaren</button>`);
+  $('nurShop').onclick=()=>{ closeSheet(); if(unl('basar')) openShop('varer'); else toast(`Basaren åpnes etter ${GATE.basar} økter`); }; }
 function openGuide(){ const st=[
  ['✦','Trykk på stjernen','Stjernen i himmelen gir deg et tilfeldig vers. Du velger det ikke selv, og det er litt av poenget.'],
  ['①','Lytt og les','Verset spilles seks ganger med oversettelse. Midt i viser vi også uttalen. Lange vers spilles tre ganger.'],
  ['②','Lær','Bygg verset ord for ord i tre runder: lett, middels og hele verset.'],
  ['③','Stell','Verset spiller videre mens du rydder, vanner fra elva og gir dyrene mat. Du kan slå av lyden.'],
+ ['✧','Nur','Nur betyr lys. Du tjener det på økter, oppgaver og stell, og bruker det i Basaren på fôr, olje, verktøy, dyr og pynt. Trykk på nur-telleren øverst for mer.'],
  ['🌹','Hagen vokser','Hver økt planter en rose og bygger hagen tilbake mot gullalderen. Hopper du over dager, kommer stormen: glemselen.'],
  ['🕊','Mer etter hvert','Hærfuglen kommer med brev fra ekte steder i den muslimske verden (Rihla). Lysets tårn er for å lære utenat, og Dagens ord gir ett arabisk ord om dagen.']];
   openSheet(`<h3>Slik fungerer Rawdah</h3>${st.map(([i,t,d])=>`<div class="card" style="display:flex;gap:12px;align-items:flex-start;margin:8px 0"><div style="font-size:22px;min-width:30px;text-align:center;color:var(--gold)">${i}</div><div><b style="color:var(--gold2)">${t}</b><p style="margin:3px 0 0;font-size:13.5px">${d}</p></div></div>`).join('')}<p style="font-size:12.5px;color:var(--muted)">Du finner denne forklaringen igjen under Meg.</p><button class="btn" id="gOk">Skjønner, gå til hagen</button>`);
@@ -2437,11 +2527,11 @@ function renderTop(){ $('nur').textContent=S.nur; $('rest').textContent=restoreP
 function renderAll(){ updateGates(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
 stage.classList.toggle('showtl',!!S.settings.tl); $('aTl').classList.toggle('on',!!S.settings.tl); $('qTlB').classList.toggle('on',!!S.settings.tl);
 S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
-S.roses.forEach((p,i)=>{ if(p.s==null) p.s=i; }); initJunk(); applySky(); drawStatic(); dailyCheck(); renderAll();
+S.roses.forEach((p,i)=>{ if(p.s==null) p.s=i; }); initJunk(); applySky(); drawStatic(); dailyCheck(); rainCheck(); renderAll();
 fetchSurahList().then(m=>{ surahMeta=m; renderAll(); }).catch(()=>{});
 setInterval(()=>{ applySky(); flockTick(); if(view==='over') renderCarpet(); },60e3);
 if(!S.settings.m10){ S.settings.m10=true; if(!S.settings.min||S.settings.min===6) S.settings.min=10; save(); }
-applyFont(); applyThemes(); $('taskPill').onclick=openTasks; armBack();
+applyFont(); applyThemes(); $('taskPill').onclick=openTasks; $('nurChip').onclick=()=>{ if(!S.active) openNur(); }; armBack();
 try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 if(!S.introSeen) playIntro();
 if(S.active){ abandonCheck(); if(S.active) openSession(); }
@@ -2457,7 +2547,7 @@ else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&
 setTimeout(()=>{ if(!weekly()) showUnseen(); },500);
 fetchSurahList().then(l=>{ surahMeta=surahMeta||l; if((S.rihla||0)>0&&!S.rihlaIntro&&S.introSeen){ S.rihlaIntro=1; save(); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) openRihlaIntro(latestMon()); else S.rihlaIntro=0; },1500); } const before=S.rihla||0; if(rihlaEarned()>before&&S.introSeen) checkRihla(); }).catch(()=>{});
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.__rawdah={openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
+window.__rawdah={openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
 }
 </script>
 </body>
