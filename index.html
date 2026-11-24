@@ -305,6 +305,12 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 .lbirds{animation:lbird 26s linear infinite}@keyframes lbird{from{transform:translateX(-140px)}to{transform:translateX(420px)}}.lboat{animation:lboat 9s ease-in-out infinite alternate}@keyframes lboat{from{transform:translateY(0)}to{transform:translateY(26px)}}
 .igold{opacity:0;transition:opacity 2.5s}.s1 .igold,.gold .igold{opacity:1}.iruinsky{transition:opacity 2s}.s1 .iruinsky,.gold .iruinsky{opacity:0}
 .iglory{opacity:1;transition:opacity 2s}.s2 .iglory,.s3 .iglory,.s4 .iglory,.s5 .iglory{opacity:0}
+.heart #iScene{filter:saturate(1.1) brightness(1.05)}.heart .igold{opacity:1}.heart .icity{opacity:1}.heart .iruinsky{opacity:0}.heart .iglory{opacity:0!important}
+.rise #iScene{filter:saturate(.6) brightness(.8)!important}.irise{opacity:0}.rise .irise{opacity:1}.rise .ilonehud{opacity:0!important;transition:none}
+.irb{transform:translate(214px,304px) scale(1.3);opacity:0}.rise .irb{animation:irb 3s ease-in forwards}@keyframes irb{0%{transform:translate(214px,304px) scale(1.3);opacity:1}70%{transform:translate(195px,160px) scale(.6);opacity:1}100%{transform:translate(195px,200px) scale(.2);opacity:0}}
+.irs{opacity:0;transform:translate(195px,200px)}.rise .irs{animation:irs 1.4s 2.4s ease-out forwards}.rise .istar{opacity:0!important}@keyframes irs{from{opacity:0;transform:translate(195px,200px) scale(.2)}to{opacity:1;transform:translate(195px,200px) scale(1)}}
+.star .istar,.herders .istar{opacity:1}.star .ilonehud,.herders .ilonehud{opacity:0!important}.rise .ilan.last .lg{opacity:0!important}
+.crest{transform-box:fill-box;transform-origin:20% 100%;animation:crest 5s ease-in-out infinite}@keyframes crest{0%,80%,100%{transform:none}86%{transform:rotate(-12deg) scaleY(1.12)}}
 .icity{opacity:0;transition:opacity 2s}.s1 .icity{opacity:1}.s2 .icity{opacity:.55}
 .ibroken{opacity:0;transition:opacity 1.5s 1.2s}.s4 .ibroken,.s5 .ibroken,.s6 .ibroken{opacity:1}.s4 .iruinsky,.s5 .iruinsky,.s6 .iruinsky{opacity:0!important}
 .itornado{opacity:0;transform:translate(-80px,560px)}.s3 .itornado{opacity:1;animation:torn 4.5s ease-in-out forwards}
@@ -656,7 +662,7 @@ function restored(q){ if(q==='roser') return true; if(q==='taarn') return !!S.hi
 const fountainOK=()=>S.vs>=AT.fountain;
 const flowing=()=>fountainOK()&&doneToday();
 function starBeacon(x,y){ const pts=Array.from({length:16},(_,k)=>{ const r=k%2?7:22, a=Math.PI*k/8-Math.PI/2; return (x+r*Math.cos(a)).toFixed(1)+' '+(y+r*Math.sin(a)).toFixed(1); }).join(' L');
-  return `<g class="bstar" style="pointer-events:none"><circle cx="${x}" cy="${y}" r="46" fill="url(#lglow)" opacity=".9"/><path class="sp" d="M${pts}Z" fill="#ffe6a6" stroke="#e7c26b" stroke-width="1.5"/><text x="${x}" y="${y+48}">Trykk på stjernen</text></g>`; }
+  return `<g class="bstar" style="pointer-events:none"><circle cx="${x}" cy="${y}" r="46" fill="url(#lglow)" opacity=".9"/><path class="sp" d="M${pts}Z" fill="#ffe6a6" stroke="#e7c26b" stroke-width="1.5"/><text x="${x}" y="${y+48}">Trykk på stjernen</text><text x="${x}" y="${y+66}" style="font-size:11px;font-weight:500;opacity:.85">Hærfuglen kommer med et vers</text></g>`; }
 function beacon(x,y,label,dy=-24){ return `<g class="beacon" transform="translate(${x} ${y})"><circle class="r" r="12"/><circle class="r r2" r="12"/><circle class="dot" r="3.5"/>${label?`<text y="${dy}">${esc(label)}</text>`:''}</g>`; }
 function hifzLearned(){ const out=[]; for(const s in S.hifz.prog) for(const a in S.hifz.prog[s]) if(S.hifz.prog[s][a]>=1) out.push({s:+s,a:+a,lv:S.hifz.prog[s][a],dim:needsReview(+s,+a)}); return out; }
 const INTERVALS=[1,3,7,21,45];
@@ -759,12 +765,18 @@ function cowSvg(x,y,s,k){
 }
 const isF=()=>S.settings.gender==='f';
 const keeper=()=>isF()?'– gjeterinnen':'– gjeteren';
-function hudSvg(x,y){ return `<g class="hud" transform="translate(${x} ${y})"><g class="hop" style="animation-duration:2.6s"><ellipse cx="0" cy="16" rx="14" ry="3" fill="rgba(0,0,0,.3)"/><path d="M-4 10 v6 M3 10 v6" stroke="#6a4a2a" stroke-width="2"/>
-  <path d="M-16 2 Q-14 -10 0 -10 Q12 -10 14 2 Q8 12 -4 12 Q-14 10 -16 2Z" fill="#e0a868" ${L}/><path d="M-14 0 L-30 4 L-14 6Z" fill="#2a2030" ${L}/>
-  <path d="M-12 -4 Q-2 6 10 -2 L8 4 Q-2 10 -12 2Z" fill="#fbf5e8"/><path d="M-10 -2 l4 4 M-4 0 l4 4 M2 -1 l4 4" stroke="#2a2030" stroke-width="2"/>
-  <circle cx="10" cy="-14" r="7" fill="#e0a868" ${L}/><path d="M16 -14 Q28 -12 32 -6" fill="none" stroke="#3a2a1a" stroke-width="2.4" stroke-linecap="round"/>
-  ${[-30,-15,0,15,30].map(a=>`<path d="M8 -20 l${Math.sin(a*Math.PI/180)*14} ${-Math.cos(a*Math.PI/180)*14}" stroke="#e0a868" stroke-width="5" stroke-linecap="round" transform="rotate(${a/3} 8 -20)"/><circle cx="${8+Math.sin(a*Math.PI/180)*14}" cy="${-20-Math.cos(a*Math.PI/180)*14}" r="2.6" fill="#2a2030"/>`).join('')}
-  </g><rect x="-34" y="-44" width="70" height="64" fill="transparent"/></g>`; }
+function hudArt(){ return `
+  <path d="M-12 8 Q-34 10 -42 2 Q-30 -2 -14 0Z" fill="#1e1626"/><path d="M-40 2 l-6 -2 M-38 6 l-6 2" stroke="#f4ead2" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M-18 4 Q-20 -14 0 -16 Q18 -16 20 0 Q16 16 -2 16 Q-16 14 -18 4Z" fill="#e9a35a"/>
+  <path d="M-14 -6 Q-2 -14 14 -8 Q4 -12 -6 -8Z" fill="#ffd49a" opacity=".85"/>
+  <path d="M-16 2 Q-4 -4 12 2 L10 10 Q-4 14 -16 8Z" fill="#1e1626"/>
+  ${[-12,-6,0,6].map(x=>`<path d="M${x} ${3-x*.15} q2 4 4 6" stroke="#f8f1de" stroke-width="2.4" stroke-linecap="round" fill="none"/>`).join('')}
+  <path d="M-2 14 v8 M6 14 v8" stroke="#5a3a24" stroke-width="2" stroke-linecap="round"/>
+  <path d="M8 -14 Q12 -26 22 -22 Q28 -16 22 -8 Q16 -4 10 -8Z" fill="#efae66"/>
+  <path d="M12 -20 Q16 -24 21 -21" stroke="#ffe0b0" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <path d="M24 -16 Q38 -14 44 -6" fill="none" stroke="#2a1a14" stroke-width="2.6" stroke-linecap="round"/>
+  <g class="crest">${[-48,-30,-14,2,18].map((a,k)=>{ const r=a*Math.PI/180, L=18+(k%2)*3; return `<path d="M14 -20 L${(14+Math.sin(r)*L).toFixed(1)} ${(-20-Math.cos(r)*L).toFixed(1)}" stroke="#f0a24e" stroke-width="5.5" stroke-linecap="round"/><circle cx="${(14+Math.sin(r)*L).toFixed(1)}" cy="${(-20-Math.cos(r)*L).toFixed(1)}" r="2.8" fill="#1e1626"/>`; }).join('')}</g>`; }
+function hudSvg(x,y){ return `<g class="hud" transform="translate(${x} ${y})"><g class="hop" style="animation-duration:2.6s"><ellipse cx="0" cy="22" rx="16" ry="3" fill="rgba(0,0,0,.3)"/>${hudArt()}</g><rect x="-48" y="-48" width="96" height="74" fill="transparent"/></g>`; }
 function henSvg(x,y,s,k){ return `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s.toFixed(2)})"><g class="hop" style="animation-delay:-${(k*.9)%4.6}s;animation-duration:3.2s"><ellipse cx="0" cy="8" rx="10" ry="2.5" fill="rgba(0,0,0,.28)"/><path d="M-2 6 v4 M3 6 v4" stroke="#e7a24a" stroke-width="2"/><path d="M-11 -2 Q-14 -12 -6 -10 Q0 -14 6 -6 Q10 4 0 6 Q-10 6 -11 -2Z" fill="#fffaf0" ${L}/><g class="graze" style="animation-delay:-${k}s"><circle cx="7" cy="-9" r="5" fill="#fffaf0" ${L}/><path d="M5 -14 q2 -4 4 0 q2 -4 3 1" fill="#d9573f" stroke="#1a1030" stroke-width="1"/><path d="M12 -9 l4 1 l-4 2Z" fill="#e7a24a"/></g></g></g>`; }
 function goatSvg(x,y,s,k){ return `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s.toFixed(2)})"><g class="hop" style="animation-delay:-${(k*1.4)%4.6}s"><ellipse cx="0" cy="15" rx="17" ry="3.5" fill="rgba(0,0,0,.28)"/>${[-9,-3,5,10].map(lx=>`<rect x="${lx-2}" y="4" width="4" height="11" rx="2" fill="#8a6a4a" ${L}/>`).join('')}<rect x="-15" y="-8" width="28" height="15" rx="7" fill="#c9a27a" ${L}/><path d="M-6 -7 q6 -2 10 4 q-6 6 -10 -4Z" fill="#fffaf0"/><g class="graze" style="animation-delay:-${k*1.2}s"><path d="M13 -10 q2 -9 -3 -12 M17 -10 q4 -8 1 -13" fill="none" stroke="#6a5340" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="17" cy="-5" rx="6" ry="7" fill="#c9a27a" ${L}/><path d="M17 2 l-1 6 l3 -5" fill="#8a6a4a"/></g></g></g>`; }
 function shepherdSvg(x,y){
@@ -1053,7 +1065,7 @@ function lifeLayer(qid){ const pct=restorePct(); if(pct<25&&!(S.rihla>0)) return
     back+=garland(8,168,338)+garland(222,382,338);
     back+=[22,368].map(x=>`<g><ellipse cx="${x}" cy="428" rx="13" ry="4" fill="#3f78b0" stroke="#e7c26b" stroke-width=".8"/><path d="M${x} 427 Q${x-4} 412 ${x} 400 Q${x+4} 412 ${x} 427" class="jet" stroke="#cfe6ff" stroke-width="1.4" fill="none"/></g>`).join(''); }
   if(pct>=75){ back+=scholar(62,396)+scholar(334,398); }
-  if(pct>=100){ back+=`<g opacity=".9">${camel(116,338,.55,'#b08a5a')}${camel(134,339,.5,'#b08a5a')}${figure(148,339,.5,'#2f5a8a','#efe4cc')}</g><g class="lboat"><path d="M188 436 h16 l-3 6 h-10Z" fill="#6a3f20"/><path d="M196 436 V418 L204 434Z" fill="#f2ead8"/></g>`; }
+  if(pct>=100){ back+=`<g transform="translate(244 330) scale(.42)" onclick="toast('Hærfuglen er hjemme. Alhamdulillah.')" style="cursor:pointer">${hudArt()}</g>`; back+=`<g opacity=".9">${camel(116,338,.55,'#b08a5a')}${camel(134,339,.5,'#b08a5a')}${figure(148,339,.5,'#2f5a8a','#efe4cc')}</g><g class="lboat"><path d="M188 436 h16 l-3 6 h-10Z" fill="#6a3f20"/><path d="M196 436 V418 L204 434Z" fill="#f2ead8"/></g>`; }
   todaysTravellers().forEach((i,k)=>{ const m=MONS[i], c=ROBE[REGION[m.id]]||['#efe4cc','#2f5a8a'], x=k?300:92, y=k?384:380;
     front+=`<g onclick="travTalk(${i},${x},${y})" style="cursor:pointer"><ellipse cx="${x}" cy="${y+1}" rx="9" ry="2" fill="rgba(0,0,0,.25)"/>${figure(x,y,.75,c[0],c[1])}<g transform="translate(${x+8} ${y-24})"><path d="M0 0 V14" stroke="#7a5a30" stroke-width=".8"/><svg x="0" y="0" width="9" height="6" viewBox="0 0 30 20">${FLAGS[m.country]||''}</svg></g></g>`; });
   return {back,front}; }
@@ -1195,7 +1207,7 @@ function renderSection(){
   if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`]));
     if(!S.roses.length) b+=beacon(110,560,'Hver økt planter en rose her',24); }
   if(q.id==='taarn'){ const Lr=hifzLearned(); h+=depth(SLOTS.filter(s=>s.x<150||s.x>240).slice(0,Math.min(Lr.length,20)).map((sl,i)=>[sl.y,cyp(sl.x,sl.y,(36+Lr[i].lv*10)*sl.sc,9*sl.sc,'bush2')]))+towerScene();
-    if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en sure',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
+    if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en surah',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
   if(q.id==='beite'){
     if(!ok){ h+=rubble(90,600,1.4)+rubble(260,640,1.6)+`<path d="M60 560 l40 -6 M110 552 l30 4 M250 570 l50 -8" stroke="#5a4a3a" stroke-width="3"/>`; }
     else { const F=S.flock, sl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(0,(F.sheep||0)+(F.cows||0)+(F.goats||0)+(F.hens||0)), L2=[]; let k=0;
@@ -1230,7 +1242,7 @@ function renderSection(){
 }
 function sectionSub(id){
   if(id==='roser') return `${S.roses.filter(p=>p.h!=='dead').length} av ${MAXROSE} roser`;
-  if(id==='taarn'){ if(!S.hifz.current) return 'I ruiner · velg en sure'; const L2=hifzLearned(); return `${surahMeta?surahMeta[S.hifz.current-1].englishName:'Sure '+S.hifz.current} · ${L2.length} vers utenat`; }
+  if(id==='taarn'){ if(!S.hifz.current) return 'I ruiner · velg en surah'; const L2=hifzLearned(); return `${surahMeta?surahMeta[S.hifz.current-1].englishName:'Surah '+S.hifz.current} · ${L2.length} vers utenat`; }
   if(!restored(id)) return 'I ruiner';
   if(id==='beite') return `${S.flock.sheep} sauer · ${S.flock.cows} ${S.flock.cows===1?'ku':'kyr'}`;
   if(id==='frukt') return `${S.fruit.length} trær · ${S.fruit.filter(t=>t.st>=3).length} modne`;
@@ -1680,7 +1692,7 @@ function rihlaNext(){ const out=[];
   if(S.vs<AT.fountain) out.push(`Reparer fontenen: ${AT.fountain-S.vs} hovedøkt${AT.fountain-S.vs===1?'':'er'} igjen`);
   const pct=restorePct(), nx=[25,50,75,100].find(v=>v>pct); if(nx) out.push(`Neste kapittel i hagen: ${nx} % gjenopprettet (nå ${pct} %)`);
   const dt=S.daysTotal||0, left=7-(dt%7); out.push(`${left} fullført${left===1?'':'e'} dag${left===1?'':'er'} til (totalt ${dt} så langt, trenger ikke være på rad)`);
-  const vl=versesLearned(), vleft=20-(vl%20); out.push(S.hifz.current?`${vleft} vers til i Lysets tårn (${vl} lært så langt)`:'Velg en sure i Lysets tårn og lær 20 vers');
+  const vl=versesLearned(), vleft=20-(vl%20); out.push(S.hifz.current?`${vleft} vers til i Lysets tårn (${vl} lært så langt)`:'Velg en surah i Lysets tårn og lær 20 vers');
   return out; }
 function openRihlaIntro(i,page=1){ const n=MONS.length, m=MONS[i];
   const dots=`<div style="display:flex;justify-content:center;gap:6px;margin:10px 0 2px">${[1,2].map(k=>`<i style="width:7px;height:7px;border-radius:50%;background:${k===page?'var(--gold)':'#4a4370'}"></i>`).join('')}</div>`;
@@ -1757,7 +1769,7 @@ const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den i bok-ikonet øverst.'],
   basar:['Basaren og rydding','Kjøp verktøy i basaren (veske-ikonet) og rydd ruinene i «Stell». Dagens tre oppgaver dukker også opp nede til venstre.'],
   ord:['Dagens ord','Ett arabisk ord fra Koranen hver dag, med rot og betydning. Finn det i bue-ikonet øverst.'],
-  hifz:['Lysets tårn','Lær en sure utenat, vers for vers. Hvert vers tenner et vindu. Finn tårnet i tårn-ikonet øverst.'],
+  hifz:['Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers tenner et vindu. Finn tårnet i tårn-ikonet øverst.'],
   beite:['Beitet','Dyrene er tilbake. Gi dem mat, samle ull, melk og egg, og selg på markedet.'],
   vern:['Vern og dyr','Basaren selger nå fuglehus, sandvegg, sluse, gjeterhund, bikube og flere dyr.'],
   bygg:['Bygg og himmel','Nå kan du bygge paviljong, kaskade og minaret, legge til nordlys og stjerneskudd, og til slutt palasset.'],
@@ -2091,21 +2103,21 @@ async function openHifz(){
   try{ surahMeta=surahMeta||await fetchSurahList(); }catch(e){}
   const cur=S.hifz.current;
   if(!cur){
-    openSheet(`<h3>Lysets tårn</h3><p>Velg en sure å lære utenat. Hvert vers tenner et vindu i tårnet, nedenfra og opp. Vinduene ber om repetisjon til riktig tid: etter 1 dag, så 3, 7, 21 og 45 dager. Når et vindu dempes, er det tid for å repetere det. Når hele suren er lært, tennes lykten på toppen.</p><div class="card list" id="hzS">${surahMeta?'':'<p>Får ikke hentet listen. Sjekk nettet.</p>'}</div><h4>Alle surer</h4><div class="card list" id="hzA"></div>`);
+    openSheet(`<h3>Lysets tårn</h3><p>Velg en surah å lære utenat. Hvert vers tenner et vindu i tårnet, nedenfra og opp. Vinduene ber om repetisjon til riktig tid: etter 1 dag, så 3, 7, 21 og 45 dager. Når et vindu dempes, er det tid for å repetere det. Når hele surahen er lært, tennes lykten på toppen.</p><div class="card list" id="hzS">${surahMeta?'':'<p>Får ikke hentet listen. Sjekk nettet.</p>'}</div><h4>Alle surahs</h4><div class="card list" id="hzA"></div>`);
     if(!surahMeta) return;
     const item=s=>`<button data-s="${s.number}"><span><b>${s.number}. ${esc(s.englishName)}</b><br><small>${esc(s.englishNameTranslation)} · ${s.numberOfAyahs} vers</small></span><span class="arn">${esc(s.name.replace('سُورَةُ ',''))}</span></button>`;
     $('hzS').innerHTML=SUGGEST.map(n=>item(surahMeta[n-1])).join(''); $('hzA').innerHTML=surahMeta.map(item).join('');
     $('sheet').querySelectorAll('.list button').forEach(b=>b.onclick=()=>{ S.hifz.current=+b.dataset.s; if(!S.seenRest.taarn){ S.seenRest.taarn=true; logEvent('Lysets tårn er reist igjen.'); } save(); openHifz(); renderAll(); });
     return;
   }
-  const meta=surahMeta?surahMeta[cur-1]:{englishName:'Sure '+cur,numberOfAyahs:7};
+  const meta=surahMeta?surahMeta[cur-1]:{englishName:'Surah '+cur,numberOfAyahs:7};
   const pr=S.hifz.prog[cur]||{}, N=meta.numberOfAyahs, lit=Object.values(pr).filter(l=>l>=1).length, all=lit===N;
   let w='', next=false;
   for(let a=1;a<=N;a++){ const lv=pr[a]||0, open=a===1||(pr[a-1]||0)>=1, dim=lv&&needsReview(cur,a);
     let c='win '+(lv?'l'+lv:'')+(open?'':' locked')+(dim?' dim':'');
     if(!next&&open&&(dim||lv<3)&&(dim||!Object.entries(pr).some(([k,l])=>needsReview(cur,+k)))){ c+=' next'; next=true; }
     w+=`<button class="${c}" data-a="${a}" ${open?'':'disabled'}><span>${a}</span><span class="st">${'★'.repeat(lv)}${'☆'.repeat(3-lv)}</span></button>`; }
-  openSheet(`<h3>${esc(meta.englishName)}</h3><p>${lit} av ${N} vinduer tent${all?' · lykten på toppen lyser':''}. Trykk på det blinkende vinduet for å fortsette. Hver leksjon er en vanlig 10-minutters økt med akkurat det verset.</p><div class="tower"><div class="crown ${all?'lit':''}"></div>${w}</div><button class="btn ghost" id="hzChg">Bytt sure</button>`);
+  openSheet(`<h3>${esc(meta.englishName)}</h3><p>${lit} av ${N} vinduer tent${all?' · lykten på toppen lyser':''}. Trykk på det blinkende vinduet for å fortsette. Hver leksjon er en vanlig 10-minutters økt med akkurat det verset.</p><div class="tower"><div class="crown ${all?'lit':''}"></div>${w}</div><button class="btn ghost" id="hzChg">Bytt surah</button>`);
   const nx=$('sheet').querySelector('.win.next'); if(nx) setTimeout(()=>{ const sh=$('sheet'); sh.scrollTo({top:sh.scrollTop+nx.getBoundingClientRect().top-sh.getBoundingClientRect().top-sh.clientHeight/2,behavior:'smooth'}); },300);
   $('sheet').querySelectorAll('.win').forEach(b=>b.onclick=()=>{ const a=+b.dataset.a; closeSheet(); unlockAudio(); startSession({kind:'hifz',cat:'dua',ref:`${cur}:${a}`,surah:cur,ayah:a,q:'taarn'}); });
   $('hzChg').onclick=()=>{ S.hifz.current=null; save(); openHifz(); renderAll(); };
@@ -2312,7 +2324,7 @@ function openBackup(){
 /* --- Meg --- */
 function modesHTML(){ return `
   <div class="mode"><div class="ic">آية</div><div><b>Vers · ca. 5–10 minutter</b><p>En stjerne faller og gir deg et vers du ikke har valgt selv. Du lytter og leser det seks ganger, bygger det ord for ord og steller hagen mens verset spiller. Økten kan ikke lukkes før alle tre delene er gjort.</p><p><i>Gir deg:</i> En pause fra skjermen som fyller deg, og et vers som kanskje treffer akkurat det du trenger. Dette gjenoppretter hagen.</p></div></div>
-  <div class="mode"><div class="ic">منارة</div><div><b>Lysets tårn · Hifz</b><p>Velg en sure og lær den vers for vers. Hvert vers tenner et vindu i tårnet, og repetisjon holder lyset ved like.</p><p><i>Gir deg:</i> Koranen utenat i små biter som faktisk sitter, og en tydelig oversikt over hvor langt du har kommet.</p></div></div>
+  <div class="mode"><div class="ic">منارة</div><div><b>Lysets tårn · Hifz</b><p>Velg en surah og lær den vers for vers. Hvert vers tenner et vindu i tårnet, og repetisjon holder lyset ved like.</p><p><i>Gir deg:</i> Koranen utenat i små biter som faktisk sitter, og en tydelig oversikt over hvor langt du har kommet.</p></div></div>
   <div class="mode"><div class="ic">كلمة</div><div><b>Dagens ord</b><p>Ett arabisk ord fra Koranen hver dag, med uttale, betydning på norsk og engelsk og roten det kommer fra. Dagen etter får du en liten test.</p><p><i>Gir deg:</i> Etter noen måneder kjenner du igjen ordene når du leser og hører Koranen. Du begynner å forstå, ikke bare lese.</p></div></div>`; }
 
 /* ---- Korte økter: antall per dag, tilfeldige klokkeslett og grense ---- */
@@ -2395,13 +2407,15 @@ function showUnseen(){
 
 /* ================= INTRO ================= */
 const CAPS=[
-  'Det var en gang en hage som het Rawdah.<small>Rundt den lå en by i gull. Lærde leste under trærne, markedene var fulle, karavaner og skip kom fra hele verden, og lyktene brant hele natten. Den var et bilde på ummaen da den blomstret.</small>',
-  'Men med tiden glemte folk hagen.<small>De sluttet å pleie den. Koranen ble stående på hylla, og lyktene sluknet én etter én.</small>',
+  'Det var en gang en hage som het Rawdah.<small>Rundt den lå en by i gull. Om morgenen fylte duften av brød og roser gatene, karavaner kom inn fra ørkenen, og skip fra hele verden la til ved elva. Om natten brant tusen lykter.</small>',
+  'Hjertet i byen var Koranen.<small>Den ble resitert fra vinduene ved fajr. Lærde satt under trærne og underviste alle som ville lære, gammel og ung, kvinner og menn. Den rike delte med den fattige, og ingen gikk sulten til sengs. Rawdah var et bilde på ummaen da den blomstret.</small>',
+  'Men med tiden glemte folk.<small>Det begynte smått. En dag uten Koranen ble til en uke. Hagen ble ikke lenger pleid, folk ble opptatt av sitt eget, og lyktene sluknet én etter én uten at noen tente dem igjen.</small>',
   'Glemselen ble til en storm.<small>En virvelvind av sand rev gjennom byen. Kuplene raste, tårnene falt, fontenen sprakk, og elvene tørket inn.</small>',
-  'Byen og hagen ble lagt i ruiner.<small>Bare én liten lykt brenner fortsatt, og en hærfugl sitter alene på muren.</small>',
-  'Det gikk mange tiår.<small>Sand og ugress dekket ruinene. Ingen kom, og ingen husket hvordan det en gang hadde vært.</small>',
-  'Så kom noen gjetere med dyrene sine.<small>De fant den ene lykta som fortsatt brant, og bestemte seg for å bli. Der skulle de bygge opp igjen.</small>',
-  'Ummaen ble ikke bygd på én dag.<small>Den gjenoppbygges heller ikke på én dag. Din rolle er å gjenopprette hagen til sin gamle storhet: noen minutter med Koranen hver dag, én dag, ett vers, ett hjerte om gangen.</small>',
+  'Byen og hagen ble lagt i ruiner.<small>Alle dro. Bare én liten lykt brant fortsatt, og ved den satt en hærfugl, hudhud, alene på muren. Den nektet å forlate hagen.</small>',
+  'Det gikk mange tiår.<small>Sand og ugress dekket ruinene. Lykta brant svakere og svakere, men hærfuglen voktet den, natt etter natt.</small>',
+  'Den natten lykta holdt på å slukne, tok hærfuglen den siste flammen.<small>Den fløy høyt opp over ruinene med lyset, så høyt at den ble til en stjerne. Der ble den hengende og lyste, i håp om at noen skulle se den.</small>',
+  'Noen gjetere så stjernen.<small>De fulgte lyset gjennom ørkenen med dyrene sine, og fant ruinene av Rawdah. Der bestemte de seg for å bli og bygge opp igjen.</small>',
+  'Ummaen ble ikke bygd på én dag.<small>Den gjenoppbygges heller ikke på én dag. Hver gang du trykker på stjernen, kommer hærfuglen ned med et vers til deg. Din rolle er å gjenopprette hagen: én dag, ett vers, ett hjerte om gangen. Når hagen blomstrer igjen, kommer hærfuglen hjem.</small>',
 ];
 /* ---- Gullalderens Rawdah: vises bare i første bilde av fortellingen og når hagen er 100 % ---- */
 const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 0 Q-7 -14 -4 -20 H4 Q7 -14 6 0Z" fill="${robe}" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-24" r="4.2" fill="#c58c5c"/><path d="M-4.6 -25 Q0 -32 4.6 -25 Q0 -27 -4.6 -25Z" fill="${turb}"/></g>`;
@@ -2520,18 +2534,19 @@ function introScene(){
   <g class="igrass">${[[60,640],[260,610],[140,700],[110,520],[280,540]].map(([x,y])=>[0,1,2,3,4].map(k=>`<path d="M${x-12+k*6} ${y+6} q-2 -12 ${k%2?3:-3} -18" stroke="#5a7a3a" stroke-width="1.6" fill="none"/>`).join('')).join('')}</g>
   <g class="itime"><circle class="itsun" cx="0" cy="0" r="12" fill="#fff0c0"/></g>
   <g class="iherd">${shepherdSvg(92,470)}${sheepSvg(140,474,.95,1)}${sheepSvg(176,488,.9,2)}${goatSvg(124,494,.85,3)}<g transform="translate(56 482)">${figure(0,0,1.2,'#7a5a3a','#efe4cc')}</g><g transform="translate(212 478)">${figure(0,0,1.1,'#3a5a7a','#efe4cc')}</g></g>
-  <g class="ilonehud" transform="translate(218 318) scale(.4)">${hudSvg(0,0)}</g>
+  <g class="ilonehud" transform="translate(214 304) scale(.8)">${hudSvg(0,0)}</g>
+  <g class="irise"><g class="irb"><g transform="scale(.6)">${hudArt()}</g><circle cx="30" cy="-2" r="5" fill="#ffe6a6"/><circle cx="30" cy="-2" r="26" fill="url(#ilg)"/></g><g class="irs"><circle r="40" fill="url(#ilg)"/><path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" fill="#fff3c4"/></g></g>
   ${lan(70,120)}${lan(320,120)}${lan(195,40,'last')}
   <g class="istar"><circle cx="195" cy="200" r="5" fill="#fff5d6"/><circle class="p" cx="195" cy="200" r="10" fill="none" stroke="#ffe6a6" stroke-width="1.5"/><circle cx="195" cy="200" r="30" fill="url(#ilg)"/></g>`;
 }
-const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#3a4a7a','#c98a6a','#f2c080'],['#05071a','#111641','#28205a'],['#05071a','#111641','#28205a']];
-const IVIS=['s1','s2','s3','s4','s4 decades','s4 herders','s5 herders','s6 herders'];
+const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#1c2a6a','#9a6a8a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a'],['#05071a','#111641','#28205a']];
+const IVIS=['s1','s1 heart','s2','s3','s4','s4 decades','s4 rise','s4 herders star','s5 herders','s6 herders'];
 let iStep=0;
 function playIntro(){
   $('intro').classList.add('on'); $('iScene').innerHTML=introScene();
   let st='';for(let i=0;i<70;i++) st+=`<i style="top:${(Math.random()*100).toFixed(1)}%;width:${(20+Math.random()*60).toFixed(0)}px;animation-duration:${(.5+Math.random()*.8).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s"></i>`; $('storm').innerHTML=st;
   let du='';for(let i=0;i<40;i++) du+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*60).toFixed(1)}%;animation-duration:${(6+Math.random()*6).toFixed(1)}s;animation-delay:-${(Math.random()*6).toFixed(1)}s"></i>`; $('dust').innerHTML=du;
-  $('idots').innerHTML=Array.from({length:8},()=>'<i></i>').join('');
+  $('idots').innerHTML=Array.from({length:10},()=>'<i></i>').join('');
   $('iModes').innerHTML=`<h3 style="font-family:var(--serif);color:var(--gold2);font-size:26px;margin:0 0 4px">Slik bygger du opp igjen</h3>${modesHTML()}<div class="mode"><div class="ic">نور</div><div><b>Nur og Basaren</b><p>Nur betyr lys. Du tjener det på økter, oppgaver og stell, og bruker det i Basaren på fôr, verktøy, dyr, gjerder og byggverk. Ingenting kan kjøpes for ekte penger.</p></div></div>`;
   introMode='intro'; $('iSkip').style.display=S.introSeen?'':'none'; iStep=0; showStep();
 }
@@ -2539,17 +2554,18 @@ function showStep(){
   const el=$('intro'); el.className='on '+IVIS[iStep];
   ['is1','is2','is3'].forEach((id,k)=>$(id).setAttribute('stop-color',ISKY[iStep][k]));
   [...$('idots').children].forEach((d,k)=>d.classList.toggle('on',k===iStep));
-  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<7){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
-  if(iStep===2){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
-  $('iNext').textContent=iStep<6?'Trykk for å fortsette':iStep===6?'Slik fungerer det':'Begynn';
+  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<9){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
+  if(iStep===6) setTimeout(()=>snd.chime([523,659,784,1047],.08),2600);
+  if(iStep===3){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
+  $('iNext').textContent=iStep<8?'Trykk for å fortsette':iStep===8?'Slik fungerer det':'Begynn';
 }
-$('iNext').onclick=()=>{ if(introMode==='chapter') return endChapter(); if(iStep<7){ iStep++; showStep(); } else endIntro(); };
+$('iNext').onclick=()=>{ if(introMode==='chapter') return endChapter(); if(iStep<9){ iStep++; showStep(); } else endIntro(); };
 $('iSkip').onclick=()=>introMode==='chapter'?endChapter():endIntro();
 const CHAPTERS=[
   ['Hærfuglen flyr ut igjen.','Rosene blomstrer, og hærfuglen har begynt å reise. Den kommer hjem med brev fra fjerne land. (25 %)'],
   ['Fontenen synger igjen.','Vannet finner veien gjennom kanalene, og lyktene tennes én etter én. (50 %)'],
   ['Flokkene vender hjem.','Det er liv på beitet og frukt på trærne. Hagen husker hvem den var. (75 %)'],
-  ['Hagen er gjenopprettet.','Reisende fra hele verden finner veien hit igjen. Men en hage må pleies hver dag, slik hjertet må det. Nå kan palasset reises. (100 %)'],
+  ['Hagen er gjenopprettet, og hærfuglen er hjemme.','Stjernen sank ned over hagen, og hærfuglen landet på muren igjen. Reisende fra hele verden finner veien hit. Men en hage må pleies hver dag, slik hjertet må det. Nå kan palasset reises. (100 %)'],
 ];
 let introMode='intro';
 function checkChapter(){ const pct=restorePct(), c=[25,50,75,100].filter(v=>pct>=v).length; if(c>(S.chap||0)){ S.chap=c; save(); setTimeout(()=>playChapter(c),4800); } }
