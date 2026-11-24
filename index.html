@@ -134,7 +134,11 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .showtl .translit{display:block}
 .ref{font-size:12px;color:var(--muted);margin-top:2px}
 .tr{font-family:var(--serif);font-size:calc(16.5px*var(--trs,1));line-height:1.35;opacity:0;transition:opacity 1.5s;margin-top:8px;text-shadow:0 1px 8px rgba(0,0,0,.7);max-height:28vh;overflow:auto}
-.tr.on{opacity:1}
+.tr.on{opacity:1;background:rgba(8,6,26,.74);border-radius:14px;padding:8px 12px;border:1px solid rgba(231,194,107,.18)}
+.sbar.stellm .actl,.sbar.stellm #snoozeBtn{display:none!important}.sbar.stellm{padding:6px 10px}
+.smute{display:inline-flex;align-items:center;gap:6px;margin:6px auto 0;padding:6px 12px;border-radius:14px;border:1px solid rgba(231,194,107,.4);background:transparent;color:var(--ink,#efe6d2);font-size:13px}
+.bstar .sp{transform-box:fill-box;transform-origin:center;animation:bsp 2.4s ease-in-out infinite}@keyframes bsp{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.18);opacity:1}}
+.bstar text{font:600 15px Inter,system-ui,sans-serif;fill:#ffe6a6;text-anchor:middle;paint-order:stroke;stroke:rgba(8,6,26,.7);stroke-width:3px}
 .tafl{color:var(--gold);font-size:11px;margin-left:6px;text-decoration:none;border:1px solid rgba(231,194,107,.45);border-radius:10px;padding:1px 7px;pointer-events:auto}
 .tr i{display:block;color:#d6cde6;font-size:calc(15px*var(--trs,1));margin-top:6px}
 .tap{position:absolute;left:0;right:0;top:calc(var(--safe-t) + 96px);height:30%;z-index:3}
@@ -244,6 +248,18 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 
 /* ---------- INTRO ---------- */
 #intro{position:absolute;inset:0;z-index:20;background:#05040f;display:none}
+#title{position:fixed;inset:0;z-index:40;display:none;background:#05040f;overflow:hidden;cursor:pointer}
+#title.on{display:block;animation:tIn .8s ease}#title.out{opacity:0;transition:opacity .6s ease}
+@keyframes tIn{from{opacity:0}to{opacity:1}}
+#title .tt{position:absolute;left:0;right:0;top:calc(var(--safe-t,0px) + 9vh);text-align:center;animation:tUp 1.4s ease both}
+#title .ta{font-family:Amiri,serif;font-size:64px;color:#ffe6a6;text-shadow:0 0 24px rgba(255,217,138,.55)}
+#title .tn{font-family:var(--serif);letter-spacing:.55em;font-size:15px;color:#f2e6c8;margin-top:-6px;padding-left:.55em}
+#title .tl{margin-top:14px;font-size:13px;color:#d8d1e6;opacity:.85}
+#title .tb{position:absolute;left:24px;right:24px;bottom:calc(env(safe-area-inset-bottom,0px) + 7vh);text-align:center;animation:tUp 1.6s .4s ease both}
+#title .tb .btn{width:100%;max-width:340px;font-size:16px;box-shadow:0 0 28px rgba(231,194,107,.35)}
+#title .tb .tguide{display:block;margin:14px auto 0;background:none;border:0;color:#ffe6a6;font-size:14px;text-decoration:underline;text-underline-offset:4px;opacity:.9}
+@keyframes tUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
 #intro.on{display:block}
 #intro svg{position:absolute;inset:0;width:100%;height:100%}
 #iScene{transition:filter 3s}
@@ -412,6 +428,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
       <div class="qline" id="rcLine" style="display:none;margin-top:8px"></div>
     </div>
     <textarea id="note" class="note" placeholder="Skriv en tanke om verset (valgfritt)" rows="2"></textarea><div class="reflect" id="reflect"></div>
+    <div style="text-align:center"><button class="smute" id="stellMute" style="display:none">🔊 Verset spiller · slå av</button></div>
     <button class="gb gold" id="stellDone" style="display:none;width:100%;margin-top:6px;min-height:40px">Ferdig å stelle · videre</button>
     <button class="gb" id="snoozeBtn" style="display:none;width:100%;margin-top:6px;min-height:34px;font-size:12.5px">Ikke nå · utsett 30 min uten straff</button>
     <div id="sErr" style="display:none;text-align:center"><p>Fikk ikke hentet verset. Sjekk nettet. Hagen tar ikke skade av dette.</p><div class="qrow"><button class="gb gold" id="sRetry">Prøv igjen</button><button class="gb" id="sCancel">Lukk</button></div></div>
@@ -423,6 +440,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
   <div class="toast" id="toast"></div>
 
   <!-- ===== INTRO ===== -->
+  <div id="title"></div>
   <div id="intro">
     <div class="shake" style="position:absolute;inset:0">
       <svg viewBox="0 0 390 760" preserveAspectRatio="xMidYMax slice"><defs>
@@ -596,6 +614,8 @@ function expandRef(ref){ if(!String(ref).includes(':')) return [String(ref)]; co
 function restored(q){ if(q==='roser') return true; if(q==='taarn') return !!S.hifz.current; return S.vs>=AT[q]; }
 const fountainOK=()=>S.vs>=AT.fountain;
 const flowing=()=>fountainOK()&&doneToday();
+function starBeacon(x,y){ const pts=Array.from({length:16},(_,k)=>{ const r=k%2?7:22, a=Math.PI*k/8-Math.PI/2; return (x+r*Math.cos(a)).toFixed(1)+' '+(y+r*Math.sin(a)).toFixed(1); }).join(' L');
+  return `<g class="bstar" style="pointer-events:none"><circle cx="${x}" cy="${y}" r="46" fill="url(#lglow)" opacity=".9"/><path class="sp" d="M${pts}Z" fill="#ffe6a6" stroke="#e7c26b" stroke-width="1.5"/><text x="${x}" y="${y+48}">Trykk på stjernen</text></g>`; }
 function beacon(x,y,label,dy=-24){ return `<g class="beacon" transform="translate(${x} ${y})"><circle class="r" r="12"/><circle class="r r2" r="12"/><circle class="dot" r="3.5"/>${label?`<text y="${dy}">${esc(label)}</text>`:''}</g>`; }
 function hifzLearned(){ const out=[]; for(const s in S.hifz.prog) for(const a in S.hifz.prog[s]) if(S.hifz.prog[s][a]>=1) out.push({s:+s,a:+a,lv:S.hifz.prog[s][a],dim:needsReview(+s,+a)}); return out; }
 const INTERVALS=[1,3,7,21,45];
@@ -612,9 +632,10 @@ function restorePct(){ if(typeof window.__pctTest==='number') return window.__pc
 }
 
 /* ================= API ================= */
-const API='https://api.alquran.cloud/v1'; const RECITERS={budair:'Salah al-Budair',bukhatir:'Salah Bukhatir',sudais:'Abdurrahman as-Sudais',shuraim:'Saud ash-Shuraim'};
+const API='https://api.alquran.cloud/v1'; const RECITERS={bland:'Bland, ny hver gang',budair:'Salah al-Budair',bukhatir:'Salah Bukhatir',sudais:'Abdurrahman as-Sudais',shuraim:'Saud ash-Shuraim'};
 const EVERYAYAH={budair:'Salah_Al_Budair_128kbps',bukhatir:'Salaah_AbdulRahman_Bukhatir_128kbps',sudais:'Abdurrahmaan_As-Sudais_192kbps',shuraim:'Saood_ash-Shuraym_128kbps'};
-const recKey=()=>{ const k=S&&S.settings&&S.settings.reciter; return EVERYAYAH[k]?k:(k==='abdurrahmaansudais'?'sudais':'budair'); };
+let curRec=null;
+const recKey=()=>{ const k=S&&S.settings&&S.settings.reciter; if(EVERYAYAH[k]) return k; if(k==='abdurrahmaansudais') return 'sudais'; if(S.active&&S.active.rec) return S.active.rec; if(S.active&&S.active.kind==='hifz') return 'budair'; return curRec||'budair'; };
 const eaUrl=(s,n)=>`https://everyayah.com/data/${EVERYAYAH[recKey()]}/${String(s).padStart(3,'0')}${String(n).padStart(3,'0')}.mp3`;
 const rec_=()=>'ar.alafasy'; const ED_=()=>`quran-uthmani,en.sahih,no.berg,${rec_()},en.transliteration`;
 function cleanArabic(t,s,a){ if(a===1&&s!==1&&s!==9&&t.startsWith('بِسْمِ')) t=t.split(' ').slice(4).join(' '); return t.trim(); }
@@ -1084,7 +1105,7 @@ function renderSection(){
       for(let i=0;i<F.hens&&k<sl.length;i++,k++) L2.push([sl[k].y,henSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)]);
       for(let i=0;i<F.cows&&k<sl.length;i++,k++) L2.push([sl[k].y,cowSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)]);
       for(let i=0;i<F.sheep&&k<sl.length;i++,k++) L2.push([sl[k].y,sheepSvg(sl[k].x,sl[k].y,sl[k].sc*.95,k)]);
-      h+=`<g id="flock" style="cursor:pointer">${depth(L2)}${shepherdSvg(60,700)}</g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
+      h+=`<g id="flock" style="cursor:pointer">${depth(L2)}${shepherdSvg(60,650)}</g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
       if(inStell()&&S.picks.length){ const p0=SLOTS[S.picks[0].s]; if(p0) b+=beacon(p0.x,p0.y-24,'Trykk for å samle',-18); }
       h+=`<g transform="translate(120 404)"><rect width="150" height="5" rx="2.5" fill="rgba(255,255,255,.15)"/><rect width="${1.5*F.hunger}" height="5" rx="2.5" fill="${F.hunger<25?'#e0806a':'#e7c26b'}"/><text x="75" y="-6" text-anchor="middle" font-size="11" fill="#d8d1e6">Mett ${Math.round(F.hunger)}% · ${S.feed} fôr</text></g>`;
       if(inStell()&&F.hunger<100) b+=beacon(300,446,'Gi mat: trykk på dyrene',-16);
@@ -1099,9 +1120,10 @@ function renderSection(){
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
   if(ok && inStell() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,`${countDamage(q.id)} skadet · trykk for tawbah`);
-  if(!S.active && !busy) b+=beacon(195,190,'Trykk på himmelen',30);
+  if(!S.active && !busy) b+=starBeacon(195,200);
   if(S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
+  if(inStell()&&q.id!=='beite') h+=`<g class="helper">${shepherdSvg(318,660)}</g>`;
   { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+h+LL.front+EG.sky; }
   $('items').innerHTML=h; $('beacons').innerHTML=b;
   $('prevQ').style.visibility=curQ>0?'visible':'hidden'; $('nextQ').style.visibility=curQ<3?'visible':'hidden';
@@ -1713,7 +1735,7 @@ function spin(force){
   if(view!=='sec') enterQuad(curQ);
   let cat=force?catById(force):chooseCat(), ref=cat.id==='hele'?String(1+Math.floor(Math.random()*6236)):rnd(cat.refs), sp=special(), spName='';
   if(!force&&sp&&Math.random()<.4){ ref=rnd(SPECIAL[sp].refs); spName=SPECIAL[sp].name; if(cat.id==='hele') cat=CATS[0]; }
-  const pre=fetchVerse(ref).catch(()=>null);
+  curRec=rnd(Object.keys(EVERYAYAH)); const pre=fetchVerse(ref).catch(()=>null);
   $('cons').classList.add('on'); $('vSec').classList.add('swirl'); $('beacons').innerHTML='';
   const idx=CATS.indexOf(cat), el=$('cons').children[idx], f=$('fall');
   [...$('cons').children].forEach(c=>c.classList.remove('hit'));
@@ -1750,7 +1772,7 @@ $('aTl').onclick=()=>setTl(!S.settings.tl); $('qTlB').onclick=()=>setTl(!S.setti
 let sess=null,verses=null,tickT=null,lastTick=0,lastSave=0;
 let pendingShort=false;
 const dur=()=>((S.active&&S.active.short)?4:(S.settings.min||10))*60;
-function startSession(a,pre){ S.active=Object.assign({elapsed:0,hiddenAt:null,solved:0,ph:0,reps:0,repT:0,stellT:0},a); save(); openSession(pre); }
+function startSession(a,pre){ S.active=Object.assign({elapsed:0,hiddenAt:null,solved:0,ph:0,reps:0,repT:0,stellT:0},a); S.active.rec=EVERYAYAH[S.settings.reciter]?S.settings.reciter:(curRec||'budair'); save(); openSession(pre); }
 async function openSession(pre){
   sess=S.active; verses=null; keepAwake(true); setTimeout(()=>snd.duck(),50); $('taskPill').style.display='none'; $('secTitle').style.opacity=0;
   const qi=QUADS.findIndex(q=>q.id===sess.q); if(qi>=0) curQ=qi;
@@ -1768,7 +1790,7 @@ async function openSession(pre){
   $('ar').classList.toggle('long',verses.reduce((n,v)=>n+v.ar.length,0)>180);
   if(sess.ph==null){ sess.ph=0; sess.reps=0; } if(sess.elapsed>3) $('ar').classList.add('shown');
   $('tl').textContent=verses.map(v=>v.tl).join(' ');
-  $('ref').innerHTML=`${esc(v0.surahName)} · ${v0.surah}:${v0.ayah}${verses.length>1?'–'+vl.ayah:''}`;
+  $('ref').innerHTML=`${esc(v0.surahName)} · ${v0.surah}:${v0.ayah}${verses.length>1?'–'+vl.ayah:''} · ${esc(RECITERS[recKey()]||'')}`;
   $('tr').innerHTML=`${esc(verses.map(v=>v.en).join(' '))}<i>${esc(verses.map(v=>v.no).join(' '))}</i>`;
   setPlaylist(verses.map(v=>v.audio),verses.map(v=>v.audio2)); quizSetup();
   sess._ph=-1; lastTick=performance.now(); clearInterval(tickT); tickT=setInterval(tick,250); tick();
@@ -1781,7 +1803,7 @@ function repDone(){ if(!sess||!verses||sess.ph!==0) return; sess.reps=(sess.reps
 function setPh(n){ if(!sess) return; if(n===2&&!hasStell()) n=3; sess.ph=n; sess.stellT=0; save(); tick(); if(navigator.vibrate) navigator.vibrate(40); }
 function repStage(){ const R_=repGoal(), r=Math.min(sess.reps||0,R_-1); return Math.min(2,Math.floor(r*3/R_)); }
 function tick(){
-  if(!sess||!verses) return;
+  if(!sess||!verses) return; if(titleOn){ lastTick=performance.now(); return; }
   const now=performance.now(),dt=(now-lastTick)/1000; lastTick=now; const vis=document.visibilityState==='visible';
   if(vis){ const d=Math.min(dt,1); sess.elapsed=Math.min(7200,sess.elapsed+d);
     if(sess.ph===0&&!userPaused&&audio.paused){ sess.repT=(sess.repT||0)+d; if(sess.repT>repEst()*1.8+4) repDone(); } // lyden virker ikke: gå videre likevel
@@ -1792,25 +1814,25 @@ function tick(){
   const fill=[ph>0?1:(sess.reps||0)/RG, ph>1?1:ph===1?Math.min(1,(sess.solved||0)/LG):0, ph>2?1:ph===2?(stellOk?1:Math.min(.9,sess.stellT/25)):0];
   [0,1,2].forEach(k=>{ $('p'+k).querySelector('b').style.width=fill[k]*100+'%'; $('p'+k).classList.toggle('on',ph===k); });
   $('p2').style.display=hasStell()?'':'none';
-  $('verse').classList.toggle('stell',ph===2);
-  if(ph===0){ const st=repStage(); $('tr').classList.toggle('on',st===0); stage.classList.toggle('showtl',st===1||!!S.settings.tl&&st===0); $('verse').classList.remove('small'); }
+  $('verse').classList.toggle('stell',ph===2); $('sbar').classList.toggle('stellm',ph===2); $('stellMute').style.display=ph===2?'inline-flex':'none'; if(ph===2) $('stellMute').textContent=(userPaused||audio.paused)?'🔈 Verset er av · slå på':'🔊 Verset spiller · slå av';
+  if(ph===0){ const st=repStage(); $('tr').classList.add('on'); stage.classList.toggle('showtl',st===1||!!S.settings.tl); $('verse').classList.remove('small'); }
   if(ph!==sess._ph){ sess._ph=ph; renderSection();
     if(ph===0){ loop=true; $('aLoop').classList.add('on'); audio.volume=1; $('verse').classList.add('on'); $('quiz').classList.remove('on'); $('actl').style.display='flex'; }
     if(ph===1){ loop=false; $('aLoop').classList.remove('on'); audio.volume=1; $('verse').classList.remove('on'); $('quiz').classList.add('on'); $('actl').style.display='none'; stage.classList.toggle('showtl',!!S.settings.tl); }
-    if(ph===2){ $('ar').classList.add('shown'); $('quiz').classList.remove('on'); $('verse').classList.add('on','small'); $('tr').classList.add('on'); $('actl').style.display='flex'; loop=true; $('aLoop').classList.add('on'); audio.volume=.45; userPaused=false; plIdx=0; playCurrent(); }
+    if(ph===2){ $('ar').classList.add('shown'); $('quiz').classList.remove('on'); $('verse').classList.add('on','small'); $('tr').classList.remove('on'); $('actl').style.display='flex'; loop=true; $('aLoop').classList.add('on'); audio.volume=.45; userPaused=false; plIdx=0; playCurrent(); }
     if(ph===3){ $('quiz').classList.remove('on'); $('actl').style.display='none'; audio.volume=1; $('note').classList.add('on'); $('reflect').classList.add('on'); renderReflect(); if(navigator.vibrate) navigator.vibrate(80); }
   }
   $('qNext').textContent=ph===1&&(sess.solved||0)>=LG?(hasStell()?'Videre til stell':'Videre'):'Neste runde';
   $('stellDone').style.display=ph===2&&stellOk?'block':'none';
   $('snoozeBtn').style.display=(sess.elapsed<30&&ph===0&&sess.kind==='spin'&&(S.snooze||{}).day!==dayStr())?'block':'none';
   const sp_=sess.short?'Kort økt · ':'', dots=Array.from({length:RG},(_,k)=>`<span style="color:${k<(sess.reps||0)?'var(--gold)':'rgba(255,255,255,.3)'}">●</span>`).join(' ');
-  if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${['Med oversettelse','Med uttale','Bare arabisk'][repStage()]}</small>`;
+  if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${['Med oversettelse','Med oversettelse og uttale','Med oversettelse'][repStage()]}</small>`;
   else if(ph===1) $('smsg').innerHTML=`${sp_}Lær · bygg verset · runde <b>${Math.min((sess.solved||0)+1,LG)} av ${LG}</b>`;
   else if(ph===2) $('smsg').innerHTML=watered?'Stell hagen mens verset spiller: rydd og gi dyrene mat':'Stell hagen mens verset spiller · <b>vann fra elven</b>';
   else $('smsg').innerHTML='Ferdig. Hva traff deg?';
 }
 function renderReflect(){ $('reflect').innerHTML=REFLECT.map(r=>`<button>${r}</button>`).join(''); [...$('reflect').children].forEach(b=>b.onclick=()=>finish(b.textContent)); }
-function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('secTitle').style.opacity=1; $('note').classList.remove('on'); $('note').value=''; $('snoozeBtn').style.display='none'; $('stellDone').style.display='none'; audio.volume=1; keepAwake(false); clearInterval(tickT); audio.pause(); playlist=[]; sess=null; verses=null; S.active=null; save();
+function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('secTitle').style.opacity=1; $('note').classList.remove('on'); $('note').value=''; $('snoozeBtn').style.display='none'; $('stellDone').style.display='none'; $('stellMute').style.display='none'; $('sbar').classList.remove('stellm'); audio.volume=1; keepAwake(false); clearInterval(tickT); audio.pause(); playlist=[]; sess=null; verses=null; S.active=null; save();
   $('sbar').classList.remove('on'); $('verse').classList.remove('on'); }
 function finish(refl){
   const a=S.active, cat=catById(a.cat), msgs=[];
@@ -1893,6 +1915,7 @@ function tapTile(k,b){
 }
 $('qNext').onclick=()=>{ if(sess&&sess.ph===1&&(sess.solved||0)>=learnGoal()) setPh(2); else quizSetup(); };
 $('stellDone').onclick=()=>setPh(3);
+$('stellMute').onclick=()=>{ if(audio.paused){ userPaused=false; if(audio.src.startsWith('http')) audio.play().catch(()=>{}); else playCurrent(); } else { audio.pause(); userPaused=true; } setTimeout(tick,50); };
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const normAr=s=>s.replace(/[ً-ٰٟۖ-ۭـ]/g,'').replace(/[ٱأإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[^ء-ي\s]/g,'').trim();
 let rec=null;
@@ -2177,17 +2200,19 @@ function openMeg(){
   <h4>Jeg er</h4><div class="seg" id="genSeg">${[['m','Mann'],['f','Kvinne']].map(([k,l])=>`<button data-g="${k}" class="${(S.settings.gender||'m')===k?'on':''}">${l}</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Påvirker om hagen passes av en gjeter eller en gjeterinne, og at arabisk tiltale i snakkeboblene får riktig form (جَزَاكَ / جَزَاكِ).</p>
   <h4>Funksjoner</h4><div class="seg" id="openSeg"><button data-o="0" class="${S.settings.allOpen?'':'on'}">Lås opp gradvis</button><button data-o="1" class="${S.settings.allOpen?'on':''}">Vis alt nå</button></div><p style="font-size:12.5px;color:var(--muted)">Nye funksjoner kommer etter hvert som du fullfører vers-økter, så det ikke blir for mye på én gang.</p>
   <h4>Lyd i hagen</h4><div class="seg" id="sndSeg"><button data-s="1" class="${S.settings.sound!==false?'on':''}">På</button><button data-s="0" class="${S.settings.sound===false?'on':''}">Av</button></div><p style="font-size:12.5px;color:var(--muted)">Vann, fugler og sirisser i bakgrunnen, og små lyder når du planter, rydder og gir mat. Ingen musikk.</p>
-  <h4>Resitatør</h4><div class="seg" id="recSeg" style="flex-wrap:wrap">${Object.entries(RECITERS).map(([k,l])=>`<button data-r="${k}" class="${recKey()===k?'on':''}" style="flex:1 0 45%;font-size:13px">${l}</button>`).join('')}</div>
+  <h4>Resitatør</h4><div class="seg" id="recSeg" style="flex-wrap:wrap">${Object.entries(RECITERS).map(([k,l])=>`<button data-r="${k}" class="${(EVERYAYAH[S.settings.reciter]?S.settings.reciter:'bland')===k?'on':''}" style="flex:1 0 45%;font-size:13px">${l}</button>`).join('')}</div>
   <h4>Arabisk skrift</h4><div class="seg" id="fontSeg">${[['amiri','Amiri'],['sch','Scheherazade'],['naskh','Naskh']].map(([k,l])=>`<button data-fo="${k}" class="${(S.settings.arFont||'amiri')===k?'on':''}" style="font-family:${FONTS[k]}">${l}</button>`).join('')}</div>
   <div class="card" style="margin-top:8px;text-align:center"><div class="ar shown" style="font-size:30px;line-height:2"><span class="wd" style="opacity:1;transform:none;animation:none">بِسْمِ</span> <span class="wd" style="opacity:1;transform:none;animation:none">ٱللَّهِ</span> <span class="wd" style="opacity:1;transform:none;animation:none">ٱلرَّحْمَٰنِ</span> <span class="wd" style="opacity:1;transform:none;animation:none">ٱلرَّحِيمِ</span></div></div>
   <h4>Størrelse på oversettelsen</h4><div class="seg" id="trSeg">${[[.9,'Liten'],[1,'Normal'],[1.18,'Stor'],[1.36,'Ekstra stor']].map(([v,l])=>`<button data-t="${v}" class="${(S.settings.trSize||1)===v?'on':''}" style="font-size:${12*v}px">${l}</button>`).join('')}</div><p style="font-family:var(--serif);font-size:calc(16.5px*${S.settings.trSize||1});margin:8px 0 4px">Si: «Mine tjenere som har syndet mot seg selv, fortvil ikke om Guds nåde!»</p><p style="font-size:12.5px;color:var(--muted)">Gjelder den engelske og norske oversettelsen under verset.</p>
   <h4>Versutvalg</h4><div class="seg" id="poolSeg">${[['tema','Tematisk'],['blandet','Blandet'],['hele','Hele Koranen']].map(([k,l])=>`<button data-p="${k}" class="${(S.settings.pool||'blandet')===k?'on':''}">${l}</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Tematisk: rundt 190 utvalgte vers i elleve temaer, også advarsler og karakter. Hele Koranen: et tilfeldig vers av alle 6236. Blandet: begge deler. På fredager, i Ramadan og i Dhul Hijjah kommer det i tillegg egne vers.</p>
   <button class="btn" id="bkBtn">Sikkerhetskopi av hagen</button>
+  <button class="btn ghost" id="guideB">Slik fungerer Rawdah</button>
   <button class="btn ghost" id="replay">Se historien igjen</button>
   <button class="btn ghost" id="resetBtn">Slett all fremgang</button>`);
   $('shSeg').onclick=e=>{ const k=e.target.dataset.n; if(k!=null){ S.settings.shortPerDay=+k; S.shortTimes=null; save(); openMeg(); } }; if($('shNew')) $('shNew').onclick=()=>{ S.shortTimes={week:weekKey(),t:genShortTimes(shortLimit())}; save(); openMeg(); };
   $('durSeg').onclick=e=>{ const m=+e.target.dataset.m; if(m){ S.settings.reps=m; save(); openMeg(); } };
   $('replay').onclick=()=>{ closeSheet(); playIntro(); };
+  $('guideB').onclick=()=>openGuide();
   $('bkBtn').onclick=openBackup;
   $('genSeg').onclick=e=>{ const g=e.target.dataset.g; if(g){ S.settings.gender=g; save(); openMeg(); if(view==='sec') renderSection(); } };
   $('openSeg').onclick=e=>{ const o=e.target.dataset.o; if(o!=null){ S.settings.allOpen=o==='1'; save(); renderAll(); openMeg(); } };
@@ -2228,6 +2253,49 @@ const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"
 const scholar=(x,y)=>`<g transform="translate(${x} ${y})"><ellipse cx="0" cy="1" rx="12" ry="2.5" fill="rgba(0,0,0,.25)"/><path d="M-9 0 Q-9 -10 -4 -13 H4 Q9 -10 9 0Z" fill="#efe4cc" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-17" r="4" fill="#c58c5c"/><path d="M-4.4 -18 Q0 -24 4.4 -18Z" fill="#fff"/><path d="M-6 -6 L0 -9 L6 -6 L0 -4Z" fill="#7a2a2a"/><path d="M0 -9 V-4" stroke="#e7c26b" stroke-width=".6"/></g>`;
 const camel=(x,y,s,c='#2a1a10')=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="#d9b25f" stroke-width="${c==='#2a1a10'?0:.8}"><path d="M-14 -10 Q-12 -20 -4 -18 Q0 -26 6 -18 Q10 -18 12 -14 L16 -22 Q19 -24 20 -20 L16 -10 Q12 -8 10 -10 L10 0 H8 L7 -8 H-8 L-9 0 H-11 L-12 -9Z"/><path d="M-4 -24 h6 v-4 h-6Z" fill="#b0283a"/></g>`;
 const birdV=(x,y,s)=>`<path d="M${x-6*s} ${y} Q${x-3*s} ${y-4*s} ${x} ${y} Q${x+3*s} ${y-4*s} ${x+6*s} ${y}" fill="none" stroke="#2a1a3a" stroke-width="${1.3*s}" stroke-linecap="round"/>`;
+function openGuide(){ const st=[
+ ['✦','Trykk på stjernen','Stjernen i himmelen gir deg et tilfeldig vers. Du velger det ikke selv, og det er litt av poenget.'],
+ ['①','Lytt og les','Verset spilles seks ganger med oversettelse. Midt i viser vi også uttalen. Lange vers spilles tre ganger.'],
+ ['②','Lær','Bygg verset ord for ord i tre runder: lett, middels og hele verset.'],
+ ['③','Stell','Verset spiller videre mens du rydder, vanner fra elva og gir dyrene mat. Du kan slå av lyden.'],
+ ['🌹','Hagen vokser','Hver økt planter en rose og bygger hagen tilbake mot gullalderen. Hopper du over dager, kommer stormen: glemselen.'],
+ ['🕊','Mer etter hvert','Hærfuglen kommer med brev fra ekte steder i den muslimske verden (Rihla). Lysets tårn er for å lære utenat, og Dagens ord gir ett arabisk ord om dagen.']];
+  openSheet(`<h3>Slik fungerer Rawdah</h3>${st.map(([i,t,d])=>`<div class="card" style="display:flex;gap:12px;align-items:flex-start;margin:8px 0"><div style="font-size:22px;min-width:30px;text-align:center;color:var(--gold)">${i}</div><div><b style="color:var(--gold2)">${t}</b><p style="margin:3px 0 0;font-size:13.5px">${d}</p></div></div>`).join('')}<p style="font-size:12.5px;color:var(--muted)">Du finner denne forklaringen igjen under Meg.</p><button class="btn" id="gOk">Skjønner, gå til hagen</button>`);
+  $('gOk').onclick=()=>{ closeSheet(); if(!S.active&&view!=='sec') enterQuad(0); }; }
+/* ---- Åpningsskjerm ---- */
+let titleOn=false;
+function titleScene(){ const P=PAL[skyKey]||PAL.natt, pct=restorePct(), lit=Math.round(pct/100*9), day=skyKey==='dag';
+  let st=''; if(P.starop>0) for(let k=0;k<46;k++){ const x=(k*97)%390, y=(k*53)%330, r=k%5===0?1.6:.9; st+=`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff8e0" opacity="${P.starop}"><animate attributeName="opacity" values="${P.starop};${P.starop*.25};${P.starop}" dur="${3+k%4}s" begin="${(k%7)*.4}s" repeatCount="indefinite"/></circle>`; }
+  const sun=day?`<circle cx="318" cy="262" r="30" fill="#fff3c4" opacity=".9"/><circle cx="318" cy="262" r="90" fill="url(#tGlow)" opacity=".7"/>`:`<path d="M318 236 a24 24 0 1 0 18 38 a18 18 0 1 1 -18 -38Z" fill="#fff3c4"/><circle cx="318" cy="256" r="70" fill="url(#tGlow)" opacity=".35"/>`;
+  const gold=pct>=100, pal=gold?'url(#tGold)':P.sil, win=(x,y,on)=>`<path d="M${x-3} ${y+8} V${y+2} Q${x} ${y-3} ${x+3} ${y+2} V${y+8}Z" fill="${on?'#ffd98a':'#2a2440'}"/>`;
+  const W=[[160,520],[175,520],[215,520],[230,520],[195,505],[130,545],[260,545],[120,500],[270,500]];
+  const palace=`<g><circle cx="195" cy="470" r="${120+pct}" fill="url(#tGlow)" opacity="${.2+pct/180}"/>
+   <path d="M110 560 V500 h170 V560Z" fill="${pal}"/><path d="M150 500 Q150 438 195 425 Q240 438 240 500Z" fill="${pal}"/><path d="M195 425 v-16" stroke="${gold?'#e7c26b':P.sil}" stroke-width="2"/><path d="M190 409 q5 -8 10 0" fill="none" stroke="${gold?'#e7c26b':P.sil}" stroke-width="2"/>
+   <path d="M116 500 Q116 470 136 464 Q156 470 156 500Z M234 500 Q234 470 254 464 Q274 470 274 500Z" fill="${pal}"/>
+   <path d="M92 560 V430 h12 V560Z M286 560 V430 h12 V560Z" fill="${pal}"/><path d="M92 430 L98 410 L104 430Z M286 430 L292 410 L298 430Z" fill="${pal}"/>
+   <path d="M180 560 V530 Q195 514 210 530 V560Z" fill="${lit>0?'#ffcf7a':'#1a1636'}" opacity=".9"/>
+   ${W.map(([x,y],k)=>win(x,y,k<lit)).join('')}</g>`;
+  const cyp=(x,h)=>`<path d="M${x} ${600-h} Q${x+10} ${600-h*.6} ${x+9} 600 H${x-9} Q${x-10} ${600-h*.6} ${x} ${600-h}Z" fill="${P.sil}"/>`;
+  const lan=[60,95,295,330].map((x,k)=>`<path d="M${x} 560 V600" stroke="${P.sil}" stroke-width="2"/><rect x="${x-4}" y="552" width="8" height="10" rx="2" fill="${k<Math.ceil(lit/2.3)?'#ffd98a':'#2a2440'}"/>${k<Math.ceil(lit/2.3)?`<circle cx="${x}" cy="557" r="16" fill="url(#tGlow)" opacity=".8"/>`:''}`).join('');
+  return `<svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" style="position:absolute;inset:0">
+  <defs><linearGradient id="tSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${P.sky1}"/><stop offset=".55" stop-color="${P.sky2}"/><stop offset=".78" stop-color="${P.sky3}"/></linearGradient>
+  <radialGradient id="tGlow"><stop offset="0" stop-color="#ffd98a" stop-opacity=".9"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="tGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e2b04a"/><stop offset="1" stop-color="#a8761f"/></linearGradient>
+  <linearGradient id="tGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${P.ground1}"/><stop offset="1" stop-color="#05040f"/></linearGradient></defs>
+  <rect width="390" height="844" fill="url(#tSky)"/>${st}${sun}
+  <g class="tbirds">${birdV(70,250,1.2)}${birdV(90,240,1)}${birdV(108,252,.9)}</g>
+  ${palace}${cyp(40,150)}${cyp(66,110)}${cyp(324,110)}${cyp(350,150)}
+  <path d="M0 590 Q195 560 390 590 V844 H0Z" fill="url(#tGround)"/>${lan}
+  <path d="M195 590 L150 844 H240Z" fill="${P.sky2}" opacity=".25"/></svg>`; }
+function showTitle(){ titleOn=true; const el=$('title'), pct=restorePct(), a=S.active;
+  const line=(S.vs||0)>0?`${pct} % gjenopprettet${S.streak>0?` · ${S.streak} ${S.streak===1?'dag':'dager'} på rad`:''}`:'Hagen venter på deg';
+  const cta=a?'Fortsett økta':doneToday()?'Gå inn i hagen':'Dagens vers venter';
+  el.innerHTML=titleScene()+`<div class="tt"><div class="ta">روضة</div><div class="tn">RAWDAH</div><div class="tl">${esc(line)}</div></div><div class="tb"><button class="btn" id="tGo">${cta}</button><button class="tguide" id="tGuide">${(S.vs||0)<3?'Første gang? Få en rask forklaring':'Hvordan fungerer Rawdah?'}</button></div>`;
+  el.classList.add('on');
+  $('tGuide').onclick=ev=>{ ev.stopPropagation(); titleOn=false; unlockAudio(); el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650); openGuide(); };
+  el.onclick=()=>{ if(!titleOn) return; titleOn=false; snd.chime([523,659,784],.06); if(sess){ userPaused=false; playCurrent(); } else unlockAudio();
+    el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650);
+    if(!S.active&&view!=='sec') enterQuad(0); lastTick=performance.now(); }; }
 function goldenAge(){
   const G='url(#goldG)', dome=(cx,by,w,hh)=>`<path d="M${cx-w} ${by} Q${cx-w} ${by-hh*.8} ${cx} ${by-hh} Q${cx+w} ${by-hh*.8} ${cx+w} ${by}Z" fill="${G}" stroke="#7a5a20" stroke-width=".8"/><path d="M${cx} ${by-hh} v-10" stroke="#e7c26b" stroke-width="1.4"/><path d="M${cx-3} ${by-hh-10} q3 -6 6 0" fill="none" stroke="#e7c26b" stroke-width="1.2"/>`;
   const min=(x,b,hh)=>`<path d="M${x-4} ${b} V${b-hh} h8 V${b}Z" fill="#f2e6c8" stroke="#7a5a20" stroke-width=".6"/><path d="M${x-6} ${b-hh*.62} h12 v-3 h-12Z M${x-6} ${b-hh*.85} h12 v-3 h-12Z" fill="${G}"/><path d="M${x-4} ${b-hh} Q${x} ${b-hh-14} ${x+4} ${b-hh}Z" fill="${G}"/><circle cx="${x}" cy="${b-hh-16}" r="1.4" fill="#ffe6a6"/>`;
@@ -2377,12 +2445,13 @@ if(QS.has('spin')){ S.stats.interrupts++; save(); history.replaceState(null,'',l
   else if(!S.active&&S.introSeen&&shortToday()>=shortLimit()){ const tryE=(k=0)=>{ if($('sheet').classList.contains('on')&&k<6) return setTimeout(()=>tryE(k+1),1500); enoughToday(); }; setTimeout(tryE,900); }
   else if(!S.active&&S.introSeen){ pendingShort=true; enterQuad(0); toast(`Kort økt ${shortToday()+1} av ${shortLimit()} i dag. Trykk på himmelen`,3500); } }
 else setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) backupNudge(); },3500);
+if(S.introSeen&&!QS.has('spin')&&!QS.has('rose')) showTitle();
 if(QS.has('rose')){ history.replaceState(null,'',location.pathname); setTimeout(()=>receiveRose(QS.get('rose')),S.introSeen?700:100); }
 else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&&!doneToday()&&!S.snooze.told){ S.snooze.told=true; save(); setTimeout(()=>toast('Utsettelsen er over. Trykk på himmelen når du er klar.',3500),900); }
 setTimeout(()=>{ if(!weekly()) showUnseen(); },500);
 fetchSurahList().then(l=>{ surahMeta=surahMeta||l; if((S.rihla||0)>0&&!S.rihlaIntro&&S.introSeen){ S.rihlaIntro=1; save(); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) openRihlaIntro(latestMon()); else S.rihlaIntro=0; },1500); } const before=S.rihla||0; if(rihlaEarned()>before&&S.introSeen) checkRihla(); }).catch(()=>{});
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.__rawdah={EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
+window.__rawdah={openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
 }
 </script>
 </body>
