@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Rawdah – vers, hage og hifz",
+  "short_name": "Rawdah",
+  "description": "Et vers om dagen, en hage som vokser tilbake, Lysets tårn for hifz og dagens arabiske ord.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "orientation": "portrait",
+  "background_color": "#0b0920",
+  "theme_color": "#0b0920",
+  "lang": "no",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
