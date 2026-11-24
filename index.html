@@ -2360,7 +2360,7 @@ function playIntro(){
   let du='';for(let i=0;i<40;i++) du+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*60).toFixed(1)}%;animation-duration:${(6+Math.random()*6).toFixed(1)}s;animation-delay:-${(Math.random()*6).toFixed(1)}s"></i>`; $('dust').innerHTML=du;
   $('idots').innerHTML=Array.from({length:6},()=>'<i></i>').join('');
   $('iModes').innerHTML=`<h3 style="font-family:var(--serif);color:var(--gold2);font-size:26px;margin:0 0 4px">Tre måter å pleie hagen på</h3>${modesHTML()}`;
-  iStep=0; showStep();
+  introMode='intro'; $('iSkip').style.display=S.introSeen?'':'none'; iStep=0; showStep();
 }
 function showStep(){
   const el=$('intro'); el.className='on s'+(iStep+1);
@@ -2379,16 +2379,16 @@ const CHAPTERS=[
 ];
 let introMode='intro';
 function checkChapter(){ const pct=restorePct(), c=[25,50,75,100].filter(v=>pct>=v).length; if(c>(S.chap||0)){ S.chap=c; save(); setTimeout(()=>playChapter(c),4800); } }
-function playChapter(n){ introMode='chapter'; $('intro').classList.add('on'); $('intro').classList.toggle('gold',n>=4); $('iScene').innerHTML=introScene();
+function playChapter(n){ introMode='chapter'; $('iSkip').style.display=''; $('intro').classList.add('on'); $('intro').classList.toggle('gold',n>=4); $('iScene').innerHTML=introScene();
   ['is1','is2','is3'].forEach((id,k)=>$(id).setAttribute('stop-color',ISKY[0][k])); $('intro').className='on s1'; $('idots').innerHTML=''; $('iModes').innerHTML='';
   $('iScene').style.filter=`saturate(${.45+n*.18}) brightness(${.75+n*.07})`;
   const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ cap.innerHTML=`<span style="font-size:13px;letter-spacing:1px;color:var(--gold)">KAPITTEL ${n+1}</span><br>${CHAPTERS[n-1][0]}<small>${CHAPTERS[n-1][1]}</small>`; cap.classList.add('on'); },500);
   $('iNext').textContent='Fortsett'; snd.chime([523,659,784,1047],.08); logEvent(`Kapittel ${n+1}: ${CHAPTERS[n-1][0]}`); }
 function endChapter(){ introMode='intro'; $('iScene').style.filter=''; $('intro').className=''; renderAll(); }
-function endIntro(){ $('intro').className=''; S.introSeen=true; save(); toOverview();
+function endIntro(){ $('intro').className=''; introMode=null; S.introSeen=true; save(); toOverview();
   if(!S.settings.gender){ setTimeout(()=>{ openSheet(`<h3>Hvem pleier hagen?</h3><p>Hagen får en gjeter eller en gjeterinne, og takken på arabisk får riktig form. Du kan endre dette under Meg.</p><div class="qrow"><button class="gb gold" data-g="m">Mann</button><button class="gb gold" data-g="f">Kvinne</button></div>`);
-    $('sheet').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ S.settings.gender=b.dataset.g; save(); closeSheet(); renderAll(); toast(b.dataset.g==='f'?'Gjeterinnen venter i Beitet':'Gjeteren venter i Beitet'); }); },700); }
-  else setTimeout(showUnseen,600); }
+    $('sheet').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ S.settings.gender=b.dataset.g; save(); closeSheet(); renderAll(); showTitle(); }); },700); }
+  else showTitle(); }
 
 const FONTS={amiri:'"Amiri Quran","Amiri",serif',sch:'"Scheherazade New",serif',naskh:'"Noto Naskh Arabic",serif'};
 function applyTrSize(){ document.documentElement.style.setProperty('--trs',S.settings.trSize||1); }
