@@ -1231,9 +1231,9 @@ function renderSection(){
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
   if(ok && inStell() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   else if(inStell()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
-  if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,`${countDamage(q.id)} skadet · trykk for tawbah`);
-  if(!S.active && !busy) b+=starBeacon(195,200);
-  if(S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
+  if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,doneToday()?`${countDamage(q.id)} skadet · tawbah i morgen`:`${countDamage(q.id)} skadet · trykk for tawbah`);
+  if(!S.active && !busy) b+=(doneToday()?starBeaconDone(195,200):starBeacon(195,200));
+  if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
   if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
   { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+weatherLayer(); }
@@ -1335,7 +1335,7 @@ function renderCarpet(){
   h+=carpetHeader()+`<rect x="58" y="53" width="274" height="19" rx="9.5" fill="rgba(11,9,32,.62)" stroke="rgba(231,194,107,.45)" stroke-width=".6"/><text x="195" y="46" style="paint-order:stroke" stroke="rgba(11,9,32,.6)" stroke-width="3" text-anchor="middle" font-family="Amiri,serif" font-size="26" fill="#ffe6a6">روضة</text><text x="195" y="66" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="13.5" fill="#f4ecdb" font-style="italic">${special()?SPECIAL[special()].name+' · ':''}Hagen er ${pct} % gjenopprettet${fok?'':` · fontenen repareres etter ${AT.fountain} økter (${Math.min(S.vs,AT.fountain)}/${AT.fountain})`}</text>`;
   let b='';
   if(S.active) b+=beacon(CX,CY,'Trykk for å fortsette økten',-50);
-  else b+=beacon(CX,CY,doneToday()?'Trykk for et nytt vers':'Trykk for dagens vers',-50);
+  else b+=beacon(CX,CY,doneToday()?'Dagens vers er mottatt':'Trykk for dagens vers',-50);
   QUADS.forEach((q,i)=>{ const [a,bb,c,d]=Q[i]; const n=needs(q.id); if(n) b+=beacon((a+c)/2,d-30,n,-18); });
   const se=season();
   if(se==='host') h=h.replace(/#2c6338/g,'#8a5a22').replace(/#4e9a50/g,'#c98a2e').replace(/#8fcf6a/g,'#f2c14e').replace(/#69b35f/g,'#d9a040');
@@ -1888,11 +1888,31 @@ async function spinFx(cat,spName){
   $('fxCard').innerHTML=`<div class="fa">${esc(cat.ar)}</div><div class="fn"># ${esc(cat.name)}</div>${spName?`<div class="fs">${esc(spName)}</div>`:cat.rare?'<div class="fs">Et sjeldent vers</div>':''}`;
   $('fxCard').classList.add('on'); haptic([20,40,30]); await wait(1700);
   box.classList.add('out'); await new Promise(r=>setTimeout(r,350)); box.className='spinfx'; box.innerHTML=''; box.onclick=null; }
+/* ---- Ett vers om dagen ---- */
+function untilMidnight(){ const n=new Date(), m=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1), mins=Math.max(1,Math.round((m-n)/60000)), h=Math.floor(mins/60), mi=mins%60; return h?`${h} t ${mi} min`:`${mi} min`; }
+async function openVerseRef(ref,label){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${esc(label||'')}</p><div id="ovV"><p style="color:var(--muted)">Henter verset …</p></div><button class="btn ghost" id="ovPlay">Hør verset</button>`);
+  let vs=null; try{ vs=await fetchVerse(ref); }catch(e){} const el=$('ovV'); if(!el) return;
+  el.innerHTML=vs?`<div class="card"><p style="font-family:var(--ar);font-size:24px;line-height:1.9;text-align:center;direction:rtl;margin:0">${esc(vs.map(v=>v.ar).join(' '))}</p><p style="font-size:12px;color:var(--muted);text-align:center;margin:4px 0">${esc(vs[0].surahName)} · ${esc(ref)}</p><p style="margin:6px 0 0;font-size:14.5px">${esc(vs.map(v=>v.no).join(' '))}</p></div>`:`<p>Verset ${esc(ref)}. Fikk ikke hentet teksten akkurat nå.</p>`;
+  $('ovPlay').onclick=()=>{ if(vs){ unlockAudio(); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); } }; }
+function comeBackTomorrow(){ const lv=S.lastVerse&&S.lastVerse.day===dayStr()?S.lastVerse:null; snd.chime([392,523],.05);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DAGENS VERS ER MOTTATT</p><h3>Kom tilbake i morgen for mer barakah</h3>
+  <div class="card"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.45">«De gjerningene Allah elsker mest, er de som gjøres jevnlig, selv om de er små.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--muted)">Profeten ﷺ · Bukhari og Muslim</p></div>
+  <p>Ett vers om dagen, hver dag, bygger mer enn mange vers én gang. Hærfuglen kommer med et nytt vers om <b style="color:var(--gold2)">${untilMidnight()}</b>, ved midnatt.</p>
+  <h4>Til da kan du</h4>${lv?'<button class="btn" id="cbAgain">Les dagens vers igjen</button>':''}${unl('hifz')?'<button class="btn ghost" id="cbHifz">Lær utenat i Lysets tårn</button>':''}${unl('ord')?'<button class="btn ghost" id="cbWord">Dagens ord</button>':''}<button class="btn ghost" id="cbClose">Gå til hagen</button>`);
+  if(lv) $('cbAgain').onclick=()=>openVerseRef(lv.ref,'DAGENS VERS · '+((catById(lv.cat)||{}).name||'').toUpperCase());
+  if($('cbHifz')) $('cbHifz').onclick=()=>{ closeSheet(); openHifz(); };
+  if($('cbWord')) $('cbWord').onclick=()=>{ closeSheet(); openWord(); };
+  $('cbClose').onclick=closeSheet; }
+function starBeaconDone(x,y){ return `<g class="bstar" style="pointer-events:none;opacity:.55"><circle cx="${x}" cy="${y}" r="30" fill="url(#lglow)" opacity=".5"/><path d="M${x} ${y-14} L${x+4} ${y-4} L${x+14} ${y} L${x+4} ${y+4} L${x} ${y+14} L${x-4} ${y+4} L${x-14} ${y} L${x-4} ${y-4}Z" fill="#ffe6a6"/><text x="${x}" y="${y+36}" style="font-size:12px">Nytt vers i morgen</text></g>`; }
 function spin(force){
-  if(busy||S.active) return; busy=true; unlockAudio();
+  if(busy||S.active) return;
+  if(doneToday()&&!pendingShort){ if(view!=='sec') enterQuad(curQ); return comeBackTomorrow(); }
+  busy=true; unlockAudio();
   if(view!=='sec') enterQuad(curQ);
   let cat=force?catById(force):chooseCat(), ref=cat.id==='hele'?String(1+Math.floor(Math.random()*6236)):rnd(cat.refs), sp=special(), spName='';
   if(!force&&sp&&Math.random()<.4){ ref=rnd(SPECIAL[sp].refs); spName=SPECIAL[sp].name; if(cat.id==='hele') cat=CATS[0]; }
+  if(pendingShort&&S.lastVerse&&S.lastVerse.day===dayStr()){ ref=S.lastVerse.ref; cat=catById(S.lastVerse.cat)||cat; spName='Dagens vers, repetert'; }
+  else if(!force&&!pendingShort&&countDamage('roser')&&Math.random()<.5){ cat=catById('tawbah')||cat; ref=rnd(cat.refs); }
   curRec=rnd(Object.keys(EVERYAYAH)); const pre=fetchVerse(ref).catch(()=>null);
   $('vSec').classList.add('swirl'); $('beacons').innerHTML='';
   spinFx(cat,spName).then(()=>{ $('vSec').classList.remove('swirl'); busy=false; startSession({kind:'spin',cat:cat.id,ref,q:QUADS[curQ].id,short:pendingShort&&!force},pre); pendingShort=false; });
@@ -1982,6 +2002,7 @@ function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('s
   $('sbar').classList.remove('on'); $('verse').classList.remove('on'); }
 function finish(refl){
   const a=S.active, cat=catById(a.cat), msgs=[];
+  if(!a.short&&a.kind!=='hifz') S.lastVerse={day:dayStr(),ref:a.ref,cat:a.cat};
   S.stats.sessions++; S.stats.seconds+=Math.round(a.elapsed); S.stats.reflect[refl]=(S.stats.reflect[refl]||0)+1;
   if(verses){ const v0=verses[0],vl=verses[verses.length-1]; S.journal=S.journal||[];
     S.journal.unshift({ts:Date.now(),ref:`${v0.surah}:${v0.ayah}${verses.length>1?'-'+vl.ayah:''}`,name:v0.surahName,cat:a.kind==='hifz'?'hifz':a.cat,f:refl,note:($('note').value||'').trim().slice(0,500),ar:verses.map(v=>v.ar).join(' ').slice(0,700),no:verses.map(v=>v.no).join(' ').slice(0,700),en:verses.map(v=>v.en).join(' ').slice(0,700)});
@@ -2323,7 +2344,7 @@ function openBackup(){
 
 /* --- Meg --- */
 function modesHTML(){ return `
-  <div class="mode"><div class="ic">آية</div><div><b>Vers · ca. 5–10 minutter</b><p>En stjerne faller og gir deg et vers du ikke har valgt selv. Du lytter og leser det seks ganger, bygger det ord for ord og steller hagen mens verset spiller. Økten kan ikke lukkes før alle tre delene er gjort.</p><p><i>Gir deg:</i> En pause fra skjermen som fyller deg, og et vers som kanskje treffer akkurat det du trenger. Dette gjenoppretter hagen.</p></div></div>
+  <div class="mode"><div class="ic">آية</div><div><b>Vers · ett om dagen, ca. 5–10 minutter</b><p>En stjerne faller og gir deg et vers du ikke har valgt selv. Du får ett nytt vers hver dag. Du lytter og leser det seks ganger, bygger det ord for ord og steller hagen mens verset spiller. Økten kan ikke lukkes før alle tre delene er gjort.</p><p><i>Gir deg:</i> En pause fra skjermen som fyller deg, og et vers som kanskje treffer akkurat det du trenger. Dette gjenoppretter hagen.</p></div></div>
   <div class="mode"><div class="ic">منارة</div><div><b>Lysets tårn · Hifz</b><p>Velg en surah og lær den vers for vers. Hvert vers tenner et vindu i tårnet, og repetisjon holder lyset ved like.</p><p><i>Gir deg:</i> Koranen utenat i små biter som faktisk sitter, og en tydelig oversikt over hvor langt du har kommet.</p></div></div>
   <div class="mode"><div class="ic">كلمة</div><div><b>Dagens ord</b><p>Ett arabisk ord fra Koranen hver dag, med uttale, betydning på norsk og engelsk og roten det kommer fra. Dagen etter får du en liten test.</p><p><i>Gir deg:</i> Etter noen måneder kjenner du igjen ordene når du leser og hører Koranen. Du begynner å forstå, ikke bare lese.</p></div></div>`; }
 
@@ -2439,7 +2460,7 @@ function openNur(){ const row=(a,b)=>`<tr><td style="padding:4px 8px 4px 0">${a}
   <button class="btn" id="nurShop">Gå til Basaren</button>`);
   $('nurShop').onclick=()=>{ closeSheet(); if(unl('basar')) openShop('varer'); else toast(`Basaren åpnes etter ${GATE.basar} økter`); }; }
 function openGuide(){ const st=[
- ['✦','Trykk på stjernen','Stjernen i himmelen gir deg et tilfeldig vers. Du velger det ikke selv, og det er litt av poenget.'],
+ ['✦','Trykk på stjernen','Stjernen er hærfuglen. Den gir deg ett tilfeldig vers om dagen, og et nytt kommer ved midnatt. Du velger det ikke selv, og det er litt av poenget.'],
  ['①','Lytt og les','Verset spilles seks ganger med oversettelse. Midt i viser vi også uttalen. Lange vers spilles tre ganger.'],
  ['②','Lær','Bygg verset ord for ord i tre runder: lett, middels og hele verset.'],
  ['③','Stell','Verset spiller videre mens du rydder, vanner fra elva og gir dyrene mat. Du kan slå av lyden.'],
