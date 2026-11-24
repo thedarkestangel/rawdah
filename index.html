@@ -393,7 +393,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 
   <!-- ===== øktlinje ===== -->
   <div class="sbar" id="sbar">
-    <div class="ph"><div id="p0"><i><b></b></i>Lytt og stell</div><div id="p1"><i><b></b></i>Les</div><div id="p2"><i><b></b></i>Lær</div></div>
+    <div class="ph"><div id="p0"><i><b></b></i>Lytt og les</div><div id="p1"><i><b></b></i>Lær</div><div id="p2"><i><b></b></i>Stell</div></div>
     <div class="smsg" id="smsg"></div>
     <div class="actl" id="actl">
       <button class="rb" id="aRep" aria-label="Fra start"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.3"/><path d="M4 4v5h5"/></svg></button>
@@ -412,6 +412,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
       <div class="qline" id="rcLine" style="display:none;margin-top:8px"></div>
     </div>
     <textarea id="note" class="note" placeholder="Skriv en tanke om verset (valgfritt)" rows="2"></textarea><div class="reflect" id="reflect"></div>
+    <button class="gb gold" id="stellDone" style="display:none;width:100%;margin-top:6px;min-height:40px">Ferdig å stelle · videre</button>
     <button class="gb" id="snoozeBtn" style="display:none;width:100%;margin-top:6px;min-height:34px;font-size:12.5px">Ikke nå · utsett 30 min uten straff</button>
     <div id="sErr" style="display:none;text-align:center"><p>Fikk ikke hentet verset. Sjekk nettet. Hagen tar ikke skade av dette.</p><div class="qrow"><button class="gb gold" id="sRetry">Prøv igjen</button><button class="gb" id="sCancel">Lukk</button></div></div>
   </div>
@@ -611,8 +612,11 @@ function restorePct(){ if(typeof window.__pctTest==='number') return window.__pc
 }
 
 /* ================= API ================= */
-const API='https://api.alquran.cloud/v1'; const RECITERS={alafasy:'Mishary Alafasy',husary:'Mahmoud Al-Husary',minshawi:'Al-Minshawi',abdurrahmaansudais:'Abdurrahman As-Sudais'};
-const rec_=()=>'ar.'+((S&&S.settings&&S.settings.reciter)||'alafasy'); const ED_=()=>`quran-uthmani,en.sahih,no.berg,${rec_()},en.transliteration`;
+const API='https://api.alquran.cloud/v1'; const RECITERS={budair:'Salah al-Budair',bukhatir:'Salah Bukhatir',sudais:'Abdurrahman as-Sudais',shuraim:'Saud ash-Shuraim'};
+const EVERYAYAH={budair:'Salah_Al_Budair_128kbps',bukhatir:'Salaah_AbdulRahman_Bukhatir_128kbps',sudais:'Abdurrahmaan_As-Sudais_192kbps',shuraim:'Saood_ash-Shuraym_128kbps'};
+const recKey=()=>{ const k=S&&S.settings&&S.settings.reciter; return EVERYAYAH[k]?k:(k==='abdurrahmaansudais'?'sudais':'budair'); };
+const eaUrl=(s,n)=>`https://everyayah.com/data/${EVERYAYAH[recKey()]}/${String(s).padStart(3,'0')}${String(n).padStart(3,'0')}.mp3`;
+const rec_=()=>'ar.alafasy'; const ED_=()=>`quran-uthmani,en.sahih,no.berg,${rec_()},en.transliteration`;
 function cleanArabic(t,s,a){ if(a===1&&s!==1&&s!==9&&t.startsWith('بِسْمِ')) t=t.split(' ').slice(4).join(' '); return t.trim(); }
 async function getJSON(url,key){
   if(key){const c=localStorage.getItem(key);if(c)try{return JSON.parse(c);}catch(e){}}
@@ -625,7 +629,7 @@ async function fetchAyah(ref){
   const d=await getJSON(`${API}/ayah/${ref}/editions/${ED_()}`,'b_'+rec_()+'_'+ref);
   const ar=pickEd(d,'quran-uthmani'),en=pickEd(d,'en.sahih'),no=pickEd(d,'no.berg'),au=pickEd(d,rec_()),tl=pickEd(d,'en.transliteration');
   const s=ar.surah.number,n=ar.numberInSurah;
-  return {ref,surah:s,ayah:n,surahName:ar.surah.englishName,ar:cleanArabic(ar.text,s,n),en:en?en.text:'',no:no?no.text:'',tl:tl?tl.text:'',audio:au?(au.audio||(au.audioSecondary||[])[0]):null};
+  return {ref,surah:s,ayah:n,surahName:ar.surah.englishName,ar:cleanArabic(ar.text,s,n),en:en?en.text:'',no:no?no.text:'',tl:tl?tl.text:'',audio:eaUrl(s,n),audio2:au?(au.audio||(au.audioSecondary||[])[0]):null};
 }
 const fetchVerse=ref=>Promise.all(expandRef(ref).map(fetchAyah));
 const fetchSurahList=()=>getJSON(`${API}/surah`,'surahlist');
@@ -810,7 +814,7 @@ function clean(id,e){
   const q=QUADS[curQ].id, j=S.junk[q].find(x=>x.id===id); if(!j) return;
   if(!unl('basar')) return toast(`Rydding åpnes etter ${GATE.basar} vers-økter (${S.vs}/${GATE.basar})`);
   const tk=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type);
-  if(!inStell()) return toast(S.active?'Rydding skjer i «Lytt og stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
+  if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
   if(!S.tools[tk]){ toast(`${JUNKNAME[j.type]}: du trenger ${TOOLS[tk].name.toLowerCase()}. Kjøp den i basaren.`); $('shopBtn').classList.add('ping'); return; }
   haptic(18); S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=1; taskHit('rydd');
   if(S.upg.messing){ const j2=S.junk[q].find(x=>x.type===j.type); if(j2){ S.junk[q]=S.junk[q].filter(x=>x!==j2); S.cleaned++; S.nur+=1; taskHit('rydd'); } } puff(e); snd.puff(); save(); renderTop(); renderSection(); say(e,keeper());
@@ -1281,6 +1285,7 @@ $('vSec').addEventListener('touchend',e=>{ if(tx==null) return; const dx=e.chang
 
 /* ================= TRYKK I SCENEN ================= */
 $('items').addEventListener('click',e=>{
+  if(e.target.closest('.egg')||e.target.closest('[onclick]')) return;
   const q=QUADS[curQ].id;
   if(e.target.closest('.hud')){ S.hud.seen=true; save(); unlockAudio(); toast('Hærfuglen har med seg et budskap',2200); return setTimeout(()=>startSession({kind:'spin',cat:'sjelden',ref:'27:20-22',q:QUADS[curQ].id}),900); }
   const pk=e.target.closest('.pick'); if(pk) return collect(pk.dataset.p,e);
@@ -1298,10 +1303,10 @@ $('scene').addEventListener('click',e=>{
   if(!restored(q)){ toast(restoreText(q)); return; }
   if(!S.active&&countDamage(q)&&e.clientY>stage.clientHeight*.5) spin('tawbah');
 });
-function inStell(){ return !!(S.active&&sess&&verses&&sess.elapsed<dur()/3); }
+function inStell(){ return !!(S.active&&sess&&verses&&sess.ph===2); }
 function grains(e){ for(let i=0;i<8;i++){ const g=document.createElement('i'); g.className='grain'; g.style.left=(e.clientX+(Math.random()-.5)*30)+'px'; g.style.top=(e.clientY-30+Math.random()*10)+'px'; g.style.animationDelay=(i*40)+'ms'; stage.appendChild(g); setTimeout(()=>g.remove(),1400);} }
 function feed(e){
-  if(!inStell()){ toast(S.active?'Dyrene får mat i «Lytt og stell»-delen':'Dyrene får mat mens verset står i himmelen. Trykk på himmelen.'); return; }
+  if(!inStell()){ toast(S.active?'Dyrene får mat i «Stell»-delen':'Dyrene får mat mens verset står i himmelen. Trykk på himmelen.'); return; }
   if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast('Tom for fôr. Kjøp en fôrsekk i basaren.'); }
   S.feed--; taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); save(); renderSection();
   say(e,rnd(['– sauene','– kua','– flokken']));
@@ -1336,7 +1341,7 @@ function pickSvg(p){ const sl=SLOTS[p.s]; if(!sl) return ''; const x=sl.x, y=sl.
   if(p.type==='egg') g=`<ellipse cx="${x}" cy="${y-2*s}" rx="${9*s}" ry="${3.5*s}" fill="#b08a4a" stroke="#1a1030" stroke-width="1"/><ellipse cx="${x-3*s}" cy="${y-5*s}" rx="${3*s}" ry="${3.8*s}" fill="#fff6e4" stroke="#1a1030" stroke-width="1"/><ellipse cx="${x+3*s}" cy="${y-5*s}" rx="${3*s}" ry="${3.8*s}" fill="#f7e6c8" stroke="#1a1030" stroke-width="1"/>`;
   return `<g class="pick" data-p="${p.id}" style="cursor:pointer">${g}<rect x="${x-14*s}" y="${y-22*s}" width="${28*s}" height="${26*s}" fill="transparent"/></g>`; }
 function collect(id,e){
-  if(!inStell()) return toast(S.active?'Du samler i «Lytt og stell»-delen':'Du samler mens verset står i himmelen. Trykk på himmelen for å starte.');
+  if(!inStell()) return toast(S.active?'Du samler i «Stell»-delen':'Du samler mens verset står i himmelen. Trykk på himmelen for å starte.');
   const p=S.picks.find(x=>x.id===id); if(!p) return; S.picks=S.picks.filter(x=>x!==p); S.goods[p.type]++; taskHit('samle'); snd.pop(); haptic(12);
   save(); renderSection(); say(e,p.type==='ull'?'– sauene':p.type==='egg'?'– hønene':'– kua'); toast(`+1 ${GOODS[p.type].name.toLowerCase()} · selg på markedet i basaren`,1800); }
 
@@ -1610,7 +1615,7 @@ const GATE={dagbok:1,basar:2,ord:3,hifz:4,beite:5,vern:7,bygg:12};
 const unl=f=>!!S.settings.allOpen||S.vs>=GATE[f];
 const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den i bok-ikonet øverst.'],
-  basar:['Basaren og rydding','Kjøp verktøy i basaren (veske-ikonet) og rydd ruinene i «Lytt og stell». Dagens tre oppgaver dukker også opp nede til venstre.'],
+  basar:['Basaren og rydding','Kjøp verktøy i basaren (veske-ikonet) og rydd ruinene i «Stell». Dagens tre oppgaver dukker også opp nede til venstre.'],
   ord:['Dagens ord','Ett arabisk ord fra Koranen hver dag, med rot og betydning. Finn det i bue-ikonet øverst.'],
   hifz:['Lysets tårn','Lær en sure utenat, vers for vers. Hvert vers tenner et vindu. Finn tårnet i tårn-ikonet øverst.'],
   beite:['Beitet','Dyrene er tilbake. Gi dem mat, samle ull, melk og egg, og selg på markedet.'],
@@ -1640,7 +1645,7 @@ function taskHit(id){ ensureTasks(); if(!S.tasks.list.length) return; const k=S.
   save(); renderTasks(); }
 function renderTasks(){ ensureTasks(); const n=S.tasks.list.filter(x=>x.prog>=x.goal).length, el=$('taskPill'); if(!el) return;
   el.innerHTML=`<b>${n}/3</b> Dagens oppgaver`; el.classList.toggle('done',n===3); el.style.display=(S.active||!S.introSeen||!S.tasks.list.length)?'none':'flex'; }
-function openTasks(){ ensureTasks(); openSheet(`<h3>Dagens oppgaver</h3><p>Tre små oppgaver hver dag. Hver gir 5 nur, og alle tre gir 10 nur i bonus. De fleste gjøres i «Lytt og stell»-delen av økten.</p>
+function openTasks(){ ensureTasks(); openSheet(`<h3>Dagens oppgaver</h3><p>Tre små oppgaver hver dag. Hver gir 5 nur, og alle tre gir 10 nur i bonus. De fleste gjøres i «Stell»-delen av økten.</p>
   ${S.tasks.list.map(t=>`<div class="si"><div class="tx"><b>${t.prog>=t.goal?'✓ ':''}${esc(t.text)}</b><small>${Math.min(t.prog,t.goal)} av ${t.goal}</small></div></div>`).join('')}
   <p style="font-size:12.5px;color:var(--muted)">Nye oppgaver kommer ved midnatt.</p>`); }
 
@@ -1724,16 +1729,17 @@ function spin(force){
     })(t0);
   },500);
 }
-$('tap').onclick=()=>{ const q=QUADS[curQ].id; if(q==='taarn'&&!S.hifz.current) return openHifz(); if(!S.active) spin(); };
+$('tap').onclick=()=>{ if(!S.active) spin(); };
 
 /* ================= LYD ================= */
-const audio=$('audio'); let playlist=[],plIdx=0,loop=true,userPaused=false;
+const audio=$('audio'); let playlist=[],playlist2=[],plIdx=0,loop=true,userPaused=false;
 function unlockAudio(){ try{ audio.src='data:audio/mp3;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAACcQCA'; audio.play().catch(()=>{}); }catch(e){} }
 function setIcon(p){ $('playIco').innerHTML=p?'<path d="M8 5h3v14H8zM14 5h3v14h-3z"/>':'<path d="M8 5v14l11-7z"/>'; }
-function setPlaylist(u){ playlist=u.filter(Boolean); plIdx=0; userPaused=false; playCurrent(); }
+function setPlaylist(u,u2){ playlist=u.filter(Boolean); playlist2=(u2||[]).slice(0,playlist.length); plIdx=0; userPaused=false; playCurrent(); }
+audio.addEventListener('error',()=>{ const alt=playlist2[plIdx]; if(alt&&playlist[plIdx]&&audio.src===playlist[plIdx]&&audio.src!==alt){ playlist[plIdx]=alt; playCurrent(); } });
 function playCurrent(){ if(!playlist.length) return setIcon(false); audio.src=playlist[plIdx]; audio.play().then(()=>setIcon(true)).catch(()=>setIcon(false)); }
 audio.addEventListener('ended',()=>{ if(!playlist.length) return; plIdx++;
-  if(plIdx>=playlist.length){ plIdx=0; if(!loop) return setIcon(false); setTimeout(()=>{ if(!userPaused&&sess) playCurrent(); },1200); return; } playCurrent(); });
+  if(plIdx>=playlist.length){ plIdx=0; repDone(); if(!loop) return setIcon(false); setTimeout(()=>{ if(!userPaused&&sess) playCurrent(); },1200); return; } playCurrent(); });
 $('aPlay').onclick=()=>{ if(!audio.paused&&audio.src.startsWith('http')){ audio.pause(); userPaused=true; setIcon(false);} else { userPaused=false; if(audio.src.startsWith('http')) audio.play().then(()=>setIcon(true)).catch(()=>{}); else playCurrent(); } };
 $('aRep').onclick=()=>{ plIdx=0; userPaused=false; playCurrent(); };
 $('aLoop').onclick=()=>{ loop=!loop; $('aLoop').classList.toggle('on',loop); toast(loop?'Gjentar verset':'Spiller én gang',1400); };
@@ -1744,7 +1750,7 @@ $('aTl').onclick=()=>setTl(!S.settings.tl); $('qTlB').onclick=()=>setTl(!S.setti
 let sess=null,verses=null,tickT=null,lastTick=0,lastSave=0;
 let pendingShort=false;
 const dur=()=>((S.active&&S.active.short)?4:(S.settings.min||10))*60;
-function startSession(a,pre){ S.active=Object.assign({elapsed:0,hiddenAt:null,solved:0},a); save(); openSession(pre); }
+function startSession(a,pre){ S.active=Object.assign({elapsed:0,hiddenAt:null,solved:0,ph:0,reps:0,repT:0,stellT:0},a); save(); openSession(pre); }
 async function openSession(pre){
   sess=S.active; verses=null; keepAwake(true); setTimeout(()=>snd.duck(),50); $('taskPill').style.display='none'; $('secTitle').style.opacity=0;
   const qi=QUADS.findIndex(q=>q.id===sess.q); if(qi>=0) curQ=qi;
@@ -1760,36 +1766,51 @@ async function openSession(pre){
   const toks=s=>s.split(/\s+/).filter(Boolean).reduce((o,w)=>{ if(o.length&&isMark(w)) o[o.length-1]+=' '+w; else o.push(w); return o; },[]);
   $('ar').innerHTML=verses.map(v=>toks(v.ar).map(w=>`<span class="wd" style="animation-delay:${(wi++*step).toFixed(2)}s">${esc(w)}</span>`).join(' ')+` <span class="am" style="animation-delay:${(wi*step).toFixed(2)}s">${ROSETTE}<b>${AR_NUM(v.ayah)}</b></span>`).join(' ');
   $('ar').classList.toggle('long',verses.reduce((n,v)=>n+v.ar.length,0)>180);
-  if(sess.elapsed>3) $('ar').classList.add('shown');
+  if(sess.ph==null){ sess.ph=0; sess.reps=0; } if(sess.elapsed>3) $('ar').classList.add('shown');
   $('tl').textContent=verses.map(v=>v.tl).join(' ');
   $('ref').innerHTML=`${esc(v0.surahName)} · ${v0.surah}:${v0.ayah}${verses.length>1?'–'+vl.ayah:''}`;
   $('tr').innerHTML=`${esc(verses.map(v=>v.en).join(' '))}<i>${esc(verses.map(v=>v.no).join(' '))}</i>`;
-  setPlaylist(verses.map(v=>v.audio)); quizSetup();
+  setPlaylist(verses.map(v=>v.audio),verses.map(v=>v.audio2)); quizSetup();
   sess._ph=-1; lastTick=performance.now(); clearInterval(tickT); tickT=setInterval(tick,250); tick();
 }
+const repGoal=()=>{ if(!sess) return 6; if(sess.short) return 3; const n=verses?verses.reduce((k,v)=>k+v.ar.length,0):0; return n>420?3:(S.settings.reps||6); };
+const learnGoal=()=>sess&&sess.short?2:3;
+const hasStell=()=>sess&&!sess.short&&sess.kind!=='hifz';
+const repEst=()=>Math.max(6,(verses||[]).reduce((n,v)=>n+v.ar.split(/\s+/).length,0)*0.75);
+function repDone(){ if(!sess||!verses||sess.ph!==0) return; sess.reps=(sess.reps||0)+1; sess.repT=0; save(); if(sess.reps>=repGoal()) setTimeout(()=>{ if(sess&&sess.ph===0) setPh(1); },900); tick(); }
+function setPh(n){ if(!sess) return; if(n===2&&!hasStell()) n=3; sess.ph=n; sess.stellT=0; save(); tick(); if(navigator.vibrate) navigator.vibrate(40); }
+function repStage(){ const R_=repGoal(), r=Math.min(sess.reps||0,R_-1); return Math.min(2,Math.floor(r*3/R_)); }
 function tick(){
   if(!sess||!verses) return;
-  const now=performance.now(),dt=(now-lastTick)/1000; lastTick=now;
-  if(document.visibilityState==='visible') sess.elapsed=Math.min(dur(),sess.elapsed+Math.min(dt,1));
+  const now=performance.now(),dt=(now-lastTick)/1000; lastTick=now; const vis=document.visibilityState==='visible';
+  if(vis){ const d=Math.min(dt,1); sess.elapsed=Math.min(7200,sess.elapsed+d);
+    if(sess.ph===0&&!userPaused&&audio.paused){ sess.repT=(sess.repT||0)+d; if(sess.repT>repEst()*1.8+4) repDone(); } // lyden virker ikke: gå videre likevel
+    if(sess.ph===2) sess.stellT=(sess.stellT||0)+d; }
   if(now-lastSave>1000){ save(); lastSave=now; }
-  const D=dur(),t=sess.elapsed,ph=t<D/3?0:t<2*D/3?1:t<D?2:3;
-  [0,1,2].forEach(k=>{ $('p'+k).querySelector('b').style.width=Math.max(0,Math.min(1,(t-k*D/3)/(D/3)))*100+'%'; $('p'+k).classList.toggle('on',ph===k); });
-  $('verse').classList.toggle('stell',ph===0);
+  const ph=sess.ph||0, RG=repGoal(), LG=learnGoal(), q=QUADS[curQ];
+  const watered=!restored(q.id)||S.watered[q.id]===dayStr(), stellOk=watered||sess.stellT>25;
+  const fill=[ph>0?1:(sess.reps||0)/RG, ph>1?1:ph===1?Math.min(1,(sess.solved||0)/LG):0, ph>2?1:ph===2?(stellOk?1:Math.min(.9,sess.stellT/25)):0];
+  [0,1,2].forEach(k=>{ $('p'+k).querySelector('b').style.width=fill[k]*100+'%'; $('p'+k).classList.toggle('on',ph===k); });
+  $('p2').style.display=hasStell()?'':'none';
+  $('verse').classList.toggle('stell',ph===2);
+  if(ph===0){ const st=repStage(); $('tr').classList.toggle('on',st===0); stage.classList.toggle('showtl',st===1||!!S.settings.tl&&st===0); $('verse').classList.remove('small'); }
   if(ph!==sess._ph){ sess._ph=ph; renderSection();
-    if(ph>=1){ $('tr').classList.add('on'); $('verse').classList.add('small'); }
-    if(ph===2){ loop=false; $('aLoop').classList.remove('on'); $('verse').classList.remove('on'); $('quiz').classList.add('on'); $('actl').style.display='none'; }
-    if(ph<2){ $('verse').classList.add('on'); $('quiz').classList.remove('on'); $('actl').style.display='flex'; }
-    if(ph===3){ $('note').classList.add('on'); $('reflect').classList.add('on'); renderReflect(); if(navigator.vibrate) navigator.vibrate(80); }
+    if(ph===0){ loop=true; $('aLoop').classList.add('on'); audio.volume=1; $('verse').classList.add('on'); $('quiz').classList.remove('on'); $('actl').style.display='flex'; }
+    if(ph===1){ loop=false; $('aLoop').classList.remove('on'); audio.volume=1; $('verse').classList.remove('on'); $('quiz').classList.add('on'); $('actl').style.display='none'; stage.classList.toggle('showtl',!!S.settings.tl); }
+    if(ph===2){ $('ar').classList.add('shown'); $('quiz').classList.remove('on'); $('verse').classList.add('on','small'); $('tr').classList.add('on'); $('actl').style.display='flex'; loop=true; $('aLoop').classList.add('on'); audio.volume=.45; userPaused=false; plIdx=0; playCurrent(); }
+    if(ph===3){ $('quiz').classList.remove('on'); $('actl').style.display='none'; audio.volume=1; $('note').classList.add('on'); $('reflect').classList.add('on'); renderReflect(); if(navigator.vibrate) navigator.vibrate(80); }
   }
-  const left=`<b>${fmt(D-t)}</b>`;
-  $('snoozeBtn').style.display=(t<30&&sess.kind==='spin'&&(S.snooze||{}).day!==dayStr())?'block':'none';
-  const sp_=sess.short?'Kort økt · ':''; if(ph===0) $('smsg').innerHTML=`${sp_}Lytt, og stell hagen: rydd, gi dyrene mat og vann fra elven · ${left}`;
-  else if(ph===1) $('smsg').innerHTML=`Les betydningen under verset · ${left}`;
-  else if(ph===2) $('smsg').innerHTML=`Bygg verset i ditt tempo · ${left}`;
+  $('qNext').textContent=ph===1&&(sess.solved||0)>=LG?(hasStell()?'Videre til stell':'Videre'):'Neste runde';
+  $('stellDone').style.display=ph===2&&stellOk?'block':'none';
+  $('snoozeBtn').style.display=(sess.elapsed<30&&ph===0&&sess.kind==='spin'&&(S.snooze||{}).day!==dayStr())?'block':'none';
+  const sp_=sess.short?'Kort økt · ':'', dots=Array.from({length:RG},(_,k)=>`<span style="color:${k<(sess.reps||0)?'var(--gold)':'rgba(255,255,255,.3)'}">●</span>`).join(' ');
+  if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${['Med oversettelse','Med uttale','Bare arabisk'][repStage()]}</small>`;
+  else if(ph===1) $('smsg').innerHTML=`${sp_}Lær · bygg verset · runde <b>${Math.min((sess.solved||0)+1,LG)} av ${LG}</b>`;
+  else if(ph===2) $('smsg').innerHTML=watered?'Stell hagen mens verset spiller: rydd og gi dyrene mat':'Stell hagen mens verset spiller · <b>vann fra elven</b>';
   else $('smsg').innerHTML='Ferdig. Hva traff deg?';
 }
 function renderReflect(){ $('reflect').innerHTML=REFLECT.map(r=>`<button>${r}</button>`).join(''); [...$('reflect').children].forEach(b=>b.onclick=()=>finish(b.textContent)); }
-function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('secTitle').style.opacity=1; $('note').classList.remove('on'); $('note').value=''; $('snoozeBtn').style.display='none'; keepAwake(false); clearInterval(tickT); audio.pause(); playlist=[]; sess=null; verses=null; S.active=null; save();
+function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('secTitle').style.opacity=1; $('note').classList.remove('on'); $('note').value=''; $('snoozeBtn').style.display='none'; $('stellDone').style.display='none'; audio.volume=1; keepAwake(false); clearInterval(tickT); audio.pause(); playlist=[]; sess=null; verses=null; S.active=null; save();
   $('sbar').classList.remove('on'); $('verse').classList.remove('on'); }
 function finish(refl){
   const a=S.active, cat=catById(a.cat), msgs=[];
@@ -1799,7 +1820,7 @@ function finish(refl){
     S.journal=S.journal.slice(0,400); if(S.journal[0].note) taskHit('dagbok'); }
   taskHit(a.kind==='hifz'?'hifz':'vers');
   if(a.short){ S.nur+=4; S.shortDone={day:dayStr(),n:shortToday()+1}; endSessionUI(); renderTop(); renderSection(); snd.chime([523,659]);
-    toast(doneToday()?'Kort økt fullført. +4 nur':'Kort økt fullført. +4 nur. Dagens hovedøkt (10 min) er det som gjenoppretter hagen.',4200); return; }
+    toast(doneToday()?'Kort økt fullført. +4 nur':'Kort økt fullført. +4 nur. Dagens hovedøkt er det som gjenoppretter hagen.',4200); return; }
   if(a.kind==='hifz'){
     S.nur+=15; msgs.push('+15 nur');
     const pr=S.hifz.prog[a.surah]=S.hifz.prog[a.surah]||{};
@@ -1870,7 +1891,8 @@ function tapTile(k,b){
     const hk=Q.tiles.findIndex(x=>!x.used&&x.w===need); const el=$('qTiles').children[hk]; if(el) el.classList.add('hint');
   }
 }
-$('qNext').onclick=()=>quizSetup();
+$('qNext').onclick=()=>{ if(sess&&sess.ph===1&&(sess.solved||0)>=learnGoal()) setPh(2); else quizSetup(); };
+$('stellDone').onclick=()=>setPh(3);
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const normAr=s=>s.replace(/[ً-ٰٟۖ-ۭـ]/g,'').replace(/[ٱأإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[^ء-ي\s]/g,'').trim();
 let rec=null;
@@ -2017,7 +2039,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
     if(k==='for10') S.feed+=10; if(k==='olje') S.oil+=5; if(k==='messing') S.upg.messing=true;
     if(k==='fro'){ const type=rnd(['sitron','mandel'].concat(FRUITS)); S.fruit.push({type:FRUITS.includes(type)?type:'oliven',st:1,h:'ok'}); }
     done(`${w.name} kjøpt`); });
-  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const t=TOOLS[b.dataset.tool]; if(!pay(t.price)) return; S.tools[b.dataset.tool]=true; done(`${t.name} kjøpt. Du rydder i «Lytt og stell».`); });
+  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const t=TOOLS[b.dataset.tool]; if(!pay(t.price)) return; S.tools[b.dataset.tool]=true; done(`${t.name} kjøpt. Du rydder i «Stell».`); });
   Q$('[data-deco]').forEach(b=>b.onclick=()=>{ const k=b.dataset.deco, d=DECOR[k]; if(!pay(d.price)) return; S.inv[k]=(S.inv[k]||0)+1; done(`${d.name} er lagt på lageret`,'lager'); });
   Q$('[data-animal]').forEach(b=>b.onclick=()=>{ const k=b.dataset.animal, a=ANIMALS[k]; if(!pay(a.price)) return; if(k==='hone') S.flock.hens+=2; if(k==='geit') S.flock.goats++; if(k==='fisk') S.fish+=2; done(`${a.name} er på plass`); });
   Q$('[data-sky]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sky; if(!pay(SKY[k].price)) return; S.themes[k]=true; applyThemes(); done(`${SKY[k].name} er lagt til himmelen`); });
@@ -2056,7 +2078,7 @@ function openBook(){
    <div class="qrow"><button class="gb" data-play="${esc(e.ref)}">Hør</button><button class="gb" data-gift="${S.journal.indexOf(e)}">Send som rose</button></div></div>`).join('')}</div>`);
   $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():openBook(); });
   $('sheet').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ jFilter=b.dataset.f==='Alle'?null:b.dataset.f; openBook(); });
-  $('sheet').querySelectorAll('[data-play]').forEach(b=>b.onclick=async()=>{ unlockAudio(); try{ const vs=await fetchVerse(b.dataset.play.includes('-')?b.dataset.play:b.dataset.play); loop=false; setPlaylist(vs.map(v=>v.audio)); }catch(e){ toast('Fikk ikke hentet lyden'); } });
+  $('sheet').querySelectorAll('[data-play]').forEach(b=>b.onclick=async()=>{ unlockAudio(); try{ const vs=await fetchVerse(b.dataset.play.includes('-')?b.dataset.play:b.dataset.play); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); }catch(e){ toast('Fikk ikke hentet lyden'); } });
   $('sheet').querySelectorAll('[data-gift]').forEach(b=>b.onclick=()=>giftRose(S.journal[+b.dataset.gift]));
 }
 $('bookBtn').onclick=openBook;
@@ -2113,7 +2135,7 @@ function openBackup(){
 
 /* --- Meg --- */
 function modesHTML(){ return `
-  <div class="mode"><div class="ic">آية</div><div><b>Vers · 10 minutter</b><p>En stjerne faller og gir deg et vers du ikke har valgt selv. Du lytter og steller hagen (rydder, gir mat og vanner), leser betydningen og bygger verset ord for ord. Økten kan ikke lukkes før tiden er ute.</p><p><i>Gir deg:</i> En pause fra skjermen som fyller deg, og et vers som kanskje treffer akkurat det du trenger. Dette gjenoppretter hagen.</p></div></div>
+  <div class="mode"><div class="ic">آية</div><div><b>Vers · ca. 5–10 minutter</b><p>En stjerne faller og gir deg et vers du ikke har valgt selv. Du lytter og leser det seks ganger, bygger det ord for ord og steller hagen mens verset spiller. Økten kan ikke lukkes før alle tre delene er gjort.</p><p><i>Gir deg:</i> En pause fra skjermen som fyller deg, og et vers som kanskje treffer akkurat det du trenger. Dette gjenoppretter hagen.</p></div></div>
   <div class="mode"><div class="ic">منارة</div><div><b>Lysets tårn · Hifz</b><p>Velg en sure og lær den vers for vers. Hvert vers tenner et vindu i tårnet, og repetisjon holder lyset ved like.</p><p><i>Gir deg:</i> Koranen utenat i små biter som faktisk sitter, og en tydelig oversikt over hvor langt du har kommet.</p></div></div>
   <div class="mode"><div class="ic">كلمة</div><div><b>Dagens ord</b><p>Ett arabisk ord fra Koranen hver dag, med uttale, betydning på norsk og engelsk og roten det kommer fra. Dagen etter får du en liten test.</p><p><i>Gir deg:</i> Etter noen måneder kjenner du igjen ordene når du leser og hører Koranen. Du begynner å forstå, ikke bare lese.</p></div></div>`; }
 
@@ -2130,7 +2152,7 @@ function shortHTML(){ const n=shortLimit(), T=n?shortTimes():[];
   <p style="font-size:12.5px;color:var(--muted)">Anbefalt: 2–3. Når du har tatt så mange korte økter som du har valgt, kan du lukke appen fritt resten av dagen. I dag: ${shortToday()} av ${n}.</p>
   ${n?`<div class="card"><b style="color:var(--gold2)">Ukens tilfeldige klokkeslett</b><p style="margin:6px 0;font-size:22px;letter-spacing:1px;text-align:center;color:var(--gold)">${T.join(' · ')}</p><p style="font-size:12.5px;color:var(--muted);margin:0">Legg inn én automatisering per klokkeslett i ${IS_ANDROID?'MacroDroid':'Snarveier'} (se oppskriften under). Nye klokkeslett kommer hver uke, så tidene ikke blir forutsigbare.</p><button class="btn ghost" id="shNew" style="margin-top:8px">Lag nye klokkeslett nå</button></div>`:''}`; }
 function enoughToday(){ openSheet(`<h3 style="text-align:center">Du har gjort nok i dag</h3><div style="text-align:center;font-size:44px">🌙</div><p style="text-align:center">Du har tatt ${shortToday()} korte økter i dag, slik du bestemte. ${doneToday()?'Hagen har fått det den trenger. Du kan lukke appen med god samvittighet.':'Du kan lukke appen med god samvittighet. Husk bare dagens hovedøkt når det passer, det er den som gjenoppretter hagen.'}</p><button class="btn" id="enClose">Lukk</button><button class="btn ghost" id="enMore">Ta en økt likevel</button>`);
-  $('enClose').onclick=closeSheet; $('enMore').onclick=()=>{ closeSheet(); pendingShort=true; enterQuad(0); toast('Kort økt: 4 minutter. Trykk på himmelen',3500); }; }
+  $('enClose').onclick=closeSheet; $('enMore').onclick=()=>{ closeSheet(); pendingShort=true; enterQuad(0); toast('Kort økt: lytt tre ganger og lær. Trykk på himmelen',3500); }; }
 function backupNudge(){ if(!S.introSeen||S.active||busy||(typeof sess!=='undefined'&&sess)||(S.vs||0)<3) return false; const last=S.lastBackup||S.firstBackupNudge||0, wk=7*864e5;
   if(!S.firstBackupNudge&&!S.lastBackup){ S.firstBackupNudge=Date.now()-wk; }
   if(Date.now()-last<wk||S.backupNudgeDay===dayStr()||$('sheet').classList.contains('on')) return false;
@@ -2143,9 +2165,10 @@ function openMeg(){
   <div class="card stats"><div><b>${restorePct()}%</b><span>gjenopprettet</span></div><div><b>${S.streak}</b><span>dager på rad</span></div><div><b>${Math.round(S.stats.seconds/60)}</b><span>minutter</span></div><div><b>${S.stats.interrupts}</b><span>stoppet før app</span></div></div>
   <p>${S.stats.interrupts?`Du har stoppet ${S.stats.interrupts} ganger før en app og brukt ${Math.round(S.stats.seconds/60)} minutter med Koranen i stedet.`:(IS_ANDROID?'Sett opp MacroDroid under':'Sett opp Snarveier under')+', så ser du hvor ofte du stoppet før en app.'}${top?` Det som oftest treffer deg: ${top[0].toLowerCase()}.`:''}</p>
   <h4>De tre måtene å pleie hagen på</h4>${modesHTML()}
-  <h4>Nur og basaren</h4><p>Du tjener nur på økter (10), hifz (15), Dagens ord (3), Dagens oppgaver (5 hver, 10 i bonus), vanning (2), rydding (1) og ved å selge ull, melk, egg, frukt og honning på markedet. Dyrene spiser fôr, og lyktene trenger lampeolje. I basaren kjøper du verktøy for å rydde ruinene og pynt til hagen. Ryddingen gjør du i «Lytt og stell»-delen av økten. Hagen bruker 5 nur til vann hver dag.</p>
+  <h4>Nur og basaren</h4><p>Du tjener nur på økter (10), hifz (15), Dagens ord (3), Dagens oppgaver (5 hver, 10 i bonus), vanning (2), rydding (1) og ved å selge ull, melk, egg, frukt og honning på markedet. Dyrene spiser fôr, og lyktene trenger lampeolje. I basaren kjøper du verktøy for å rydde ruinene og pynt til hagen. Ryddingen gjør du i «Stell»-delen av økten. Hagen bruker 5 nur til vann hver dag.</p>
   <h4>Lyktene</h4><p>Den ene lykten tennes når du har fullført en økt i dag. Den andre tennes når du har holdt det gående i 7 dager på rad.</p>
-  <h4>Øktens lengde</h4><div class="seg" id="durSeg">${[4,6,8,10].map(m=>`<button data-m="${m}" class="${S.settings.min===m?'on':''}">${m} min</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">10 minutter anbefales: hjernen trenger tid til å lande, lytte og huske. Tiden deles likt mellom Lytt og stell, Les og Lær.</p>
+  <h4>Gjentakelser</h4><div class="seg" id="durSeg">${[3,6,9].map(m=>`<button data-m="${m}" class="${(S.settings.reps||6)===m?'on':''}">${m} ganger</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Hvor mange ganger verset spilles i «Lytt og les» før du går videre til Lær. 6 er anbefalt. Veldig lange vers spilles 3 ganger.</p>
+  <h4>Hold deg i økta</h4><p style="font-size:12.5px;color:var(--muted)">Appen kan ikke hindre deg i å gå ut. Vil du ha en ekte lås, kan du feste skjermen: på Android heter det <b>Skjermfesting</b> (Innstillinger → Sikkerhet), og på iPhone <b>Veiledet tilgang</b> (Innstillinger → Tilgjengelighet).</p>
   <h4>Siste hendelser</h4><div class="card log">${S.events.length?S.events.slice(0,12).map(e=>`<div>${esc(e.text)}<small>${new Date(e.ts).toLocaleString('no-NO',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</small></div>`).join(''):'<div>Ingen hendelser ennå.</div>'}</div>
   ${installEvt&&!isStandalone()?'<button class="btn" id="instBtn">Installer Rawdah på telefonen</button>':''}
   ${shortHTML()}
@@ -2154,7 +2177,7 @@ function openMeg(){
   <h4>Jeg er</h4><div class="seg" id="genSeg">${[['m','Mann'],['f','Kvinne']].map(([k,l])=>`<button data-g="${k}" class="${(S.settings.gender||'m')===k?'on':''}">${l}</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Påvirker om hagen passes av en gjeter eller en gjeterinne, og at arabisk tiltale i snakkeboblene får riktig form (جَزَاكَ / جَزَاكِ).</p>
   <h4>Funksjoner</h4><div class="seg" id="openSeg"><button data-o="0" class="${S.settings.allOpen?'':'on'}">Lås opp gradvis</button><button data-o="1" class="${S.settings.allOpen?'on':''}">Vis alt nå</button></div><p style="font-size:12.5px;color:var(--muted)">Nye funksjoner kommer etter hvert som du fullfører vers-økter, så det ikke blir for mye på én gang.</p>
   <h4>Lyd i hagen</h4><div class="seg" id="sndSeg"><button data-s="1" class="${S.settings.sound!==false?'on':''}">På</button><button data-s="0" class="${S.settings.sound===false?'on':''}">Av</button></div><p style="font-size:12.5px;color:var(--muted)">Vann, fugler og sirisser i bakgrunnen, og små lyder når du planter, rydder og gir mat. Ingen musikk.</p>
-  <h4>Resitatør</h4><div class="seg" id="recSeg" style="flex-wrap:wrap">${Object.entries(RECITERS).map(([k,l])=>`<button data-r="${k}" class="${(S.settings.reciter||'alafasy')===k?'on':''}" style="flex:1 0 45%;font-size:13px">${l}</button>`).join('')}</div>
+  <h4>Resitatør</h4><div class="seg" id="recSeg" style="flex-wrap:wrap">${Object.entries(RECITERS).map(([k,l])=>`<button data-r="${k}" class="${recKey()===k?'on':''}" style="flex:1 0 45%;font-size:13px">${l}</button>`).join('')}</div>
   <h4>Arabisk skrift</h4><div class="seg" id="fontSeg">${[['amiri','Amiri'],['sch','Scheherazade'],['naskh','Naskh']].map(([k,l])=>`<button data-fo="${k}" class="${(S.settings.arFont||'amiri')===k?'on':''}" style="font-family:${FONTS[k]}">${l}</button>`).join('')}</div>
   <div class="card" style="margin-top:8px;text-align:center"><div class="ar shown" style="font-size:30px;line-height:2"><span class="wd" style="opacity:1;transform:none;animation:none">بِسْمِ</span> <span class="wd" style="opacity:1;transform:none;animation:none">ٱللَّهِ</span> <span class="wd" style="opacity:1;transform:none;animation:none">ٱلرَّحْمَٰنِ</span> <span class="wd" style="opacity:1;transform:none;animation:none">ٱلرَّحِيمِ</span></div></div>
   <h4>Størrelse på oversettelsen</h4><div class="seg" id="trSeg">${[[.9,'Liten'],[1,'Normal'],[1.18,'Stor'],[1.36,'Ekstra stor']].map(([v,l])=>`<button data-t="${v}" class="${(S.settings.trSize||1)===v?'on':''}" style="font-size:${12*v}px">${l}</button>`).join('')}</div><p style="font-family:var(--serif);font-size:calc(16.5px*${S.settings.trSize||1});margin:8px 0 4px">Si: «Mine tjenere som har syndet mot seg selv, fortvil ikke om Guds nåde!»</p><p style="font-size:12.5px;color:var(--muted)">Gjelder den engelske og norske oversettelsen under verset.</p>
@@ -2163,7 +2186,7 @@ function openMeg(){
   <button class="btn ghost" id="replay">Se historien igjen</button>
   <button class="btn ghost" id="resetBtn">Slett all fremgang</button>`);
   $('shSeg').onclick=e=>{ const k=e.target.dataset.n; if(k!=null){ S.settings.shortPerDay=+k; S.shortTimes=null; save(); openMeg(); } }; if($('shNew')) $('shNew').onclick=()=>{ S.shortTimes={week:weekKey(),t:genShortTimes(shortLimit())}; save(); openMeg(); };
-  $('durSeg').onclick=e=>{ const m=+e.target.dataset.m; if(m){ S.settings.min=m; save(); openMeg(); } };
+  $('durSeg').onclick=e=>{ const m=+e.target.dataset.m; if(m){ S.settings.reps=m; save(); openMeg(); } };
   $('replay').onclick=()=>{ closeSheet(); playIntro(); };
   $('bkBtn').onclick=openBackup;
   $('genSeg').onclick=e=>{ const g=e.target.dataset.g; if(g){ S.settings.gender=g; save(); openMeg(); if(view==='sec') renderSection(); } };
@@ -2198,7 +2221,7 @@ const CAPS=[
   'Men med tiden glemte folk hagen.<small>De sluttet å pleie den. Koranen ble stående på hylla, og lyktene sluknet én etter én.</small>',
   'Glemselen ble til en storm.<small>Sanden la seg over alt som ikke lenger ble pleid. Fontenen sprakk, elvene tørket inn, og veiene dit forsvant.</small>',
   'I dag ligger hagen i ruiner.<small>Bare én liten lykt brenner fortsatt, og en hærfugl sitter alene på muren.</small>',
-  'Din rolle er å gjenopprette hagen til sin gamle storhet.<small>Ummaen ble ikke bygd på én dag, og den gjenoppbygges heller ikke på én dag. Hver dag 10 minutter med Koranen: én dag, ett vers, ett hjerte om gangen.</small>',
+  'Din rolle er å gjenopprette hagen til sin gamle storhet.<small>Ummaen ble ikke bygd på én dag, og den gjenoppbygges heller ikke på én dag. Hver dag noen minutter med Koranen: én dag, ett vers, ett hjerte om gangen.</small>',
 ];
 /* ---- Gullalderens Rawdah: vises bare i første bilde av fortellingen og når hagen er 100 % ---- */
 const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 0 Q-7 -14 -4 -20 H4 Q7 -14 6 0Z" fill="${robe}" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-24" r="4.2" fill="#c58c5c"/><path d="M-4.6 -25 Q0 -32 4.6 -25 Q0 -27 -4.6 -25Z" fill="${turb}"/></g>`;
@@ -2352,7 +2375,7 @@ const QS=new URLSearchParams(location.search);
 if(QS.has('spin')){ S.stats.interrupts++; save(); history.replaceState(null,'',location.pathname);
   if(S.snooze&&S.snooze.until>Date.now()) toast(`Du har utsatt til ${new Date(S.snooze.until).toLocaleTimeString('no-NO',{hour:'2-digit',minute:'2-digit'})}. Du kan gå tilbake.`,4000);
   else if(!S.active&&S.introSeen&&shortToday()>=shortLimit()){ const tryE=(k=0)=>{ if($('sheet').classList.contains('on')&&k<6) return setTimeout(()=>tryE(k+1),1500); enoughToday(); }; setTimeout(tryE,900); }
-  else if(!S.active&&S.introSeen){ pendingShort=true; enterQuad(0); toast(`Kort økt ${shortToday()+1} av ${shortLimit()} i dag: 4 minutter. Trykk på himmelen`,3500); } }
+  else if(!S.active&&S.introSeen){ pendingShort=true; enterQuad(0); toast(`Kort økt ${shortToday()+1} av ${shortLimit()} i dag. Trykk på himmelen`,3500); } }
 else setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) backupNudge(); },3500);
 if(QS.has('rose')){ history.replaceState(null,'',location.pathname); setTimeout(()=>receiveRose(QS.get('rose')),S.introSeen?700:100); }
 else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&&!doneToday()&&!S.snooze.told){ S.snooze.told=true; save(); setTimeout(()=>toast('Utsettelsen er over. Trykk på himmelen når du er klar.',3500),900); }
