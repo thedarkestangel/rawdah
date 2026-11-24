@@ -304,6 +304,16 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 .lbirds{animation:lbird 26s linear infinite}@keyframes lbird{from{transform:translateX(-140px)}to{transform:translateX(420px)}}.lboat{animation:lboat 9s ease-in-out infinite alternate}@keyframes lboat{from{transform:translateY(0)}to{transform:translateY(26px)}}
 .igold{opacity:0;transition:opacity 2.5s}.s1 .igold,.gold .igold{opacity:1}.iruinsky{transition:opacity 2s}.s1 .iruinsky,.gold .iruinsky{opacity:0}
 .iglory{opacity:1;transition:opacity 2s}.s2 .iglory,.s3 .iglory,.s4 .iglory,.s5 .iglory{opacity:0}
+.icity{opacity:0;transition:opacity 2s}.s1 .icity{opacity:1}.s2 .icity{opacity:.55}
+.ibroken{opacity:0;transition:opacity 1.5s 1.2s}.s4 .ibroken,.s5 .ibroken,.s6 .ibroken{opacity:1}.s4 .iruinsky,.s5 .iruinsky,.s6 .iruinsky{opacity:0!important}
+.itornado{opacity:0;transform:translate(-80px,560px)}.s3 .itornado{opacity:1;animation:torn 4.5s ease-in-out forwards}
+@keyframes torn{0%{transform:translate(-80px,560px)}100%{transform:translate(480px,540px)}}
+.itw{animation:twist .35s ease-in-out infinite alternate}@keyframes twist{from{transform:skewX(-8deg)}to{transform:skewX(8deg)}}
+.igrass{opacity:0;transition:opacity 3s}.decades .igrass,.herders .igrass{opacity:1}
+.itime{opacity:0}.decades .itime{opacity:1}.itsun{animation:tl 2.4s linear infinite}@keyframes tl{0%{transform:translate(-20px,330px)}50%{transform:translate(195px,90px)}100%{transform:translate(410px,330px)}}
+.decades #iScene{animation:days 2.4s linear infinite}@keyframes days{0%,100%{filter:saturate(.3) brightness(.45)}50%{filter:saturate(.4) brightness(.8)}}
+.herders #iScene{filter:saturate(.5) brightness(.85)!important}.s5.herders #iScene{filter:saturate(.45) brightness(.7)!important}
+.iherd{opacity:0;transform:translateX(-260px);transition:transform 4s ease-out,opacity 1.5s}.herders .iherd{opacity:1;transform:none}
 .storm{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1s;background:linear-gradient(rgba(120,80,40,.0),rgba(150,100,50,.45))}
 .s3 .storm{opacity:1}
 .storm i{position:absolute;height:1.5px;border-radius:2px;background:rgba(240,200,140,.75);animation:sand linear infinite}
@@ -942,7 +952,11 @@ function drawHorizon(){
   const hzTrees=[30,52,78,104,286,312,338,360].map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join('');
   if(S.horizon&&S.horizon!=='palass'&&MONS.some((m,i)=>m.id===S.horizon&&isUnl(i))){ $('horizon').innerHTML=regionScene(S.horizon,false); return; }
   if((S.palace||0)>0&&S.horizon!=='album'){ $('horizon').innerHTML=palaceSvg(S.palace)+[30,52,78,104,286,312,338,360].map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join(''); return; }
-  $('horizon').innerHTML=`<g class="sil"><path d="M150 332 V272 h6 v-26 l3 -10 l3 10 v26 h6 V332Z"/>${ok?'<path d="M222 332 V272 h6 v-26 l3 -10 l3 10 v26 h6 V332Z"/>':'<path d="M222 332 V292 l5 -6 l4 8 l3 -4 l6 4 V332Z"/>'}<path d="M168 332 V290 h54 V332Z"/>${ok?'<path d="M172 290 Q172 256 195 248 Q218 256 218 290Z"/>':'<path d="M172 290 Q172 268 186 262 l4 8 l6 -10 l5 12 l6 -6 Q218 272 218 290Z"/>'}</g><path d="M186 332 V310 Q186 298 195 294 Q204 298 204 310 V332Z" style="fill:#ffcf7a;fill-opacity:${ok?'calc(.5*var(--glow))':'.05'}"/>`+[30,52,78,104,286,312,338,360].map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join('');
+  const st=S.vs>=AT.frukt?2:ok?1:0, cyps=(st===0?[30,78,312,360]:[30,52,78,104,286,312,338,360]).map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join('');
+  const ruin=`<g class="sil"><path d="M150 332 V292 h6 v-12 l3 -6 l3 8 V332Z"/><path d="M222 332 V304 l5 -6 l4 8 l3 -4 l6 4 V332Z"/><path d="M168 332 V302 l8 -6 l10 4 l12 -8 l8 6 l16 -2 V332Z"/><path d="M174 302 Q176 286 186 282 l4 6 l3 -10 l4 12Z"/><path d="M118 334 Q138 316 160 334Z M228 334 Q252 314 276 334Z M196 334 Q206 324 216 334Z"/></g>`;
+  const mid=`<g class="sil"><path d="M150 332 V272 h6 v-26 l3 -10 l3 10 v26 h6 V332Z"/><path d="M222 332 V292 l5 -6 l4 8 l3 -4 l6 4 V332Z"/><path d="M168 332 V290 h54 V332Z"/><path d="M172 290 Q172 266 190 258 l5 6 l6 -4 Q218 268 218 290Z"/></g><g fill="none" stroke="#8a6a3a" stroke-width="1.2" opacity=".8"><path d="M200 290 V250 M214 290 V256 M198 262 H218 M198 276 H218 M200 262 L214 276"/></g>`;
+  const whole=`<g class="sil"><path d="M150 332 V272 h6 v-26 l3 -10 l3 10 v26 h6 V332Z"/><path d="M222 332 V272 h6 v-26 l3 -10 l3 10 v26 h6 V332Z"/><path d="M168 332 V290 h54 V332Z"/><path d="M172 290 Q172 256 195 248 Q218 256 218 290Z"/></g>`;
+  $('horizon').innerHTML=[ruin,mid,whole][st]+`<path d="M186 332 V310 Q186 298 195 294 Q204 298 204 310 V332Z" style="fill:#ffcf7a;fill-opacity:${st?'calc(.5*var(--glow))':'.05'}"/>`+cyps;
 }
 function palaceSvg(st){ let g='<g class="sil">';
   g+=`<path d="M96 334 V300 H294 V334Z"/>`;
@@ -2326,11 +2340,13 @@ function showUnseen(){
 
 /* ================= INTRO ================= */
 const CAPS=[
-  'Det var en gang en hage som het Rawdah.<small>Den var et bilde på ummaen da den blomstret. Lærde leste under trærne, karavaner og skip kom fra hele verden, og lyktene brant hele natten.</small>',
+  'Det var en gang en hage som het Rawdah.<small>Rundt den lå en by i gull. Lærde leste under trærne, markedene var fulle, karavaner og skip kom fra hele verden, og lyktene brant hele natten. Den var et bilde på ummaen da den blomstret.</small>',
   'Men med tiden glemte folk hagen.<small>De sluttet å pleie den. Koranen ble stående på hylla, og lyktene sluknet én etter én.</small>',
-  'Glemselen ble til en storm.<small>Sanden la seg over alt som ikke lenger ble pleid. Fontenen sprakk, elvene tørket inn, og veiene dit forsvant.</small>',
-  'I dag ligger hagen i ruiner.<small>Bare én liten lykt brenner fortsatt, og en hærfugl sitter alene på muren.</small>',
-  'Din rolle er å gjenopprette hagen til sin gamle storhet.<small>Ummaen ble ikke bygd på én dag, og den gjenoppbygges heller ikke på én dag. Hver dag noen minutter med Koranen: én dag, ett vers, ett hjerte om gangen.</small>',
+  'Glemselen ble til en storm.<small>En virvelvind av sand rev gjennom byen. Kuplene raste, tårnene falt, fontenen sprakk, og elvene tørket inn.</small>',
+  'Byen og hagen ble lagt i ruiner.<small>Bare én liten lykt brenner fortsatt, og en hærfugl sitter alene på muren.</small>',
+  'Det gikk mange tiår.<small>Sand og ugress dekket ruinene. Ingen kom, og ingen husket hvordan det en gang hadde vært.</small>',
+  'Så kom noen gjetere med dyrene sine.<small>De fant den ene lykta som fortsatt brant, og bestemte seg for å bli. Der skulle de bygge opp igjen.</small>',
+  'Ummaen ble ikke bygd på én dag.<small>Den gjenoppbygges heller ikke på én dag. Din rolle er å gjenopprette hagen til sin gamle storhet: noen minutter med Koranen hver dag, én dag, ett vers, ett hjerte om gangen.</small>',
 ];
 /* ---- Gullalderens Rawdah: vises bare i første bilde av fortellingen og når hagen er 100 % ---- */
 const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 0 Q-7 -14 -4 -20 H4 Q7 -14 6 0Z" fill="${robe}" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-24" r="4.2" fill="#c58c5c"/><path d="M-4.6 -25 Q0 -32 4.6 -25 Q0 -27 -4.6 -25Z" fill="${turb}"/></g>`;
@@ -2442,28 +2458,36 @@ function introScene(){
   <g class="irubble">${rubble(60,640,1.6)}${rubble(260,610,1.3)}${rubble(140,700,1.8)}${stump({x:110,y:520,sc:1.3})}${stump({x:280,y:540,sc:1.4})}</g>
   <g class="ianimals">${cowSvg(290,520,1,0)}${sheepSvg(95,505,1,1)}${sheepSvg(135,535,.95,2)}</g>
   ${goldenAge()}
+  <g class="icity">${[[18,300,26,'#e2b04a'],[44,292,22,'#d9a040'],[66,304,20,'#c98a2e'],[300,302,22,'#d9a040'],[324,292,24,'#e2b04a'],[350,300,22,'#c98a2e']].map(([x,y,w,c])=>`<path d="M${x} 334 V${y} H${x+w} V334Z" fill="${c}" stroke="#7a5a20" stroke-width=".6"/><path d="M${x+w/2-4} 334 V${y+14} Q${x+w/2} ${y+8} ${x+w/2+4} ${y+14} V334Z" fill="#ffd98a"/>`).join('')}${[[80,360,'#c43f4f'],[112,372,'#2f6db5'],[268,366,'#2f7a4a'],[300,376,'#c9922e']].map(([x,y,c])=>`<path d="M${x-14} ${y} L${x} ${y-12} L${x+14} ${y}Z" fill="${c}"/><path d="M${x-12} ${y} V${y+14} M${x+12} ${y} V${y+14}" stroke="#6a4a2a" stroke-width="1.4"/><rect x="${x-10}" y="${y+6}" width="20" height="6" fill="#e8c890"/>`).join('')}${figure(96,392,.9,'#2f5a8a','#efe4cc')}${figure(286,398,.9,'#7a2a2a','#efe4cc')}${figure(126,402,.85,'#efe4cc','#2f7a4a')}</g>
+  <g class="ibroken" style="fill:#1a1636">${['M150 332 V290 h6 v-14 l3 -6 l3 8 V332Z','M222 332 V300 l5 -6 l4 8 l3 -4 l6 4 V332Z','M168 332 V300 l8 -6 l10 4 l12 -8 l8 6 l16 -2 V332Z','M174 300 Q176 282 186 278 l4 6 l3 -10 l4 12Z'].map(d=>`<path d="${d}"/>`).join('')}<path d="M120 334 Q140 318 160 334Z M228 334 Q250 316 272 334Z" fill="#2a2440"/></g>
+  <g class="itornado"><g class="itw">${Array.from({length:9},(_,k)=>`<ellipse cx="${(Math.sin(k)*6).toFixed(1)}" cy="${-k*26}" rx="${10+k*7}" ry="${4+k*1.6}" fill="none" stroke="rgba(214,180,130,${(.75-k*.04).toFixed(2)})" stroke-width="${6-k*.4}"/>`).join('')}</g></g>
+  <g class="igrass">${[[60,640],[260,610],[140,700],[110,520],[280,540]].map(([x,y])=>[0,1,2,3,4].map(k=>`<path d="M${x-12+k*6} ${y+6} q-2 -12 ${k%2?3:-3} -18" stroke="#5a7a3a" stroke-width="1.6" fill="none"/>`).join('')).join('')}</g>
+  <g class="itime"><circle class="itsun" cx="0" cy="0" r="12" fill="#fff0c0"/></g>
+  <g class="iherd">${shepherdSvg(92,470)}${sheepSvg(140,474,.95,1)}${sheepSvg(176,488,.9,2)}${goatSvg(124,494,.85,3)}<g transform="translate(56 482)">${figure(0,0,1.2,'#7a5a3a','#efe4cc')}</g><g transform="translate(212 478)">${figure(0,0,1.1,'#3a5a7a','#efe4cc')}</g></g>
   <g class="ilonehud" transform="translate(218 318) scale(.4)">${hudSvg(0,0)}</g>
   ${lan(70,120)}${lan(320,120)}${lan(195,40,'last')}
   <g class="istar"><circle cx="195" cy="200" r="5" fill="#fff5d6"/><circle class="p" cx="195" cy="200" r="10" fill="none" stroke="#ffe6a6" stroke-width="1.5"/><circle cx="195" cy="200" r="30" fill="url(#ilg)"/></g>`;
 }
-const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#05071a','#111641','#28205a'],['#05071a','#111641','#28205a']];
+const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#3a4a7a','#c98a6a','#f2c080'],['#05071a','#111641','#28205a'],['#05071a','#111641','#28205a']];
+const IVIS=['s1','s2','s3','s4','s4 decades','s4 herders','s5 herders','s6 herders'];
 let iStep=0;
 function playIntro(){
   $('intro').classList.add('on'); $('iScene').innerHTML=introScene();
   let st='';for(let i=0;i<70;i++) st+=`<i style="top:${(Math.random()*100).toFixed(1)}%;width:${(20+Math.random()*60).toFixed(0)}px;animation-duration:${(.5+Math.random()*.8).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s"></i>`; $('storm').innerHTML=st;
   let du='';for(let i=0;i<40;i++) du+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*60).toFixed(1)}%;animation-duration:${(6+Math.random()*6).toFixed(1)}s;animation-delay:-${(Math.random()*6).toFixed(1)}s"></i>`; $('dust').innerHTML=du;
-  $('idots').innerHTML=Array.from({length:6},()=>'<i></i>').join('');
-  $('iModes').innerHTML=`<h3 style="font-family:var(--serif);color:var(--gold2);font-size:26px;margin:0 0 4px">Tre måter å pleie hagen på</h3>${modesHTML()}`;
+  $('idots').innerHTML=Array.from({length:8},()=>'<i></i>').join('');
+  $('iModes').innerHTML=`<h3 style="font-family:var(--serif);color:var(--gold2);font-size:26px;margin:0 0 4px">Slik bygger du opp igjen</h3>${modesHTML()}<div class="mode"><div class="ic">نور</div><div><b>Nur og Basaren</b><p>Nur betyr lys. Du tjener det på økter, oppgaver og stell, og bruker det i Basaren på fôr, verktøy, dyr, gjerder og byggverk. Ingenting kan kjøpes for ekte penger.</p></div></div>`;
   introMode='intro'; $('iSkip').style.display=S.introSeen?'':'none'; iStep=0; showStep();
 }
 function showStep(){
-  const el=$('intro'); el.className='on s'+(iStep+1);
+  const el=$('intro'); el.className='on '+IVIS[iStep];
   ['is1','is2','is3'].forEach((id,k)=>$(id).setAttribute('stop-color',ISKY[iStep][k]));
   [...$('idots').children].forEach((d,k)=>d.classList.toggle('on',k===iStep));
-  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<5){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
-  $('iNext').textContent=iStep<4?'Trykk for å fortsette':iStep===4?'Slik pleier du hagen':'Begynn';
+  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<7){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
+  if(iStep===2){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
+  $('iNext').textContent=iStep<6?'Trykk for å fortsette':iStep===6?'Slik fungerer det':'Begynn';
 }
-$('iNext').onclick=()=>{ if(introMode==='chapter') return endChapter(); if(iStep<5){ iStep++; showStep(); } else endIntro(); };
+$('iNext').onclick=()=>{ if(introMode==='chapter') return endChapter(); if(iStep<7){ iStep++; showStep(); } else endIntro(); };
 $('iSkip').onclick=()=>introMode==='chapter'?endChapter():endIntro();
 const CHAPTERS=[
   ['Hærfuglen flyr ut igjen.','Rosene blomstrer, og hærfuglen har begynt å reise. Den kommer hjem med brev fra fjerne land. (25 %)'],
