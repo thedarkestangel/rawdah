@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "luqman", "who": "Luqman", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · efd2295"};(function(){var o=+(localStorage.getItem("jabal_luqman_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "luqman", "who": "Luqman", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · d970acc"};(function(){var o=+(localStorage.getItem("jabal_luqman_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -468,6 +468,7 @@ body:has(.sheet.on) #bellBtn,body:has(#baytScene) #bellBtn,body:has(#tour) #bell
 .bstar.nudge .sp{animation:nud .7s ease-in-out}@keyframes nud{0%,100%{transform:scale(1)}30%{transform:scale(1.45) rotate(12deg)}60%{transform:scale(.9) rotate(-8deg)}}
 .flashme{animation:flm2 .8s ease-in-out 8;box-shadow:0 0 0 3px #ffe6a6,0 0 22px 6px rgba(255,214,120,.7)!important;border-radius:14px}@keyframes flm2{50%{box-shadow:0 0 0 2px rgba(255,230,166,.2),0 0 4px 1px rgba(255,214,120,.1)}}
 #byeScr{position:fixed;inset:0;z-index:150;background:radial-gradient(120% 90% at 50% 30%,#1c1840,#05040f);display:flex;align-items:center;justify-content:center;text-align:center;color:#efe6d2;opacity:0;transition:opacity .8s;padding:30px}#byeScr.on{opacity:1}#byeScr h2{font-family:var(--serif);color:var(--gold2);font-weight:600;margin:10px 0}#byeScr .sm{font-size:13px;color:var(--muted);margin-top:28px}
+.si.core{border:1px solid rgba(231,194,107,.55);border-radius:12px;background:rgba(231,194,107,.06)}.card.deed{border-color:rgba(169,230,189,.45);background:rgba(169,230,189,.05)}
 #bellBtn{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:60;height:38px;min-width:38px;padding:0 10px;border-radius:19px;background:rgba(23,19,58,.92);border:1px solid rgba(231,194,107,.6);color:#ffe6a6;font-size:17px;box-shadow:0 4px 14px rgba(0,0,0,.4)}#bellBtn b{margin-left:4px;font-size:13px;background:#c0392b;color:#fff;border-radius:9px;padding:0 6px}
 .inbr{display:flex;width:100%;text-align:left;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;color:inherit;font:inherit}.inbr span{display:flex;flex-direction:column}.inbr small{color:var(--muted);font-size:11.5px}.inbr em{font-style:normal;font-size:11px;color:var(--muted);white-space:nowrap}.inbr i{width:8px;height:8px;border-radius:4px;background:#e7c26b;display:inline-block;margin-bottom:3px}.inbr.new{border-color:rgba(231,194,107,.6)}
 #baytScene{position:fixed;inset:0;z-index:118;background:#0b0a22;opacity:0;transition:opacity .45s}#baytScene.on{opacity:1}#baytScene svg{position:absolute;inset:0;width:100%;height:100%}
@@ -1044,7 +1045,7 @@ function fxWater(x,y){ if(fxOff()) return; const w=stage.clientWidth; [[w*.22,y-
 const JUNKFX={blader:['#c98a2e','#a8601e','#d9a040'],rotter:['#5a4028','#2a1e14','#7a6a58'],greiner:['#5a3a1a','#8a5a2a','#c89a5a'],mokk:['#4a3220','#6a4a2e','#8a6a42'],stein:['#9a8a72','#7a6a58','#c8b89a'],ugress:['#6a9a3a','#4f7a2a','#a8c870'],stubbe:['#8a5a2a','#6a4020','#c89a5a'],stov:['#d8c8a0','#b8a880','#efe4cc']};
 function handClean(q,j,e){ S.handClean=true; const el=document.querySelector(`.junk[data-j="${j.id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top;
   haptic(18); fxDust(cx,cy,1); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,10,36,5,10); setTimeout(()=>fxNur(cx,cy-20,1),150);
-  kMark('rydd'); S.junk[q]=S.junk[q].filter(x=>x!==j); S.cleaned++; S.nur+=1; if(!tLvl('rive')) S.tools.rive=1; snd.puff(); save(); renderTop(); renderSection();
+  kMark('rydd'); S.junk[q]=S.junk[q].filter(x=>x!==j); S.cleaned++; S.nur+=1; taskHit('rydd'); if(!tLvl('rive')) S.tools.rive=1; snd.puff(); save(); renderTop(); renderSection();
   setTimeout(()=>{ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DIN FØRSTE RYDDING</p><h3>Der ble det plass</h3>
    <p>Rot, steiner og ugress tar plassen der nye roser og trær skal stå. Hver ting du rydder gir litt nur, og hagen kommer seg raskere.</p>
    <div class="card" style="margin-top:8px"><b style="color:var(--gold2)">Vismannen gir deg en gammel rive</b><p style="margin:4px 0 0;font-size:14px">Med riven tar du ugress og visne blader. Den orker 4 tak om dagen før den må hvile.</p></div>
@@ -1351,7 +1352,7 @@ function rewardSeq(nur0,gain,rose){ flyNur(nur0,gain);
 const GREET=[['As-salāmu ʿalaykum!','Fred være med deg.'],['Bismillāh','I Guds navn. Godt å se deg i hagen.'],['Alḥamdulillāh','Takk og lov for en ny dag.'],['Subḥān Allāh','Se hvor vakkert det vokser!'],['Rabbi zidnī ʿilmā','Herre, øk meg i kunnskap. (20:114)'],['Lā ḥawla wa lā quwwata illā billāh','Det finnes ingen styrke uten hos Gud.'],['Bārak Allāhu fīk','Gud velsigne deg for at du kom.']];
 function keeperTap(e){ kLek('gjeter'); const [a,n]=rnd(GREET); haptic(8); snd.chime([440,554],.05); const old=document.getElementById('kpB'); if(old) old.remove();
   const d=document.createElement('div'); d.id='kpB'; d.className='kbub'; d.innerHTML=`<b>${esc(a)}</b><span>${esc(n)}</span><i>${esc(keeper())}</i>`; d.style.left=Math.min(Math.max(e.clientX,120),stage.clientWidth-120)+'px'; d.style.top=(e.clientY-20)+'px'; stage.appendChild(d); setTimeout(()=>d.remove(),4200); }
-async function roseTap(i){ kMark('rose'); const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
+async function roseTap(i){ kMark('rose'); taskHit('rose'); const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN ROSE FRA ${esc((p.day||'').split('-').reverse().join('.'))}</p><h3>${esc(cat.name)}${p.rare?' · sjelden':''}</h3><div id="rzV"><p style="color:var(--muted)">Henter verset …</p></div><button class="btn ghost" id="rzPlay">Hør verset</button>`);
   let vs=null; try{ vs=await fetchVerse(p.ref); }catch(e){}
   const el=$('rzV'); if(!el) return;
@@ -2162,7 +2163,7 @@ function openHikma(){ if((JABAL&&hikmaOpen()||KAHWA)&&tMet()<tAvail()){ if(KAHWA
     ${tease?`<div class="card" style="margin-top:10px;border-color:rgba(231,194,107,.5)"><b style="color:var(--gold2)">Bibliotekaren</b><p style="margin:4px 0 0;font-style:italic">«${esc(rnd(HTEASE))}»</p></div>`:''}`; }
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${open?'BAYT AL-ḤIKMA · بيت الحكمة':'🌫 I TÅKA'}</p><h3>${open?'Visdommens hus':'Noe i tåka'}</h3>${hikmaArt(open,p)}${body}${open?kildeNote(false):''}<button class="btn ghost" id="hkOk">Lukk</button>`);
   $('hkOk').onclick=closeSheet; $('sheet').querySelectorAll('[data-hk]').forEach(c=>c.onclick=()=>openScholar(+c.dataset.hk)); }
-function openScholar(k){ const h=HIKMA[k], sk=['#c08a5e','#b07a4e','#d0a07a'][k%3];
+function openScholar(k){ taskHit('laerd'); const h=HIKMA[k], sk=['#c08a5e','#b07a4e','#d0a07a'][k%3];
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISDOMMENS HUS · ${k+1} AV ${HIKMA.length}</p><h3>${esc(h.n)}</h3>
   <div class="card" style="display:flex;gap:12px;align-items:center"><svg viewBox="-20 -66 40 70" width="56" height="96" style="flex:0 0 56px">${personSvg(!!h.f,0,0,1,h.f?'#5a4a6a':'#efe4cc',h.f?'#2f5a8a':'#f4f0e8',sk)}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(h.ttl)}</b><div style="font-size:13px">${esc(h.y)} · ${esc(h.pl)}</div><svg viewBox="-16 -16 32 32" width="34" height="34" style="margin-top:4px">${hikmaEm(h.em)}</svg></div></div>
   <h4>Hvem</h4><p>${esc(h.who)}</p><h4>Bidraget</h4><p>${esc(h.did)}</p><h4>Hvorfor det betyr noe i dag</h4><p>${esc(h.why)}</p>
@@ -2223,7 +2224,7 @@ function openRihla(){ const n=S.rihla||0;
   $('sheet').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ S.horizon=b.dataset.h||null; save(); renderAll(); openRihla(); }); }
 
 /* ================= GRADVIS OPPLÅSING ================= */
-const GATE={dagbok:1,basar:1,ord:3,hifz:4,beite:5,vern:7,hikma:10,bygg:12};
+const GATE={dagbok:1,basar:1,ord:3,hifz:(window.JABAL||window.KAHWA)?2:5,beite:5,vern:7,hikma:10,bygg:12};
 const unl=f=>!!S.settings.allOpen||vsEff()>=GATE[f];
 const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den under Samling øverst.'],
@@ -2257,28 +2258,74 @@ function announceUnlocks(before){ const got=Object.keys(GATE).filter(k=>before<G
   setTimeout(()=>{ openSheet(`<h3>Nytt i hagen</h3>${got.map(k=>`<div class="card" style="margin-top:8px"><b style="color:var(--gold2)">${UNLOCK_TXT[k][0]}</b><p style="margin:4px 0 0">${UNLOCK_TXT[k][1]}</p></div>`).join('')}<button class="btn" id="unlOk">Fint</button>`); $('unlOk').onclick=closeSheet; snd.chime([659,784,988]); },4600); }
 
 /* ================= DAGENS TRE OPPGAVER ================= */
-function taskPool(){ const P=[]; if(!unl('basar')) return P;
-  if(junkLeft()>=3) P.push({id:'rydd',text:'Rydd 3 ting i hagen',goal:3});
-  if(restored('beite')){ P.push({id:'mat',text:'Gi dyrene mat 3 ganger',goal:3}); P.push({id:'samle',text:'Samle 3 varer fra beitet',goal:3}); P.push({id:'selg',text:'Selg varer på markedet',goal:1}); }
-  if(fountainOK()) P.push({id:'vann',text:'Vann 2 deler av hagen',goal:2});
-  if(restored('frukt')&&S.fruit.some(t=>t.st>=3)) P.push({id:'host',text:'Høst 2 trær',goal:2});
-  if(unl('ord')) P.push({id:'ord',text:'Lær Dagens ord',goal:1}); if(unl('dagbok')) P.push({id:'dagbok',text:'Skriv en tanke etter en økt',goal:1});
-  if(S.hifz.current) P.push({id:'hifz',text:'Fullfør en leksjon i Lysets tårn',goal:1});
-  if(P.length<3) P.push({id:'vers',text:'Fullfør en vers-økt',goal:1});
-  return P; }
+/* ================= DAGENS OPPGAVER: vers først, rydding, én variert, og en god gjerning ================= */
+function cleanCap(){ if(!unl('basar')&&!S.handClean) return junkLeft()?1:0; const left={}; let n=0;
+  for(const q in S.junk||{}) for(const j of S.junk[q]){ const k=toolFor(j.type); if(!k||tLvl(k)<(j.z||1)) continue; if(left[k]==null) left[k]=usesLeft(k); if(left[k]>0){ left[k]--; n++; } } return n; }
+function taskPool(){ const V=[], w=(x,n)=>{ for(let i=0;i<n;i++) V.push(x); };
+  if(unl('hifz')) w(S.hifz.current?{id:'hifz',text:'Lær et vers utenat i Lysets tårn',goal:1}:{id:'hifz',text:'Velg en surah i Lysets tårn og lær første vers',goal:1},3);
+  if(unl('ord')) w({id:'ord',text:'Lær dagens arabiske ord',goal:1},2);
+  if(fountainOK()&&QUADS.some(q=>restored(q.id))) w({id:'vann',text:'Vann en del av hagen fra elva',goal:1},2);
+  if(restored('beite')&&(S.feed||0)>0) w({id:'mat',text:'Gi dyrene mat',goal:2},2);
+  if(restored('beite')&&(S.picks||[]).length) w({id:'samle',text:'Samle varer fra beitet',goal:2},1);
+  if(restored('frukt')&&S.fruit.some(t=>t.st>=3)) w({id:'host',text:'Høst et modent tre',goal:1},1);
+  if((S.roses||[]).filter(p=>p.h!=='dead').length>=2) w({id:'rose',text:'Les en av rosene dine på nytt',goal:1},2);
+  if(hikmaOpen()&&((JABAL||KAHWA)?tMet()>0:hikmaState().n>0)) w({id:'laerd',text:'Besøk en lærd i Visdommens hus',goal:1},1);
+  w({id:'lytt',text:'Hør dagens vers en gang til',goal:1},1); w({id:'vis',text:'Trykk på vismannen og hør hva han sier',goal:1},1);
+  return V; }
+function makeTasks(){ const L=[{id:'vers',text:'Les og bygg dagens vers',goal:1,core:1}], c=cleanCap();
+  if(c) L.push({id:'rydd',text:c>=3?'Rydd 3 ting i hagen':`Rydd ${c} ting i hagen`,goal:Math.min(3,c)});
+  else if(junkLeft()&&unl('basar')){ const k=needTool(); if(k&&S.nur>=TIERS[k][0][1]) L.push({id:'rydd',text:`Kjøp ${TIERS[k][0][0].toLowerCase()} i Basaren og rydd 1 ting`,goal:1}); }
+  let V=taskPool(); while(L.length<3){ V=V.filter(x=>!L.some(y=>y.id===x.id)); if(!V.length) break; L.push(V[Math.floor(Math.random()*V.length)]); }
+  return L.map(x=>Object.assign({},x,{prog:0})); }
 const TASKGATE={ord:'ord',dagbok:'dagbok',hifz:'hifz'};
-function ensureTasks(){ const t=dayStr(); if(S.tasks&&S.tasks.day===t&&(S.tasks.list.length||!unl('basar'))&&!S.tasks.list.some(x=>TASKGATE[x.id]&&!unl(TASKGATE[x.id])&&!x.prog)) return;
-  const P=taskPool().sort(()=>Math.random()-.5).slice(0,3).map(x=>Object.assign(x,{prog:0}));
-  S.tasks={day:t,list:P,bonus:false}; save(); }
+function ensureTasks(){ const t=dayStr(); if(S.tasks&&S.tasks.day===t&&S.tasks.v2&&!S.tasks.list.some(x=>TASKGATE[x.id]&&!unl(TASKGATE[x.id])&&!x.prog)) return;
+  const old=S.tasks&&S.tasks.day===t?S.tasks.list:[], L=makeTasks(); L.forEach(x=>{ const o=old.find(y=>y.id===x.id); if(o) x.prog=Math.min(o.prog,x.goal); }); const v=L.find(x=>x.id==='vers'); if(v&&doneToday()) v.prog=1;
+  S.tasks={day:t,list:L,bonus:S.tasks&&S.tasks.day===t?S.tasks.bonus:false,v2:1,deed:S.tasks&&S.tasks.day===t?S.tasks.deed:null}; ensureDeed(); save(); }
+/* Dagens gode gjerning: utenfor appen, ingen nur, mellom deg og Allah */
+const DEEDS=[
+ ['Gi salām til noen du ikke pleier å hilse på.','«Spre salām blant dere.»','Profeten ﷺ · Muslim'],
+ ['Smil til noen i dag, med vilje.','«Smilet ditt til din bror er sadaqa.»','Profeten ﷺ · Tirmidhi'],
+ ['Gjør en duʿāʾ for foreldrene dine.','«Herre, vis dem barmhjertighet, slik de oppdro meg da jeg var liten.»','Koranen 17:24'],
+ ['Send en melding til et familiemedlem du ikke har snakket med på lenge.','«Den som vil få et rikere liv, skal holde kontakten med slekta si.»','Profeten ﷺ · Bukhari'],
+ ['Si et godt ord til noen, eller ingenting i stedet for noe sårende.','«Den som tror på Allah og den ytterste dag, skal si noe godt eller tie.»','Profeten ﷺ · Bukhari og Muslim'],
+ ['Takk noen som har hjulpet deg, og si det rett ut.','«Den som ikke takker mennesker, takker ikke Allah.»','Profeten ﷺ · Abu Dawud'],
+ ['Fjern noe som ligger i veien for andre: søppel, en stein, en sykkel.','«Å fjerne noe skadelig fra veien er sadaqa.»','Profeten ﷺ · Bukhari og Muslim'],
+ ['Hjelp noen med noe de strever med, uten at de ber om det.','«Allah hjelper sin tjener så lenge tjeneren hjelper sin bror.»','Profeten ﷺ · Muslim'],
+ ['Gi noen en liten gave, selv om den er enkel.','«Gi gaver til hverandre, så kommer dere til å bli glade i hverandre.»','Profeten ﷺ · al-Adab al-Mufrad'],
+ ['Hjelp til hjemme med noe du vanligvis ikke gjør.','Profeten ﷺ hjalp familien sin i huset, og når det var tid for bønn, gikk han for å be.','Aisha · Bukhari'],
+ ['Tilgi noen i stillhet for noe de har gjort mot deg.','«La dem tilgi og overse. Ønsker dere ikke at Allah skal tilgi dere?»','Koranen 24:22'],
+ ['Gjør noe godt for naboen din.','«Jibril sluttet ikke å minne meg om naboen, til jeg trodde han skulle arve.»','Profeten ﷺ · Bukhari'],
+ ['Si «Subḥān Allāhi wa bi-ḥamdih, subḥān Allāhi l-ʿaẓīm» noen ganger i dag.','«To ord som er lette på tunga, tunge på vekten og elsket av Den Barmhjertige.»','Profeten ﷺ · Bukhari'],
+ ['Gi vann eller mat til et dyr, eller vær ekstra snill mot et.','«I hver levende skapning er det belønning.»','Profeten ﷺ · Bukhari'],
+ ['Vær mild mot noen du lett blir irritert på.','«Allah er mild og elsker mildhet i alle ting.»','Profeten ﷺ · Bukhari'],
+ ['Ønsk noen det samme gode som du ønsker deg selv, og si det til dem.','«Ingen av dere tror fullt ut før han ønsker for sin bror det han ønsker for seg selv.»','Profeten ﷺ · Bukhari'],
+ ['Ring eller besøk en eldre i familien.','«Han hører ikke til oss, den som ikke viser barmhjertighet mot de små og respekt for de eldre.»','Profeten ﷺ · Tirmidhi'],
+ ['Skriv ned tre ting du er takknemlig for i dag.','«Hvis dere er takknemlige, vil Jeg gi dere mer.»','Koranen 14:7'],
+ ['Gi litt sadaqa, så lite det skal være.','«Vern dere mot Ilden, selv om det bare er med en halv daddel.»','Profeten ﷺ · Bukhari'],
+ ['Spør noen hvordan de egentlig har det, og lytt.','«Et godt ord er sadaqa.»','Profeten ﷺ · Bukhari']];
+const DEED_FRI=['Les surah al-Kahf i dag, det er fredag.','Det er overlevert at den som leser al-Kahf på fredag, får lys mellom de to fredagene.','Profeten ﷺ · al-Ḥākim'];
+function ensureDeed(){ if(!S.tasks) return; if(!S.tasks.deed){ const fri=new Date().getDay()===5; S.tasks.deed={i:fri?-1:Math.floor(Math.random()*DEEDS.length),done:0}; } }
+const deedOf=d=>d.i<0?DEED_FRI:DEEDS[d.i%DEEDS.length];
+function deedDone(){ const d=S.tasks.deed; d.done=1; save(); renderTasks();
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🤲 DAGENS GODE GJERNING</p><h3>Mellom deg og Allah</h3>
+  <p>Dette gjorde du ikke for nur eller for å bli sett. Ingen andre trenger å vite det, men Allah så det. Måtte Allah ta imot det fra deg og belønne deg rikelig.</p>
+  <div class="card"><p style="margin:0;font-family:var(--serif);font-size:16px;line-height:1.45">Blant de sju som får skygge på dagen da det ikke finnes annen skygge, er den som gir så i det skjulte at venstre hånd ikke vet hva den høyre gir.</p><p style="margin:6px 0 0;font-size:12px;color:var(--muted)">Profeten ﷺ · Bukhari og Muslim</p></div>
+  <h4>Vil du skrive ned hva du gjorde?</h4><p style="font-size:13px;color:var(--muted);margin-top:0">Helt frivillig. Det blir bare på telefonen din, og blir aldri sendt noe sted, heller ikke med testnotatene.</p>
+  <textarea id="gdT" rows="3" style="width:100%;box-sizing:border-box;font-size:16px;border-radius:12px;border:1px solid rgba(231,194,107,.45);background:rgba(0,0,0,.3);color:#efe6d2;padding:10px;font-family:inherit" placeholder="Bare for deg …"></textarea>
+  <button class="btn" id="gdS">Lagre for meg selv</button><button class="btn ghost" id="gdX">Nei takk, la det være mellom meg og Allah</button>`);
+  $('gdS').onclick=()=>{ const t=$('gdT').value.trim(); if(t){ S.deedLog=(S.deedLog||[]); S.deedLog.unshift({d:dayStr(),t:t.slice(0,400),g:deedOf(d)[0]}); S.deedLog=S.deedLog.slice(0,200); save(); } closeSheet(); toast('Alḥamdulillāh',1800); };
+  $('gdX').onclick=()=>{ closeSheet(); toast('Alḥamdulillāh',1800); }; }
+
 function taskHit(id){ ensureTasks(); if(!S.tasks.list.length) return; const k=S.tasks.list.find(x=>x.id===id); if(!k||k.prog>=k.goal) return; k.prog++;
   if(k.prog>=k.goal){ S.nur+=5; setTimeout(()=>{ toast(`Oppgave fullført: ${k.text}. +5 nur`,2400); snd.chime([659,880]); sparkle(); },900); }
   if(!S.tasks.bonus&&S.tasks.list.every(x=>x.prog>=x.goal)){ S.tasks.bonus=true; S.nur+=10; setTimeout(()=>toast('Alle dagens oppgaver er fullført! +10 nur bonus',3000),3400); }
   save(); renderTasks(); dayCheck(); }
 function renderTasks(){ ensureTasks(); const n=S.tasks.list.filter(x=>x.prog>=x.goal).length, el=$('taskPill'); if(!el) return;
-  el.innerHTML=`<b>${n}/3</b> Dagens oppgaver`; el.classList.toggle('done',n===3); el.style.display=(S.active||!S.introSeen||!S.tasks.list.length)?'none':'flex'; }
-function openTasks(){ ensureTasks(); openSheet(`<h3>Dagens oppgaver</h3><p>Tre små oppgaver hver dag. Hver gir 5 nur, og alle tre gir 10 nur i bonus. De fleste gjøres i «Stell»-delen av økten.</p>
-  ${S.tasks.list.map(t=>`<div class="si${t.prog>=t.goal?'':' tgo'}" ${t.prog>=t.goal?'':`data-tg="${t.id}" style="cursor:pointer"`}><div class="tx"><b>${t.prog>=t.goal?'✓ ':''}${esc(t.text)}</b><small>${Math.min(t.prog,t.goal)} av ${t.goal}${t.prog>=t.goal?'':' · trykk for å gjøre den'}</small></div>${t.prog>=t.goal?'':'<span style="color:var(--gold2);font-size:20px">›</span>'}</div>`).join('')}
-  <p style="font-size:12.5px;color:var(--muted)">Nye oppgaver kommer ved midnatt.</p>`); $('sheet').querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>taskGo(b.dataset.tg)); }
+  const N=S.tasks.list.length; el.innerHTML=`<b>${n}/${N}</b> Dagens oppgaver${S.tasks.deed&&!S.tasks.deed.done?' <i style="font-style:normal">🤲</i>':''}`; el.classList.toggle('done',n===N); el.style.display=(S.active||!S.introSeen||!S.tasks.list.length)?'none':'flex'; }
+function openTasks(){ ensureTasks(); const D=S.tasks.deed, g=deedOf(D), row=t=>`<div class="si${t.prog>=t.goal?'':' tgo'}${t.core?' core':''}" ${t.prog>=t.goal?'':`data-tg="${t.id}" style="cursor:pointer"`}><div class="tx"><b>${t.prog>=t.goal?'✓ ':''}${t.core?'📖 ':''}${esc(t.text)}</b><small>${t.goal>1?Math.min(t.prog,t.goal)+' av '+t.goal+' · ':''}${t.prog>=t.goal?'fullført':'trykk for å gjøre den'}</small></div>${t.prog>=t.goal?'':'<span style="color:var(--gold2);font-size:20px">›</span>'}</div>`;
+  openSheet(`<h3>Dagens oppgaver</h3><p style="margin-top:0">Dagens vers først, så hagen. Hver oppgave gir 5 nur, og alle gir 10 nur i bonus.</p>${S.tasks.list.map(row).join('')}
+  <div class="card deed${D.done?' done':''}" style="margin-top:12px"><p style="color:var(--gold);letter-spacing:1px;font-size:11.5px;margin:0">🤲 DAGENS GODE GJERNING · UTENFOR APPEN</p><p style="margin:6px 0 4px;font-size:15.5px;color:#efe6d2"><b>${esc(g[0])}</b></p><p style="margin:0;font-family:var(--serif);font-size:15px;line-height:1.4">${esc(g[1])}</p><p style="margin:3px 0 8px;font-size:11.5px;color:var(--muted)">${esc(g[2])}</p>${D.done?'<p style="margin:0;color:#a9e6bd">✓ Gjort. Mellom deg og Allah.</p>':'<button class="gb gold" id="tdDo" style="width:100%">Gjort, alḥamdulillāh</button><p style="font-size:11.5px;color:var(--muted);margin:6px 0 0">Gir ingen nur, med vilje. Den gjør du for Allah, ikke for poeng.</p>'}</div>
+  <p style="font-size:12.5px;color:var(--muted)">Nye oppgaver kommer ved midnatt.</p>`); $('sheet').querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>taskGo(b.dataset.tg)); if($('tdDo')) $('tdDo').onclick=deedDone; }
 
 /* ================= DAGLIG SJEKK ================= */
 function disaster(reason){
@@ -2379,7 +2426,7 @@ function untilMidnight(){ const n=new Date(), m=new Date(n.getFullYear(),n.getMo
 async function openVerseRef(ref,label){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${esc(label||'')}</p><div id="ovV"><p style="color:var(--muted)">Henter verset …</p></div><button class="btn ghost" id="ovPlay">Hør verset</button>`);
   let vs=null; try{ vs=await fetchVerse(ref); }catch(e){} const el=$('ovV'); if(!el) return;
   el.innerHTML=vs?`<div class="card"><p style="font-family:var(--ar);font-size:24px;line-height:1.9;text-align:center;direction:rtl;margin:0">${esc(vs.map(v=>v.ar).join(' '))}</p><p style="font-size:12px;color:var(--muted);text-align:center;margin:4px 0">${esc(vs[0].surahName)} · ${esc(ref)}</p><p style="margin:6px 0 0;font-size:14.5px">${esc(vs.map(v=>v.no).join(' '))}</p></div>`:`<p>Verset ${esc(ref)}. Fikk ikke hentet teksten akkurat nå.</p>`;
-  $('ovPlay').onclick=()=>{ if(vs){ unlockAudio(); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); } }; }
+  $('ovPlay').onclick=()=>{ taskHit('lytt'); if(vs){ unlockAudio(); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); } }; }
 function comeBackTomorrow(){ const lv=S.lastVerse&&S.lastVerse.day===dayStr()?S.lastVerse:null; snd.chime([392,523],.05);
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DAGENS VERS ER MOTTATT</p><h3>Kom tilbake i morgen for mer barakah</h3>
   <div class="card"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.45">«De gjerningene Allah elsker mest, er de som gjøres jevnlig, selv om de er små.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--muted)">Profeten ﷺ · Bukhari og Muslim</p></div>
@@ -2512,7 +2559,7 @@ function finish(refl){
   if(verses){ const v0=verses[0],vl=verses[verses.length-1]; S.journal=S.journal||[];
     S.journal.unshift({ts:Date.now(),ref:`${v0.surah}:${v0.ayah}${verses.length>1?'-'+vl.ayah:''}`,name:v0.surahName,cat:a.kind==='hifz'?'hifz':a.cat,f:refl,note:($('note').value||'').trim().slice(0,500),ar:verses.map(v=>v.ar).join(' ').slice(0,700),no:verses.map(v=>v.no).join(' ').slice(0,700),en:verses.map(v=>v.en).join(' ').slice(0,700)});
     S.journal=S.journal.slice(0,400); if(S.journal[0].note) taskHit('dagbok'); }
-  taskHit(a.kind==='hifz'?'hifz':'vers');
+  if(!a.short) taskHit(a.kind==='hifz'?'hifz':'vers');
   if(a.short){ S.nur+=4; S.shortDone={day:dayStr(),n:shortToday()+1}; endSessionUI(); renderTop(); renderSection(); snd.chime([523,659]);
     toast(doneToday()?'Kort økt fullført. +4 nur':'Kort økt fullført. +4 nur. Dagens hovedøkt er det som gjenoppretter hagen.',4200); return; }
   if(a.kind==='hifz'){
@@ -2648,6 +2695,10 @@ function shopGuide(){ const k=needTool(), hasBeite=restored('beite');
   tourRun(steps); }
 function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på den glødende stjernen for dagens vers'); setTimeout(()=>{ const g=document.querySelector('#beacons .bstar'); if(g){ g.classList.remove('nudge'); void g.getBoundingClientRect(); g.classList.add('nudge'); } },900); };
   const bi=QUADS.findIndex(q=>q.id==='beite');
+  if(id==='lytt'){ if(!doneToday()) return taskGo('vers'); closeSheet(); return setTimeout(comeBackTomorrow,300); }
+  if(id==='vis') return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på den vise mannen helt til venstre');
+  if(id==='rose'){ const ri=QUADS.findIndex(q=>q.id==='roser'); return goTend(ri,'Trykk på en av rosene dine for å lese verset igjen'); }
+  if(id==='laerd'){ closeSheet(); return setTimeout(()=>{ toOverview(); setTimeout(()=>openHikma(),600); },300); }
   if(id==='vers') return doneToday()?toast('Dagens vers er allerede tatt. Kom tilbake i morgen.'):pulse();
   if(id==='ord') return openWord(); if(id==='hifz') return openHifz();
   if(id==='dagbok') return doneToday()?toast('Du skriver en tanke på slutten av neste vers-økt.',3800):pulse();
@@ -2731,10 +2782,10 @@ function openInbox(){ if(sqNext()) return; const L=S.inbox||[], f=d=>{ try{ retu
 /* ================= ROLLER: du er gjeteren, vismannen er en egen figur ================= */
 function wiseFig(id){ return sageSvg(id,'#d9d0b8','#8a7a5a','#b58a62',['#ece8de',12],TURBAN('#ece8de')).replace(`id="${id}_aR" transform="translate(8 -37)">`,`id="${id}_aR" transform="translate(8 -37)"><path d="M1 -16 L1 44" stroke="#6a4a2a" stroke-width="2.2" stroke-linecap="round"/>`); }
 function wiseLayer(q){ if(q!=='roser'||S.active) return ''; return `<g class="wise" style="cursor:pointer" transform="translate(44 478) scale(.8)">${wiseFig('gWise')}<rect x="-20" y="-70" width="40" height="76" fill="transparent"/></g>`; }
-function wiseTap(e){ kLek('gjeter'); keeperTap(e); }
+function wiseTap(e){ kLek('gjeter'); taskHit('vis'); keeperTap(e); }
 function wiseIcon(){ return `<svg viewBox="-24 -70 48 76" width="46" height="80" style="flex:0 0 46px">${wiseFig('wIc'+Math.random().toString(36).slice(2,6))}</svg>`; }
 /* Trykk på deg selv: hjelp med dagens oppgaver */
-const TASKWHERE={vers:{q:'roser',el:'#beacons .bstar path',t:'Trykk på den glødende stjernen. Den gir deg dagens vers.'},dagbok:{q:'roser',el:'#beacons .bstar path',t:'Ta dagens vers. På slutten av økten kan du skrive en tanke.'},ord:{el:'#learnBtn',t:'Trykk på Lær. Dagens ord ligger der.'},hifz:{el:'#learnBtn',t:'Trykk på Lær og gå til Lysets tårn.'},
+const TASKWHERE={lytt:{q:'roser',el:'#beacons .bstar path',t:'Trykk på stjernen, så «Les dagens vers igjen» og «Hør verset». Har du ikke tatt verset ennå, gjør det først.'},vis:{q:'roser',el:'#items .wise',t:'Trykk på den vise mannen ved kanten av Rosehagen.'},rose:{q:'roser',el:'#items .rz',t:'Trykk på en av rosene dine. Da kan du lese og høre verset igjen.'},vers:{q:'roser',el:'#beacons .bstar path',t:'Trykk på den glødende stjernen. Den gir deg dagens vers.'},dagbok:{q:'roser',el:'#beacons .bstar path',t:'Ta dagens vers. På slutten av økten kan du skrive en tanke.'},ord:{el:'#learnBtn',t:'Trykk på Lær. Dagens ord ligger der.'},hifz:{el:'#learnBtn',t:'Trykk på Lær og gå til Lysets tårn.'},
   rydd:{junk:1,t:'Trykk på de lysende prikkene over rotet. Hver prikk er én rydding.'},mat:{q:'beite',el:'#flock',t:'Trykk på dyrene for å gi dem mat.'},samle:{q:'beite',el:'#flock',t:'Trykk på varene ved dyrene for å samle dem.'},selg:{el:'#shopBtn',t:'Trykk på Basar og velg Marked.'},vann:{water:1,el:'#beacons .beacon',t:'Trykk på «Vann fra elven».'},host:{q:'frukt',el:'#beacons .beacon',t:'Trykk på de modne trærne.'}};
 function flash(sel){ const e=typeof sel==='string'?document.querySelector(sel):sel; if(!e) return; e.classList.remove('flashme'); void e.getBoundingClientRect(); e.classList.add('flashme'); setTimeout(()=>e.classList.remove('flashme'),6500); }
 function taskGuide(id){ const w=TASKWHERE[id]; if(!w) return taskGo(id); closeSheet(); let qi=-1, el=w.el;
@@ -2754,7 +2805,7 @@ function dayAllDone(){ ensureTasks(); return doneToday()&&S.tasks.list.length&&S
 function dayCheck(){ if(S.dayDone===dayStr()||!dayAllDone()) return; S.dayDone=dayStr(); save(); setTimeout(()=>dayDone(false),4200); }
 function dayDone(manual){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">ALT ER GJORT I DAG · MASHALLAH</p><h3>Ta vare på deg selv også</h3>
   <div class="card"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.45">«Kroppen din har en rett over deg.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--muted)">Profeten ﷺ · Bukhari</p></div>
-  <p>Hagen er stelt, og dagens vers er ditt. En muslim skal også ta vare på seg selv: drikk vann, be når tiden kommer, sov godt, og bruk tid med menneskene rundt deg.</p>
+  <p>Hagen er stelt, og dagens vers er ditt. En muslim skal også ta vare på seg selv: drikk vann, be når tiden kommer, sov godt, og bruk tid med menneskene rundt deg.</p>${S.tasks&&S.tasks.deed&&!S.tasks.deed.done?`<div class="card deed"><p style="margin:0;font-size:14px">🤲 Dagens gode gjerning venter fortsatt: <b>${esc(deedOf(S.tasks.deed)[0])}</b></p></div>`:''}
   <button class="btn" id="ddBye">Lukk appen for i dag</button><button class="btn ghost" id="ddStay">Jeg vil være her litt til</button>`);
   $('ddStay').onclick=closeSheet; $('ddBye').onclick=()=>{ closeSheet(); goodbye(); }; }
 function goodbye(){ const d=document.createElement('div'); d.id='byeScr'; d.innerHTML=`<div><div style="font-size:46px;color:#fff3cf;text-shadow:0 0 20px #ffd27a">☾</div><h2>Vi ses i morgen, in shā' Allāh</h2><p>Nytt vers om <b>${untilMidnight()}</b>.</p><p class="sm">Du kan sveipe appen bort nå.<br>Trykk hvor som helst for å gå tilbake.</p></div>`; document.body.appendChild(d); requestAnimationFrame(()=>d.classList.add('on')); d.onclick=()=>{ d.classList.remove('on'); setTimeout(()=>d.remove(),500); }; try{ window.close(); }catch(e){} }

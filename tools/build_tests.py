@@ -17,7 +17,7 @@ TESTERS = [
     {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True, 'skip': True},
     {'mode': 'jabal', 'name': 'ibrahim', 'who': 'Ibrahim', 'form': None, 'dev': True},
 ]
-src = open('index.html', encoding='utf-8').read()
+src = open('src/rawdah.html', encoding='utf-8').read()
 try:
     rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], text=True).strip()
 except Exception:
