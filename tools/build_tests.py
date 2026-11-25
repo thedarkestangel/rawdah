@@ -13,8 +13,8 @@ TESTERS = [
     {'mode': 'jabal', 'name': 'najaat', 'who': 'Najaat', 'form': FORM},
     {'mode': 'jabal', 'name': 'sadia', 'who': 'Sadia', 'form': FORM},
     {'mode': 'jabal', 'name': 'luqman', 'who': 'Luqman', 'form': FORM},
-    {'mode': 'jabal', 'name': 'noxiphone', 'who': 'noxp (iPhone)', 'form': FORM, 'notes': True},
-    {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True},
+    {'mode': 'jabal', 'name': 'noxiphone', 'who': 'noxp (iPhone)', 'form': FORM, 'notes': True, 'skip': True},
+    {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True, 'skip': True},
     {'mode': 'jabal', 'name': 'ibrahim', 'who': 'Ibrahim', 'form': None, 'dev': True},
 ]
 src = open('index.html', encoding='utf-8').read()

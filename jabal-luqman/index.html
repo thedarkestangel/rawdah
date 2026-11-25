@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "luqman", "who": "Luqman", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · 7ca1937"};(function(){var o=+(localStorage.getItem("jabal_luqman_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "luqman", "who": "Luqman", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · 4fe4674"};(function(){var o=+(localStorage.getItem("jabal_luqman_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -472,7 +472,8 @@ body:has(.sheet.on) #bellBtn,body:has(#baytScene) #bellBtn,body:has(#tour) #bell
 .bsCap{position:absolute;left:14px;right:14px;top:calc(env(safe-area-inset-top,0px) + 54px);background:rgba(15,12,36,.88);border:1px solid rgba(231,194,107,.55);border-radius:16px;padding:10px 14px;color:#efe6d2;font-size:15px;line-height:1.45;opacity:0;transform:translateY(-8px);transition:opacity .35s,transform .35s;max-width:460px;margin:0 auto}.bsCap.on{opacity:1;transform:none}.bsCap b{display:block;color:#e7c26b;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
 .bsBtns{position:absolute;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);max-width:460px;margin:0 auto;opacity:0;transition:opacity .35s;pointer-events:none}.bsBtns.on{opacity:1;pointer-events:auto}.bsBtns .btn.ghost{background:rgba(15,12,36,.88)}
 .bsX{position:absolute;right:12px;top:calc(env(safe-area-inset-top,0px) + 10px);background:rgba(0,0,0,.35);border:0;color:#efe6d2;width:34px;height:34px;border-radius:17px;font-size:16px}
-#noteBtn{position:fixed;right:10px;top:42%;z-index:120;width:40px;height:40px;border-radius:50%;background:#e7c26b;color:#2a1a06;font-size:22px;font-weight:800;border:2px solid #fff3cf;box-shadow:0 4px 14px rgba(0,0,0,.45)}#noteBtn b{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:#c0392b;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
+#noteBtn.drag{transform:scale(1.15);opacity:.85}
+#noteBtn{touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;right:10px;top:42%;z-index:120;width:40px;height:40px;border-radius:50%;background:#e7c26b;color:#2a1a06;font-size:22px;font-weight:800;border:2px solid #fff3cf;box-shadow:0 4px 14px rgba(0,0,0,.45)}#noteBtn b{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:#c0392b;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
 #noteBox{position:fixed;inset:0;z-index:130;background:rgba(5,4,15,.55);display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 60px) 14px 14px}
 #noteBox .nbx{width:100%;max-width:420px;background:#17133a;border:1px solid rgba(231,194,107,.5);border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 #noteBox textarea{width:100%;box-sizing:border-box;font-size:16px;border-radius:12px;border:1px solid rgba(231,194,107,.45);background:rgba(0,0,0,.3);color:#efe6d2;padding:10px;font-family:inherit}
@@ -3637,7 +3638,10 @@ function openJabal(){ const d=jDay(), nsg=SIGNS.filter(g=>!g.fri&&!g.bonus&&(S.s
   <div class="card">${bits.map(([a,b])=>`<div style="display:flex;justify-content:space-between;font-size:14px;padding:3px 0"><span>${a}</span><span style="color:var(--gold2)">${b}</span></div>`).join('')}</div>
   <p style="font-size:12.5px;color:var(--muted)">Dette er en forenklet versjon. I den ekte appen er det mye mer å oppdage, og det kommer over flere måneder.</p>
   <button class="btn ghost" id="jbR">🔔 Påminnelse${jt().rem?' ('+esc(jt().rem)+')':''}</button>${JABAL.form&&d>=7?'<a class="btn" href="'+JABAL.form+'" target="_blank" rel="noopener" style="text-decoration:none">Gi tilbakemelding</a>':''}<button class="btn ghost" id="jbOk">Lukk</button>`);
-  $('jbR').onclick=jRemind; $('jbOk').onclick=closeSheet; }
+  $('jbR').onclick=jRemind; $('jbOk').onclick=closeSheet;
+  if(JABAL.skip){ const b=document.createElement('div'); b.innerHTML=`<h4 style="margin-top:14px">🧪 Testverktøy</h4><p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">Bare i din versjon. Hopp fram én dag om gangen for å se alt uten å vente. Du må fortsatt ta dagens vers hver dag for at dagen skal telle.</p><button class="btn ghost" id="jbSkip">⏭ Hopp til neste dag${doneToday()?'':' (dagens vers er ikke tatt)'}</button><button class="btn ghost" id="jbReset">🔄 Start helt på nytt</button>`; $('jbOk').before(b);
+    $('jbSkip').onclick=()=>{ if(!doneToday()&&!confirm('Du har ikke tatt dagens vers. Da teller ikke denne dagen. Hoppe likevel?')) return; jJump(1); };
+    $('jbReset').onclick=()=>{ if(!confirm('Slette all fremgang og starte helt fra begynnelsen? Notatene dine (?) beholdes.')) return; localStorage.removeItem(KEY); localStorage.removeItem('jabal_'+JABAL.name+'_off'); location.reload(); }; } }
 function jTeaser(){ jt().baytOpen=1; save(); updHikmaPill(); const lib=`<svg viewBox="-20 -66 40 70" width="46" height="80" style="flex:0 0 46px">${personSvg(isF(),0,0,1,isF()?'#8a3f62':'#3b2f6b',isF()?'#efe4cc':'#3b2f6b','#c08a5e')}</svg>`;
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${isF()?'GJETERINNEN':'GJETEREN'}</p><h3>Jeg så noe i tåka …</h3><div class="card mod">${lib}<div style="flex:1"><p style="margin:0;font-style:italic">«Da jeg gikk tur bak hagemuren i går, så jeg noe stort og skyggelagt i tåka. Et hus, tror jeg, med en kuppel og lys i ett vindu. Jeg turte ikke gå nærmere. Kan ikke du ta en tur og sjekke?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– ${esc(keeper())}</p></div></div>
   <button class="btn" id="jtGo">Ta en tur og sjekk</button><button class="btn ghost" id="jtL">Senere</button>`);
@@ -3684,7 +3688,7 @@ function nOpen(){ if($('noteBox')) return; const ctx=nCtx(); const d=document.cr
   <div class="qrow" id="nbK" style="margin:8px 0"><button class="gb gold" data-k="Feil">🐞 Feil</button><button class="gb" data-k="Forbedring">✨ Forbedring</button><button class="gb" data-k="Annet">💬 Annet</button></div>
   <textarea id="nbT" placeholder="Hva skjedde, eller hva kan bli bedre?" rows="4"></textarea>
   <div style="font-size:11.5px;color:var(--muted);margin:4px 0 8px">Lagres med: ${esc(ctx)}</div>
-  <button class="btn" id="nbS">Lagre</button><button class="btn ghost" id="nbA">Se alle (${nList().length}) og send</button></div>`;
+  <div style="font-size:11px;color:var(--muted);margin:-4px 0 8px">Tips: hold og dra «?»-knappen for å flytte den.</div><button class="btn" id="nbS">Lagre</button><button class="btn ghost" id="nbA">Se alle (${nList().length}) og send</button></div>`;
   document.body.appendChild(d); let kind='Feil';
   d.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ kind=b.dataset.k; d.querySelectorAll('[data-k]').forEach(x=>x.classList.toggle('gold',x===b)); });
   $('nbX').onclick=()=>d.remove(); setTimeout(()=>{ const t=$('nbT'); if(t) t.focus(); },100);
@@ -3701,7 +3705,16 @@ function nAll(){ const L=nList();
   $('naCp').onclick=async()=>{ try{ await navigator.clipboard.writeText(nText()); toast('Kopiert. Lim inn i en melding til Ibrahim.'); }catch(e){ toast('Kunne ikke kopiere'); } };
   $('naSh').onclick=async()=>{ const txt=nText(); if(navigator.share){ try{ await navigator.share({title:'Rawdah-notater',text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } } location.href='mailto:'+(JABAL.mail||'')+'?subject='+encodeURIComponent('Rawdah Jabal – notater fra '+(JABAL.who||''))+'&body='+encodeURIComponent(txt); }; }
 
-if(JABAL&&JABAL.notes){ const nb=document.createElement('button'); nb.id='noteBtn'; nb.setAttribute('aria-label','Meld fra'); document.body.appendChild(nb); nb.onclick=nOpen; nUpd(); setTimeout(nFlush,4000); addEventListener('online',nFlush); }
+if(JABAL&&JABAL.notes){ const nb=document.createElement('button'); nb.id='noteBtn'; nb.setAttribute('aria-label','Meld fra'); document.body.appendChild(nb);
+  const PK='rawdah_nbpos_'+JABAL.name, place=(x,y)=>{ x=Math.min(Math.max(4,x),innerWidth-44); y=Math.min(Math.max(4,y),innerHeight-44); Object.assign(nb.style,{left:x+'px',top:y+'px',right:'auto'}); return [x,y]; };
+  try{ const P=JSON.parse(localStorage.getItem(PK)||'null'); if(P) place(P[0],P[1]); }catch(e){}
+  let dr=null, moved=false;
+  nb.addEventListener('pointerdown',e=>{ const r=nb.getBoundingClientRect(); dr={dx:e.clientX-r.left,dy:e.clientY-r.top,x0:e.clientX,y0:e.clientY}; moved=false; try{ nb.setPointerCapture(e.pointerId); }catch(_){} });
+  nb.addEventListener('pointermove',e=>{ if(!dr) return; if(!moved&&Math.hypot(e.clientX-dr.x0,e.clientY-dr.y0)<8) return; moved=true; nb.classList.add('drag'); place(e.clientX-dr.dx,e.clientY-dr.dy); });
+  nb.addEventListener('pointerup',()=>{ if(dr&&moved){ try{ localStorage.setItem(PK,JSON.stringify([parseFloat(nb.style.left),parseFloat(nb.style.top)])); }catch(_){} } dr=null; nb.classList.remove('drag'); });
+  nb.addEventListener('pointercancel',()=>{ dr=null; nb.classList.remove('drag'); });
+  nb.onclick=e=>{ if(moved){ moved=false; e.preventDefault(); return; } nOpen(); };
+  addEventListener('resize',()=>{ if(nb.style.left) place(parseFloat(nb.style.left),parseFloat(nb.style.top)); }); nUpd(); setTimeout(nFlush,4000); addEventListener('online',nFlush); }
 if(JABAL){ $('jabalBtn').onclick=openJabal; $('devBtn').onclick=openDev; updJabalBtn(); if(JABAL.dev&&localStorage.getItem('jabal_'+JABAL.name+'_auto')){ localStorage.removeItem('jabal_'+JABAL.name+'_auto'); setTimeout(()=>{ if(titleOn) $('title').click(); setTimeout(devComplete,1200); },900); } }
 if(KAHWA){ $('kahwaBtn').onclick=openKahwa; updKahwaBtn(); if(S.kt&&S.kt.jumped){ S.kt.jumped=0; S.kt.q=(S.kt.q||[]).concat(['dag']); } }
 if(KAHWA){ Object.assign(GATE,{dagbok:1,basar:1,ord:1,hifz:1,beite:2,vern:2,hikma:2,bygg:3}); Object.assign(AT,{fountain:1,beite:2,frukt:3}); }
