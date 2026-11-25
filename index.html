@@ -75,6 +75,8 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .top{position:absolute;left:0;right:0;top:0;padding:calc(var(--safe-t) + 8px) 12px 0;display:flex;align-items:center;gap:6px;z-index:6;pointer-events:none}
 .top>*{pointer-events:auto}
 .ib{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(11,9,32,.55);border:1px solid rgba(231,194,107,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);position:relative}
+.ib.locked{opacity:.5}.ib.locked::after{content:'';position:absolute;right:-2px;top:-2px;width:13px;height:13px;border-radius:50%;background:#0b0920 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e7c26b' stroke-width='3'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/9px no-repeat;border:1px solid rgba(231,194,107,.5)}
+.mod{display:flex;gap:10px;align-items:flex-start}.mod .mi{flex:0 0 34px;height:34px;border-radius:50%;border:1px solid rgba(231,194,107,.4);display:flex;align-items:center;justify-content:center;font-size:16px}.mod.focus{outline:2px solid var(--gold2)}.mod .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin-top:6px;overflow:hidden}.mod .bar b{display:block;height:100%;background:var(--gold2)}
 .ib .ibl{position:absolute;top:38px;left:50%;transform:translateX(-50%);font-size:9.5px;line-height:1;color:var(--gold2);white-space:nowrap;letter-spacing:.2px;text-shadow:0 1px 4px rgba(0,0,0,.9);pointer-events:none}
 .ib svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .ib.ping::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid #ffe6a6;animation:nping 1.8s ease-out infinite}
@@ -191,6 +193,7 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sbar.stellm .actl,.sbar.stellm #snoozeBtn{display:none!important}.sbar.stellm{padding:6px 10px}
 .smute{display:inline-flex;align-items:center;gap:6px;margin:6px auto 0;padding:6px 12px;border-radius:14px;border:1px solid rgba(231,194,107,.4);background:transparent;color:var(--ink,#efe6d2);font-size:13px}
 .bstar .sp{transform-box:fill-box;transform-origin:center;animation:bsp 2.4s ease-in-out infinite}@keyframes bsp{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.18);opacity:1}}
+.bstar.cmp text+text{display:none}
 .bstar text{font:600 15px Inter,system-ui,sans-serif;fill:#ffe6a6;text-anchor:middle;paint-order:stroke;stroke:rgba(8,6,26,.7);stroke-width:3px}
 .tafl{color:var(--gold);font-size:11px;margin-left:6px;text-decoration:none;border:1px solid rgba(231,194,107,.45);border-radius:10px;padding:1px 7px;pointer-events:auto}
 .tr i{display:block;color:#d6cde6;font-size:calc(15px*var(--trs,1));margin-top:6px}
@@ -222,9 +225,10 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .qtl{text-align:center;font-size:13px;color:#d8cfe8;font-style:italic;margin-top:6px;display:none}
 .showtl .qtl{display:block}
 .qline .qw{display:inline-flex;flex-direction:column;align-items:center;vertical-align:top;margin:0 3px 4px}
-.qline .qw small{direction:ltr;font-family:system-ui,sans-serif;font-size:10.5px;line-height:1.15;color:#b9b0d0;max-width:86px;text-align:center;margin-top:-4px}
+.qline .qw .qa{display:block;line-height:1.75;min-height:1.75em}
+.qline .qw small{direction:ltr;font-family:system-ui,sans-serif;font-size:10.5px;line-height:1.15;color:#b9b0d0;max-width:86px;text-align:center;margin-top:3px}
 .qline .qw.blank{border:0;min-width:0;height:auto;margin:0 3px 4px}
-.qline .qw.blank .qa{display:inline-block;min-width:44px;height:1.15em;border-bottom:2px solid #8f88a8}
+.qline .qw.blank .qa{min-width:52px;height:1.75em;border-bottom:2px solid #8f88a8;box-sizing:border-box}
 .qline .qw.blank.cur .qa{border-bottom-color:var(--gold2);animation:blink 1.4s infinite}
 .qline .qw.blank small{color:var(--gold2);font-style:italic}
 .qline .qw.w .qa{color:#a9e6bd}.qline .qw.g .qa{color:#cfc6e0}
@@ -959,9 +963,21 @@ function fxRing(x,y,c='#ffe6a6'){ if(fxOff()) return; const d=fxEl('fxring',x,y,
 function fxFall(x,y,c,n=10,cls='fxhay'){ if(fxOff()) return; for(let k=0;k<n;k++){ const d=fxEl(cls,x+(Math.random()-.5)*60,y-70-Math.random()*20,`background:${c};animation-delay:${k*35}ms;transform:rotate(${Math.random()*180}deg)`); setTimeout(()=>d.remove(),1100); } }
 function fxWater(x,y){ if(fxOff()) return; const w=stage.clientWidth; [[w*.22,y-70],[w*.78,y-60],[w*.3,y-160],[w*.7,y-150]].forEach(([tx,ty],i)=>{ for(let k=0;k<6;k++){ const d=fxEl('fxdrop',x,y,`--tx:${(tx-x).toFixed(0)}px;--ty:${(ty-y).toFixed(0)}px;animation-delay:${i*70+k*30}ms`); setTimeout(()=>d.remove(),1100); } setTimeout(()=>fxBurst(tx,ty,['#9fd0ff','#cfe6ff'],8,26,4),i*70+520); }); }
 const JUNKFX={blader:['#c98a2e','#a8601e','#d9a040'],rotter:['#5a4028','#2a1e14','#7a6a58'],greiner:['#5a3a1a','#8a5a2a','#c89a5a'],mokk:['#4a3220','#6a4a2e','#8a6a42'],stein:['#9a8a72','#7a6a58','#c8b89a'],ugress:['#6a9a3a','#4f7a2a','#a8c870'],stubbe:['#8a5a2a','#6a4020','#c89a5a'],stov:['#d8c8a0','#b8a880','#efe4cc']};
+function handClean(q,j,e){ S.handClean=true; const el=document.querySelector(`.junk[data-j="${j.id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top;
+  haptic(18); fxDust(cx,cy,1); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,10,36,5,10); setTimeout(()=>fxNur(cx,cy-20,1),150);
+  S.junk[q]=S.junk[q].filter(x=>x!==j); S.cleaned++; S.nur+=1; if(!tLvl('rive')) S.tools.rive=1; snd.puff(); save(); renderTop(); renderSection();
+  setTimeout(()=>{ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DIN FØRSTE RYDDING</p><h3>Der ble det plass</h3>
+   <p>Rot, steiner og ugress tar plassen der nye roser og trær skal stå. Hver ting du rydder gir litt nur, og hagen kommer seg raskere.</p>
+   <div class="card" style="margin-top:8px"><b style="color:var(--gold2)">Gjeteren gir deg en gammel rive</b><p style="margin:4px 0 0;font-size:14px">Med riven tar du ugress og visne blader. Den orker 4 tak om dagen før den må hvile.</p></div>
+   <div class="card" style="margin-top:8px"><b style="color:var(--gold2)">Basaren åpner etter denne økten</b><p style="margin:4px 0 0;font-size:14px">Der kjøper du spade (steiner, rottehull), sag (stubber, greiner) og vannkrukke (sand, møkk). Senere kan du oppgradere til verktøy som tar større ting og orker mer. Du betaler med nur fra øktene.</p></div>
+   <button class="btn" id="hcOk">Fint, videre</button>`); $('hcOk').onclick=closeSheet; snd.chime([523,659,784]); },900); }
 function clean(id,e){
   const q=QUADS[curQ].id, j=S.junk[q].find(x=>x.id===id); if(!j) return;
-  if(!unl('basar')) return toast(`Rydding åpnes etter ${GATE.basar} vers-økter (${S.vs}/${GATE.basar})`);
+  if(!unl('basar')){
+    if(!inStell()) return toast('Du rydder mens verset spiller, i «Stell»-delen av økten. Trykk på himmelen for å starte.');
+    if(S.handClean) return toast('Riven tar du i bruk fra neste økt. Da åpner også Basaren med flere verktøy.',3600);
+    if((j.z||1)>1) return toast('Den er for stor for hendene. Prøv noe mindre, som ugress eller visne blader.',3200);
+    return handClean(q,j,e); }
   const tk=toolFor(j.type);
   if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
   const need=j.z||1, have=tLvl(tk);
@@ -1352,9 +1368,9 @@ function renderSection(){
       const ri=S.fruit.findIndex((t,i)=>sl[i]&&t.st>=3&&t.h==='ok'&&S.harvested[i]!==dayStr()); if(ri>=0) b+=beacon(sl[ri].x,sl[ri].y-70*sl[ri].sc,'Trykk for å høste'); } }
   const J=(S.junk[q.id]||[]), D=S.decor.filter(d=>d.q===q.id);
   h=depth(J.map(j=>[SLOTS[j.s]?SLOTS[j.s].y:0,junkSvg(j)]).concat(D.map(d=>{const sp=SPOTS[d.spot];return [sp.y,decoSvg(d.type,sp.x,sp.y,sp.sc,d.id)];})))+h;
-  if(inStell()&&J.length){ const fj=J.find(j=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
+  if(inStell()&&J.length){ const hand=!unl('basar')&&!S.handClean, fj=J.find(j=>hand?(j.z||1)===1:(()=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; })()); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,hand?'Rydd én ting med hendene':'Trykk for å rydde',-20); }
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
-  if(ok && inStell() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
+  if(ok && inStell() && fountainOK() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   else if(inStell()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,doneToday()?`${countDamage(q.id)} skadet · tawbah i morgen`:`${countDamage(q.id)} skadet · trykk for tawbah`);
   if(!S.active && !busy) b+=(doneToday()?starBeaconDone(195,200):starBeacon(195,200));
@@ -1362,7 +1378,7 @@ function renderSection(){
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
   if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
   { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+weatherLayer(); }
-  $('items').innerHTML=h; $('beacons').innerHTML=b;
+  $('items').innerHTML=h; $('beacons').innerHTML=b; requestAnimationFrame(placeStar);
   $('prevQ').style.visibility=curQ>0?'visible':'hidden'; $('nextQ').style.visibility=curQ<3?'visible':'hidden';
 }
 function sectionSub(id){
@@ -1372,7 +1388,7 @@ function sectionSub(id){
   if(id==='beite') return `${S.flock.sheep} sauer · ${S.flock.cows} ${S.flock.cows===1?'ku':'kyr'}`;
   if(id==='frukt') return `${S.fruit.length} trær · ${S.fruit.filter(t=>t.st>=3).length} modne`;
 }
-function restoreText(id){ const n=AT[id]; return `Gjenopprettes etter ${n} vers-økter (${Math.min(S.vs,n)}/${n})`; }
+function restoreText(id){ const n=AT[id], c=`(${Math.min(S.vs,n)}/${n})`; if(id==='beite') return `Dyrene kommer tilbake etter ${n} vers-økter ${c}`; if(id==='frukt') return `Trærne kan plantes etter ${n} vers-økter ${c}`; return `Gjenopprettes etter ${n} vers-økter ${c}`; }
 function countDamage(id){ if(id==='roser') return S.roses.filter(p=>p.h==='dmg').length; if(id==='frukt') return S.fruit.filter(t=>t.h==='dmg').length; return 0; }
 
 /* ================= HAGETEPPET (idyllisk terrassehage sett ovenfra) ================= */
@@ -1467,8 +1483,9 @@ function renderCarpet(){
   if(se==='vinter'){ h=h.replace(/url\(#waterG\)/g,'#cfe3ee').replace(/#6fa64e/g,'#a9bfb0').replace(/#86b95a/g,'#b9cbb8').replace(/#5c8f45/g,'#8aa498').replace(/#4f7d3a/g,'#7d958a'); h+=`<rect x="-40" y="-60" width="470" height="880" fill="#ffffff" opacity=".12" pointer-events="none"/>`; }
   if(se==='var') h+=blossomT(90,300,10)+blossomT(300,560,11)+blossomT(110,620,9);
   h=h.replace('Hagen er '+pct+' % gjenopprettet',SEASONNAME[se]+' · Hagen er '+pct+' % gjenopprettet');
-  $('carpet').setAttribute('preserveAspectRatio','xMidYMid slice');
+  { const sv=$('carpet'), W=sv.clientWidth||390, H=sv.clientHeight||844, short=H/W<2.05; sv.setAttribute('viewBox',short?'0 -96 390 852':'0 -60 390 816'); sv.setAttribute('preserveAspectRatio','xMidYMid meet'); }
   $('carpet').innerHTML=h+b;
+  { const t=[...$('carpet').querySelectorAll('text')].find(x=>x.getAttribute('y')==='66'), rc=$('carpet').querySelector('rect[y="53"]'); if(t&&rc){ let L=t.getComputedTextLength(); if(L>366){ t.setAttribute('textLength',366); t.setAttribute('lengthAdjust','spacingAndGlyphs'); L=366; } rc.setAttribute('x',(195-L/2-10).toFixed(1)); rc.setAttribute('width',(L+20).toFixed(1)); } }
   $('carpet').querySelectorAll('.quad').forEach(g=>g.onclick=()=>enterQuad(+g.dataset.q));
   $('fountain').onclick=()=>{ if(S.active) enterQuad(Math.max(0,QUADS.findIndex(q=>q.id===S.active.q))); else { enterQuad(0); setTimeout(()=>spin(),650); } };
 }
@@ -1895,18 +1912,34 @@ function openRihla(){ const n=S.rihla||0;
   $('sheet').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ S.horizon=b.dataset.h||null; save(); renderAll(); openRihla(); }); }
 
 /* ================= GRADVIS OPPLÅSING ================= */
-const GATE={dagbok:1,basar:2,ord:3,hifz:4,beite:5,vern:7,bygg:12};
+const GATE={dagbok:1,basar:1,ord:3,hifz:4,beite:5,vern:7,bygg:12};
 const unl=f=>!!S.settings.allOpen||S.vs>=GATE[f];
 const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den i bok-ikonet øverst.'],
-  basar:['Basaren og rydding','Kjøp verktøy i basaren (veske-ikonet) og rydd ruinene i «Stell». Dagens tre oppgaver dukker også opp nede til venstre.'],
+  basar:['Basaren og rydding','Basaren (veske-ikonet) er åpen. Kjøp verktøy og rydd ruinene i «Stell». Dagens tre oppgaver dukker også opp nede til venstre.'],
   ord:['Dagens ord','Ett arabisk ord fra Koranen hver dag, med rot og betydning. Finn det i bue-ikonet øverst.'],
   hifz:['Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers tenner et vindu. Finn tårnet i tårn-ikonet øverst.'],
   beite:['Beitet','Dyrene er tilbake. Gi dem mat, samle ull, melk og egg, og selg på markedet.'],
   vern:['Vern og dyr','Basaren selger nå fuglehus, sandvegg, sluse, gjeterhund, bikube og flere dyr.'],
   bygg:['Bygg og himmel','Nå kan du bygge paviljong, kaskade og minaret, legge til nordlys og stjerneskudd, og til slutt palasset.'],
 };
-function updateGates(){ $('bookBtn').style.display=unl('dagbok')?'':'none'; $('shopBtn').style.display=unl('basar')?'':'none'; $('wordBtn').style.display=unl('ord')?'':'none'; $('hifzBtn').style.display=unl('hifz')?'':'none'; }
+const BTNGATE={bookBtn:'dagbok',shopBtn:'basar',wordBtn:'ord',hifzBtn:'hifz'};
+function updateGates(){ Object.entries(BTNGATE).forEach(([id,k])=>{ const el=$(id); el.style.display=''; el.classList.toggle('locked',!unl(k)); }); }
+const MODS=[['dagbok','📖','Bok (dagbok)','Hvert vers du fullfører lagres her, med det som traff deg og tankene du skrev.'],
+ ['basar','🛍','Basar','Kjøp verktøy til ryddingen, mat til dyrene, pynt og vern. Du betaler med nur.'],
+ ['ord','🔤','Ord','Ett arabisk ord fra Koranen hver dag, med rot og betydning. Dagen etter får du en liten quiz.'],
+ ['hifz','🗼','Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers du kan, tenner et vindu i tårnet.'],
+ ['beite','🐑','Beitet og dyrene','Sauer og kyr kommer tilbake. Gi dem mat, samle ull, melk og egg, og selg dem i Basaren.'],
+ ['vern','🛡','Vern og flere dyr','Fuglehus, sandvegg, gjeterhund, bikube og flere dyr i Basaren.'],
+ ['bygg','🏛','Bygg og himmel','Paviljong, kaskade, minaret, nordlys og til slutt palasset.'],
+ ['frukt','🌴','Frukthagen','Plant og høst daddel, granateple, fiken og oliven.']];
+const modAt=k=>k==='frukt'?AT.frukt:k==='beite'?AT.beite:GATE[k];
+const modOpen=k=>k==='frukt'||k==='beite'?restored(k):unl(k);
+function openModules(focus){ const rows=MODS.map(([k,ic,nm,tx])=>{ const n=modAt(k), o=modOpen(k), v=Math.min(S.vs,n);
+   return `<div class="card mod${k===focus?' focus':''}" style="margin-top:8px" id="mod_${k}"><div class="mi">${ic}</div><div style="flex:1"><b style="color:var(--gold2)">${nm}</b> <span style="font-size:12px;color:${o?'#a9e6bd':'var(--muted)'}">${o?'· åpen':`· åpner etter ${n} vers-økt${n>1?'er':''}`}</span><p style="margin:3px 0 0;font-size:13.5px">${tx}</p>${o?'':`<div class="bar"><b style="width:${v/n*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${v} av ${n} økt${n>1?'er':''}</div>`}</div></div>`; }).join('');
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">HAGENS DELER</p><h3>Det som åpner seg underveis</h3><p style="font-size:13.5px;margin:4px 0 0">Hver dag du fullfører dagens vers, åpner en ny del av hagen seg. Ingenting kan kjøpes seg forbi.</p>${rows}<button class="btn" id="modOk">Fint</button>`);
+  $('modOk').onclick=closeSheet; if(focus){ const el=$('mod_'+focus); if(el) setTimeout(()=>el.scrollIntoView({block:'center',behavior:'smooth'}),250); } }
+document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.ib.locked'); if(!b) return; e.stopImmediatePropagation(); e.preventDefault(); haptic(8); openModules(BTNGATE[b.id]); },true);
 function announceUnlocks(before){ const got=Object.keys(GATE).filter(k=>before<GATE[k]&&S.vs>=GATE[k]&&!S.settings.allOpen); if(!got.length) return;
   setTimeout(()=>{ openSheet(`<h3>Nytt i hagen</h3>${got.map(k=>`<div class="card" style="margin-top:8px"><b style="color:var(--gold2)">${UNLOCK_TXT[k][0]}</b><p style="margin:4px 0 0">${UNLOCK_TXT[k][1]}</p></div>`).join('')}<button class="btn" id="unlOk">Fint</button>`); $('unlOk').onclick=closeSheet; snd.chime([659,784,988]); },4600); }
 
@@ -2042,6 +2075,10 @@ function comeBackTomorrow(){ const lv=S.lastVerse&&S.lastVerse.day===dayStr()?S.
   if($('cbHifz')) $('cbHifz').onclick=()=>{ closeSheet(); openHifz(); };
   if($('cbWord')) $('cbWord').onclick=()=>{ closeSheet(); openWord(); };
   $('cbClose').onclick=closeSheet; }
+function placeStar(){ const g=document.querySelector('#beacons .bstar'), sv=$('scene'); if(!g||!sv) return; const r=sv.getBoundingClientRect(); if(!r.height) return;
+  const s=Math.max(r.width/390,r.height/760), crop=760-r.height/s, tb=$('secTitle').getBoundingClientRect().bottom-r.top;
+  const want=crop+(tb+34)/s, dy=Math.max(0,want-200); g.setAttribute('transform',`translate(0 ${dy.toFixed(1)})`); g.classList.toggle('cmp',200+dy+70>335); }
+addEventListener('resize',()=>requestAnimationFrame(placeStar));
 function starBeaconDone(x,y){ return `<g class="bstar" style="pointer-events:none;opacity:.55"><circle cx="${x}" cy="${y}" r="30" fill="url(#lglow)" opacity=".5"/><path d="M${x} ${y-14} L${x+4} ${y-4} L${x+14} ${y} L${x+4} ${y+4} L${x} ${y+14} L${x-4} ${y+4} L${x-14} ${y} L${x-4} ${y-4}Z" fill="#ffe6a6"/><text x="${x}" y="${y+36}" style="font-size:12px">Nytt vers i morgen</text></g>`; }
 function spin(force){
   if(busy||S.active) return;
@@ -2115,7 +2152,7 @@ function tick(){
     if(sess.ph===2) sess.stellT=(sess.stellT||0)+d; }
   if(now-lastSave>1000){ save(); lastSave=now; }
   const ph=sess.ph||0, RG=repGoal(), LG=learnGoal(), q=QUADS[curQ];
-  const watered=!restored(q.id)||S.watered[q.id]===dayStr(), stellOk=watered||sess.stellT>25;
+  const watered=!restored(q.id)||!fountainOK()||S.watered[q.id]===dayStr(), stellOk=(watered&&(unl('basar')||!!S.handClean))||sess.stellT>25;
   const fill=[ph>0?1:(sess.reps||0)/RG, ph>1?1:ph===1?Math.min(1,(sess.solved||0)/LG):0, ph>2?1:ph===2?(stellOk?1:Math.min(.9,sess.stellT/25)):0];
   [0,1,2].forEach(k=>{ $('p'+k).querySelector('b').style.width=fill[k]*100+'%'; $('p'+k).classList.toggle('on',ph===k); });
   $('p2').style.display=hasStell()?'':'none';
@@ -2131,7 +2168,7 @@ function tick(){
   $('qNext').textContent=ph===1&&(sess.solved||0)>=LG?(hasStell()?'Videre til stell':'Videre'):'Neste runde';
   $('stellDone').style.display='none';
   $('stellGo').classList.toggle('on',ph===2&&stellOk); $('stellTop').classList.toggle('on',ph===2);
-  if(ph===2){ $('stellTxt').innerHTML=watered?(stellOk?'Stell · <b>ferdig</b>, rydd gjerne mer':'Stell · rydd og gi dyrene mat'):'Stell · <b>vann fra elven</b>'; $('stellSnd').textContent=(userPaused||audio.paused)?'🔈':'🔊'; }
+  if(ph===2){ { const more=[(!unl('basar')?(!S.handClean?'rydd én ting med hendene':''):'rydd'),restored('beite')?'gi dyrene mat':''].filter(Boolean).join(' og '); $('stellTxt').innerHTML=watered?(stellOk?`Stell · <b>ferdig</b>${more?', '+more+' om du vil':''}`:`Stell · ${more||'se deg rundt i hagen'}`):'Stell · <b>vann fra elven</b>'; } $('stellSnd').textContent=(userPaused||audio.paused)?'🔈':'🔊'; }
   $('snoozeBtn').style.display=(sess.elapsed<30&&ph===0&&sess.kind==='spin'&&(S.snooze||{}).day!==dayStr())?'block':'none';
   const sp_=sess.short?'Kort økt · ':'', dots=Array.from({length:RG},(_,k)=>`<span style="color:${k<(sess.reps||0)?'var(--gold)':'rgba(255,255,255,.3)'}">●</span>`).join(' ');
   if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${S.settings.tl?'Med oversettelse og uttale':'Med oversettelse · trykk Aa for uttale'}</small>`;
@@ -2667,7 +2704,7 @@ function titleScene(){ const P=PAL[skyKey]||PAL.natt, pct=restorePct(), lit=Math
   <linearGradient id="tGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${P.ground1}"/><stop offset="1" stop-color="#05040f"/></linearGradient></defs>
   <rect width="390" height="844" fill="url(#tSky)"/>${st}${sun}
   <g class="tbirds">${birdV(70,250,1.2)}${birdV(90,240,1)}${birdV(108,252,.9)}</g>
-  ${palace}${cyp(40,150)}${cyp(66,110)}${cyp(324,110)}${cyp(350,150)}
+  ${palace}<path d="M80 556 H310 L318 600 H72Z" fill="${pal}"/>${cyp(40,150)}${cyp(66,110)}${cyp(324,110)}${cyp(350,150)}
   <path d="M0 590 Q195 560 390 590 V844 H0Z" fill="url(#tGround)"/>${lan}
   <path d="M195 590 L150 844 H240Z" fill="${P.sky2}" opacity=".25"/></svg>`; }
 function showTitle(){ titleOn=true; const el=$('title'), pct=restorePct(), a=S.active;
