@@ -1463,7 +1463,7 @@ function sectionSub(id){
   if(id==='beite') return `${S.flock.sheep} sauer · ${S.flock.cows} ${S.flock.cows===1?'ku':'kyr'}`;
   if(id==='frukt') return `${S.fruit.length} trær · ${S.fruit.filter(t=>t.st>=3).length} modne`;
 }
-function restoreText(id){ const n=AT[id], c=`(${Math.min(S.vs,n)}/${n})`; if(id==='beite') return `Dyrene kommer tilbake etter ${n} vers-økter ${c}`; if(id==='frukt') return `Trærne kan plantes etter ${n} vers-økter ${c}`; return `Gjenopprettes etter ${n} vers-økter ${c}`; }
+function restoreText(id){ const n=AT[id], ok=n>1?'vers-økter':'vers-økt', c=`(${Math.min(S.vs,n)}/${n})`; if(id==='beite') return `Dyrene kommer tilbake etter ${n} ${ok} ${c}`; if(id==='frukt') return `Trærne kan plantes etter ${n} ${ok} ${c}`; return `Gjenopprettes etter ${n} ${ok} ${c}`; }
 function countDamage(id){ if(id==='roser') return S.roses.filter(p=>p.h==='dmg').length; if(id==='frukt') return S.fruit.filter(t=>t.h==='dmg').length; return 0; }
 
 /* ================= HAGETEPPET (idyllisk terrassehage sett ovenfra) ================= */
@@ -1548,7 +1548,7 @@ function renderCarpet(){
   h+=`<rect x="-40" y="-60" width="470" height="880" fill="${tint}" pointer-events="none"/>`;
   if(skyKey!=='dag'&&S.oil>0) [[CX-46,CY-46],[CX+46,CY-46],[CX-46,CY+46],[CX+46,CY+46]].forEach(([x,y])=>h+=`<circle cx="${x}" cy="${y}" r="14" fill="url(#lglowC)" opacity="${PAL[skyKey].glow}"/><rect x="${x-2}" y="${y-3}" width="4" height="6" fill="#ffcf7a"/>`);
   // overskrift
-  h+=carpetHeader()+`<rect x="58" y="53" width="274" height="19" rx="9.5" fill="rgba(11,9,32,.62)" stroke="rgba(231,194,107,.45)" stroke-width=".6"/><text x="195" y="46" style="paint-order:stroke" stroke="rgba(11,9,32,.6)" stroke-width="3" text-anchor="middle" font-family="Amiri,serif" font-size="26" fill="#ffe6a6">روضة</text><text x="195" y="66" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="13.5" fill="#f4ecdb" font-style="italic">${special()?SPECIAL[special()].name+' · ':''}Hagen er ${pct} % gjenopprettet${fok?'':` · fontenen repareres etter ${AT.fountain} økter (${Math.min(S.vs,AT.fountain)}/${AT.fountain})`}</text>`;
+  h+=carpetHeader()+`<rect x="58" y="53" width="274" height="19" rx="9.5" fill="rgba(11,9,32,.62)" stroke="rgba(231,194,107,.45)" stroke-width=".6"/><text x="195" y="46" style="paint-order:stroke" stroke="rgba(11,9,32,.6)" stroke-width="3" text-anchor="middle" font-family="Amiri,serif" font-size="26" fill="#ffe6a6">روضة</text><text x="195" y="66" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="13.5" fill="#f4ecdb" font-style="italic">${special()?SPECIAL[special()].name+' · ':''}Hagen er ${pct} % gjenopprettet${fok?'':` · fontenen repareres etter ${AT.fountain} økt${AT.fountain>1?'er':''} (${Math.min(S.vs,AT.fountain)}/${AT.fountain})`}</text>`;
   let b='';
   if(S.active) b+=beacon(CX,CY,'Trykk for å fortsette økten',-50);
   else b+=beacon(CX,CY,doneToday()?'Dagens vers er mottatt':'Trykk for dagens vers',-50);
