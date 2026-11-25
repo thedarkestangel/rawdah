@@ -77,7 +77,7 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .ib{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(11,9,32,.55);border:1px solid rgba(231,194,107,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);position:relative}
 .ib.locked{opacity:.5}.ib.locked::after{content:'';position:absolute;right:-2px;top:-2px;width:13px;height:13px;border-radius:50%;background:#0b0920 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e7c26b' stroke-width='3'%3E%3Crect x='5' y='11' width='14' height='10' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E") center/9px no-repeat;border:1px solid rgba(231,194,107,.5)}
 .mod{display:flex;gap:10px;align-items:flex-start}.mod .mi{flex:0 0 34px;height:34px;border-radius:50%;border:1px solid rgba(231,194,107,.4);display:flex;align-items:center;justify-content:center;font-size:16px}.mod.focus{outline:2px solid var(--gold2)}.mod .bar{height:4px;border-radius:2px;background:rgba(255,255,255,.12);margin-top:6px;overflow:hidden}.mod .bar b{display:block;height:100%;background:var(--gold2)}
-.ib .ibl{position:absolute;top:38px;left:50%;transform:translateX(-50%);font-size:9.5px;line-height:1;color:var(--gold2);white-space:nowrap;letter-spacing:.2px;text-shadow:0 1px 4px rgba(0,0,0,.9);pointer-events:none}
+.ib .ibl{position:absolute;top:38px;left:50%;transform:translateX(-50%);font-size:8.8px;line-height:1;color:var(--gold2);white-space:nowrap;letter-spacing:0;text-shadow:0 1px 4px rgba(0,0,0,.9);pointer-events:none}
 .ib svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .ib.ping::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid #ffe6a6;animation:nping 1.8s ease-out infinite}
 @keyframes nping{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
@@ -509,9 +509,9 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
     <span class="chip" id="nurChip" style="cursor:pointer"><b id="rest">0%</b>·<b id="nur">0</b> nur</span>
     <span class="sp"></span>
     <button class="ib" id="shopBtn" aria-label="Basar"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="ibl">Basar</span></button>
-    <button class="ib" id="wordBtn" aria-label="Dagens ord"><svg viewBox="0 0 24 24"><path d="M5 21V10a7 7 0 0 1 14 0v11"/><path d="M9 21v-7a3 3 0 0 1 6 0v7"/></svg><span class="ibl">Ord</span></button>
-    <button class="ib" id="hifzBtn" aria-label="Lysets tårn"><svg viewBox="0 0 24 24"><path d="M9 21V8l3-5 3 5v13"/><path d="M7 21h10"/><rect x="11" y="10" width="2" height="3"/><rect x="11" y="15" width="2" height="3"/></svg><span class="ibl">Tårn</span></button>
-    <button class="ib" id="bookBtn" aria-label="Dagbok"><svg viewBox="0 0 24 24"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M4 17a3 3 0 0 1 3-3h11"/><path d="M9 8h5"/></svg><span class="ibl">Bok</span></button>
+    <button class="ib" id="learnBtn" aria-label="Lær"><svg viewBox="0 0 24 24"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg><span class="ibl">Lær</span></button>
+    <button class="ib" id="bookBtn" aria-label="Dagbok"><svg viewBox="0 0 24 24"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M4 17a3 3 0 0 1 3-3h11"/><path d="M9 8h5"/></svg><span class="ibl">Samling</span></button>
+    <button class="ib" id="wellBtn" aria-label="Velvære"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="ibl">Velvære</span></button>
     <button class="ib" id="megBtn" aria-label="Meg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span class="ibl">Meg</span></button>
   </div>
 
@@ -2169,15 +2169,15 @@ function openRihla(){ const n=S.rihla||0;
 const GATE={dagbok:1,basar:1,ord:3,hifz:4,beite:5,vern:7,hikma:10,bygg:12};
 const unl=f=>!!S.settings.allOpen||S.vs>=GATE[f];
 const UNLOCK_TXT={
-  dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den i bok-ikonet øverst.'],
+  dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den under Samling øverst.'],
   basar:['Basaren og rydding','Basaren (veske-ikonet) er åpen. Kjøp verktøy og rydd ruinene i «Stell». Dagens tre oppgaver dukker også opp nede til venstre.'],
-  ord:['Dagens ord','Ett arabisk ord fra Koranen hver dag, med rot og betydning. Finn det i bue-ikonet øverst.'],
-  hifz:['Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers tenner et vindu. Finn tårnet i tårn-ikonet øverst.'],
+  ord:['Dagens ord','Ett arabisk ord fra Koranen hver dag, med rot og betydning. Finn det under Lær øverst.'],
+  hifz:['Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers tenner et vindu. Finn det under Lær øverst, eller trykk på tårnet i hagen.'],
   beite:['Beitet','Dyrene er tilbake. Gi dem mat, samle ull, melk og egg, og selg på markedet.'],
   vern:['Vern og dyr','Basaren selger nå fuglehus, sandvegg, sluse, gjeterhund, bikube og flere dyr.'],
   bygg:['Bygg og himmel','Nå kan du bygge paviljong, kaskade og minaret, legge til nordlys og stjerneskudd, og til slutt palasset.'],
 };
-const BTNGATE={bookBtn:'dagbok',shopBtn:'basar',wordBtn:'ord',hifzBtn:'hifz'};
+const BTNGATE={bookBtn:'dagbok',shopBtn:'basar',learnBtn:'ord'};
 function updateGates(){ Object.entries(BTNGATE).forEach(([id,k])=>{ const el=$(id); el.style.display=''; el.classList.toggle('locked',!unl(k)); }); }
 const MODS=[['dagbok','📖','Bok (dagbok)','Hvert vers du fullfører lagres her, med det som traff deg og tankene du skrev.'],
  ['basar','🛍','Basar','Kjøp verktøy til ryddingen, mat til dyrene, pynt og vern. Du betaler med nur.'],
@@ -2185,7 +2185,7 @@ const MODS=[['dagbok','📖','Bok (dagbok)','Hvert vers du fullfører lagres her
  ['hifz','🗼','Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers du kan, tenner et vindu i tårnet.'],
  ['beite','🐑','Beitet og dyrene','Sauer og kyr kommer tilbake. Gi dem mat, samle ull, melk og egg, og selg dem i Basaren.'],
  ['vern','🛡','Vern og flere dyr','Fuglehus, sandvegg, gjeterhund, bikube og flere dyr i Basaren.'],
- ['well','💧','Velvære','Bønn, vann og søvn. En muslim trenger også hvile. Finn det under Meg → Velvære.'],
+ ['well','💧','Velvære','Bønn, vann og søvn. En muslim trenger også hvile. Finn det under Velvære øverst.'],
  ['hikma','📚','Bayt al-Ḥikma','Visdommens hus. Lærde fra gullalderen kommer én etter én: algebra, optikk, kirurgi, maskiner og stjerner. Finn det nede til høyre i oversikten.'],
  ['bygg','🏛','Bygg og himmel','Paviljong, kaskade, minaret, nordlys og til slutt palasset.'],
  ['frukt','🌴','Frukthagen','Plant og høst daddel, granateple, fiken og oliven.']];
@@ -2393,6 +2393,8 @@ async function openSession(pre){
   setPlaylist(verses.map(v=>v.audio),verses.map(v=>v.audio2)); quizSetup(); loadWords(verses); $('verse').scrollTop=0;
   sess._ph=-1; lastTick=performance.now(); clearInterval(tickT); tickT=setInterval(tick,250); tick();
 }
+const ROLIG=[['«… og resiter Koranen langsomt og tydelig.»','Koranen 73:4'],['«Beveg ikke tungen din med den for å skynde deg med den.»','Koranen 75:16'],['«Skynd deg ikke med Koranen … og si: Herre, øk meg i kunnskap.»','Koranen 20:114'],['«Besindighet er fra Allah, og hastverk er fra Shayṭān.»','al-Tirmidhī, hasan ifølge al-Albānī'],['«Du har to egenskaper som Allah elsker: mildhet og besindighet.»','Profeten ﷺ til Ashajj ʻAbd al-Qays. Muslim'],['Allah ser deg i hvert øyeblikk. Gi Hans ord noen rolige minutter av din dag.','Til ettertanke']];
+const roligToday=()=>ROLIG[(dayDiff('2026-01-01',dayStr())%ROLIG.length+ROLIG.length)%ROLIG.length];
 const repGoal=()=>{ if(!sess) return 6; if(sess.short) return 3; const n=verses?verses.reduce((k,v)=>k+v.ar.length,0):0; return n>420?3:(S.settings.reps||6); };
 const learnGoal=()=>sess&&sess.short?2:3;
 const hasStell=()=>sess&&!sess.short&&sess.kind!=='hifz';
@@ -2427,7 +2429,7 @@ function tick(){
   if(ph===2){ { const more=[(!unl('basar')?(!S.handClean?'rydd én ting med hendene':''):'rydd'),restored('beite')?'gi dyrene mat':''].filter(Boolean).join(' og '); $('stellTxt').innerHTML=watered?(stellOk?`Stell · <b>ferdig</b>${more?', '+more+' om du vil':''}`:`Stell · ${more||'se deg rundt i hagen'}`):'Stell · <b>vann fra elven</b>'; } $('stellSnd').textContent=(userPaused||audio.paused)?'🔈':'🔊'; }
   $('snoozeBtn').style.display=(sess.elapsed<30&&ph===0&&sess.kind==='spin'&&(S.snooze||{}).day!==dayStr())?'block':'none';
   const sp_=sess.short?'Kort økt · ':'', dots=Array.from({length:RG},(_,k)=>`<span style="color:${k<(sess.reps||0)?'var(--gold)':'rgba(255,255,255,.3)'}">●</span>`).join(' ');
-  if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${S.settings.tl?'Med oversettelse og uttale':'Med oversettelse · trykk Aa for uttale'}</small>`;
+  if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${(sess.reps||0)===0?`Ta deg tid · ${esc(roligToday()[0])} <i>${esc(roligToday()[1])}</i>`:S.settings.tl?'Med oversettelse og uttale':'Med oversettelse · trykk Aa for uttale'}</small>`;
   else if(ph===1) $('smsg').innerHTML=`${sp_}Lær · bygg verset · runde <b>${Math.min((sess.solved||0)+1,LG)} av ${LG}</b>`;
   else if(ph===2) $('smsg').innerHTML=watered?'Stell hagen mens verset spiller: rydd og gi dyrene mat':'Stell hagen mens verset spiller · <b>vann fra elven</b>';
   else $('smsg').innerHTML='Ferdig. Hva traff deg?';
@@ -2500,7 +2502,7 @@ function quizSetup(){
   // Korte vers: 3 ord, halvparten, hele. Lange vers: bare 1, 2, 3 ord, resten står med betydning under.
   const lvl=Math.min(sess.solved||0,2), blanksN=long?Math.min([1,2,3][lvl],seg.length):lvl===0?Math.min(3,seg.length):lvl===1?Math.ceil(seg.length/2):seg.length;
   const idx=seg.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,blanksN).sort((a,b)=>a-b);
-  Q={seg:seg.map(x=>x.ar),gl:seg.map(x=>x.en),tl:seg.map(x=>x.tl),blanks:idx,bi:0,wrong:0,filled:new Set(),tiles:idx.map(i=>({w:seg[i].ar,used:false})).sort(()=>Math.random()-.5),lvl,long};
+  Q={t0:Date.now(),seg:seg.map(x=>x.ar),gl:seg.map(x=>x.en),tl:seg.map(x=>x.tl),blanks:idx,bi:0,wrong:0,filled:new Set(),tiles:idx.map(i=>({w:seg[i].ar,used:false})).sort(()=>Math.random()-.5),lvl,long};
   $('qHead').innerHTML=`Runde ${(sess.solved||0)+1} · <b>${long?['1 ord','2 ord','3 ord'][lvl]:['Lett','Middels','Hele verset'][lvl]}</b>${part}`;
   $('qTl').textContent=Q.tl.some(Boolean)?Q.tl.join(' '):(seg===W?v.tl||'':'');
   $('qMsg').textContent=''; $('qNext').style.display='none'; $('rcLine').style.display='none'; $('qRecite').style.display=SR?'block':'none'; renderQuiz();
@@ -2517,7 +2519,7 @@ function renderQuiz(){
 function tapTile(k,b){
   const t=Q.tiles[k]; if(t.used) return; const need=Q.seg[Q.blanks[Q.bi]];
   if(t.w===need){ haptic(12); t.used=true; Q.filled.add(Q.blanks[Q.bi]); Q.bi++; Q.wrong=0; renderQuiz();
-    if(Q.bi>=Q.blanks.length){ sess.solved=(sess.solved||0)+1; save(); $('qMsg').textContent=['Mashallah!','Bra jobbet!','Barakallahu fik!'][Math.min(Q.lvl,2)]+(Q.lvl<2?' Neste runde blir litt vanskeligere.':' Du bygde hele verset.'); $('qNext').style.display='block'; plIdx=0; playCurrent(); }
+    if(Q.bi>=Q.blanks.length){ if(Q.t0&&Date.now()-Q.t0<Q.blanks.length*900&&!sess.roligShown){ sess.roligShown=true; setTimeout(()=>toast('Ingen hast. «Besindighet er fra Allah, og hastverk er fra Shayṭān.» Si ordene stille for deg selv mens du legger dem.',5200),900); } sess.solved=(sess.solved||0)+1; save(); $('qMsg').textContent=['Mashallah!','Bra jobbet!','Barakallahu fik!'][Math.min(Q.lvl,2)]+(Q.lvl<2?' Neste runde blir litt vanskeligere.':' Du bygde hele verset.'); $('qNext').style.display='block'; plIdx=0; playCurrent(); }
   } else {
     b.classList.remove('soft'); void b.offsetWidth; b.classList.add('soft'); Q.wrong++;
     $('qMsg').textContent=Q.wrong===1?'Nesten. Prøv et annet ord.':'Se ordet som lyser.';
@@ -2589,7 +2591,7 @@ async function openHifz(){
   $('sheet').querySelectorAll('.win').forEach(b=>b.onclick=()=>{ const a=+b.dataset.a; closeSheet(); unlockAudio(); startSession({kind:'hifz',cat:'dua',ref:`${cur}:${a}`,surah:cur,ayah:a,q:'taarn'}); });
   $('hzChg').onclick=()=>{ S.hifz.current=null; save(); openHifz(); renderAll(); };
 }
-$('hifzBtn').onclick=openHifz;
+
 
 /* --- Dagens ord --- */
 function wordIndex(){ if(!S.words.start){ S.words.start=dayStr(); save(); } return dayDiff(S.words.start,dayStr())%WORDS.length; }
@@ -2613,8 +2615,15 @@ function openWord(){
   <p style="font-size:12px;color:var(--muted)">Ordene henger høyt i buene, aldri på bakken. I morgen får du en liten test på dagens ord.</p>`);
   const lb=$('learnW'); if(lb) lb.onclick=()=>{ S.words.learned.push(i); S.nur+=3; taskHit('ord'); save(); renderTop(); updatePings(); openWord(); };
 }
-$('wordBtn').onclick=openWord;
-function updatePings(){ $('megBtn').classList.toggle('ping',S.stats.sessions>=3&&(!S.lastBackup||Date.now()-S.lastBackup>7*864e5)); const i=wordIndex(), yi=(i-1+WORDS.length)%WORDS.length; $('wordBtn').classList.toggle('ping',!S.words.learned.includes(i)||(S.words.learned.includes(yi)&&!S.words.quiz[dayStr()])); }
+function addLearnTabs(on){ const g=$('sheet').querySelector('.grab'); if(!g||$('sheet').querySelector('[data-lt]')) return; const d=document.createElement('div'); d.className='tabs'; d.innerHTML=`<button data-lt="ord"${on==='ord'?' class="on"':''}>Dagens ord</button><button data-lt="hifz"${on==='hifz'?' class="on"':''}>Hifz · Lysets tårn${unl('hifz')?'':' 🔒'}</button>`; g.after(d); d.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>openLearn(b.dataset.lt)); }
+async function openLearn(tab){ tab=tab||S.learnTab||'ord'; S.learnTab=tab; $('learnBtn').classList.remove('ping');
+  if(tab==='hifz'){ if(!unl('hifz')){ openSheet(`<h3>Lysets tårn · Hifz</h3><p>Her lærer du en surah utenat, vers for vers. Hvert vers tenner et vindu i tårnet.</p><div class="card mod"><div class="mi">🔒</div><div style="flex:1"><b style="color:var(--gold2)">Åpner etter ${GATE.hifz} vers-økter</b><div class="bar"><b style="width:${Math.min(1,S.vs/GATE.hifz)*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${Math.min(S.vs,GATE.hifz)} av ${GATE.hifz} økter</div></div></div>`); }
+    else if(S.active){ openSheet(`<h3>Lysets tårn · Hifz</h3><p>Fullfør økten først, så kan du fortsette med hifz.</p>`); }
+    else await openHifz(); }
+  else openWord();
+  addLearnTabs(tab); }
+$('learnBtn').onclick=()=>openLearn(); $('wellBtn').onclick=openWell;
+function updatePings(){ $('megBtn').classList.toggle('ping',S.stats.sessions>=3&&(!S.lastBackup||Date.now()-S.lastBackup>7*864e5)); const i=wordIndex(), yi=(i-1+WORDS.length)%WORDS.length; $('learnBtn').classList.toggle('ping',unl('ord')&&!S.words.learned.includes(i)||(S.words.learned.includes(yi)&&!S.words.quiz[dayStr()])); }
 
 /* --- Basar --- */
 let shopTab='varer';
@@ -2836,7 +2845,7 @@ function wireMegTabs(){ $('sheet').querySelectorAll('[data-mt]').forEach(b=>b.on
 function openWell(){ const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026-01-01',dayStr())%WELLQ.length+WELLQ.length)%WELLQ.length];
   const last7=Array.from({length:7},(_,k)=>addDays(dayStr(),k-6)).map(d=>[d,S.well.log[d]]);
   const prayed=SALAH.filter(([k])=>L.p[k]).length;
-  openSheet(`${wellTabs('well')}<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
+  openSheet(`<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
   <div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.4">${esc(q[0])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">${esc(q[1])}</p></div>
   <h4>🕌 Bønnen</h4><p style="font-size:13.5px;margin-top:0">Bønnen er ikke bare en plikt, den er også hvile. Profeten ﷺ sa til Bilāl: «Gi oss ro med den.»</p>
   <div class="qrow" id="wlP" style="flex-wrap:wrap${L.free?';opacity:.4;pointer-events:none':''}">${SALAH.map(([k,n])=>`<button class="gb${L.p[k]?' gold':''}" data-p="${k}" style="flex:1 1 30%">${L.p[k]?'✓ ':''}${n}</button>`).join('')}</div>
@@ -2868,7 +2877,7 @@ function openWell(){ const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026
 function wellNudge(){ const L=wellDay(), h=new Date().getHours(); if(S.well.nudged===dayStr()) return;
   let t=null;
   if(h>=23||h<4) t='Det er sent. Kroppen din har en rett over deg. Sov godt, in shā\' Allāh 🌙';
-  else if(h>=13&&L.w<2&&!(hijri()&&hijri().m===9)) t='Har du husket å drikke vann i dag? 💧 Trykk på Meg → Velvære for å notere.';
+  else if(h>=13&&L.w<2&&!(hijri()&&hijri().m===9)) t='Har du husket å drikke vann i dag? 💧 Trykk på Velvære øverst for å notere.';
   if(t){ S.well.nudged=dayStr(); save(); toast(t,4200); } }
 function openPrivacy(){ openSheet(`<h3>Personvern</h3>
   <p><b style="color:var(--gold2)">Alt blir på telefonen din.</b> Rawdah har ingen konto, ingen server og ingen sporing. Hagen din, dagboka, notatene dine og det du registrerer under Velvære (bønn, vann og søvn) lagres bare i appen på denne enheten. Ingen andre, heller ikke den som laget appen, kan se det.</p>
@@ -2880,7 +2889,7 @@ function openPrivacy(){ openSheet(`<h3>Personvern</h3>
   <button class="btn ghost" id="pvB">Tilbake</button>`); $('pvB').onclick=openMeg; }
 function openMeg(){
   const top=Object.entries(S.stats.reflect).sort((a,b)=>b[1]-a[1])[0], url=location.href.split('?')[0].split('#')[0]+'?spin=1';
-  openSheet(`${wellTabs('hage')}<h3>Din hage</h3>
+  openSheet(`<h3>Din hage</h3>
   <div class="card stats"><div><b>${restorePct()}%</b><span>gjenopprettet</span></div><div><b>${S.streak}</b><span>dager på rad</span></div><div><b>${Math.round(S.stats.seconds/60)}</b><span>minutter</span></div><div><b>${S.stats.interrupts}</b><span>stoppet før app</span></div></div>
   <p>${S.stats.interrupts?`Du har stoppet ${S.stats.interrupts} ganger før en app og brukt ${Math.round(S.stats.seconds/60)} minutter med Koranen i stedet.`:(IS_ANDROID?'Sett opp MacroDroid under':'Sett opp Snarveier under')+', så ser du hvor ofte du stoppet før en app.'}${top?` Det som oftest treffer deg: ${top[0].toLowerCase()}.`:''}</p>
   <h4>De tre måtene å pleie hagen på</h4>${modesHTML()}
@@ -3205,7 +3214,7 @@ else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&
 setTimeout(()=>{ if(!weekly()) showUnseen(); },500);
 fetchSurahList().then(l=>{ surahMeta=surahMeta||l; if((S.rihla||0)>0&&!S.rihlaIntro&&S.introSeen){ S.rihlaIntro=1; save(); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) openRihlaIntro(latestMon()); else S.rihlaIntro=0; },1500); } const before=S.rihla||0; if(rihlaEarned()>before&&S.introSeen) checkRihla(); }).catch(()=>{});
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.__rawdah={openWell,wellNudge,openHikma,openScholar,hikmaTick,HIKMA,showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
+window.__rawdah={openLearn,openWell,wellNudge,openHikma,openScholar,hikmaTick,HIKMA,showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
 }
 </script>
 </body>
