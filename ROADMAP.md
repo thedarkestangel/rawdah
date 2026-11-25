@@ -21,10 +21,18 @@ Hver lærd i Visdommens hus skal etter hvert få en liten aktivitet. Bibliotekar
 - [ ] Påskeegg for resten av personene i Rihla-brevene.
 - [ ] Oppdater muslimtallene i Rihla når Pew Research Center publiserer nyere tall (dagens tall er anslag for 2020, publisert 2025).
 
+## Ramadan-oppdatering (før Ramadan 2027, ca. 8. februar)
+
+- [ ] Ramadan-preg på hagen: lykter, halvmåne og iftār-stemning.
+- [ ] Velvære i Ramadan: råd om suhūr og iftār i stedet for vann midt på dagen (vannpåminnelsen er allerede slått av i Ramadan).
+- [ ] Egne vers og påminnelser for fasten, Laylat al-Qadr og de siste ti nettene.
+
 ## Funksjoner
 
 - [ ] Pausedager (f.eks. ved sykdom eller reise) uten at hagen tar skade.
 - [ ] Lyd uten nett (lagre resitasjonen lokalt).
 - [ ] Bytte av «pass» eller stempler mellom brukere.
-- [ ] Tilbakemeldingsknapp i appen.
+- [ ] Tilbakemeldingsknapp i appen (f.eks. lenke til et Google-skjema).
+- [ ] Kreditering av oversettelser, resitatører og fonter; sjekk vilkår før appen spres bredt.
+- [ ] Faglig gjennomlesning av vers, hadith og historiske tekster av en lærd.
 - [ ] Ekte push-varsler (krever server, f.eks. OneSignal).

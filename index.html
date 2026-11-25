@@ -2839,8 +2839,9 @@ function openWell(){ const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026
   openSheet(`${wellTabs('well')}<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
   <div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.4">${esc(q[0])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">${esc(q[1])}</p></div>
   <h4>🕌 Bønnen</h4><p style="font-size:13.5px;margin-top:0">Bønnen er ikke bare en plikt, den er også hvile. Profeten ﷺ sa til Bilāl: «Gi oss ro med den.»</p>
-  <div class="qrow" id="wlP" style="flex-wrap:wrap">${SALAH.map(([k,n])=>`<button class="gb${L.p[k]?' gold':''}" data-p="${k}" style="flex:1 1 30%">${L.p[k]?'✓ ':''}${n}</button>`).join('')}</div>
-  <p style="font-size:12.5px;color:var(--muted)">${prayed} av 5 i dag. Bare for deg selv. Ingen poeng, ingen straff.</p>
+  <div class="qrow" id="wlP" style="flex-wrap:wrap${L.free?';opacity:.4;pointer-events:none':''}">${SALAH.map(([k,n])=>`<button class="gb${L.p[k]?' gold':''}" data-p="${k}" style="flex:1 1 30%">${L.p[k]?'✓ ':''}${n}</button>`).join('')}</div>
+  ${isF()?`<button class="gb${L.free?' gold':''}" id="wlFree" style="width:100%;margin-top:6px">${L.free?'✓ ':''}Fri fra bønn i dag (mens eller nifās)</button>`:''}
+  <p style="font-size:12.5px;color:var(--muted)">${L.free?'Du er fri fra bønn i dag. Det er Allahs lettelse, ikke et tap. Dhikr, duʿāʼ og å lytte til Koranen kan du fortsatt gjøre.':`${prayed} av 5 i dag. Bare for deg selv. Ingen poeng, ingen straff.`}</p>
   <h4>💧 Vann</h4><p style="font-size:13.5px;margin-top:0">Sunna er å sitte, si bismillāh og drikke i tre åndedrag (al-Bukhārī og Muslim).</p>
   <div class="card" style="display:flex;align-items:center;gap:10px"><div style="flex:1;display:flex;gap:4px;flex-wrap:wrap">${Array.from({length:Math.max(G,L.w)},(_,k)=>`<span style="font-size:22px;opacity:${k<L.w?1:.25}">💧</span>`).join('')}</div><button class="gb gold" id="wlW" style="flex:0 0 auto">+1 glass</button></div>
   <p style="font-size:12.5px;color:var(--muted)">${L.w} av ${G} glass i dag. <a href="#" id="wlG" style="color:var(--gold2)">Endre mål</a> · <a href="#" id="wlWm" style="color:var(--gold2)">Angre</a>. Behovet varierer med vekt, vær og aktivitet. Har du sykdom som påvirker væskebalansen, følg rådet fra legen din.</p>
@@ -2848,7 +2849,11 @@ function openWell(){ const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026
   <p style="font-size:13.5px;margin:0 0 6px">Hvor mye sov du i natt?</p>
   <div class="qrow" id="wlS">${[5,6,7,8,9].map(h=>`<button class="gb${L.sl===h?' gold':''}" data-h="${h}">${h===5?'≤5':h===9?'9+':h} t</button>`).join('')}</div>
   ${L.sl!=null?`<p style="font-size:13px;margin:6px 0 0">${L.sl<=5?'Det er lite. Prøv å legge deg litt tidligere i kveld. Kroppen din har en rett over deg.':L.sl===6?'Litt i underkant for de fleste. En kort hvil midt på dagen (qaylūla) er også sunna.':'Godt. Alḥamdulillāh.'}</p>`:''}
-  <h4>Siste 7 dager</h4><div class="card" style="display:flex;justify-content:space-between;font-size:11px;text-align:center">${last7.map(([d,l])=>`<div style="flex:1"><div style="color:var(--muted)">${['sø','ma','ti','on','to','fr','lø'][new Date(d+'T12:00').getDay()]}</div><div title="bønn">${l?SALAH.filter(([k])=>l.p[k]).length:'–'}🕌</div><div>${l?l.w:'–'}💧</div><div>${l&&l.sl!=null?(l.sl>=9?'9+':l.sl):'–'}🌙</div></div>`).join('')}</div>
+  <h4>Siste 7 dager</h4><div class="card" style="display:flex;justify-content:space-between;font-size:11px;text-align:center">${last7.map(([d,l])=>`<div style="flex:1"><div style="color:var(--muted)">${['sø','ma','ti','on','to','fr','lø'][new Date(d+'T12:00').getDay()]}</div><div title="bønn">${l?(l.free?'fri':SALAH.filter(([k])=>l.p[k]).length):'–'}🕌</div><div>${l?l.w:'–'}💧</div><div>${l&&l.sl!=null?(l.sl>=9?'9+':l.sl):'–'}🌙</div></div>`).join('')}</div>
+  <h4>🤝 Har du det tungt?</h4>
+  <div class="card"><p style="margin:0;font-size:14px;line-height:1.5">Bønn, dhikr og Koranen gir ro, og det er viktig å holde fast ved dem. Men Allah skapte oss også til å trenge hverandre. Profeten ﷺ sa at de troende i sin kjærlighet og omsorg for hverandre er som én kropp: når én del har vondt, kjenner hele kroppen det (al-Bukhārī og Muslim).</p>
+  <p style="margin:8px 0 0;font-size:14px;line-height:1.5">Å be om hjelp er ikke svak tro. Snakk med noen du stoler på: familie, en venn, imamen eller fastlegen din.</p>
+  <p style="margin:8px 0 0;font-size:14px;line-height:1.5"><b style="color:var(--gold2)">Mental Helses hjelpetelefon: <a href="tel:116123" style="color:var(--gold2)">116 123</a></b>, gratis og døgnåpen. Ved akutt fare, ring <a href="tel:113" style="color:var(--gold2)">113</a>.</p></div>
   <p style="font-size:12px;color:var(--muted)">Dette er en påminnelse, ikke medisinske råd. Er du bekymret for søvn eller helse, snakk med fastlegen din.</p>
   <button class="btn ghost" id="wlOk">Lukk</button>`);
   wireMegTabs(); $('wlOk').onclick=closeSheet;
@@ -2856,14 +2861,23 @@ function openWell(){ const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026
   $('wlWm').onclick=e=>{ e.preventDefault(); if(L.w>0){ L.w--; save(); openWell(); } };
   $('wlG').onclick=e=>{ e.preventDefault(); const opts=[4,6,8,10]; S.well.goal=opts[(opts.indexOf(G)+1)%opts.length]; save(); openWell(); };
   $('wlP').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const k=b.dataset.p; L.p[k]=!L.p[k]; save(); haptic(8); if(L.p[k]) snd.chime([523,659],.04); openWell(); });
+  if($('wlFree')) $('wlFree').onclick=()=>{ L.free=!L.free; save(); haptic(8); openWell(); };
   $('wlS').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ L.sl=+b.dataset.h; save(); haptic(8); openWell(); });
 }
 /* Milde påminnelser inne i appen, høyst én om dagen */
 function wellNudge(){ const L=wellDay(), h=new Date().getHours(); if(S.well.nudged===dayStr()) return;
   let t=null;
   if(h>=23||h<4) t='Det er sent. Kroppen din har en rett over deg. Sov godt, in shā\' Allāh 🌙';
-  else if(h>=13&&L.w<2) t='Har du husket å drikke vann i dag? 💧 Trykk på Meg → Velvære for å notere.';
+  else if(h>=13&&L.w<2&&!(hijri()&&hijri().m===9)) t='Har du husket å drikke vann i dag? 💧 Trykk på Meg → Velvære for å notere.';
   if(t){ S.well.nudged=dayStr(); save(); toast(t,4200); } }
+function openPrivacy(){ openSheet(`<h3>Personvern</h3>
+  <p><b style="color:var(--gold2)">Alt blir på telefonen din.</b> Rawdah har ingen konto, ingen server og ingen sporing. Hagen din, dagboka, notatene dine og det du registrerer under Velvære (bønn, vann og søvn) lagres bare i appen på denne enheten. Ingen andre, heller ikke den som laget appen, kan se det.</p>
+  <h4>Hva appen henter fra nettet</h4>
+  <p>For å vise vers og spille resitasjon henter appen tekst og lyd fra disse tjenestene. De ser bare hvilket vers som hentes, ikke hvem du er eller hva du har skrevet:</p>
+  <div class="card"><p style="margin:0;font-size:14px">• <b>alquran.cloud</b>: arabisk tekst, norsk og engelsk oversettelse og uttale<br>• <b>everyayah.com</b>: resitasjon vers for vers<br>• <b>quran.com</b>: ordforklaringer i Lær<br>• Lenker til Wikipedia og andre sider åpnes bare når du trykker på dem.</p></div>
+  <h4>Sikkerhetskopi</h4>
+  <p>Fordi alt ligger på telefonen, forsvinner det hvis du sletter appen eller nettleserdataene. Ta sikkerhetskopi under Meg av og til, og legg appen på hjemskjermen. Da sletter ikke telefonen dataene av seg selv.</p>
+  <button class="btn ghost" id="pvB">Tilbake</button>`); $('pvB').onclick=openMeg; }
 function openMeg(){
   const top=Object.entries(S.stats.reflect).sort((a,b)=>b[1]-a[1])[0], url=location.href.split('?')[0].split('#')[0]+'?spin=1';
   openSheet(`${wellTabs('hage')}<h3>Din hage</h3>
@@ -2889,13 +2903,13 @@ function openMeg(){
   <h4>Versutvalg</h4><div class="seg" id="poolSeg">${[['tema','Tematisk'],['blandet','Blandet'],['hele','Hele Koranen']].map(([k,l])=>`<button data-p="${k}" class="${(S.settings.pool||'blandet')===k?'on':''}">${l}</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Tematisk: rundt 190 utvalgte vers i elleve temaer, også advarsler og karakter. Hele Koranen: et tilfeldig vers av alle 6236. Blandet: begge deler. På fredager, i Ramadan og i Dhul Hijjah kommer det i tillegg egne vers.</p>
   <button class="btn" id="bkBtn">Sikkerhetskopi av hagen</button>
   <p style="font-size:13px;color:var(--muted);text-align:center">Skjulte tegn i hagen: <b style="color:var(--gold2)">${signFound()} av ${SIGNN()}</b> funnet. Se godt etter.</p>
-  <button class="btn ghost" id="guideB">Slik fungerer Rawdah</button>
+  <button class="btn ghost" id="guideB">Slik fungerer Rawdah</button><button class="btn ghost" id="privB">Personvern</button>
   <button class="btn ghost" id="replay">Se historien igjen</button>
   <button class="btn ghost" id="resetBtn">Slett all fremgang</button>`);
   $('shSeg').onclick=e=>{ const k=e.target.dataset.n; if(k!=null){ S.settings.shortPerDay=+k; S.shortTimes=null; save(); openMeg(); } }; if($('shNew')) $('shNew').onclick=()=>{ S.shortTimes={week:weekKey(),t:genShortTimes(shortLimit())}; save(); openMeg(); };
   $('durSeg').onclick=e=>{ const m=+e.target.dataset.m; if(m){ S.settings.reps=m; save(); openMeg(); } };
   $('replay').onclick=()=>{ closeSheet(); playIntro(); };
-  $('guideB').onclick=()=>openGuide(); wireMegTabs();
+  $('guideB').onclick=()=>openGuide(); $('privB').onclick=openPrivacy; wireMegTabs();
   $('bkBtn').onclick=openBackup;
   $('genSeg').onclick=e=>{ const g=e.target.dataset.g; if(g){ S.settings.gender=g; save(); openMeg(); if(view==='sec') renderSection(); } };
   $('openSeg').onclick=e=>{ const o=e.target.dataset.o; if(o!=null){ S.settings.allOpen=o==='1'; save(); renderAll(); openMeg(); } };
