@@ -127,6 +127,16 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sign{opacity:.85}.sdate{transform-box:fill-box}.sign:active .sdate{animation:sdrop .8s ease-in forwards}@keyframes sdrop{to{transform:translateY(40px)}}
 .swhale{animation:swh 38s ease-in-out infinite}@keyframes swh{0%,82%,100%{opacity:0;transform:translateY(8px)}86%,94%{opacity:1;transform:translateY(0)}}
 .sbee{animation:sbee 4s ease-in-out infinite}@keyframes sbee{0%{transform:translate(0,0)}25%{transform:translate(10px,-6px)}50%{transform:translate(2px,-12px)}75%{transform:translate(-8px,-4px)}100%{transform:translate(0,0)}}
+.fxp{position:absolute;z-index:7;border-radius:50%;margin:-3px 0 0 -3px;pointer-events:none;animation:fxp .7s cubic-bezier(.2,.8,.4,1) forwards}@keyframes fxp{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),calc(var(--dy) + 26px)) scale(.4);opacity:0}}
+.fxnur{position:absolute;z-index:8;transform:translate(-50%,0);font:700 14px Inter,system-ui,sans-serif;color:#ffe6a6;text-shadow:0 1px 6px rgba(0,0,0,.8);pointer-events:none;animation:fxnur 1.1s ease-out forwards}@keyframes fxnur{from{opacity:0;transform:translate(-50%,6px)}20%{opacity:1}to{opacity:0;transform:translate(-50%,-34px)}}
+.fxdust{position:absolute;z-index:6;margin:-11px 0 0 -11px;border-radius:50%;background:radial-gradient(circle,rgba(230,215,180,.8),rgba(230,215,180,0) 70%);pointer-events:none;animation:fxdust .8s ease-out forwards}@keyframes fxdust{from{transform:scale(.4);opacity:.9}to{transform:scale(2.2) translateY(-10px);opacity:0}}
+.fxring{position:absolute;z-index:7;width:16px;height:16px;margin:-8px 0 0 -8px;border:2px solid;border-radius:50%;pointer-events:none;animation:fxring .8s ease-out forwards}@keyframes fxring{to{transform:scale(5);opacity:0}}
+.fxhay{position:absolute;z-index:7;width:3px;height:12px;border-radius:2px;pointer-events:none;animation:fxhay .9s ease-in forwards}@keyframes fxhay{from{opacity:0}15%{opacity:1}to{transform:translateY(70px) rotate(220deg);opacity:0}}
+.fxdrop{position:absolute;z-index:7;width:5px;height:7px;margin:-3px 0 0 -2px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#9fd0ff;pointer-events:none;animation:fxdrop .6s cubic-bezier(.3,0,.6,1) forwards}@keyframes fxdrop{0%{transform:translate(0,0);opacity:0}15%{opacity:1}50%{transform:translate(calc(var(--tx)*.5),calc(var(--ty)*.5 - 60px))}100%{transform:translate(var(--tx),var(--ty));opacity:.9}}
+#items.perk .rz,#items.perk .fruitT{animation:perk .8s ease}@keyframes perk{40%{filter:brightness(1.35) saturate(1.3)}}
+.sprout{transform-box:fill-box;transform-origin:50% 100%;animation:sprout 1.3s cubic-bezier(.2,1.5,.4,1) both}@keyframes sprout{from{transform:scale(.1,0);opacity:0}to{transform:none;opacity:1}}
+.landed{animation:landed 1.6s ease}@keyframes landed{0%{opacity:0;filter:brightness(2)}40%{opacity:1;filter:brightness(1.6) drop-shadow(0 0 8px #ffe6a6)}100%{filter:none}}
+@media (prefers-reduced-motion: reduce){.sprout,.landed,#items.perk .rz{animation:none!important}}
 .spinfx{position:absolute;inset:0;z-index:9;display:none;cursor:pointer}.spinfx.on{display:block}.spinfx.out{opacity:0;transition:opacity .35s}
 .spinfx svg{position:absolute;inset:0}
 .fxcard{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) scale(.85);opacity:0;transition:all .45s cubic-bezier(.2,1.4,.4,1);text-align:center;padding:18px 34px;border-radius:22px;background:rgba(10,8,30,.82);border:1px solid rgba(231,194,107,.55);box-shadow:0 0 40px rgba(255,217,138,.35);min-width:200px}
@@ -887,6 +897,16 @@ function say(e,who){ const [a,en]=rnd(isF()?THANKS_F:THANKS); if(bubEl) bubEl.re
   b.style.left=x+'px'; b.style.top=y+'px'; stage.appendChild(b); bubEl=b; setTimeout(()=>{ if(b.parentNode) b.remove(); },3300); }
 function sparkle(x,y){ x=x??stage.clientWidth/2; y=y??stage.clientHeight*.55; for(let i=0;i<22;i++){ const d=document.createElement('i'); d.className='puff gold'; d.style.left=x+'px'; d.style.top=y+'px'; const a=Math.random()*Math.PI*2, r=40+Math.random()*90; d.style.setProperty('--dx',Math.cos(a)*r+'px'); d.style.setProperty('--dy',Math.sin(a)*r+'px'); d.style.animationDelay=(Math.random()*.2)+'s'; stage.appendChild(d); setTimeout(()=>d.remove(),1300);} }
 function puff(e){ for(let i=0;i<10;i++){ const d=document.createElement('i'); d.className='puff'; d.style.left=e.clientX+'px'; d.style.top=e.clientY+'px'; d.style.setProperty('--dx',((Math.random()-.5)*70)+'px'); d.style.setProperty('--dy',(-Math.random()*50)+'px'); stage.appendChild(d); setTimeout(()=>d.remove(),900);} }
+/* ---- Animasjoner når man steller (korte, blokkerer aldri) ---- */
+const fxOff=()=>{ try{ return matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } };
+function fxEl(cls,x,y,css=''){ const d=document.createElement('i'); d.className=cls; d.style.cssText=`left:${x}px;top:${y}px;${css}`; stage.appendChild(d); return d; }
+function fxBurst(x,y,colors,n=12,spread=46,size=6,up=0){ if(fxOff()) return; for(let k=0;k<n;k++){ const a=Math.random()*Math.PI*2, r=spread*(.4+Math.random()*.6), d=fxEl('fxp',x,y,`--dx:${(Math.cos(a)*r).toFixed(0)}px;--dy:${(Math.sin(a)*r*.7-up).toFixed(0)}px;width:${size}px;height:${size}px;background:${colors[k%colors.length]};animation-delay:${k*12}ms`); setTimeout(()=>d.remove(),800); } }
+function fxNur(x,y,n){ const d=fxEl('fxnur',x,y); d.textContent=`+${n} nur`; setTimeout(()=>d.remove(),1200); }
+function fxDust(x,y,sz=1){ if(fxOff()) return; for(let k=0;k<4;k++){ const d=fxEl('fxdust',x+(k-1.5)*10*sz,y-4,`width:${22*sz}px;height:${22*sz}px;animation-delay:${k*40}ms`); setTimeout(()=>d.remove(),900); } }
+function fxRing(x,y,c='#ffe6a6'){ if(fxOff()) return; const d=fxEl('fxring',x,y,`border-color:${c}`); setTimeout(()=>d.remove(),900); }
+function fxFall(x,y,c,n=10,cls='fxhay'){ if(fxOff()) return; for(let k=0;k<n;k++){ const d=fxEl(cls,x+(Math.random()-.5)*60,y-70-Math.random()*20,`background:${c};animation-delay:${k*35}ms;transform:rotate(${Math.random()*180}deg)`); setTimeout(()=>d.remove(),1100); } }
+function fxWater(x,y){ if(fxOff()) return; const w=stage.clientWidth; [[w*.22,y-70],[w*.78,y-60],[w*.3,y-160],[w*.7,y-150]].forEach(([tx,ty],i)=>{ for(let k=0;k<6;k++){ const d=fxEl('fxdrop',x,y,`--tx:${(tx-x).toFixed(0)}px;--ty:${(ty-y).toFixed(0)}px;animation-delay:${i*70+k*30}ms`); setTimeout(()=>d.remove(),1100); } setTimeout(()=>fxBurst(tx,ty,['#9fd0ff','#cfe6ff'],8,26,4),i*70+520); }); }
+const JUNKFX={stein:['#9a8a72','#7a6a58','#c8b89a'],ugress:['#6a9a3a','#4f7a2a','#a8c870'],stubbe:['#8a5a2a','#6a4020','#c89a5a'],stov:['#d8c8a0','#b8a880','#efe4cc']};
 function clean(id,e){
   const q=QUADS[curQ].id, j=S.junk[q].find(x=>x.id===id); if(!j) return;
   if(!unl('basar')) return toast(`Rydding åpnes etter ${GATE.basar} vers-økter (${S.vs}/${GATE.basar})`);
@@ -894,7 +914,8 @@ function clean(id,e){
   if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
   const need=j.z||1, have=tLvl(tk);
   if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZE[need][0].toUpperCase()+SIZE[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
-  haptic(18); S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need; taskHit('rydd');
+  haptic(need>1?[18,30,18]:18); { const el=document.querySelector(`.junk[data-j="${id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top; fxDust(cx,cy,need*.7+.3); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,8+need*6,30+need*16,4+need*2,10); if(need>=2) setTimeout(()=>fxBurst(cx,cy+6,JUNKFX[j.type]||JUNKFX.stein,10,50,5,-20),120); setTimeout(()=>fxNur(cx,cy-20,need),150); }
+  S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need; taskHit('rydd');
   if(S.upg.messing){ const j2=S.junk[q].find(x=>x.type===j.type); if(j2){ S.junk[q]=S.junk[q].filter(x=>x!==j2); S.cleaned++; S.nur+=1; taskHit('rydd'); } } puff(e); snd.puff(); save(); renderTop(); renderSection(); say(e,keeper());
   const left=S.junk[q].length; toast(left?`Ryddet. +${need} nur · ${left} igjen her`:`Denne delen er ryddet, alhamdulillah. +${need} nur`);
 }
@@ -1178,7 +1199,7 @@ function fishLayer(){ if(!fountainOK()) return ''; const n=Math.min(6,2+(S.fish|
     h+=`<g class="fishg" data-f="${k}" transform="translate(${x.toFixed(1)} ${y})"><g class="${fed?'fj':'frest'}" style="--dx:${dx}px;animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"><g transform="scale(${dx<0?-1:1} 1) scale(${(.8+y/1000).toFixed(2)})"><path d="M-9 0 Q-2 -6 7 0 Q-2 6 -9 0Z" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><path d="M-9 0 l-5 -4 v8Z" fill="${c2}"/><path d="M-2 -4 q2 2 0 4" stroke="${c2}" stroke-width="1" fill="none"/></g></g><ellipse class="fsplash" cx="0" cy="2" rx="7" ry="2" fill="none" stroke="rgba(220,240,255,.8)" style="animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"/><rect x="-16" y="-34" width="${Math.abs(dx)+32}" height="40" fill="transparent" transform="translate(${dx<0?dx:0} 0)"/></g>`; }
   return h; }
 function fishTap(k,e){ const f=FISH[k%FISH.length]; snd.splash(); ripple(e); haptic(6);
-  if(inStell()&&S.fishFed!==dayStr()){ if((S.fiskemat||0)<=0) return toast('Tom for fiskemat. Kjøp i Basaren (Gård og beite).'); S.fiskemat--; S.fishFed=dayStr(); taskHit('mat'); save(); renderSection(); return toast(`Fiskene fikk mat · ${S.fiskemat} igjen`); }
+  if(inStell()&&S.fishFed!==dayStr()){ if((S.fiskemat||0)<=0) return toast('Tom for fiskemat. Kjøp i Basaren (Gård og beite).'); S.fiskemat--; S.fishFed=dayStr(); taskHit('mat'); { const sr=stage.getBoundingClientRect(); fxBurst(e.clientX-sr.left,e.clientY-sr.top,['#e2b04a','#c9922e','#f2d94e'],14,34,3,8); } save(); renderSection(); document.querySelectorAll('.fj').forEach((f,i)=>{ f.style.animationDelay=`-${5.5-i*.25}s`; }); return toast(`Fiskene fikk mat · ${S.fiskemat} igjen`); }
   floatWord(e,f[0]); }
 const FENCE=[['Ingen gjerde',0,'Gamle stolper etter stormen.'],['Tregjerde',40,'Holder flokken samlet. Dyrene blir 10 % saktere sultne, og det blir plass til flere.'],['Steingjerde',120,'Lav mur av stein. 20 % saktere sultne og enda mer plass.'],['Pyntet gjerde med port',250,'Hvitt gjerde med lykter på portstolpene. 30 % saktere sultne og plass til en stor flokk.']];
 const FARMX={stall:{name:'Stall',price:150,desc:'Ly for dyrene. De blir 20 % saktere sultne, og det blir plass til 4 dyr til.'},trau:{name:'Vanntrau',price:60,desc:'Friskt vann hele dagen. Dyrene blir 15 % saktere sultne.'}};
@@ -1190,7 +1211,7 @@ const kornOK=()=>S.kornDay&&dayDiff(S.kornDay,dayStr())<=1;
 function addYoung(t,n=1){ for(let i=0;i<n;i++){ if(flockN()>=farmCap()) return false; S.young.push({t,g:0}); } return true; }
 function growYoung(){ let grown=[]; S.young.forEach(y=>{ if(y.t==='kylling'?kornOK():S.flock.hunger>=40) y.g++; });
   S.young=S.young.filter(y=>{ if(y.g>=5){ S.flock[YOUNG[y.t][0]]=(S.flock[YOUNG[y.t][0]]||0)+1; grown.push(YOUNG[y.t][2]); return false; } return true; });
-  if(grown.length) logEvent(`På beitet har ${grown.length===1?'et ungdyr':grown.length+' ungdyr'} vokst opp: ${grown.join(', ')}.`); }
+  if(grown.length){ logEvent(`På beitet har ${grown.length===1?'et ungdyr':grown.length+' ungdyr'} vokst opp: ${grown.join(', ')}.`); S.grownFx=grown; } }
 function fenceSvg(){ const L=S.farm.fence||0, bx1=74,bx2=316,by=462, fx1=18,fx2=372,fy=736;
   const lerp=(a,b,t)=>a+(b-a)*t, posts=[]; for(let k=0;k<=8;k++){ const t=k/8; posts.push([lerp(bx1,bx2,t),by,.55],[lerp(fx1,fx2,t),fy,1.2]); } for(let k=1;k<6;k++){ const t=k/6; posts.push([lerp(bx1,fx1,t),lerp(by,fy,t),lerp(.55,1.2,t)],[lerp(bx2,fx2,t),lerp(by,fy,t),lerp(.55,1.2,t)]); }
   if(L===0) return `<g opacity=".8">${posts.filter((p,i)=>i%3===0).map(([x,y,sc])=>`<path d="M${x} ${y} l${2*sc} ${-16*sc}" stroke="#5a3a1a" stroke-width="${3*sc}"/>`).join('')}</g>`;
@@ -1230,7 +1251,7 @@ function renderSection(){
   $('chan').classList.toggle('dry',!flowing()); $('chan').setAttribute('opacity',flowing()?1:.3);
   $('secTitle').innerHTML=`<div class="a">${q.ar}</div><div class="n">${q.name}</div><div class="s">${esc(sectionSub(q.id))}</div>`;
   let h='', b='';
-  if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`]));
+  if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz${S.sprout===p.s&&q.id==='roser'?' sprout':''}" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`])); if(q.id==='roser'&&S.sprout!=null&&!S.active){ const sp=S.sprout; setTimeout(()=>{ if(S.sprout===sp){ S.sprout=null; save(); const g=document.querySelector('.rz.sprout'); if(g){ const r=g.getBoundingClientRect(), sr=stage.getBoundingClientRect(); fxBurst(r.left+r.width/2-sr.left,r.top+r.height/2-sr.top,['#e46a8a','#ffe6a6','#7fd36a'],14,36,4,10); } } },700); }
     if(!S.roses.length) b+=beacon(110,560,'Hver økt planter en rose her',24); }
   if(q.id==='taarn'){ const Lr=hifzLearned(); h+=depth(SLOTS.filter(s=>s.x<150||s.x>240).slice(0,Math.min(Lr.length,20)).map((sl,i)=>[sl.y,cyp(sl.x,sl.y,(36+Lr[i].lv*10)*sl.sc,9*sl.sc,'bush2')]))+towerScene();
     if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en surah',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
@@ -1242,7 +1263,8 @@ function renderSection(){
       for(let i=0;i<F.cows&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="cow">${cowSvg(sl[k].x,sl[k].y,sl[k].sc*.8,k)}</g>`]);
       for(let i=0;i<F.sheep&&k<sl.length;i++,k++) L2.push([sl[k].y,`<g class="ani" data-a="sheep">${sheepSvg(sl[k].x,sl[k].y,sl[k].sc*.95,k)}</g>`]);
       const ysl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(k); (S.young||[]).forEach((y,i)=>{ const q2=ysl[i]; if(!q2) return; const f={lam:sheepSvg,kalv:cowSvg,kje:goatSvg,kylling:henSvg}[y.t], sc={lam:.6,kalv:.5,kje:.55,kylling:.5}[y.t]; L2.push([q2.y,`<g class="ani" data-a="${YOUNG[y.t][0]==='hens'?'hen':YOUNG[y.t][0]==='cows'?'cow':YOUNG[y.t][0]==='goats'?'goat':'sheep'}">${f(q2.x,q2.y,q2.sc*sc,i+20)}</g>`]); });
-      h+=fenceSvg()+farmExtras()+`<g id="flock" style="cursor:pointer">${depth(L2)}<g class="keeper">${shepherdSvg(60,650)}</g></g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
+      if(S.grownFx&&!S.active){ const gw=S.grownFx; S.grownFx=null; save(); setTimeout(()=>{ toast(`Ungdyr har vokst opp: ${gw.join(', ')}. Alhamdulillah.`,3200); snd.chime([523,659,784],.06); document.querySelectorAll('#items .ani').forEach((g,i)=>{ if(i<gw.length+3){ const r=g.getBoundingClientRect(), sr=stage.getBoundingClientRect(); fxBurst(r.left+r.width/2-sr.left,r.top+r.height/2-sr.top,['#ffe6a6','#fff'],10,30,4,10); } }); },600); }
+      h+=`<g class="${window.fxNew&&Date.now()-window.fxNew<8000?'landed':''}">`+fenceSvg()+farmExtras()+'</g>'+`<g id="flock" style="cursor:pointer">${depth(L2)}<g class="keeper">${shepherdSvg(60,650)}</g></g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
       if(inStell()&&S.picks.length){ const p0=SLOTS[S.picks[0].s]; if(p0) b+=beacon(p0.x,p0.y-24,'Trykk for å samle',-18); }
       h+=`<g transform="translate(120 404)"><rect width="150" height="5" rx="2.5" fill="rgba(255,255,255,.15)"/><rect width="${1.5*F.hunger}" height="5" rx="2.5" fill="${F.hunger<25?'#e0806a':'#e7c26b'}"/><text x="75" y="-6" text-anchor="middle" font-size="11" fill="#d8d1e6">Mett ${Math.round(F.hunger)}% · ${S.feed} høy${F.hens||(S.young||[]).some(y=>y.t==='kylling')?` · ${S.korn||0} korn`:''} · ${flockN()}/${farmCap()} dyr</text></g>`;
       if(inStell()&&F.hunger<100) b+=beacon(300,446,'Gi mat: trykk på dyrene',-16);
@@ -1473,7 +1495,7 @@ function grains(e){ for(let i=0;i<8;i++){ const g=document.createElement('i'); g
 function feed(e){
   if(!inStell()){ toast(S.active?'Dyrene får mat i «Stell»-delen':'Dyrene får mat mens verset står i himmelen. Trykk på himmelen.'); return; }
   if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast('Tomt for høy. Kjøp høy i Basaren (Gård og beite).'); }
-  S.feed--; if(((S.flock.hens||0)||(S.young||[]).some(y=>y.t==='kylling'))&&(S.korn||0)>0&&S.kornDay!==dayStr()){ S.korn--; S.kornDay=dayStr(); toast('Hønene fikk korn',1200); } taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); save(); renderSection();
+  S.feed--; if(((S.flock.hens||0)||(S.young||[]).some(y=>y.t==='kylling'))&&(S.korn||0)>0&&S.kornDay!==dayStr()){ S.korn--; S.kornDay=dayStr(); toast('Hønene fikk korn',1200); } taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); { const sr=stage.getBoundingClientRect(); fxFall(e.clientX-sr.left,e.clientY-sr.top,'#e2c46a',12); } document.querySelectorAll('#items .ani').forEach((g,i)=>setTimeout(()=>bounce(g),120+i*60)); save(); renderSection();
   say(e,rnd(['– sauene','– kua','– flokken']));
   const fl=$('flock'); if(fl){ fl.classList.add('joy'); setTimeout(()=>{ const f2=$('flock'); if(f2) f2.classList.remove('joy'); },1800); }
   if(F.hunger>=100) toast('Flokken er mett, alhamdulillah'); else toast(`${S.feed} høy igjen`,1400);
@@ -1483,7 +1505,7 @@ function water(e){
   if(!inStell()){ if(fountainOK()) return ripple(e); toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
   if(!fountainOK()){ toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
   if(S.watered[q]===dayStr()){ toast('Denne delen er vannet i dag'); return; }
-  S.watered[q]=dayStr(); S.nur+=2; taskHit('vann'); let fixed=0;
+  S.watered[q]=dayStr(); S.nur+=2; taskHit('vann'); let fixed=0; if(e){ const sr=stage.getBoundingClientRect(), x=e.clientX-sr.left, y=e.clientY-sr.top; fxWater(x,y); setTimeout(()=>fxNur(x,y-30,2),200); setTimeout(()=>{ const it=$('items'); if(it){ it.classList.add('perk'); setTimeout(()=>it.classList.remove('perk'),900); } },650); }
   if(q==='roser'){ const p=S.roses.find(p=>p.h==='dmg'); if(p){p.h='ok';fixed=1;} }
   if(q==='frukt'){ const t=S.fruit.find(t=>t.h==='dmg'); if(t){t.h='ok';fixed=1;} }
   save(); renderSection(); renderTop(); if(e) say(e,keeper()); toast(`Vannet. +2 nur${fixed?' · 1 reparert':''}`);
@@ -2052,7 +2074,7 @@ function finish(refl){
     const vsBefore=S.vs; S.vs++; announceUnlocks(vsBefore);
     const gain=cat.rare?15:10; S.nur+=gain; msgs.push(`+${gain} nur`);
     const slot=freeRoseSlot(), rose={n:Date.now(),c:cat.id,st:1,h:'ok',ref:(verses&&verses[0])?`${verses[0].surah}:${verses[0].ayah}`:a.ref,day:dayStr(),rare:!!cat.rare,s:slot};
-    if(slot!=null){ S.roses.push(rose); msgs.push('en ny rose'); }
+    if(slot!=null){ S.roses.push(rose); S.sprout=slot; msgs.push('en ny rose'); }
     else if(S.roses.length<MAXROSE){ msgs.push('ingen ledig jord: rydd i Rosehagen for å plante flere'); }
     else { const g=S.roses.filter(p=>p.h==='ok'&&p.st<3); if(g.length) rnd(g).st++; }
     const grow=S.roses.filter(p=>p.h==='ok'&&p.st<3&&p!==rose); if(grow.length) rnd(grow).st++;
@@ -2270,7 +2292,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
     body=eggH+(items.length?items.map(([k,n])=>`<div class="si" style="flex-wrap:wrap">${decoThumb(k)}<div class="tx"><b>${DECOR[k].name}</b><small>${n} på lager · plasser i:</small><div class="place">${QUADS.map(q=>`<button data-place="${k}" data-q="${q.id}">${q.name}</button>`).join('')}</div></div></div>`).join(''):(EU.length?'<p>Ingen pynt på lageret.</p>':'<p>Lageret er tomt.</p>'));
     if(S.decor.length) body+=`<p style="font-size:12.5px;color:var(--muted)">Trykk på en ting i hagen for å flytte den tilbake hit.</p>`; }
   openSheet(head+`<div class="shop">${body}</div>`);
-  const Q$=s=>$('sheet').querySelectorAll(s), pay=n=>{ if(S.nur<n) return false; S.nur-=n; snd.coin(); return true; }, done=(msg,tab)=>{ save(); renderAll(); toast(msg); openShop(tab); };
+  const Q$=s=>$('sheet').querySelectorAll(s), pay=n=>{ if(S.nur<n) return false; S.nur-=n; snd.coin(); return true; }, done=(msg,tab)=>{ const b=document.activeElement, r=b&&b.getBoundingClientRect&&b.getBoundingClientRect(), sr=stage.getBoundingClientRect(); save(); renderAll(); toast(msg); openShop(tab); if(r&&r.width){ const x=r.left+r.width/2-sr.left, y=r.top+r.height/2-sr.top; fxRing(x,y); fxBurst(x,y,['#ffe6a6','#e7c26b','#fff'],14,40,4,6); } window.fxNew=Date.now(); };
   Q$('.tabs button').forEach(b=>b.onclick=()=>openShop(b.dataset.t));
   eggToggleWire(()=>openShop('lager'));
   Q$('[data-ware]').forEach(b=>b.onclick=()=>{ const k=b.dataset.ware, w=WARES[k];
