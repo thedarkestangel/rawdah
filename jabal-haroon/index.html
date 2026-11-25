@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "haroon", "who": "Haroon", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · 4fe4674"};(function(){var o=+(localStorage.getItem("jabal_haroon_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "haroon", "who": "Haroon", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · 864d198"};(function(){var o=+(localStorage.getItem("jabal_haroon_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2457,8 +2457,9 @@ async function openSession(pre){
 }
 const ROLIG=[['«… og resiter Koranen langsomt og tydelig.»','Koranen 73:4'],['«Beveg ikke tungen din med den for å skynde deg med den.»','Koranen 75:16'],['«Skynd deg ikke med Koranen … og si: Herre, øk meg i kunnskap.»','Koranen 20:114'],['«Besindighet er fra Allah, og hastverk er fra Shayṭān.»','al-Tirmidhī, hasan ifølge al-Albānī'],['«Du har to egenskaper som Allah elsker: mildhet og besindighet.»','Profeten ﷺ til Ashajj ʻAbd al-Qays. Muslim'],['Allah ser deg i hvert øyeblikk. Gi Hans ord noen rolige minutter av din dag.','Til ettertanke']];
 const roligToday=()=>ROLIG[(dayDiff('2026-01-01',dayStr())%ROLIG.length+ROLIG.length)%ROLIG.length];
-const repGoal=()=>{ if(KAHWA||(JABAL&&S.devShort)) return 1; if(!sess) return 6; if(sess.short) return 3; const n=verses?verses.reduce((k,v)=>k+v.ar.length,0):0; return n>420?3:(S.settings.reps||6); };
-const learnGoal=()=>(KAHWA||(JABAL&&S.devShort))?1:sess&&sess.short?2:3;
+const QUICK=()=>!!(KAHWA||(JABAL&&(S.devShort||(JABAL.skip&&!S.fullSess))));
+const repGoal=()=>{ if(QUICK()) return 1; if(!sess) return 6; if(sess.short) return 3; const n=verses?verses.reduce((k,v)=>k+v.ar.length,0):0; return n>420?3:(S.settings.reps||6); };
+const learnGoal=()=>QUICK()?1:sess&&sess.short?2:3;
 const hasStell=()=>sess&&!sess.short&&sess.kind!=='hifz';
 const repEst=()=>Math.max(6,(verses||[]).reduce((n,v)=>n+v.ar.split(/\s+/).length,0)*0.75);
 function repDone(){ if(!sess||!verses||sess.ph!==0) return; sess.reps=(sess.reps||0)+1; sess.repT=0; save(); if(sess.reps>=repGoal()) setTimeout(()=>{ if(sess&&sess.ph===0) setPh(1); },900); tick(); }
@@ -2472,8 +2473,8 @@ function tick(){
     if(sess.ph===2) sess.stellT=(sess.stellT||0)+d; }
   if(now-lastSave>1000){ save(); lastSave=now; }
   const ph=sess.ph||0, RG=repGoal(), LG=learnGoal(), q=QUADS[curQ];
-  const watered=!restored(q.id)||!fountainOK()||S.watered[q.id]===dayStr(), stellOk=(watered&&(unl('basar')||!!S.handClean))||sess.stellT>((KAHWA||(JABAL&&S.devShort))?6:25);
-  const fill=[ph>0?1:(sess.reps||0)/RG, ph>1?1:ph===1?Math.min(1,(sess.solved||0)/LG):0, ph>2?1:ph===2?(stellOk?1:Math.min(.9,sess.stellT/((KAHWA||(JABAL&&S.devShort))?6:25))):0];
+  const watered=!restored(q.id)||!fountainOK()||S.watered[q.id]===dayStr(), stellOk=(watered&&(unl('basar')||!!S.handClean))||sess.stellT>(QUICK()?6:25);
+  const fill=[ph>0?1:(sess.reps||0)/RG, ph>1?1:ph===1?Math.min(1,(sess.solved||0)/LG):0, ph>2?1:ph===2?(stellOk?1:Math.min(.9,sess.stellT/(QUICK()?6:25))):0];
   [0,1,2].forEach(k=>{ $('p'+k).querySelector('b').style.width=fill[k]*100+'%'; $('p'+k).classList.toggle('on',ph===k); });
   $('p2').style.display=hasStell()?'':'none';
   $('verse').classList.toggle('stell',ph===2); $('sbar').classList.toggle('stellm',ph===2); $('stellMute').style.display=ph===2?'inline-flex':'none'; if(ph===2) $('stellMute').textContent=(userPaused||audio.paused)?'🔈 Verset er av · slå på':'🔊 Verset spiller · slå av';
@@ -2689,6 +2690,7 @@ function tourMain(){ const ri=QUADS.findIndex(q=>q.id==='roser'); if(curQ!==ri||
     {el:'#wellBtn',k:'VELVÆRE',t:'Velvære',d:'Små påminnelser om bønn, vann og søvn, og en side med hjelp hvis du har det tungt.'},
     {el:'#megBtn',k:'MEG',t:'Meg',d:'Innstillinger, lyd, personvern og «Slik fungerer Rawdah», hvis du vil lese dette igjen.'},
     {el:'#taskPill',if:()=>$('taskPill').style.display!=='none',k:'OPPGAVER',t:'Dagens oppgaver',d:'Tre små oppgaver hver dag. Hver gir litt nur, og alle tre gir bonus.'},
+    {el:'#kahwaBtn',if:()=>!!KAHWA,k:'TESTMENYEN',t:'Skriftrullen din',d:'Her ser du hva du har gjort i testen, og hva som gjenstår. Trykk for neste steg og snarveier.'},
     {el:'#jabalBtn',if:()=>!!JABAL,k:'TESTUKA',t:'Hvor langt du har kommet',d:'Viser hvilken dag av testuka du er på. Trykk for påminnelser og hva som venter.'},
     {el:'#noteBtn',if:()=>!!(JABAL&&JABAL.notes),k:'MELD FRA',t:'Fant du noe rart?',d:'Trykk på spørsmålstegnet med en gang du ser en feil eller har en idé. Appen husker hvor du var.'},
     {svg:[195,560,300,260],zoom:1,pad:0,k:'HAGEN',t:'Gjør hagen levende igjen',d:'Stell skjer inne i vers-økten: etter at du har lyttet og lært, får du rydde, vanne og gi mat. Se etter de små <b>lysende prikkene</b> i hagen. De viser hvor du kan trykke.',last:'Bismillāh!'}
@@ -2699,7 +2701,7 @@ const QTOUR={
     :[{svg:[180,640,180,120],zoom:1.9,k:'BEITET',t:'Beitet ligger i ruiner',d:`Gjeteren venter ved bålet. Etter ${AT.beite} vers-økter kommer dyrene tilbake (${Math.min(S.vs,AT.beite)}/${AT.beite}). Trykk på gjeteren for en hilsen.`}],
   frukt:()=>[{svg:[195,560,280,200],zoom:1.5,k:'FRUKTHAGEN',t:restored('frukt')?'Trær som bærer frukt':'Frukthagen venter',d:restored('frukt')?'Nye trær plantes etter hvert som du gjør økter. Når frukten er moden, trykker du for å høste den og får nur.':`Etter ${AT.frukt} vers-økter kan de første trærne plantes her (${Math.min(S.vs,AT.frukt)}/${AT.frukt}). Til da er det bare ruiner og håp.`}]};
 let _tourT=0;
-function tourCheck(){ if(KAHWA||S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
+function tourCheck(){ if(S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
   if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<3200) return; _tourT=0;
   if(!S.tour1){ if(S.vs>=1&&doneToday()) tourMain(); return; }
   if(view!=='sec') return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
@@ -2973,7 +2975,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
     if(k==='hund'&&q!=='beite') toast('Hunden gjør bare nytte i Beitet');
     S.inv[k]--; S.decor.push({id:Date.now().toString(36),type:k,q,spot}); save(); closeSheet(); enterQuad(QUADS.findIndex(x=>x.id===q)); toast(`${DECOR[k].name} er plassert`); });
 }
-$('shopBtn').onclick=()=>{ openShop(); if(unl('basar')&&!S.shopGuide&&!KAHWA){ S.shopGuide=1; save(); setTimeout(shopGuide,600); } };
+$('shopBtn').onclick=()=>{ openShop(); if(unl('basar')&&!S.shopGuide){ S.shopGuide=1; save(); setTimeout(shopGuide,600); } };
 function decoMenu(id){ const d=S.decor.find(x=>x.id===id); if(!d) return;
   openSheet(`<h3>${DECOR[d.type].name}</h3><div class="si">${decoThumb(d.type)}<div class="tx"><small>${DECOR[d.type].desc}</small></div></div><button class="btn ghost" id="dBack">Flytt tilbake til lageret</button>`);
   $('dBack').onclick=()=>{ S.decor=S.decor.filter(x=>x.id!==id); S.inv[d.type]=(S.inv[d.type]||0)+1; save(); closeSheet(); renderSection(); toast('Lagt tilbake på lageret'); }; }
@@ -3639,7 +3641,8 @@ function openJabal(){ const d=jDay(), nsg=SIGNS.filter(g=>!g.fri&&!g.bonus&&(S.s
   <p style="font-size:12.5px;color:var(--muted)">Dette er en forenklet versjon. I den ekte appen er det mye mer å oppdage, og det kommer over flere måneder.</p>
   <button class="btn ghost" id="jbR">🔔 Påminnelse${jt().rem?' ('+esc(jt().rem)+')':''}</button>${JABAL.form&&d>=7?'<a class="btn" href="'+JABAL.form+'" target="_blank" rel="noopener" style="text-decoration:none">Gi tilbakemelding</a>':''}<button class="btn ghost" id="jbOk">Lukk</button>`);
   $('jbR').onclick=jRemind; $('jbOk').onclick=closeSheet;
-  if(JABAL.skip){ const b=document.createElement('div'); b.innerHTML=`<h4 style="margin-top:14px">🧪 Testverktøy</h4><p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">Bare i din versjon. Hopp fram én dag om gangen for å se alt uten å vente. Du må fortsatt ta dagens vers hver dag for at dagen skal telle.</p><button class="btn ghost" id="jbSkip">⏭ Hopp til neste dag${doneToday()?'':' (dagens vers er ikke tatt)'}</button><button class="btn ghost" id="jbReset">🔄 Start helt på nytt</button>`; $('jbOk').before(b);
+  if(JABAL.skip){ const b=document.createElement('div'); b.innerHTML=`<h4 style="margin-top:14px">🧪 Testverktøy</h4><p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">Bare i din versjon. Hopp fram én dag om gangen for å se alt uten å vente. Du må fortsatt ta dagens vers hver dag for at dagen skal telle.</p><button class="btn ghost" id="jbQuick">⚡ Kort økt: ${S.fullSess?'av (full økt)':'på (lytt 1 gang, løs 1 gang)'}</button><button class="btn ghost" id="jbSkip">⏭ Hopp til neste dag${doneToday()?'':' (dagens vers er ikke tatt)'}</button><button class="btn ghost" id="jbReset">🔄 Start helt på nytt</button>`; $('jbOk').before(b);
+    $('jbQuick').onclick=()=>{ S.fullSess=!S.fullSess; save(); openJabal(); };
     $('jbSkip').onclick=()=>{ if(!doneToday()&&!confirm('Du har ikke tatt dagens vers. Da teller ikke denne dagen. Hoppe likevel?')) return; jJump(1); };
     $('jbReset').onclick=()=>{ if(!confirm('Slette all fremgang og starte helt fra begynnelsen? Notatene dine (?) beholdes.')) return; localStorage.removeItem(KEY); localStorage.removeItem('jabal_'+JABAL.name+'_off'); location.reload(); }; } }
 function jTeaser(){ jt().baytOpen=1; save(); updHikmaPill(); const lib=`<svg viewBox="-20 -66 40 70" width="46" height="80" style="flex:0 0 46px">${personSvg(isF(),0,0,1,isF()?'#8a3f62':'#3b2f6b',isF()?'#efe4cc':'#3b2f6b','#c08a5e')}</svg>`;
