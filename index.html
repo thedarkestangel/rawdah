@@ -137,6 +137,13 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .sprout{transform-box:fill-box;transform-origin:50% 100%;animation:sprout 1.3s cubic-bezier(.2,1.5,.4,1) both}@keyframes sprout{from{transform:scale(.1,0);opacity:0}to{transform:none;opacity:1}}
 .landed{animation:landed 1.6s ease}@keyframes landed{0%{opacity:0;filter:brightness(2)}40%{opacity:1;filter:brightness(1.6) drop-shadow(0 0 8px #ffe6a6)}100%{filter:none}}
 @media (prefers-reduced-motion: reduce){.sprout,.landed,#items.perk .rz{animation:none!important}}
+#stellTop{position:absolute;z-index:6;left:50%;top:calc(var(--safe-t,0px) + 112px);transform:translate(-50%,-12px);display:flex;align-items:center;gap:8px;padding:5px 6px 5px 14px;border-radius:20px;background:rgba(8,6,26,.62);border:1px solid rgba(231,194,107,.3);color:#efe6d2;font-size:13px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .4s ease}
+#stellTop.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}#stellTop b{color:var(--gold)}
+#stellSnd{width:30px;height:30px;border-radius:50%;border:1px solid rgba(231,194,107,.45);background:transparent;color:#efe6d2;font-size:14px;padding:0}
+#stellGo{position:absolute;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translate(-50%,140%);padding:14px 26px;border-radius:28px;border:0;background:linear-gradient(180deg,#f2d38a,#d9a94a);color:#2a1a08;font:600 16px Inter,system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 26px rgba(231,194,107,.45);opacity:0;pointer-events:none;transition:transform .5s cubic-bezier(.2,1.4,.4,1),opacity .3s;white-space:nowrap}
+#stellGo.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.sbar.stellm{transform:translateY(120%)!important;opacity:0;pointer-events:none;transition:transform .45s ease,opacity .35s}
+.sbar{transition:transform .45s ease,opacity .35s}
 .spinfx{position:absolute;inset:0;z-index:9;display:none;cursor:pointer}.spinfx.on{display:block}.spinfx.out{opacity:0;transition:opacity .35s}
 .spinfx svg{position:absolute;inset:0}
 .fxcard{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) scale(.85);opacity:0;transition:all .45s cubic-bezier(.2,1.4,.4,1);text-align:center;padding:18px 34px;border-radius:22px;background:rgba(10,8,30,.82);border:1px solid rgba(231,194,107,.55);box-shadow:0 0 40px rgba(255,217,138,.35);min-width:200px}
@@ -442,6 +449,8 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
     <div class="cons" id="cons"></div>
     <div class="fall" id="fall"></div>
     <div class="spinfx" id="spinFx"></div>
+    <div id="stellTop"><span id="stellTxt"></span><button id="stellSnd" aria-label="Lyd av eller på">🔊</button></div>
+    <button id="stellGo">Ferdig å stelle · gå videre</button>
     <button class="tap" id="tap" aria-label="Trykk på himmelen"></button>
     <div class="verse" id="verse"><div class="panel"><div class="ar" id="ar"></div><div class="translit" id="tl"></div><div class="ref" id="ref"></div></div><div class="tr" id="tr"></div></div>
   </div>
@@ -2044,7 +2053,9 @@ function tick(){
     if(ph===3){ $('quiz').classList.remove('on'); $('actl').style.display='none'; audio.volume=1; $('note').classList.add('on'); $('reflect').classList.add('on'); renderReflect(); if(navigator.vibrate) navigator.vibrate(80); }
   }
   $('qNext').textContent=ph===1&&(sess.solved||0)>=LG?(hasStell()?'Videre til stell':'Videre'):'Neste runde';
-  $('stellDone').style.display=ph===2&&stellOk?'block':'none';
+  $('stellDone').style.display='none';
+  $('stellGo').classList.toggle('on',ph===2&&stellOk); $('stellTop').classList.toggle('on',ph===2);
+  if(ph===2){ $('stellTxt').innerHTML=watered?(stellOk?'Stell · <b>ferdig</b>, rydd gjerne mer':'Stell · rydd og gi dyrene mat'):'Stell · <b>vann fra elven</b>'; $('stellSnd').textContent=(userPaused||audio.paused)?'🔈':'🔊'; }
   $('snoozeBtn').style.display=(sess.elapsed<30&&ph===0&&sess.kind==='spin'&&(S.snooze||{}).day!==dayStr())?'block':'none';
   const sp_=sess.short?'Kort økt · ':'', dots=Array.from({length:RG},(_,k)=>`<span style="color:${k<(sess.reps||0)?'var(--gold)':'rgba(255,255,255,.3)'}">●</span>`).join(' ');
   if(ph===0) $('smsg').innerHTML=`${sp_}Lytt og les · <b>${Math.min((sess.reps||0)+1,RG)} av ${RG}</b> ${dots}<br><small style="opacity:.75">${['Med oversettelse','Med oversettelse og uttale','Med oversettelse'][repStage()]}</small>`;
@@ -2053,7 +2064,7 @@ function tick(){
   else $('smsg').innerHTML='Ferdig. Hva traff deg?';
 }
 function renderReflect(){ $('reflect').innerHTML=REFLECT.map(r=>`<button>${r}</button>`).join(''); [...$('reflect').children].forEach(b=>b.onclick=()=>finish(b.textContent)); }
-function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('secTitle').style.opacity=1; $('note').classList.remove('on'); $('note').value=''; $('snoozeBtn').style.display='none'; $('stellDone').style.display='none'; $('stellMute').style.display='none'; $('sbar').classList.remove('stellm'); audio.volume=1; keepAwake(false); clearInterval(tickT); audio.pause(); playlist=[]; sess=null; verses=null; S.active=null; save();
+function endSessionUI(){ setTimeout(()=>{ renderTasks(); snd.duck(); },50); $('secTitle').style.opacity=1; $('note').classList.remove('on'); $('note').value=''; $('snoozeBtn').style.display='none'; $('stellDone').style.display='none'; $('stellMute').style.display='none'; $('sbar').classList.remove('stellm'); $('stellGo').classList.remove('on'); $('stellTop').classList.remove('on'); audio.volume=1; keepAwake(false); clearInterval(tickT); audio.pause(); playlist=[]; sess=null; verses=null; S.active=null; save();
   $('sbar').classList.remove('on'); $('verse').classList.remove('on'); }
 function finish(refl){
   const a=S.active, cat=catById(a.cat), msgs=[];
@@ -2137,6 +2148,8 @@ function tapTile(k,b){
 }
 $('qNext').onclick=()=>{ if(sess&&sess.ph===1&&(sess.solved||0)>=learnGoal()) setPh(2); else quizSetup(); };
 $('stellDone').onclick=()=>setPh(3);
+$('stellGo').onclick=()=>setPh(3);
+$('stellSnd').onclick=()=>$('stellMute').click();
 $('stellMute').onclick=()=>{ if(audio.paused){ userPaused=false; if(audio.src.startsWith('http')) audio.play().catch(()=>{}); else playCurrent(); } else { audio.pause(); userPaused=true; } setTimeout(tick,50); };
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const normAr=s=>s.replace(/[ً-ٰٟۖ-ۭـ]/g,'').replace(/[ٱأإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[^ء-ي\s]/g,'').trim();
