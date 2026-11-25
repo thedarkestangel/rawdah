@@ -288,7 +288,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 @keyframes grain{to{transform:translateY(46px);opacity:0}}
 
 /* ---------- INTRO ---------- */
-#intro{position:absolute;inset:0;z-index:20;background:#05040f;display:none}
+#intro{position:absolute;inset:0;z-index:20;background:#05040f;display:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #title{position:fixed;inset:0;z-index:40;display:none;background:#05040f;overflow:hidden;cursor:pointer}
 #title.on{display:block;animation:tIn .8s ease}#title.out{opacity:0;transition:opacity .6s ease}
 @keyframes tIn{from{opacity:0}to{opacity:1}}
@@ -2649,7 +2649,9 @@ function showStep(){
   if(iStep===3){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
   $('iNext').textContent=iStep<8?'Trykk for å fortsette':iStep===8?'Slik fungerer det':'Begynn';
 }
-$('iNext').onclick=()=>{ if(introMode==='chapter') return endChapter(); if(iStep<9){ iStep++; showStep(); } else endIntro(); };
+let iTapT=0;
+$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(iStep<9){ iStep++; showStep(); } else endIntro(); };
+$('intro').addEventListener('click',e=>{ if(!$('intro').classList.contains('on')||e.target.closest('#iSkip,a,input,select')) return; $('iNext').onclick(); });
 $('iSkip').onclick=()=>introMode==='chapter'?endChapter():endIntro();
 const CHAPTERS=[
   ['Hærfuglen flyr ut igjen.','Rosene blomstrer, og hærfuglen har begynt å reise. Den kommer hjem med brev fra fjerne land. (25 %)'],
