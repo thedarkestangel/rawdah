@@ -452,6 +452,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 @keyframes spark{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:translateY(-14px)}}
 .kbub2{background:#fbf4e4;color:#3a2414;border-radius:14px;padding:9px 12px;font-size:14px;line-height:1.4;position:relative}.kbub2::before{content:'';position:absolute;left:-7px;top:16px;border:7px solid transparent;border-right-color:#fbf4e4;border-left:0}
 @media (prefers-reduced-motion: reduce){.khw.giggle svg,.khw.giggle .ks{animation:none}}
+a.btn{display:flex!important;align-items:center;justify-content:center;box-sizing:border-box}
 #hikmaPill{position:absolute;right:12px;bottom:calc(var(--safe-b) + 14px);z-index:6;display:flex;gap:6px;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:rgba(11,9,32,.72);border:1px solid rgba(231,194,107,.5);font-size:13px;color:var(--ink,#efe6d2);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #hikmaPill.ping{box-shadow:0 0 0 0 rgba(231,194,107,.6);animation:hkp 2s infinite}@keyframes hkp{0%{box-shadow:0 0 0 0 rgba(231,194,107,.6)}70%{box-shadow:0 0 0 12px rgba(231,194,107,0)}100%{box-shadow:0 0 0 0 rgba(231,194,107,0)}}
 .hkf{animation:hkf 14s ease-in-out infinite alternate}.hkf.b{animation-duration:19s;animation-direction:alternate-reverse}@keyframes hkf{from{transform:translateX(-30px)}to{transform:translateX(30px)}}
@@ -2929,13 +2930,13 @@ function openMeg(){
   <h4>Versutvalg</h4><div class="seg" id="poolSeg">${[['tema','Tematisk'],['blandet','Blandet'],['hele','Hele Koranen']].map(([k,l])=>`<button data-p="${k}" class="${(S.settings.pool||'blandet')===k?'on':''}">${l}</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Tematisk: rundt 190 utvalgte vers i elleve temaer, også advarsler og karakter. Hele Koranen: et tilfeldig vers av alle 6236. Blandet: begge deler. På fredager, i Ramadan og i Dhul Hijjah kommer det i tillegg egne vers.</p>
   <button class="btn" id="bkBtn">Sikkerhetskopi av hagen</button>
   <p style="font-size:13px;color:var(--muted);text-align:center">Skjulte tegn i hagen: <b style="color:var(--gold2)">${signFound()} av ${SIGNN()}</b> funnet. Se godt etter.</p>
-  <button class="btn ghost" id="guideB">Slik fungerer Rawdah</button><button class="btn ghost" id="privB">Personvern</button>
+  <button class="btn ghost" id="guideB">Slik fungerer Rawdah</button><button class="btn ghost" id="privB">Personvern</button>${KAHWA?'<button class="btn" id="kFin" style="margin-top:10px">✅ Jeg er ferdig med appen</button>':''}
   <button class="btn ghost" id="replay">Se historien igjen</button>
   <button class="btn ghost" id="resetBtn">Slett all fremgang</button>`);
   $('shSeg').onclick=e=>{ const k=e.target.dataset.n; if(k!=null){ S.settings.shortPerDay=+k; S.shortTimes=null; save(); openMeg(); } }; if($('shNew')) $('shNew').onclick=()=>{ S.shortTimes={week:weekKey(),t:genShortTimes(shortLimit())}; save(); openMeg(); };
   $('durSeg').onclick=e=>{ const m=+e.target.dataset.m; if(m){ S.settings.reps=m; save(); openMeg(); } };
   $('replay').onclick=()=>{ closeSheet(); playIntro(); };
-  $('guideB').onclick=()=>openGuide(); $('privB').onclick=openPrivacy; wireMegTabs();
+  $('guideB').onclick=()=>openGuide(); $('privB').onclick=openPrivacy; if($('kFin')) $('kFin').onclick=kFeedback; wireMegTabs();
   $('bkBtn').onclick=openBackup;
   $('genSeg').onclick=e=>{ const g=e.target.dataset.g; if(g){ S.settings.gender=g; save(); openMeg(); if(view==='sec') renderSection(); } };
   $('openSeg').onclick=e=>{ const o=e.target.dataset.o; if(o!=null){ S.settings.allOpen=o==='1'; save(); renderAll(); openMeg(); } };
@@ -3280,7 +3281,7 @@ function kSwitch(){ const toF=!isF(); S.settings.gender=toF?'f':'m'; kt().sx=kt(
   <div class="card"><p style="margin:0;font-size:14px;line-height:1.6">🧕 <b>Gjeterinnen</b> har hijab og egne farger. Du ser henne i hagen og i Stell.<br>💬 <b>Egne fraser:</b> boblene hennes har egne duʿāʼ og takkefraser.<br>🧢 <b>Jinnah-lua</b> (Rihla, Pakistan): gjeteren kan få den, gjeterinnen beholder hijaben.<br>🌙 <b>Velvære:</b> gjeterinnen har valget «Fri fra bønn i dag (mens eller nifās)».</p></div>
   <p style="font-size:13px;color:var(--muted)">Synes du forskjellen er for liten, eller savner du noe? Skriv det gjerne i tilbakemeldingen.</p><button class="btn" id="kSxOk">Se hagen</button><button class="btn ghost" id="kSxB">Bytt tilbake</button>`);
   $('kSxOk').onclick=closeSheet; $('kSxB').onclick=kSwitch; }
-function kFeedback(){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🧪 TAKK FOR AT DU TESTET</p><h3>Er du ferdig med å teste?</h3>
+function kFeedback(){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🧪 TAKK FOR AT DU TESTET</p><h3>Er du ferdig med appen?</h3>
   <p>Da blir jeg veldig glad om du forteller hvordan opplevelsen var: det som var bra, og det som kan bli bedre. Kritikk hjelper mest. Det tar rundt 5 minutter, og svarene er anonyme.</p>
   <a class="btn" href="${KAHWA.form}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Gi tilbakemelding</a>
   <p style="font-size:13px;color:var(--muted)">Du kan fortsette å teste etterpå. Det du har gjort, blir liggende.</p><button class="btn ghost" id="kfB">Tilbake</button>`); $('kfB').onclick=openKahwa; }
@@ -3310,7 +3311,13 @@ function raisinTap(){ if(!KAHWA||kt().rosin) return; kt().rosin=dayStr(); save()
   setTimeout(()=>{ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DET HEMMELIGE TEGNET · SAHĪḤ AL-BUKHĀRĪ 7142</p><h3>Du fant ham!</h3>
    <div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.45">«Lytt og adlyd, selv om en abessinsk slave med et hode som en rosin blir satt over dere.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">Profeten ﷺ, fortalt av Anas ibn Mālik. Al-Bukhārī 7142</p></div>
    <p>Budskapet er at hudfarge, opphav og stand ikke avgjør hvem som er verdig. Den som er satt til å lede med rett, skal følges, uansett hvem han er. Det var et sterkt ord i en tid der stamme og slekt betydde alt, og det er det fortsatt i dag. Det minner om 49:13: «Den edleste av dere hos Allah er den mest gudfryktige.»</p>
-   <p style="font-size:13px;color:var(--muted)">Denne testversjonen heter Kahwa 7142 etter denne hadithen. Mannen med rosinhodet er bare med i testversjonen og kommer ikke i hovedutgaven av appen.</p><button class="btn" id="rsOk">Alḥamdulillāh</button>`); $('rsOk').onclick=closeSheet; kMark('rosin'); renderSection(); },2200); }
+   <p style="font-size:13px;color:var(--muted)">Denne testversjonen heter Kahwa 7142 etter denne hadithen. Mannen med rosinhodet er bare med i testversjonen og kommer ikke i hovedutgaven av appen.</p><button class="btn" id="rsOk">Alḥamdulillāh</button>`); $('rsOk').onclick=kFinished; kMark('rosin'); kt().allDone=2; save(); renderSection(); },2200); }
+function kFinished(){ snd.chime([523,659,784,1047,1319],.07); sparkle();
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🎉 RAWDAH KAHWA 7142</p><h3>Gratulerer, du har fullført testversjonen!</h3>
+  <p>Du fant mannen med rosinhodet, og dermed har du vært gjennom hele Kahwa. Tusen takk for tiden din.</p>
+  <p>Du kan nå klikke deg litt rundt i appen, eller trykke på knappen under for å avslutte og gi tilbakemelding. Du kan også gjøre det senere fra «Meg».</p>
+  <a class="btn" href="${KAHWA.form}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Avslutt og gi tilbakemelding</a>
+  <button class="btn ghost" id="kfX">Klikk meg litt rundt</button>`); $('kfX').onclick=closeSheet; }
 
 if(KAHWA){ $('kahwaBtn').onclick=openKahwa; updKahwaBtn(); if(S.kt&&S.kt.jumped){ S.kt.jumped=0; S.kt.q=(S.kt.q||[]).concat(['dag']); } }
 if(KAHWA){ Object.assign(GATE,{dagbok:1,basar:1,ord:1,hifz:1,beite:2,vern:2,hikma:2,bygg:3}); Object.assign(AT,{fountain:1,beite:2,frukt:3}); }
