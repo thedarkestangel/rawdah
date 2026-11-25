@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "sadia", "who": "Sadia", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · 29cf56a"};(function(){var o=+(localStorage.getItem("jabal_sadia_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "sadia", "who": "Sadia", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "build": "bygg 25.11.2026 · 7ca1937"};(function(){var o=+(localStorage.getItem("jabal_sadia_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -173,10 +173,11 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .wd{display:inline-block;padding:.12em .02em;background:linear-gradient(180deg,#fffbea 0%,#ffe7a8 42%,#e2b24f 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 7px rgba(255,205,110,.42));opacity:0;transform:translateY(6px);animation:wd 1.1s ease-out forwards}
 .ar.shown .wd{animation:none;opacity:1;transform:none}
 @keyframes wd{0%{opacity:0;transform:translateY(6px);filter:blur(5px) drop-shadow(0 0 7px rgba(255,205,110,.42))}100%{opacity:1;transform:none;filter:drop-shadow(0 0 7px rgba(255,205,110,.42))}}
-.am{display:inline-flex;align-items:center;justify-content:center;width:1.15em;height:1.15em;margin:0 .12em;vertical-align:middle;position:relative;opacity:0;animation:wd 1s ease-out forwards}
+.am{display:inline-flex;align-items:center;justify-content:center;width:1.4em;height:1.4em;margin:0 .12em;vertical-align:middle;position:relative;opacity:0;animation:wd 1s ease-out forwards}
 .ar.shown .am{animation:none;opacity:1}
 .am svg{position:absolute;inset:0;width:100%;height:100%}
-.am b{position:relative;font-family:var(--arq);font-size:.42em;color:#ffe6a6;font-weight:700;line-height:1}
+.am.d2 b{font-size:.34em}.am.d3 b{font-size:.27em;letter-spacing:-.04em}
+.am b{position:relative;font-family:var(--arq);font-size:.4em;color:#ffe6a6;font-weight:700;line-height:1}
 .ar.long{font-size:clamp(17px,4.8vw,23px)}
 .verse.small .ar{font-size:clamp(19px,5.2vw,25px);line-height:1.95}.verse.small .panel{padding-top:20px}.verse.small .ar.long{font-size:15px}
 .ar .an{color:var(--gold);font-size:.7em}
@@ -2244,7 +2245,7 @@ const modOpen=k=>k==='well'?true:k==='frukt'||k==='beite'?restored(k):unl(k);
 function openModules(focus){ const rows=MODS.filter(([k])=>!(JABAL&&k==='hikma'&&!hikmaOpen())).map(([k,ic,nm,tx])=>{ const n=modAt(k), o=modOpen(k), v=Math.min(S.vs,n); if(k==='hikma'&&o){ ic='📚'; nm='Bayt al-Ḥikma'; tx='Visdommens hus. Lærde fra gullalderen kommer én etter én. Finn det nede til høyre i oversikten.'; }
    return `<div class="card mod${k===focus?' focus':''}" style="margin-top:8px" id="mod_${k}"><div class="mi">${ic}</div><div style="flex:1"><b style="color:var(--gold2)">${nm}</b> <span style="font-size:12px;color:${o?'#a9e6bd':'var(--muted)'}">${o?'· åpen':`· åpner etter ${n} vers-økt${n>1?'er':''}`}</span><p style="margin:3px 0 0;font-size:13.5px">${tx}</p>${o?'':`<div class="bar"><b style="width:${v/n*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${v} av ${n} økt${n>1?'er':''}</div>`}</div></div>`; }).join('');
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">HAGENS DELER</p><h3>Det som åpner seg underveis</h3><p style="font-size:13.5px;margin:4px 0 0">Hver dag du fullfører dagens vers, åpner en ny del av hagen seg. Ingenting kan kjøpes seg forbi.</p>${rows}<button class="btn" id="modOk">Fint</button>`);
-  $('modOk').onclick=closeSheet; if(focus){ const el=$('mod_'+focus); if(el) setTimeout(()=>el.scrollIntoView({block:'center',behavior:'smooth'}),250); } }
+  $('modOk').onclick=closeSheet; if(focus){ const el=$('mod_'+focus); if(el) setTimeout(()=>{ const sh=$('sheet'); sh.scrollTo({top:sh.scrollTop+el.getBoundingClientRect().top-sh.getBoundingClientRect().top-sh.clientHeight*.35,behavior:'smooth'}); },250); } }
 document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.ib.locked'); if(!b) return; e.stopImmediatePropagation(); e.preventDefault(); haptic(8); openModules(BTNGATE[b.id]); },true);
 function announceUnlocks(before){ const got=Object.keys(GATE).filter(k=>before<GATE[k]&&S.vs>=GATE[k]&&!S.settings.allOpen); if(!got.length) return;
   setTimeout(()=>{ openSheet(`<h3>Nytt i hagen</h3>${got.map(k=>`<div class="card" style="margin-top:8px"><b style="color:var(--gold2)">${UNLOCK_TXT[k][0]}</b><p style="margin:4px 0 0">${UNLOCK_TXT[k][1]}</p></div>`).join('')}<button class="btn" id="unlOk">Fint</button>`); $('unlOk').onclick=closeSheet; snd.chime([659,784,988]); },4600); }
@@ -2270,8 +2271,8 @@ function taskHit(id){ ensureTasks(); if(!S.tasks.list.length) return; const k=S.
 function renderTasks(){ ensureTasks(); const n=S.tasks.list.filter(x=>x.prog>=x.goal).length, el=$('taskPill'); if(!el) return;
   el.innerHTML=`<b>${n}/3</b> Dagens oppgaver`; el.classList.toggle('done',n===3); el.style.display=(S.active||!S.introSeen||!S.tasks.list.length)?'none':'flex'; }
 function openTasks(){ ensureTasks(); openSheet(`<h3>Dagens oppgaver</h3><p>Tre små oppgaver hver dag. Hver gir 5 nur, og alle tre gir 10 nur i bonus. De fleste gjøres i «Stell»-delen av økten.</p>
-  ${S.tasks.list.map(t=>`<div class="si"><div class="tx"><b>${t.prog>=t.goal?'✓ ':''}${esc(t.text)}</b><small>${Math.min(t.prog,t.goal)} av ${t.goal}</small></div></div>`).join('')}
-  <p style="font-size:12.5px;color:var(--muted)">Nye oppgaver kommer ved midnatt.</p>`); }
+  ${S.tasks.list.map(t=>`<div class="si${t.prog>=t.goal?'':' tgo'}" ${t.prog>=t.goal?'':`data-tg="${t.id}" style="cursor:pointer"`}><div class="tx"><b>${t.prog>=t.goal?'✓ ':''}${esc(t.text)}</b><small>${Math.min(t.prog,t.goal)} av ${t.goal}${t.prog>=t.goal?'':' · trykk for å gjøre den'}</small></div>${t.prog>=t.goal?'':'<span style="color:var(--gold2);font-size:20px">›</span>'}</div>`).join('')}
+  <p style="font-size:12.5px;color:var(--muted)">Nye oppgaver kommer ved midnatt.</p>`); $('sheet').querySelectorAll('[data-tg]').forEach(b=>b.onclick=()=>taskGo(b.dataset.tg)); }
 
 /* ================= DAGLIG SJEKK ================= */
 function disaster(reason){
@@ -2444,7 +2445,7 @@ async function openSession(pre){
   const v0=verses[0],vl=verses[verses.length-1];
   let wi=0; const step=Math.min(.22,9/Math.max(1,verses.reduce((n,v)=>n+v.ar.split(/\s+/).length,0)));
   const toks=s=>s.split(/\s+/).filter(Boolean).reduce((o,w)=>{ if(o.length&&isMark(w)) o[o.length-1]+=' '+w; else o.push(w); return o; },[]);
-  $('ar').innerHTML=verses.map(v=>toks(v.ar).map(w=>`<span class="wd" style="animation-delay:${(wi++*step).toFixed(2)}s">${esc(w)}</span>`).join(' ')+` <span class="am" style="animation-delay:${(wi*step).toFixed(2)}s">${ROSETTE}<b>${AR_NUM(v.ayah)}</b></span>`).join(' ');
+  $('ar').innerHTML=verses.map(v=>toks(v.ar).map(w=>`<span class="wd" style="animation-delay:${(wi++*step).toFixed(2)}s">${esc(w)}</span>`).join(' ')+` <span class="am d${String(v.ayah).length}" style="animation-delay:${(wi*step).toFixed(2)}s">${ROSETTE}<b>${AR_NUM(v.ayah)}</b></span>`).join(' ');
   { const L=verses.reduce((n,v)=>n+v.ar.length,0); $('ar').classList.toggle('long',L>180&&L<=520); $('ar').classList.toggle('xlong',L>520); }
   if(sess.ph==null){ sess.ph=0; sess.reps=0; } if(sess.elapsed>3) $('ar').classList.add('shown');
   $('tl').textContent=verses.map(v=>v.tl).join(' ');
@@ -2536,7 +2537,7 @@ function finish(refl){
   if(rw&&a._rose&&!(view==='sec'&&curQ===QUADS.findIndex(q=>q.id==='roser'))){ const sp=S.sprout; S.sprout=null; renderSection(); S.sprout=sp; } else renderSection();
   renderTop(); barakah(); snd.chime(); sparkle(); if(rw) rewardSeq(a._nur0,a._gain,!!a._rose);
   if(a.kind!=='hifz'&&hikmaTick()){ msgs.push(hikmaState().n===1?'Visdommens hus har åpnet dørene':'en ny lærd har kommet til Visdommens hus'); updHikmaPill(); }
-  setTimeout(()=>{ toast(msgs.join(' · '),rw?2900:4200); },rw?1700:0); { const hh=new Date().getHours(); if(hh>=23||hh<4) setTimeout(()=>wellNudge(),5200); } setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
+  { const extra=rw?msgs.filter(m=>!/^\+\d+ nur$/.test(m)&&m!=='en ny rose'):msgs; if(extra.length) setTimeout(()=>{ toast(extra.join(' · '),3800); },rw?(a._rose?9800:7400):0); } { const hh=new Date().getHours(); if(hh>=23||hh<4) setTimeout(()=>wellNudge(),5200); } setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
 }
 function markDone(){ const t=dayStr(); if(!S.doneDays.includes(t)){ S.streak=S.doneDays.includes(addDays(t,-1))?S.streak+1:1; S.best=Math.max(S.best,S.streak); S.daysTotal=(S.daysTotal||0)+1; S.doneDays.push(t); S.doneDays=S.doneDays.slice(-120);} save(); drawLanterns(); }
 function barakah(){ $('vSec').classList.add('barakah'); setTimeout(()=>$('vSec').classList.remove('barakah'),12000); }
@@ -2622,6 +2623,34 @@ $('qPeek').onclick=()=>{ $('verse').classList.add('on'); $('tr').classList.remov
 
 /* ================= ARK ================= */
 function _openSheet(html){ $('sheet').innerHTML='<div class="grab"></div>'+html; $('sheet').dataset.nid=''; $('sheet').classList.add('on'); $('scrim').classList.add('on'); $('sheet').scrollTop=0; }
+/* ================= BASAR-GUIDE + VERKTØYHJELP + OPPGAVER SOM LEDER DEG ================= */
+function junkQuad(types){ for(let i=0;i<QUADS.length;i++){ const L=(S.junk||{})[QUADS[i].id]||[]; if(L.some(j=>!types||types.includes(j.type))) return i; } return -1; }
+function needTool(){ const c={}; for(const q in S.junk||{}) for(const j of S.junk[q]){ const k=TOOLFOR[j.type]; if(k&&!tLvl(k)) c[k]=(c[k]||0)+1; } const k=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; return k||null; }
+function goTend(qi,msg){ closeSheet(); setTimeout(()=>{ if(qi>=0) enterQuad(qi); toast(msg,4200); },350); }
+function toolHowTo(k){ const types=Object.keys(TOOLFOR).filter(t=>TOOLFOR[t]===k), qi=junkQuad(types), nm=TIERS[k][0][0];
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">SLIK BRUKER DU ${esc(nm.toUpperCase())}</p><h3>Nå kan du rydde ${esc(types.map(t=>JUNKNAME[t].toLowerCase()).join(' og '))}</h3>
+  <div class="card"><p style="margin:0;font-size:14px;line-height:1.6">1. Gå til hagen der det ligger rot.<br>2. Se etter de <b style="color:var(--gold2)">lysende prikkene</b> over rotet.<br>3. Trykk på prikken, så rydder du den.<br><br>Hver rydding gir litt nur. Verktøyet blir slitent og hviler over natta, så du får ${TUSE[1]} ryddinger om dagen.</p></div>
+  ${qi>=0?'<button class="btn" id="thGo">Vis meg hvor</button>':''}<button class="btn ghost" id="thOk">Skjønner</button>`);
+  if($('thGo')) $('thGo').onclick=()=>goTend(qi,'Trykk på de lysende prikkene for å rydde'); $('thOk').onclick=closeSheet; }
+function shopGuide(){ const k=needTool(), hasBeite=restored('beite');
+  const steps=[{el:()=>document.querySelector('#sheet .tabs'),pad:6,k:'BASAREN',t:'Avdelingene',d:'Basaren har flere avdelinger: <b>Varer</b> (forbruk og verktøy), <b>Gård og beite</b>, <b>Vern</b>, <b>Pynt og bygg</b>, <b>Marked</b> der du selger, og <b>Lager</b>. Noen åpner seg senere.'},
+    {el:()=>document.querySelector('#sheet p'),pad:6,k:'NUR',t:'Pengene dine',d:`Her ser du hvor mye nur du har. Nå har du <b>${S.nur} nur</b>. Ingenting kan kjøpes for ekte penger.`}];
+  if(k){ const nx=TIERS[k][0], types=Object.keys(TOOLFOR).filter(t=>TOOLFOR[t]===k).map(t=>JUNKNAME[t].toLowerCase());
+    steps.push({el:()=>document.querySelector(`#sheet [data-tool="${k}"]`),scroll:true,pad:10,k:'DETTE TRENGER DU FØRST',t:nx[0],d:`I hagen ligger det ${types.join(' og ')} som bare kan ryddes med <b>${nx[0].toLowerCase()}</b>. Den koster ${nx[1]} nur.${S.nur<nx[1]?` Du har ${S.nur} nur, så du må spare litt først.`:''}`,last:S.nur>=nx[1]?`Kjøp ${nx[0].toLowerCase()} (${nx[1]} nur)`:'Skjønner',act:S.nur>=nx[1]?()=>{ const b=document.querySelector(`#sheet [data-tool="${k}"]`); if(b) b.click(); }:null}); }
+  else if(hasBeite) steps.push({el:()=>document.querySelector('#sheet .tabs button[data-t="gard"]'),pad:6,k:'TIPS',t:'Fôr til dyrene',d:'Dyrene på beitet trenger fôr. Det kjøper du under <b>Gård og beite</b>.'});
+  tourRun(steps); }
+function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på den glødende stjernen for dagens vers'); setTimeout(()=>{ const g=document.querySelector('#beacons .bstar'); if(g){ g.classList.remove('nudge'); void g.getBoundingClientRect(); g.classList.add('nudge'); } },900); };
+  const bi=QUADS.findIndex(q=>q.id==='beite');
+  if(id==='vers') return doneToday()?toast('Dagens vers er allerede tatt. Kom tilbake i morgen.'):pulse();
+  if(id==='ord') return openWord(); if(id==='hifz') return openHifz();
+  if(id==='dagbok') return doneToday()?toast('Du skriver en tanke på slutten av neste vers-økt.',3800):pulse();
+  if(id==='rydd'){ const qi=junkQuad(); if(qi<0) return toast('Det er ikke noe rot igjen å rydde.'); const k=needTool(); if(k&&!Object.values(TOOLFOR).some(t=>tLvl(t)&&usesLeft(t)>0)) return (closeSheet(),setTimeout(()=>openShop('varer'),350),setTimeout(()=>toast('Du trenger et verktøy først',3000),800)); return goTend(qi,'Trykk på de lysende prikkene over rotet for å rydde'); }
+  if(id==='mat') return (S.feed||0)>0?goTend(bi,'Trykk på dyrene for å gi dem mat'):(closeSheet(),setTimeout(()=>openShop('gard'),350),setTimeout(()=>toast('Kjøp fôr først',2600),800));
+  if(id==='samle') return goTend(bi,'Trykk på varene ved dyrene for å samle dem');
+  if(id==='selg') return (closeSheet(),setTimeout(()=>openShop('marked'),350));
+  if(id==='vann'){ const qi=QUADS.findIndex(q=>restored(q.id)&&S.watered[q.id]!==dayStr()); return goTend(qi>=0?qi:0,'Trykk på «Vann fra elven» i hagen'); }
+  if(id==='host') return goTend(QUADS.findIndex(q=>q.id==='frukt'),'Trykk på de modne trærne for å høste'); }
+
 /* ================= OMVISNING: lys opp og zoom inn på det som skal forklares ================= */
 const lockTxt=k=>unl(k)?'':`<span class="tlock">🔒 Åpner etter ${GATE[k]} vers-økter (${Math.min(S.vs,GATE[k])}/${GATE[k]})</span>`;
 function tourRect(st){
@@ -2631,21 +2660,23 @@ function tourRun(steps,done){ if($('tour')) return; steps=steps.filter(st=>!st.i
   const d=document.createElement('div'); d.id='tour'; d.innerHTML='<div class="tspot" id="tSpot"></div><div class="tcard" id="tCard"></div>'; document.body.appendChild(d);
   const sv=$('scene'); let i=0;
   const unzoom=()=>{ sv.style.transform=''; };
-  const show=()=>{ const st=steps[i]; let r=tourRect(st); if(!r){ i++; if(i<steps.length) return show(); return end(); }
-    let s=1; if(st.zoom){ s=st.zoom; const vr=$('vSec').getBoundingClientRect(), cx=r.x+r.w/2, cy=r.y+r.h/2; sv.style.transition='transform .9s cubic-bezier(.3,.7,.2,1)'; sv.style.transformOrigin=`${cx-vr.left}px ${cy-vr.top}px`; sv.style.transform=`scale(${s})`; r={x:cx-r.w*s/2,y:cy-r.h*s/2,w:r.w*s,h:r.h*s}; } else unzoom();
-    const pad=st.pad==null?8:st.pad, sp=$('tSpot'), c=$('tCard'), W=innerWidth, H=innerHeight;
+  const show=()=>{ const st=steps[i]; if(st.scroll){ const e=typeof st.el==='function'?st.el():document.querySelector(st.el), sh=$('sheet'); if(e&&sh){ sh.scrollTop+=e.getBoundingClientRect().top-sh.getBoundingClientRect().top-sh.clientHeight*.45; } }
+    let r=st.center?{x:innerWidth/2,y:innerHeight*.42,w:0,h:0}:tourRect(st); if(!r){ i++; if(i<steps.length) return show(); return end(); }
+    let s=1; if(st.zoom){ s=st.zoom; const vr=$('vSec').getBoundingClientRect(), cx=r.x+r.w/2, cy=r.y+r.h/2; sv.style.willChange='transform'; sv.style.transition='transform .9s cubic-bezier(.3,.7,.2,1)'; sv.style.transformOrigin=`${cx-vr.left}px ${cy-vr.top}px`; sv.style.transform=`scale(${s})`; r={x:cx-r.w*s/2,y:cy-r.h*s/2,w:r.w*s,h:r.h*s}; } else unzoom();
+    const pad=st.center?0:st.pad==null?8:st.pad, sp=$('tSpot'), c=$('tCard'), W=innerWidth, H=innerHeight;
     const R={x:Math.max(4,r.x-pad),y:Math.max(4,r.y-pad)}; R.w=Math.min(W-8,r.w+pad*2); R.h=Math.min(H-8,r.h+pad*2);
     Object.assign(sp.style,{left:R.x+'px',top:R.y+'px',width:R.w+'px',height:R.h+'px',borderRadius:(st.round||Math.min(18,R.h/2))+'px'});
     c.classList.remove('on'); setTimeout(()=>{
-      c.innerHTML=`<div class="tk">${esc(st.k||'')}<span>${i+1} / ${steps.length}</span></div><h4>${esc(st.t)}</h4><p>${st.d}</p><button class="btn" id="tNext">${i===steps.length-1?(st.last||'Skjønner!'):'Neste'}</button>`;
-      const below=R.y+R.h/2<H*.52; c.style.top=below?Math.min(H-c.offsetHeight-12,R.y+R.h+14)+'px':''; c.style.bottom=below?'':Math.max(12,H-R.y+14)+'px';
+      c.innerHTML=`<div class="tk">${esc(st.k||'')}<span>${i+1} / ${steps.length}</span></div><h4>${esc(st.t)}</h4><p>${st.d}</p><button class="btn" id="tNext">${st.btn||(i===steps.length-1?(st.last||'Skjønner!'):'Neste')}</button>`;
+      const below=!st.center&&R.y+R.h/2<H*.52; if(st.center){ c.style.top=Math.max(20,H*.42-c.offsetHeight/2)+'px'; c.style.bottom=''; c.classList.add('on'); $('tNext').onclick=()=>{ haptic(6); i++; i<steps.length?show():end(); }; return; } c.style.top=below?Math.min(H-c.offsetHeight-12,R.y+R.h+14)+'px':''; c.style.bottom=below?'':Math.max(12,H-R.y+14)+'px';
       if(!below&&H-(H-R.y+14)-c.offsetHeight<10){ c.style.bottom=''; c.style.top='calc(env(safe-area-inset-top,0px) + 12px)'; }
-      c.classList.add('on'); $('tNext').onclick=()=>{ haptic(6); i++; i<steps.length?show():end(); }; },st.zoom?650:220); };
-  const end=()=>{ unzoom(); d.classList.remove('on'); setTimeout(()=>{ d.remove(); setTimeout(()=>{ sv.style.transition=''; },900); done&&done(); setTimeout(sqNext,300); },350); };
+      c.classList.add('on'); $('tNext').onclick=()=>{ haptic(6); const a=st.act; i++; if(i<steps.length) show(); else end(a); }; },st.zoom?650:220); };
+  const end=(act)=>{ unzoom(); d.classList.remove('on'); setTimeout(()=>{ d.remove(); setTimeout(()=>{ sv.style.transition=''; sv.style.willChange=''; },900); done&&done(); if(act) act(); setTimeout(sqNext,300); },350); };
   requestAnimationFrame(()=>{ d.classList.add('on'); show(); }); }
 function tourMain(){ const ri=QUADS.findIndex(q=>q.id==='roser'); if(curQ!==ri||view!=='sec') enterQuad(ri);
   const last=S.roses[S.roses.length-1], sl=last&&SLOTS[last.s];
   setTimeout(()=>tourRun([
+    {center:1,k:'VELKOMMEN',t:'Hagen din har våknet',d:'Du har fullført ditt første vers, og den første rosen er plantet. Vil du ha en kort omvisning, så du vet hvor alt er?',last:'OK, vis meg',btn:'OK, vis meg'},
     sl?{el:()=>document.querySelector(`#items .rz[data-r="${S.roses.length-1}"]`),pad:22,zoom:2.2,k:'ROSEHAGEN',t:'Her er rosen din',d:'Hver gang du fullfører dagens vers, plantes en rose. <b>Hver rose er et vers du har lært.</b> Trykker du på en rose, kan du lese og høre verset igjen. Det er plass til 36 roser. Blir du borte lenge, kan stormen skade dem, men en tawbah-økt gjør dem friske igjen.'}:null,
     {el:'#beacons .bstar path',pad:30,round:80,k:'STJERNEN',t:'Hærfuglen',d:'Den glødende stjernen er hærfuglen. <b>Trykk på den for å få dagens vers.</b> Du får ett vers om dagen, og et nytt kommer ved midnatt. Nå har den levert, så den hviler til i morgen.'},
     {el:'#nextQ',pad:10,k:'FIRE HAGER',t:'Bla mellom hagene',d:'Hagen har fire deler: <b>Rosehagen, Lysets tårn, Beitet og Frukthagen</b>. Trykk på pilene for å gå mellom dem. Delene våkner etter hvert som du gjør flere vers-økter.'},
@@ -2667,8 +2698,8 @@ const QTOUR={
     :[{svg:[180,640,180,120],zoom:1.9,k:'BEITET',t:'Beitet ligger i ruiner',d:`Gjeteren venter ved bålet. Etter ${AT.beite} vers-økter kommer dyrene tilbake (${Math.min(S.vs,AT.beite)}/${AT.beite}). Trykk på gjeteren for en hilsen.`}],
   frukt:()=>[{svg:[195,560,280,200],zoom:1.5,k:'FRUKTHAGEN',t:restored('frukt')?'Trær som bærer frukt':'Frukthagen venter',d:restored('frukt')?'Nye trær plantes etter hvert som du gjør økter. Når frukten er moden, trykker du for å høste den og får nur.':`Etter ${AT.frukt} vers-økter kan de første trærne plantes her (${Math.min(S.vs,AT.frukt)}/${AT.frukt}). Til da er det bare ruiner og håp.`}]};
 let _tourT=0;
-function tourCheck(){ if(KAHWA||S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
-  if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<2200) return; _tourT=0;
+function tourCheck(){ if(KAHWA||S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
+  if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<3200) return; _tourT=0;
   if(!S.tour1){ if(S.vs>=1&&doneToday()) tourMain(); return; }
   if(view!=='sec') return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
 setInterval(tourCheck,700);
@@ -2781,10 +2812,10 @@ async function baytScene(mode,done){ if($('baytScene')) return; closeSheet();
   d.id='bsGone'; d.classList.remove('on'); setTimeout(()=>d.remove(),400); done&&done(); }
 
 function openSheet(html){ const auto=Date.now()-window.__lt>2500, e=auto?inboxLog(html):null;
-  if((auto&&sheetBusy())||$('baytScene')){ const w=document.createElement('div'); w.innerHTML='<div class="grab"></div>'+html; $('sheetQ').prepend(w); SQ.push({w,id:e&&e.id});
+  if((auto&&sheetBusy())||$('baytScene')||$('tour')){ const w=document.createElement('div'); w.innerHTML='<div class="grab"></div>'+html; $('sheetQ').prepend(w); SQ.push({w,id:e&&e.id});
     const sh=$('sheet'); sh.id='sheetCur'; w.id='sheet'; Promise.resolve().then(()=>{ w.id=''; sh.id='sheet'; }); updBell(); return; }
   _openSheet(html); if(e){ $('sheet').dataset.nid=e.id; inboxSeen(e.id); } updBell(); }
-function closeSheet(){ setTimeout(sqNext,900); { const nid=$('sheet').dataset.nid; if(nid&&Date.now()-window.__lt<1500){ const e=(S.inbox||[]).find(x=>x.id===nid); if(e){ e.seen=1; save(); } } setTimeout(updBell,50); } if(JABAL&&$('cvOk')){ jt()['cv'+dayStr()]=1; save(); } $('sheet').classList.remove('on'); $('scrim').classList.remove('on'); if(JABAL&&!S.active) setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')&&!titleOn) jQueue(); },700); if(KAHWA){ if(kt().pcN>=2&&!kt().n_rihla){ setTimeout(()=>kNote('rihla'),500); } else kQueue(); } if(S._hintPend&&!S.active){ S._hintPend=false; setTimeout(()=>{ if(!$('sheet').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },900); } }
+function closeSheet(){ setTimeout(sqNext,900); try{ if(stage.scrollTop) stage.scrollTop=0; if(document.scrollingElement.scrollTop) document.scrollingElement.scrollTop=0; }catch(e){} { const nid=$('sheet').dataset.nid; if(nid&&Date.now()-window.__lt<1500){ const e=(S.inbox||[]).find(x=>x.id===nid); if(e){ e.seen=1; save(); } } setTimeout(updBell,50); } if(JABAL&&$('cvOk')){ jt()['cv'+dayStr()]=1; save(); } $('sheet').classList.remove('on'); $('scrim').classList.remove('on'); if(JABAL&&!S.active) setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')&&!titleOn) jQueue(); },700); if(KAHWA){ if(kt().pcN>=2&&!kt().n_rihla){ setTimeout(()=>kNote('rihla'),500); } else kQueue(); } if(S._hintPend&&!S.active){ S._hintPend=false; setTimeout(()=>{ if(!$('sheet').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },900); } }
 $('scrim').onclick=closeSheet;
 let ty=null; $('sheet').addEventListener('touchstart',e=>{ ty=$('sheet').scrollTop<=0?e.touches[0].clientY:null; },{passive:true});
 $('sheet').addEventListener('touchend',e=>{ if(ty!=null&&e.changedTouches[0].clientY-ty>90) closeSheet(); ty=null; });
@@ -2926,7 +2957,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
     if(k==='for10') S.feed+=10; if(k==='korn') S.korn=(S.korn||0)+10; if(k==='fiskemat') S.fiskemat=(S.fiskemat||0)+10; if(k==='olje') S.oil+=5; if(k==='messing') S.upg.messing=true;
     if(k==='fro'){ const type=rnd(['sitron','mandel'].concat(FRUITS)); S.fruit.push({type:FRUITS.includes(type)?type:'oliven',st:1,h:'ok'}); }
     done(`${w.name} kjøpt`); });
-  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const k=b.dataset.tool, L=tLvl(k), nx=TIERS[k][L]; if(!nx||!pay(nx[1])) return; S.tools[k]=L+1; done(L?`Oppgradert til ${nx[0].toLowerCase()}. Nå kan du rydde ${SIZEPL[L+1]} ting.`:`${nx[0]} kjøpt. Du rydder i «Stell».`); });
+  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const k=b.dataset.tool, L=tLvl(k), nx=TIERS[k][L]; if(!nx||!pay(nx[1])) return; S.tools[k]=L+1; if(!L){ S.toolHelp=S.toolHelp||{}; if(!S.toolHelp[k]){ S.toolHelp[k]=1; setTimeout(()=>toolHowTo(k),1400); } } done(L?`Oppgradert til ${nx[0].toLowerCase()}. Nå kan du rydde ${SIZEPL[L+1]} ting.`:`${nx[0]} kjøpt. Du rydder i «Stell».`); });
   Q$('[data-deco]').forEach(b=>b.onclick=()=>{ const k=b.dataset.deco, d=DECOR[k]; if(!pay(d.price)) return; S.inv[k]=(S.inv[k]||0)+1; done(`${d.name} er lagt på lageret`,'lager'); });
   Q$('[data-sharpen]').forEach(b=>b.onclick=()=>{ if(!pay(12)) return; toolDay().bonus=(toolDay().bonus||0)+3; done('Verktøyene er slipt. +3 ryddinger i dag.','varer'); });
   Q$('[data-fence]').forEach(b=>b.onclick=()=>{ const nf=FENCE[(S.farm.fence||0)+1]; if(!nf||!pay(nf[1])) return; S.farm.fence=(S.farm.fence||0)+1; logEvent(`${nf[0]} er satt opp rundt beitet.`); done(`${nf[0]} er satt opp`,'gard'); });
@@ -2941,7 +2972,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
     if(k==='hund'&&q!=='beite') toast('Hunden gjør bare nytte i Beitet');
     S.inv[k]--; S.decor.push({id:Date.now().toString(36),type:k,q,spot}); save(); closeSheet(); enterQuad(QUADS.findIndex(x=>x.id===q)); toast(`${DECOR[k].name} er plassert`); });
 }
-$('shopBtn').onclick=()=>openShop();
+$('shopBtn').onclick=()=>{ openShop(); if(unl('basar')&&!S.shopGuide&&!KAHWA){ S.shopGuide=1; save(); setTimeout(shopGuide,600); } };
 function decoMenu(id){ const d=S.decor.find(x=>x.id===id); if(!d) return;
   openSheet(`<h3>${DECOR[d.type].name}</h3><div class="si">${decoThumb(d.type)}<div class="tx"><small>${DECOR[d.type].desc}</small></div></div><button class="btn ghost" id="dBack">Flytt tilbake til lageret</button>`);
   $('dBack').onclick=()=>{ S.decor=S.decor.filter(x=>x.id!==id); S.inv[d.type]=(S.inv[d.type]||0)+1; save(); closeSheet(); renderSection(); toast('Lagt tilbake på lageret'); }; }
@@ -3403,7 +3434,7 @@ function playChapter(n){ introMode='chapter'; $('iSkip').style.display=''; $('in
   $('iNext').textContent='Fortsett'; snd.chime([523,659,784,1047],.08); logEvent(`Kapittel ${n+1}: ${CHAPTERS[n-1][0]}`); }
 function endChapter(){ introMode='intro'; $('iScene').style.filter=''; $('intro').className=''; renderAll(); if(S._hintPend){ S._hintPend=false; setTimeout(()=>{ if(!$('sheet').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },1200); } }
 function endIntro(){ $('intro').className=''; introMode=null; S.introSeen=true; save(); toOverview();
-  if(!S.settings.gender){ setTimeout(()=>{ openSheet(`<h3>Hvem pleier hagen?</h3><p>Hagen får en gjeter eller en gjeterinne, og takken på arabisk får riktig form. Du kan endre dette under Meg.</p><div class="qrow"><button class="gb gold" data-g="m">Mann</button><button class="gb gold" data-g="f">Kvinne</button></div>`);
+  if(!S.settings.gender){ setTimeout(()=>{ openSheet(`<h3>Hvem pleier hagen?</h3><p>Hagen får en gjeter eller en gjeterinne. Du kan endre dette under Meg.</p><div class="qrow"><button class="gb gold" data-g="m">Mann</button><button class="gb gold" data-g="f">Kvinne</button></div>`);
     $('sheet').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ S.settings.gender=b.dataset.g; save(); closeSheet(); renderAll(); showTitle(); }); },700); }
   else showTitle(); }
 
