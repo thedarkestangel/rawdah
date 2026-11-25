@@ -439,6 +439,9 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 .bfly .wing{transform-origin:center;animation:flap .25s ease-in-out infinite alternate}
 @keyframes flap{to{transform:scaleX(.35)}}
 @keyframes bfly{0%{transform:translate(0,0)}33%{transform:translate(40px,-30px)}66%{transform:translate(-20px,-50px)}100%{transform:translate(30px,10px)}}
+#hikmaPill{position:absolute;right:12px;bottom:calc(var(--safe-b) + 14px);z-index:6;display:flex;gap:6px;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:rgba(11,9,32,.72);border:1px solid rgba(231,194,107,.5);font-size:13px;color:var(--ink,#efe6d2);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#hikmaPill.ping{box-shadow:0 0 0 0 rgba(231,194,107,.6);animation:hkp 2s infinite}@keyframes hkp{0%{box-shadow:0 0 0 0 rgba(231,194,107,.6)}70%{box-shadow:0 0 0 12px rgba(231,194,107,0)}100%{box-shadow:0 0 0 0 rgba(231,194,107,0)}}
+.hkf{animation:hkf 14s ease-in-out infinite alternate}.hkf.b{animation-duration:19s;animation-direction:alternate-reverse}@keyframes hkf{from{transform:translateX(-30px)}to{transform:translateX(30px)}}
 #taskPill{position:absolute;left:12px;bottom:calc(var(--safe-b) + 14px);z-index:6;display:flex;gap:6px;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:rgba(11,9,32,.72);border:1px solid rgba(231,194,107,.5);font-size:13px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:blink 2.4s ease-in-out infinite}
 #taskPill b{color:var(--gold2)}#taskPill.done{animation:none;border-color:rgba(127,211,160,.6)}
 .grow{transform-box:fill-box;transform-origin:50% 100%;animation:grow 1.6s cubic-bezier(.3,1.7,.5,1) both}
@@ -540,6 +543,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
   </div>
 
   <button id="taskPill" aria-label="Dagens oppgaver"></button>
+  <button id="hikmaPill" aria-label="Visdommens hus" style="display:none"></button>
   <div class="scrim" id="scrim"></div>
   <div class="sheet" id="sheet"></div>
   <div class="toast" id="toast"></div>
@@ -1617,9 +1621,9 @@ function carpetItems(id,a,b,c,d){
 
 /* ================= NAVIGASJON ================= */
 let view='over';
-function enterQuad(i){ curQ=i; view='sec'; const id=QUADS[i].id; if(S.seenRest[id]==='new'){S.seenRest[id]=true;save();}
+function enterQuad(i){ curQ=i; view='sec'; if($('hikmaPill')) $('hikmaPill').style.display='none'; const id=QUADS[i].id; if(S.seenRest[id]==='new'){S.seenRest[id]=true;save();}
   $('vOver').classList.add('off'); $('vSec').classList.remove('off'); $('homeBtn').style.display=''; renderSection(); }
-function toOverview(){ view='over'; $('vSec').classList.add('off'); $('vOver').classList.remove('off'); $('homeBtn').style.display='none'; renderCarpet(); }
+function toOverview(){ view='over'; $('vSec').classList.add('off'); $('vOver').classList.remove('off'); $('homeBtn').style.display='none'; renderCarpet(); updHikmaPill(); }
 $('homeBtn').onclick=()=>toOverview();
 $('prevQ').onclick=()=>{ if(curQ>0){curQ--;renderSection();} };
 $('nextQ').onclick=()=>{ if(curQ<3){curQ++;renderSection();} };
@@ -1772,7 +1776,7 @@ const MONS=[
 ];
 MONS.push({id:'sokoto',name:'Den sentrale moskeen i Sokoto',city:'Sokoto',country:'Nigeria',lat:13.1,lon:5.2,built:'grunnlagt 1809',
   fact:'Den regnes som den første moskeen i Sokoto, grunnlagt i 1809 av Muhammad Bello. I dag ber sultanen av Sokoto her, og hver ramadan holdes det daglig tafsir i moskeen.',
-  people:[['Usman dan Fodio (1754–1817)','Fulani-lærd, lærer og forfatter som grunnla Sokoto-kalifatet. Han hadde 23 barn, blant dem Muhammad Bello og Nana Asmaʼu.'],['Nana Asmaʼu (1793–1864)','Datter av Usman dan Fodio. Poet og lærd som skrev på fire språk. Hun sendte ut kvinnelige lærere (jajis) for å undervise kvinner i hjemmene deres. Bevegelsen, ʼYan Taru, finnes fortsatt.'],['Muhammad Bello (1781–1837)','Sønn av Usman dan Fodio og bror av Nana Asmaʼu. Han grunnla byen Sokoto i 1809, ble den andre kalifen og var også historiker og poet.']]});
+  people:[['Usman dan Fodio (1754–1817)','Fulani-lærd og forkynner som reiste rundt i hausalandene i over tjue år og underviste menn og kvinner side om side, noe som var uvanlig da. Han kritiserte urettferdige skatter og herskere som blandet islam med overtro. Bevegelsen hans endte i et opprør (1804–1808) som samlet området i Sokoto-kalifatet, en av de største statene i Afrika på 1800-tallet. Han skrev over hundre verk på arabisk, fulfulde og hausa, og trakk seg selv tilbake til studier og la styret til sønnen og broren. Han hadde 23 barn, blant dem Muhammad Bello og Nana Asmaʼu.'],['Nana Asmaʼu (1793–1864)','Datter av Usman dan Fodio. Poet og lærd som skrev på fire språk. Hun sendte ut kvinnelige lærere (jajis) for å undervise kvinner i hjemmene deres. Bevegelsen, ʼYan Taru, finnes fortsatt.'],['Muhammad Bello (1781–1837)','Sønn av Usman dan Fodio og bror av Nana Asmaʼu. Han grunnla byen Sokoto i 1809, ble den andre kalifen og var også historiker og poet.']]});
 MONS.push(
  {id:'mustansiriya',name:'Al-Mustansiriya-madrasaen',city:'Bagdad',country:'Irak',lat:33.3,lon:44.4,built:'1227–1234',
   fact:'Kalifen al-Mustansir bygde skolen ved Tigris. Her ble det undervist i medisin, matematikk, språk og islamske fag, og den var blant de første som underviste i alle de fire lovskolene under ett tak. I 1235 fikk inngangshallen en vanndrevet klokke som viste bønnetidene dag og natt. Bagdads berømte «Visdommens hus», der al-Khwarizmi arbeidet, finnes ikke lenger, så madrasaen står her for byens lærde.',
@@ -1803,7 +1807,7 @@ MONS.push(
   people:[['Rumi (1207–1273)','Poet og lærd født i Balkh i dagens Afghanistan. Han levde og underviste i Konya i flere tiår. Hovedverket hans er Masnavi, et langt lærediktverk på persisk.'],['Gürcü Hatun','Hustru til en seldsjukkisk vesir i Konya, og en av Rumis nære venner og støttespillere.']]},
  {id:'mazar',name:'Mazar-e-Quaid',city:'Karachi',country:'Pakistan',lat:24.9,lon:67.0,built:'1960–1970',
   fact:'Mausoleet i hvit marmor ligger midt i Karachi og er byens kjennetegn. Inne henger en krystallysekrone i fire etasjer, en gave fra Kina. Jinnah-lua kommer fra Bukhara: den er laget av pelsen til karakul-sau, og «karakul» betyr «svart pels» på usbekisk.',
-  people:[['Muhammad Ali Jinnah (1876–1948)','Pakistans grunnlegger, kalt Quaid-e-Azam, «den store lederen». Lua hans av karakulpels er så knyttet til ham at den kalles Jinnah-lua.'],['Fatima Jinnah (1893–1967)','Søsteren hans. Hun ble den første kvinnelige tannlegen i Britisk India og senere opposisjonsleder i Pakistan. Hun ble kalt Madar-e-Millat, «nasjonens mor». Det var også hun som valgte arkitekten Yahya Merchant, og hun er selv gravlagt i mausoleet.']]},
+  people:[['Muhammad Ali Jinnah (1876–1948)','Advokat fra Karachi, utdannet i London, og leder for Den muslimske liga. Først arbeidet han for samhold mellom hinduer og muslimer mot britisk styre, men han ble overbevist om at muslimene trengte et eget land for å sikre rettighetene sine. Han ledet kravet om Pakistan, og da Britisk India ble delt, ble Pakistan selvstendig 14. august 1947. Han ble landets første generalguvernør, men døde året etter. Han kalles Quaid-e-Azam, «den store lederen». Lua hans av karakulpels er så knyttet til ham at den kalles Jinnah-lua.'],['Fatima Jinnah (1893–1967)','Søsteren hans. Hun ble den første kvinnelige tannlegen i Britisk India og senere opposisjonsleder i Pakistan. Hun ble kalt Madar-e-Millat, «nasjonens mor». Det var også hun som valgte arkitekten Yahya Merchant, og hun er selv gravlagt i mausoleet.']]},
  {id:'liverpool',name:'Abdullah Quilliams moské',city:'Liverpool',country:'Storbritannia',lat:53.41,lon:-2.98,built:'1889',
   fact:'Liverpool Muslim Institute åpnet første juledag 1889 i et rekkehus i Brougham Terrace 8. Den regnes som den første moskeen i drift i Storbritannia. I dag holder Abdullah Quilliam Society på å sette huset i stand igjen.',
   people:[['Abdullah Quilliam (1856–1932)','Advokat fra Liverpool som ble muslim i 1887 etter en reise til Marokko. Rundt 600 mennesker ble muslimer gjennom arbeidet hans, og den osmanske sultanen ga ham tittelen shaykh al-islam for De britiske øyer.'],['Fatima Cates (1865–1900)','En av de første kvinnene i Storbritannia som ble muslim, i 1887. Hun var med på å grunnlegge moskeen og ble den første kassereren. Hun skrev om islam til aviser og tidsskrifter, og tålte steinkast for troen sin.']]},
@@ -1935,10 +1939,120 @@ function personSvg(f,x,y,sc,robe,acc,skin){ const T=`translate(${x} ${y}) scale(
   return `<g transform="${T}"><ellipse cx="0" cy="1" rx="13" ry="3" fill="rgba(0,0,0,.28)"/><path d="M-11 0 Q-11 -30 -7 -40 H7 Q11 -30 11 0Z" fill="${robe}" stroke="rgba(0,0,0,.35)" stroke-width=".6"/><path d="M-2 -40 V-20" stroke="rgba(0,0,0,.18)"/><ellipse cx="0" cy="-48" rx="5.6" ry="6.6" fill="${skin}"/><path d="M-5.6 -47 Q-6 -38 0 -36 Q6 -38 5.6 -47 Q3 -42 0 -42 Q-3 -42 -5.6 -47Z" fill="#2a1e18"/><path d="M-5.8 -51 Q0 -58 5.8 -51 Z" fill="${acc}"/></g>`; }
 function folkSvg(id){ const r=REGION[id]||'', c=ROBE[r]||['#efe4cc','#2f5a8a'], sk=SKIN[r]||'#c08a5e';
   return `<svg viewBox="0 0 80 70" width="92" height="80" style="display:block">${personSvg(false,24,66,1,c[0],'#f4f0e8',sk)}${personSvg(true,54,66,1,c[1],c[0]==='#efe4cc'||c[0]==='#f2ece0'?'#5a4a6a':c[0],sk)}</svg>`; }
+const MUSPOP={Pakistan:[235000000,96.5],India:[1402620000,15.2],Mali:[21710000,94.1],'Bosnia-Hercegovina':[3300000,53.6],Tanzania:[60970000,29.9],Tyrkia:[86090000,97.1],Polen:[38170000,0.05],Usbekistan:[33590000,95.6],Bangladesh:[166300000,91.1],Marokko:[36580000,99.7],Nigeria:[214000000,56.1],Irak:[42120000,99.5],Spania:[47680000,3.6],Egypt:[109320000,95.2],Syria:[21050000,94.2],Indonesia:[274810000,87.0],Storbritannia:[67350000,6.4],Somalia:[16650000,99.8],Kenya:[52220000,10.9],Japan:[126300000,0.2]};
+function fmtMill(n){ if(n>=1e6){ const m=n/1e6; return (m>=10?Math.round(m):m.toFixed(1).replace('.',','))+' millioner'; } if(n>=1000) return 'ca. '+Math.round(n/1000).toLocaleString('no-NO')+' 000'; return String(n); }
+function popBox(country){ const d=MUSPOP[country]; if(!d) return ''; const [pop,pc]=d, mus=pop*pc/100;
+  return `<div class="card" style="margin-top:10px;display:flex;gap:12px;align-items:center"><div style="flex:0 0 64px;height:64px;border-radius:50%;background:conic-gradient(var(--gold2) 0 ${Math.max(pc,1.5)}%,rgba(255,255,255,.12) 0);display:flex;align-items:center;justify-content:center"><div style="width:46px;height:46px;border-radius:50%;background:#12102a;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:var(--gold2)">${pc<0.1?'&lt;0,1':String(pc).replace('.',',')} %</div></div><div style="flex:1"><b style="color:var(--gold2)">Muslimer i ${esc(country)}</b><p style="margin:3px 0 0;font-size:14px">${pc<0.1?'Under 0,1 % av befolkningen, noen få tusen.':`Rundt ${fmtMill(mus)}, av ${fmtMill(pop)} innbyggere.`}</p><p style="margin:3px 0 0;font-size:11.5px;color:var(--muted)">Anslag for 2020 fra Pew Research Center (2025). Ekte tall kan avvike.</p></div></div>`; }
+/* ================= BAYT AL-ḤIKMA · VISDOMMENS HUS ================= */
+const HIKMA=[
+ {id:'khwarizmi',f:0,n:'al-Khwārizmī',y:'ca. 780–ca. 850',pl:'Bagdad',ttl:'Matematiker og astronom',em:'alg',w:'https://en.wikipedia.org/wiki/Al-Khwarizmi',
+  who:'Han arbeidet i det første Bayt al-Ḥikma i Bagdad, under kalif al-Maʼmūn, der lærde oversatte og samlet kunnskap fra hele verden.',
+  did:'Boka hans om «al-jabr» ga navn til algebra: å løse et ukjent tall steg for steg. En stor del av boka handler om å regne ut arv etter Koranens regler. Fra navnet hans, latinisert til «Algoritmi», kommer ordet algoritme. Han gjorde også de indiske tallene med null kjent i den islamske verden, og derfra kom de til Europa.',
+  why:'Hver gang du bruker en app, også denne, kjører det algoritmer. Tallene du skriver med, kom til Europa gjennom ham.',
+  myth:['Fant han opp null?','Nei. Null og titallssystemet kom fra India. Al-Khwārizmī forklarte og spredte det.']},
+ {id:'fihri',f:1,n:'Fāṭima al-Fihrī',y:'ca. 800–ca. 880',pl:'Fès',ttl:'Grunnla al-Qarawiyyīn',em:'arch',w:'https://en.wikipedia.org/wiki/Fatima_al-Fihriya',
+  who:'Ifølge tradisjonen kom hun fra Kairouan i dagens Tunisia. Da faren døde, arvet hun og søsteren Maryam en formue.',
+  did:'Hun brukte arven på å bygge al-Qarawiyyīn-moskeen i Fès (857–859). Den ble et av de viktigste lærestedene i Nord-Afrika, og søsteren bygde al-Andalusiyyīn-moskeen i samme by.',
+  why:'Hun viser hvordan en kvinne brukte rikdommen sin på kunnskap som har levd i over tusen år. Du finner al-Qarawiyyīn også i Rihla.',
+  myth:['Grunnla hun verdens eldste universitet?','Det sies ofte, men det var først en moské med undervisning. Det ble statlig universitet i 1963. Historien om henne bygger på en krønike skrevet rundt 450 år senere, og noen historikere tviler på detaljene.']},
+ {id:'haytham',f:0,n:'Ibn al-Haytham',y:'ca. 965–ca. 1040',pl:'Basra og Kairo',ttl:'Lys, syn og eksperiment',em:'eye',w:'https://en.wikipedia.org/wiki/Ibn_al-Haytham',
+  who:'Han ble født i Basra og levde store deler av livet i Kairo.',
+  did:'I Boka om optikk (skrevet 1011–1021) viste han at vi ser fordi lys kommer inn i øyet, ikke fordi øyet sender ut stråler, slik mange grekere mente. Han testet ideene sine i et mørkt rom med et lite hull, et camera obscura, og krevde at påstander skulle prøves med forsøk.',
+  why:'Kameraet i mobilen din bygger på det samme prinsippet. Og ideen om å teste før man tror, er kjernen i all forskning.',
+  myth:['Spilte han gal for å slippe unna kalifen?','Det fortelles at han lovet å temme Nilen, innså at det var umulig, og latet som han var gal. Historien kommer fra senere biografer, så vi vet ikke sikkert.']},
+ {id:'zahrawi',f:0,n:'al-Zahrāwī',y:'936–1013',pl:'Córdoba',ttl:'Kirurg',em:'scal',w:'https://en.wikipedia.org/wiki/Al-Zahrawi',
+  who:'Han var lege ved kalifens hoff i Córdoba og arbeidet der hele livet.',
+  did:'Han skrev al-Taṣrīf, et medisinsk oppslagsverk i 30 bind. Delen om kirurgi har tegninger av rundt 200 instrumenter, mange laget av ham selv. Den ble oversatt til latin og brukt i europeisk legeutdanning i flere hundre år.',
+  why:'Flere av instrumentene han beskrev, ligner fortsatt dem kirurger bruker i dag.'},
+ {id:'jazari',f:0,n:'al-Jazarī',y:'1136–1206',pl:'Øvre Mesopotamia (Diyarbakır)',ttl:'Ingeniør og oppfinner',em:'ele',w:'https://en.wikipedia.org/wiki/Ismail_al-Jazari',
+  who:'Han var sjefsingeniør ved hoffet til artuqide-herskerne, slik faren hadde vært før ham.',
+  did:'I 1206 ble han ferdig med en bok om 50 maskiner, med tegninger og oppskrift på hvordan de skulle bygges. Han beskrev bare det han selv hadde laget. Mest kjent er elefantklokka, der figurer beveger seg hver halvtime. Han laget også pumper som bønder brukte til å løfte vann.',
+  why:'Tannhjul, ventiler og automatikk i maskinene hans går igjen i teknikk vi bruker i dag.',
+  myth:['Var han «robotikkens far»?','Det er et moderne kallenavn. Han laget automater, men ordet robot fantes ikke før 1920.']},
+ {id:'ijliyya',f:1,n:'al-ʻIjliyya',y:'900-tallet',pl:'Aleppo',ttl:'Lagde astrolaber',em:'astro',w:'https://en.wikipedia.org/wiki/Al-%CA%BBIjliyyah',
+  who:'Hun var datter av en astrolabmaker, og begge gikk i lære hos en mester fra Bagdad.',
+  did:'Hun lagde astrolaber, presise instrumenter for å finne tiden, stjernenes plass og retningen til Mekka, og ble ansatt av emiren av Aleppo, Sayf al-Dawla. En asteroide, 7060 Al-ʻIjliya, er oppkalt etter henne.',
+  why:'Muslimer trengte å vite bønnetidene og qibla. Det drev fram instrumenter som også ble brukt til navigasjon.',
+  myth:['Het hun Mariam?','Navnet «Mariam al-Asṭurlābiyya» brukes ofte i dag, men den eneste kilden fra hennes tid nevner ikke fornavnet hennes.']},
+ {id:'biruni',f:0,n:'al-Bīrūnī',y:'973–ca. 1050',pl:'Khwarazm og Ghazni',ttl:'Målte jorda',em:'globe',w:'https://en.wikipedia.org/wiki/Al-Biruni',
+  who:'Han ble født i Khwarazm i Sentral-Asia og reiste med hoffet i Ghazni, blant annet til India.',
+  did:'Fra en fjelltopp ved Nandana i dagens Pakistan målte han hvor mye horisonten «synker», og regnet ut jordas radius med geometri. Han kom svært nær dagens verdi. Han skrev også en grundig bok om India, med respekt for folk han var uenig med.',
+  why:'Han viste at man kan måle hele jorda med en fjelltopp, et instrument og god matematikk.'},
+ {id:'firnas',f:0,n:'ʻAbbās ibn Firnās',y:'ca. 810–887',pl:'Córdoba',ttl:'Oppfinner',em:'wing',w:'https://en.wikipedia.org/wiki/Abbas_ibn_Firnas',
+  who:'Han levde i Córdoba og var både poet, astronom og oppfinner.',
+  did:'Han fant en metode for å slipe bergkrystall, slik at al-Andalus slapp å sende den til Egypt. Han laget også en vannklokke og arbeidet med glass og astronomi.',
+  why:'Han viser at nysgjerrighet går på tvers av fag: poesi, stjerner og verksted.',
+  myth:['Fløy han med vinger?','Historien om at han hoppet med vinger og fjær, kommer fra al-Maqqarī, som skrev rundt 750 år senere. Ingen tidligere kilder nevner det, så det er usikkert.']},
+ {id:'lubna',f:1,n:'Lubnā fra Córdoba',y:'900-tallet',pl:'Córdoba',ttl:'Sekretær og lærd',em:'book',w:'https://en.wikipedia.org/wiki/Lubna_of_C%C3%B3rdoba',
+  who:'Hun ble født som slave i palassbyen Madīnat al-Zahrāʼ og ble satt fri.',
+  did:'Hun ble sekretær for kalif al-Ḥakam II og arbeidet i det store biblioteket i Córdoba med å kopiere og oversette bøker. Hun huskes for grammatikk, poesi og matematikk. Byen hadde mange kvinner som kopierte håndskrifter.',
+  why:'Hun gikk fra slaveri til å være blant de lærde i en av verdens største byer på den tiden.',
+  myth:['Hvor mye vet vi om henne?','Lite er sikkert. Senere fortellinger kan ha blandet flere kvinner sammen.']},
+ {id:'battuta',f:0,n:'Ibn Baṭṭūṭa',y:'1304–1368/69',pl:'Tanger',ttl:'Reisende',em:'foot',w:'https://en.wikipedia.org/wiki/Ibn_Battuta',
+  who:'Han dro fra Tanger på hajj som 21-åring, og kom ikke hjem for godt før nesten 30 år senere.',
+  did:'Han reiste gjennom Nord-Afrika, Midtøsten, Øst-Afrika, India, Sentral-Asia og helt til Kina, ifølge vanlige anslag over 100 000 km. Etterpå dikterte han reisene sine til skriveren Ibn Juzayy. Boka kalles ganske enkelt «Riḥla», reisen.',
+  why:'Hærfuglens reisebrev i denne appen heter Rihla etter samme tradisjon.'},
+ {id:'khaldun',f:0,n:'Ibn Khaldūn',y:'1332–1406',pl:'Tunis og Kairo',ttl:'Historiker',em:'scale',w:'https://en.wikipedia.org/wiki/Ibn_Khaldun',
+  who:'Han var lærd, dommer og diplomat i Nord-Afrika, al-Andalus og Egypt.',
+  did:'I Muqaddima forklarte han at historikere må granske kildene sine, ikke bare skrive av. Han beskrev ʻaṣabiyya, samholdet som får folk til å bygge byer og stater, og hvordan rikdom og bekvemmelighet kan svekke det til alt faller.',
+  why:'Historien om Rawdah, byen som ble rik, glemte og falt, er nesten hans teori fortalt som en fabel.'},
+ {id:'ulugh',f:0,n:'Ulugh Beg',y:'1394–1449',pl:'Samarkand',ttl:'Astronom og hersker',em:'star',w:'https://en.wikipedia.org/wiki/Ulugh_Beg',
+  who:'Han var barnebarn av Timur og styrte Samarkand.',
+  did:'Han bygde en madrasa og et stort observatorium i byen og lagde en stjernekatalog med rundt tusen stjerner, en av de mest nøyaktige før teleskopet.',
+  why:'Han viser at også en hersker kan bruke makten sin på kunnskap. Du finner Samarkand i Rihla.'}
+];
+const HTEASE=['I verkstedet bak hyllene står en elefant av messing. En dag skal den tikke igjen, in shā\' Allāh.','Har du prøvd å løse en likning slik al-Khwārizmī gjorde, med kvadrater og rektangler? En dag skal jeg vise deg.','Jeg holder på å mørklegge et rom. Gjennom et lite hull i veggen skal vi se verden opp ned, slik Ibn al-Haytham gjorde.','Astrolaben på taket er i stykker. Kanskje vi kan bygge en ny sammen en gang?','Fra taket kan man se horisonten. En dag skal vi måle jorda herfra, slik al-Bīrūnī gjorde.'];
+function hikmaEm(k){ const g='#ffe6a6'; return ({alg:`<text x="0" y="6" text-anchor="middle" font-size="16" font-family="serif" fill="${g}">x²</text>`,arch:`<path d="M-10 10 V-2 Q-10 -12 0 -14 Q10 -12 10 -2 V10Z" fill="none" stroke="${g}" stroke-width="2"/>`,eye:`<path d="M-12 0 Q0 -10 12 0 Q0 10 -12 0Z" fill="none" stroke="${g}" stroke-width="1.8"/><circle r="3.5" fill="${g}"/>`,scal:`<path d="M-10 10 L6 -6 L10 -10 L8 -4 L-8 12Z" fill="${g}"/>`,ele:`<path d="M-11 8 V-2 Q-11 -9 -3 -9 H5 Q11 -9 11 -2 V8 M-7 8 V2 M7 8 V2 M11 -4 Q15 -2 13 6" fill="none" stroke="${g}" stroke-width="1.8"/><path d="M-2 -9 V-15 H4 V-9" fill="none" stroke="${g}" stroke-width="1.4"/>`,astro:`<circle r="11" fill="none" stroke="${g}" stroke-width="1.8"/><circle r="5" fill="none" stroke="${g}" stroke-width="1"/><path d="M-11 0 H11 M0 -11 V11" stroke="${g}" stroke-width=".8"/><circle cy="-13" r="2" fill="${g}"/>`,globe:`<circle r="11" fill="none" stroke="${g}" stroke-width="1.8"/><ellipse rx="5" ry="11" fill="none" stroke="${g}" stroke-width="1"/><path d="M-11 0 H11" stroke="${g}"/>`,wing:`<path d="M-12 4 Q-4 -12 12 -8 Q4 -4 6 0 Q0 -2 2 4 Q-4 2 -12 4Z" fill="${g}"/>`,book:`<path d="M0 -8 Q-6 -12 -12 -9 V9 Q-6 6 0 10 Q6 6 12 9 V-9 Q6 -12 0 -8 V10" fill="none" stroke="${g}" stroke-width="1.8"/>`,foot:`<path d="M-12 8 Q-2 -4 12 -10" fill="none" stroke="${g}" stroke-width="1.4" stroke-dasharray="2 3"/><circle cx="12" cy="-10" r="2.5" fill="${g}"/>`,scale:`<path d="M0 -11 V10 M-10 -6 H10 M-10 -6 L-13 2 H-7Z M10 -6 L7 2 H13Z M-5 10 H5" fill="none" stroke="${g}" stroke-width="1.6"/>`,star:`<path d="M0 -12 L3 -3 L12 -3 L5 3 L8 12 L0 6 L-8 12 L-5 3 L-12 -3 L-3 -3Z" fill="${g}"/>`})[k]||''; }
+function hikmaState(){ S.hikma=S.hikma||{n:0,last:null,vsLast:0,seen:0}; return S.hikma; }
+const hikmaOpen=()=>S.vs>=GATE.hikma;
+function hikmaTick(){ const H=hikmaState(); if(!hikmaOpen()) return false;
+  if(H.n===0){ H.n=1; H.last=dayStr(); H.vsLast=S.vs; save(); return true; }
+  if(H.n<HIKMA.length&&H.last&&dayDiff(H.last,dayStr())>=7&&S.vs-H.vsLast>=3){ H.n++; H.last=dayStr(); H.vsLast=S.vs; save(); return true; }
+  return false; }
+function hikmaNext(){ const H=hikmaState(); if(H.n>=HIKMA.length) return 'Alle de lærde har kommet. Flere kommer i en senere versjon, in shā\' Allāh.';
+  const d=Math.max(0,7-dayDiff(H.last,dayStr())), v=Math.max(0,3-(S.vs-H.vsLast));
+  return d||v?`Neste lærde kommer om ${d?`${d} dag${d>1?'er':''}`:''}${d&&v?' og etter ':v?'etter ':''}${v?`${v} vers-økt${v>1?'er':''} til`:''}.`:'Neste lærde kommer neste gang du fullfører en økt.'; }
+function hikmaArt(open,p){ const fog=open?0:Math.max(.25,1-p*.75), win=open?'#ffcf7a':'#2a2440', col=open?'#3a2c5a':'#1a1630', st=open?'#e7c26b':'#3a3456';
+  return `<svg viewBox="0 0 390 250" width="100%" style="display:block;border-radius:16px;background:linear-gradient(#0b0a22,#1c1840 70%,#2a2238)"><defs><linearGradient id="hkFog" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#c9c3e0" stop-opacity="0"/><stop offset=".5" stop-color="#c9c3e0" stop-opacity=".55"/><stop offset="1" stop-color="#c9c3e0" stop-opacity=".2"/></linearGradient><radialGradient id="hkGl"><stop offset="0" stop-color="#ffd98a" stop-opacity=".8"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient></defs>
+  ${[[40,30],[90,60],[300,40],[350,80],[200,20],[250,70]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.2" fill="#fff8e0" opacity=".8"/>`).join('')}
+  <g fill="${col}" stroke="${st}" stroke-width="${open?1:.6}">
+   <path d="M60 230 V150 H330 V230Z"/><path d="M130 150 V120 H260 V150Z"/>
+   <path d="M150 120 Q150 60 195 52 Q240 60 240 120Z"/><path d="M195 52 V36"/>
+   <path d="M76 150 V96 h16 V150Z M298 150 V96 h16 V150Z"/><path d="M76 96 L84 80 L92 96Z M298 96 L306 80 L314 96Z"/>
+  </g>
+  <circle cx="195" cy="30" r="9" fill="none" stroke="${open?'#ffe6a6':'#4a4466'}" stroke-width="1.6"/><path d="M186 30 H204 M195 21 V39" stroke="${open?'#ffe6a6':'#4a4466'}" stroke-width=".8"/>
+  ${[90,130,170,210,250,290].map((x,i)=>`<path d="M${x} 230 V196 Q${x} 180 ${x+15} 176 Q${x+30} 180 ${x+30} 196 V230Z" fill="${open?'#2a1e10':'#0e0c1c'}" stroke="${st}" stroke-width=".6"/>${[0,1,2,3].map(k=>`<path d="M${x+5} ${200+k*8} H${x+25}" stroke="${open?'#8a5a2a':'#1e1a30'}" stroke-width="2"/>`).join('')}`).join('')}
+  ${[[170,134],[195,134],[220,134]].map(([x,y],k)=>`<path d="M${x-5} ${y+10} V${y+2} Q${x} ${y-4} ${x+5} ${y+2} V${y+10}Z" fill="${open||k===1?win:'#2a2440'}"/>`).join('')}
+  ${!open?`<circle cx="195" cy="138" r="18" fill="url(#hkGl)" opacity=".7"/>`:`<circle cx="195" cy="100" r="120" fill="url(#hkGl)" opacity=".25"/>`}
+  <path d="M0 236 Q195 220 390 236 V250 H0Z" fill="#141026"/>
+  ${fog?`<g opacity="${fog.toFixed(2)}"><rect class="hkf" x="-60" y="60" width="510" height="190" fill="url(#hkFog)"/><rect class="hkf b" x="-80" y="120" width="550" height="130" fill="url(#hkFog)"/></g>`:''}
+  </svg>`; }
+function openHikma(){ hikmaTick(); const H=hikmaState(), open=hikmaOpen(), p=Math.min(1,S.vs/GATE.hikma); H.seen=H.n; save(); $('hikmaPill').classList.remove('ping');
+  let body;
+  if(!open) body=`<p>Her samlet lærde fra hele verden kunnskap om tall, stjerner, kroppen, lys og maskiner. I dag ligger huset i tåke.</p><p>Fullfør vers-økter, så letter tåka litt for hver gang. Når dørene åpner seg, kommer de lærde én etter én.</p><div class="card mod"><div class="mi">🔒</div><div style="flex:1"><b style="color:var(--gold2)">Låst til ${GATE.hikma} vers-økter</b><div class="bar"><b style="width:${p*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${Math.min(S.vs,GATE.hikma)} av ${GATE.hikma} økter</div></div></div>`;
+  else { const L=HIKMA.slice(0,H.n), tease=H.n>=2&&Math.random()<.45;
+    body=`<p>Dørene er åpne. Én lærd kommer om gangen, omtrent én i uka, når du har holdt deg til versene.</p>
+    ${L.map((h,k)=>`<div class="card mod" style="margin-top:8px;cursor:pointer" data-hk="${k}"><svg viewBox="-16 -16 32 32" width="40" height="40" style="flex:0 0 40px">${hikmaEm(h.em)}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(h.n)}</b><div style="font-size:12.5px">${esc(h.ttl)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(h.y)} · ${esc(h.pl)}</div></div></div>`).join('')}
+    ${H.n<HIKMA.length?`<div class="card mod" style="margin-top:8px;opacity:.6"><div class="mi">?</div><div style="flex:1"><b>Noen er på vei</b><div style="font-size:12px;color:var(--muted)">${esc(hikmaNext())}</div></div></div>`:''}
+    ${tease?`<div class="card" style="margin-top:10px;border-color:rgba(231,194,107,.5)"><b style="color:var(--gold2)">Bibliotekaren</b><p style="margin:4px 0 0;font-style:italic">«${esc(rnd(HTEASE))}»</p></div>`:''}`; }
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">BAYT AL-ḤIKMA · بيت الحكمة</p><h3>Visdommens hus</h3>${hikmaArt(open,p)}${body}<button class="btn ghost" id="hkOk">Lukk</button>`);
+  $('hkOk').onclick=closeSheet; $('sheet').querySelectorAll('[data-hk]').forEach(c=>c.onclick=()=>openScholar(+c.dataset.hk)); }
+function openScholar(k){ const h=HIKMA[k], sk=['#c08a5e','#b07a4e','#d0a07a'][k%3];
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISDOMMENS HUS · ${k+1} AV ${HIKMA.length}</p><h3>${esc(h.n)}</h3>
+  <div class="card" style="display:flex;gap:12px;align-items:center"><svg viewBox="-20 -66 40 70" width="56" height="96" style="flex:0 0 56px">${personSvg(!!h.f,0,0,1,h.f?'#5a4a6a':'#efe4cc',h.f?'#2f5a8a':'#f4f0e8',sk)}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(h.ttl)}</b><div style="font-size:13px">${esc(h.y)} · ${esc(h.pl)}</div><svg viewBox="-16 -16 32 32" width="34" height="34" style="margin-top:4px">${hikmaEm(h.em)}</svg></div></div>
+  <h4>Hvem</h4><p>${esc(h.who)}</p><h4>Bidraget</h4><p>${esc(h.did)}</p><h4>Hvorfor det betyr noe i dag</h4><p>${esc(h.why)}</p>
+  ${h.myth?`<div class="card" style="border-color:rgba(231,194,107,.5)"><b style="color:var(--gold2)">Myte eller fakta: ${esc(h.myth[0])}</b><p style="margin:4px 0 0">${esc(h.myth[1])}</p></div>`:''}
+  <a class="tafl" style="display:inline-block;margin:8px 0 0" href="${h.w}" target="_blank" rel="noopener">Les mer på Wikipedia ↗</a>
+  <p style="font-size:12px;color:var(--muted)">Wikipedia er et greit sted å begynne, men ikke det beste. Let etter gode bøker og lærde kilder når du vil vite mer.</p>
+  <button class="btn ghost" id="skB">Tilbake til Visdommens hus</button>`); $('skB').onclick=openHikma; }
+function updHikmaPill(){ const el=$('hikmaPill'); if(!el) return; el.style.display=view==='over'&&!S.active?'':'none'; const H=hikmaState();
+  el.innerHTML=hikmaOpen()?`<span>📚</span> Visdommens hus${H.n>(H.seen||0)?' <b style="color:var(--gold2)">· ny</b>':''}`:`<span>📚</span> Visdommens hus · ${Math.min(S.vs,GATE.hikma)}/${GATE.hikma}`;
+  el.classList.toggle('ping',hikmaOpen()&&H.n>(H.seen||0)); }
 function openPostcard(i,isNew,opened){ if(isNew&&!opened) return openEnvelope(i); const m=MONS[i], ML=MLINKS[m.id]||[null,[]], lnk=k=>{ const h=ML[1][k]; return h?`<a class="tafl" style="display:inline-block;margin:6px 0 0" href="${h}" target="_blank" rel="noopener">${h.includes('wikipedia')?'Les mer på Wikipedia':'Les mer på Muslim Heritage'} ↗</a>`:''; }; S.rdates=S.rdates||{}; if(!S.rdates[m.id]){ S.rdates[m.id]=dayStr(); save(); }
   openSheet(`${isNew?'<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">HÆRFUGLEN ER HJEMME MED ET NYTT REISEBREV</p>':''}<h3>${esc(m.name)}</h3>
   <div class="card" style="padding:0;overflow:hidden;position:relative">${monThumb(m.id)}<div style="position:absolute;left:4px;bottom:2px">${folkSvg(m.id)}</div><div style="position:absolute;right:8px;bottom:8px">${stampSvg(m)}</div></div>
   <p style="font-size:12.5px;color:var(--muted)">Basert på den ekte ${esc(m.name.replace(/^Den /,''))}${m.name.includes(m.city)?'':' i '+esc(m.city)}, ${esc(m.country)} · ${esc(m.built)}. Tegningen er en forenklet silhuett.</p>
+  ${popBox(m.country)}
   <h4>Visste du?</h4><p>${esc(m.fact)}</p>
   ${ML[0]?`<a class="tafl" style="display:inline-block;margin:2px 0 4px" href="${ML[0]}" target="_blank" rel="noopener">Les om stedet på Wikipedia ↗</a>`:''}
   <h4>Fra stedet</h4>${m.people.map(([n,t],k)=>`<div class="card" style="margin-top:6px"><b style="color:var(--gold2)">${esc(n)}</b><p style="margin:4px 0 0">${esc(t)}</p>${lnk(k)}</div>`).join('')}
@@ -1981,7 +2095,7 @@ function openRihla(){ const n=S.rihla||0;
   $('sheet').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ S.horizon=b.dataset.h||null; save(); renderAll(); openRihla(); }); }
 
 /* ================= GRADVIS OPPLÅSING ================= */
-const GATE={dagbok:1,basar:1,ord:3,hifz:4,beite:5,vern:7,bygg:12};
+const GATE={dagbok:1,basar:1,ord:3,hifz:4,beite:5,vern:7,hikma:10,bygg:12};
 const unl=f=>!!S.settings.allOpen||S.vs>=GATE[f];
 const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den i bok-ikonet øverst.'],
@@ -2000,6 +2114,7 @@ const MODS=[['dagbok','📖','Bok (dagbok)','Hvert vers du fullfører lagres her
  ['hifz','🗼','Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers du kan, tenner et vindu i tårnet.'],
  ['beite','🐑','Beitet og dyrene','Sauer og kyr kommer tilbake. Gi dem mat, samle ull, melk og egg, og selg dem i Basaren.'],
  ['vern','🛡','Vern og flere dyr','Fuglehus, sandvegg, gjeterhund, bikube og flere dyr i Basaren.'],
+ ['hikma','📚','Bayt al-Ḥikma','Visdommens hus. Lærde fra gullalderen kommer én etter én: algebra, optikk, kirurgi, maskiner og stjerner. Finn det nede til høyre i oversikten.'],
  ['bygg','🏛','Bygg og himmel','Paviljong, kaskade, minaret, nordlys og til slutt palasset.'],
  ['frukt','🌴','Frukthagen','Plant og høst daddel, granateple, fiken og oliven.']];
 const modAt=k=>k==='frukt'?AT.frukt:k==='beite'?AT.beite:GATE[k];
@@ -2284,6 +2399,7 @@ function finish(refl){
   const rw=a._gain&&a.kind!=='hifz';
   if(rw&&a._rose&&!(view==='sec'&&curQ===QUADS.findIndex(q=>q.id==='roser'))){ const sp=S.sprout; S.sprout=null; renderSection(); S.sprout=sp; } else renderSection();
   renderTop(); barakah(); snd.chime(); sparkle(); if(rw) rewardSeq(a._nur0,a._gain,!!a._rose);
+  if(a.kind!=='hifz'&&hikmaTick()){ msgs.push(hikmaState().n===1?'Visdommens hus har åpnet dørene':'en ny lærd har kommet til Visdommens hus'); updHikmaPill(); }
   setTimeout(()=>{ toast(msgs.join(' · '),rw?2900:4200); },rw?1700:0); setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
 }
 function markDone(){ const t=dayStr(); if(!S.doneDays.includes(t)){ S.streak=S.doneDays.includes(addDays(t,-1))?S.streak+1:1; S.best=Math.max(S.best,S.streak); S.daysTotal=(S.daysTotal||0)+1; S.doneDays.push(t); S.doneDays=S.doneDays.slice(-120);} save(); drawLanterns(); }
@@ -2932,14 +3048,14 @@ function automationHTML(url){
 
 /* ================= START ================= */
 function renderTop(){ $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
-function renderAll(){ updateGates(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
+function renderAll(){ updateGates(); updHikmaPill(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
 stage.classList.toggle('showtl',!!S.settings.tl); $('aTl').classList.toggle('on',!!S.settings.tl); $('qTlB').classList.toggle('on',!!S.settings.tl);
 S.farm=S.farm||{fence:0,stall:false,trau:false}; S.young=S.young||[]; S.korn=S.korn??0; S.fiskemat=S.fiskemat??5; S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
 S.roses.forEach((p,i)=>{ if(p.s==null) p.s=i; }); initJunk(); applySky(); drawStatic(); dailyCheck(); rainCheck(); renderAll();
 fetchSurahList().then(m=>{ surahMeta=m; renderAll(); }).catch(()=>{});
 setInterval(()=>{ applySky(); flockTick(); if(view==='over') renderCarpet(); },60e3);
 if(!S.settings.m10){ S.settings.m10=true; if(!S.settings.min||S.settings.min===6) S.settings.min=10; save(); }
-applyFont(); applyThemes(); $('taskPill').onclick=openTasks; $('nurChip').onclick=()=>{ if(!S.active) openNur(); }; armBack();
+applyFont(); applyThemes(); $('taskPill').onclick=openTasks; $('hikmaPill').onclick=openHikma; $('nurChip').onclick=()=>{ if(!S.active) openNur(); }; armBack();
 try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 if(!S.introSeen) playIntro();
 if(S.active){ abandonCheck(); if(S.active) openSession(); }
@@ -2955,7 +3071,7 @@ else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&
 setTimeout(()=>{ if(!weekly()) showUnseen(); },500);
 fetchSurahList().then(l=>{ surahMeta=surahMeta||l; if((S.rihla||0)>0&&!S.rihlaIntro&&S.introSeen){ S.rihlaIntro=1; save(); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) openRihlaIntro(latestMon()); else S.rihlaIntro=0; },1500); } const before=S.rihla||0; if(rihlaEarned()>before&&S.introSeen) checkRihla(); }).catch(()=>{});
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.__rawdah={showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
+window.__rawdah={openHikma,openScholar,hikmaTick,HIKMA,showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
 }
 </script>
 </body>
