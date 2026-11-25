@@ -149,7 +149,7 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .fxcard{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%) scale(.85);opacity:0;transition:all .45s cubic-bezier(.2,1.4,.4,1);text-align:center;padding:18px 34px;border-radius:22px;background:rgba(10,8,30,.82);border:1px solid rgba(231,194,107,.55);box-shadow:0 0 40px rgba(255,217,138,.35);min-width:200px}
 .fxcard.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .fxcard .fa{font-family:Amiri,serif;font-size:46px;color:#ffe6a6;line-height:1.2;text-shadow:0 0 18px rgba(255,217,138,.5)}
-.fxcard .fn{font-family:var(--serif);font-size:26px;color:#f2e6c8;margin-top:2px}.fxcard .fs{font-size:13px;color:var(--gold);margin-top:6px;letter-spacing:.5px}
+.fxcard .fn{font-family:var(--serif);font-size:26px;white-space:nowrap;color:#f2e6c8;margin-top:2px}.fxcard .fs{font-size:13px;color:var(--gold);margin-top:6px;letter-spacing:.5px}
 .fxsp{animation:fxsp .9s ease-out forwards}@keyframes fxsp{to{transform:translate(var(--dx),var(--dy));opacity:0}}
 .fxpop{animation:fxpop .6s ease-out}@keyframes fxpop{from{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.3)}}
 .fall{position:absolute;width:6px;height:6px;border-radius:50%;background:#fff5d6;box-shadow:0 0 12px 4px #ffd98a;pointer-events:none;display:none;z-index:4}
@@ -563,7 +563,9 @@ function toolDay(){ if(!S.toolUse||S.toolUse.day!==dayStr()) S.toolUse={day:dayS
 const usesLeft=k=>{ const T=toolDay(); return Math.max(0,TUSE[tLvl(k)]+(T.bonus||0)-(T.used[k]||0)); };
 const usesMax=k=>TUSE[tLvl(k)]+(toolDay().bonus||0);
 const SIZE=['','liten','middels','stor'], SIZEPL=['','små','middels store','store'];
-const JUNKNAME={stein:'Steinrester',ugress:'Ugress',stubbe:'Død stubbe',stov:'Sand og støv'};
+const JUNKNAME={stein:'Steinrester',ugress:'Ugress',stubbe:'Død stubbe',stov:'Sand og støv',blader:'Visne blader',rotter:'Rottehull og rottespor',greiner:'Knekte greiner',mokk:'Møkk'};
+const TOOLFOR={stein:'spade',rotter:'spade',ugress:'rive',blader:'rive',stubbe:'sag',greiner:'sag',stov:'krukke',mokk:'krukke'};
+const toolFor=t=>TOOLFOR[t];
 const DECOR={
   lykt:{name:'Lyktestolpe',price:20,desc:'Lyser opp hagen om natten.'},
   krukke:{name:'Blomsterkrukke',price:15,desc:'Terrakotta med blomster.'},
@@ -847,6 +849,10 @@ function junkSvg(j){ const sl=SLOTS[j.s]; if(!sl) return ''; const z=j.z||1, s=s
   if(j.type==='stein') g=rubble(x-12*s,y,s*1.1);
   if(j.type==='ugress') g=`<g>${[-8,-3,2,7].map((dx,k)=>`<path d="M${x+dx*s} ${y} q${-3*s} ${-8*s} ${(k%2?4:-4)*s} ${-14*s}" stroke="#9a9a4a" stroke-width="${2.2*s}" fill="none" stroke-linecap="round"/>`).join('')}<ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${3*s}" fill="#3a3424"/></g>`;
   if(j.type==='stubbe') g=deadTree({x,y,sc:s});
+  if(j.type==='blader') g=`<g>${[[-9,-2,'#c98a2e',20],[-2,1,'#a8601e',-30],[6,-1,'#d9a040',50],[1,-4,'#8a5a1e',10]].map(([dx,dy,c,r])=>`<ellipse cx="${x+dx*s}" cy="${y+dy*s}" rx="${5*s}" ry="${2.4*s}" fill="${c}" transform="rotate(${r} ${x+dx*s} ${y+dy*s})"/>`).join('')}</g>`;
+  if(j.type==='rotter') g=`<g><ellipse cx="${x}" cy="${y}" rx="${9*s}" ry="${3.6*s}" fill="#1a120c"/><ellipse cx="${x}" cy="${y-1*s}" rx="${12*s}" ry="${4.6*s}" fill="none" stroke="#5a4028" stroke-width="${2*s}"/>${[[-14,4],[-11,6],[12,3],[15,5],[18,2]].map(([dx,dy])=>`<ellipse cx="${x+dx*s}" cy="${y+dy*s}" rx="${1.2*s}" ry="${.8*s}" fill="#2a1e14"/>`).join('')}<g transform="translate(${x+6*s} ${y-3*s}) scale(${s})"><ellipse rx="5" ry="3" fill="#5a5060"/><circle cx="5" cy="-1" r="2.2" fill="#5a5060"/><path d="M-5 0 q-6 2 -9 -2" stroke="#7a6a72" stroke-width="1" fill="none"/></g></g>`;
+  if(j.type==='greiner') g=`<g stroke="#5a3a1a" stroke-linecap="round" fill="none"><path d="M${x-14*s} ${y} L${x+12*s} ${y-6*s}" stroke-width="${3*s}"/><path d="M${x-2*s} ${y-3*s} l${4*s} ${-7*s} M${x+6*s} ${y-5*s} l${5*s} ${-4*s}" stroke-width="${1.8*s}"/><path d="M${x-10*s} ${y+2*s} L${x+8*s} ${y+4*s}" stroke-width="${2.4*s}"/></g>`;
+  if(j.type==='mokk') g=`<g><ellipse cx="${x}" cy="${y}" rx="${8*s}" ry="${3.2*s}" fill="#4a3220"/><ellipse cx="${x-1*s}" cy="${y-2.6*s}" rx="${5.4*s}" ry="${2.6*s}" fill="#5a3e26"/><ellipse cx="${x}" cy="${y-4.6*s}" rx="${3*s}" ry="${1.8*s}" fill="#6a4a2e"/>${[0,1].map(k=>`<path d="M${x-3*s+k*6*s} ${y-8*s} q${-2*s} ${-4*s} 0 ${-8*s}" stroke="rgba(180,170,140,.4)" stroke-width="${1*s}" fill="none"/>`).join('')}</g>`;
   if(j.type==='stov') g=`<g><ellipse cx="${x}" cy="${y-4*s}" rx="${18*s}" ry="${7*s}" fill="#9a8a6a" opacity=".55"/><ellipse cx="${x+8*s}" cy="${y-8*s}" rx="${10*s}" ry="${5*s}" fill="#b4a37f" opacity=".5"/></g>`;
   return `<g class="junk" data-j="${j.id}">${g}<rect x="${x-20*s}" y="${y-28*s}" width="${40*s}" height="${32*s}" fill="transparent"/></g>`; }
 const O='stroke="#1a1030" stroke-width="2" stroke-linejoin="round"';
@@ -919,11 +925,11 @@ function fxDust(x,y,sz=1){ if(fxOff()) return; for(let k=0;k<4;k++){ const d=fxE
 function fxRing(x,y,c='#ffe6a6'){ if(fxOff()) return; const d=fxEl('fxring',x,y,`border-color:${c}`); setTimeout(()=>d.remove(),900); }
 function fxFall(x,y,c,n=10,cls='fxhay'){ if(fxOff()) return; for(let k=0;k<n;k++){ const d=fxEl(cls,x+(Math.random()-.5)*60,y-70-Math.random()*20,`background:${c};animation-delay:${k*35}ms;transform:rotate(${Math.random()*180}deg)`); setTimeout(()=>d.remove(),1100); } }
 function fxWater(x,y){ if(fxOff()) return; const w=stage.clientWidth; [[w*.22,y-70],[w*.78,y-60],[w*.3,y-160],[w*.7,y-150]].forEach(([tx,ty],i)=>{ for(let k=0;k<6;k++){ const d=fxEl('fxdrop',x,y,`--tx:${(tx-x).toFixed(0)}px;--ty:${(ty-y).toFixed(0)}px;animation-delay:${i*70+k*30}ms`); setTimeout(()=>d.remove(),1100); } setTimeout(()=>fxBurst(tx,ty,['#9fd0ff','#cfe6ff'],8,26,4),i*70+520); }); }
-const JUNKFX={stein:['#9a8a72','#7a6a58','#c8b89a'],ugress:['#6a9a3a','#4f7a2a','#a8c870'],stubbe:['#8a5a2a','#6a4020','#c89a5a'],stov:['#d8c8a0','#b8a880','#efe4cc']};
+const JUNKFX={blader:['#c98a2e','#a8601e','#d9a040'],rotter:['#5a4028','#2a1e14','#7a6a58'],greiner:['#5a3a1a','#8a5a2a','#c89a5a'],mokk:['#4a3220','#6a4a2e','#8a6a42'],stein:['#9a8a72','#7a6a58','#c8b89a'],ugress:['#6a9a3a','#4f7a2a','#a8c870'],stubbe:['#8a5a2a','#6a4020','#c89a5a'],stov:['#d8c8a0','#b8a880','#efe4cc']};
 function clean(id,e){
   const q=QUADS[curQ].id, j=S.junk[q].find(x=>x.id===id); if(!j) return;
   if(!unl('basar')) return toast(`Rydding åpnes etter ${GATE.basar} vers-økter (${S.vs}/${GATE.basar})`);
-  const tk=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type);
+  const tk=toolFor(j.type);
   if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
   const need=j.z||1, have=tLvl(tk);
   if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZEPL[need][0].toUpperCase()+SIZEPL[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
@@ -935,7 +941,7 @@ function clean(id,e){
   const left=S.junk[q].length, ul=usesLeft(tk), tn=TIERS[tk][tLvl(tk)-1][0]; toast(left?`Ryddet. +${need} nur · ${tn}: ${ul} av ${usesMax(tk)} igjen i dag`:`Denne delen er ryddet, alhamdulillah. +${need} nur`);
 }
 function junkLeft(){ return Object.values(S.junk||{}).reduce((n,a)=>n+a.length,0); }
-function canClean(q){ return (S.junk[q]||[]).some(j=>{ const k=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); }
+function canClean(q){ return (S.junk[q]||[]).some(j=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); }
 
 /* ================= SCENE ================= */
 function cyp(x,b,h,w,cls='sil'){
@@ -1290,7 +1296,7 @@ function renderSection(){
       const ri=S.fruit.findIndex((t,i)=>sl[i]&&t.st>=3&&t.h==='ok'&&S.harvested[i]!==dayStr()); if(ri>=0) b+=beacon(sl[ri].x,sl[ri].y-70*sl[ri].sc,'Trykk for å høste'); } }
   const J=(S.junk[q.id]||[]), D=S.decor.filter(d=>d.q===q.id);
   h=depth(J.map(j=>[SLOTS[j.s]?SLOTS[j.s].y:0,junkSvg(j)]).concat(D.map(d=>{const sp=SPOTS[d.spot];return [sp.y,decoSvg(d.type,sp.x,sp.y,sp.sc,d.id)];})))+h;
-  if(inStell()&&J.length){ const fj=J.find(j=>{ const k=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
+  if(inStell()&&J.length){ const fj=J.find(j=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
   if(ok && inStell() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   else if(inStell()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
@@ -1885,17 +1891,22 @@ function disaster(reason){
   else { const ok=S.fruit.map((t,i)=>t.h==='ok'?i:-1).filter(i=>i>=0); const n=Math.min(ok.length,1+Math.floor(Math.random()*2));
     const n2=has('frukt','fuglehus')?Math.floor(n/2):n; ok.sort(()=>Math.random()-.5).slice(0,n2).forEach(i=>{S.fruit[i].h='dmg';S.fruit[i].dd=dayStr();}); addJunk('frukt','ugress',2);
     if(n2<n) logEvent('Fuglene i fuglehuset tok mange av gresshoppene i Frukthagen.');
-    logEvent(n?`${reason}: Gresshopper i Frukthagen. ${n} tre${n>1?'r':''} ble skadet.`:`${reason}: Gresshopper. −5 nur.`); if(!n) S.nur-=5; }
+    logEvent(n?`${reason}: Gresshopper i Frukthagen. ${n} ${n>1?'trær':'tre'} ble skadet.`:`${reason}: Gresshopper. −5 nur.`); if(!n) S.nur-=5; }
 }
 const has=(q,type)=>S.decor.some(d=>d.q===q&&d.type===type);
 function flockTick(){ const F=S.flock, days=(Date.now()-F.ts)/864e5; if(days>0.01){ F.hunger=Math.max(0,F.hunger-days*(has('beite','hund')?15:30)*hungerMul()); F.ts=Date.now(); } }
+const AWAYMSG={rotter:n=>`Rottene har gravd seg inn i ${n}. Det er hull og rottespor overalt.`,mokk:n=>`Ingen har måket i ${n}. Møkka hoper seg opp.`,ugress:n=>`Ugresset har krøpet inn mellom blomstene i ${n}.`,blader:n=>`Visne blader dekker stiene i ${n}.`};
+let awayLog=[];
 function dailyCheck(){
   flockTick();
   if(!S.hud||S.hud.day!==dayStr()) S.hud={day:dayStr(),show:Math.random()<.12,seen:false};
   const today=dayStr(); if(!S.lastCheck){S.lastCheck=today;save();return;} if(S.lastCheck===today) return;
   const passed=Math.min(dayDiff(S.lastCheck,today),14); let dis=0;
   for(let k=0;k<passed;k++){ const d=addDays(S.lastCheck,k); S.nur-=5;
-    addJunk(rnd(['roser'].concat(['taarn','beite','frukt'].filter(q=>restored(q)))),'ugress',2);
+    { const qs=['roser'].concat(['taarn','beite','frukt'].filter(q=>restored(q))), did=S.doneDays.includes(d), cap=q=>(S.junk[q]||[]).length<16;
+      const light=()=>{ const q=rnd(qs); if(!cap(q)) return; const t=rnd(q==='frukt'?['blader','greiner']:q==='beite'?['blader','mokk','greiner']:['blader','ugress','greiner']); addJunk(q,t,1,1); };
+      light(); if(Math.random()<.6) light();
+      if(!did){ const q=rnd(qs); if(cap(q)){ const t=rnd(q==='beite'?['rotter','mokk','mokk']:['rotter','ugress','blader']); const n0=S.junk[q].length; addJunk(q,t,2,rnd([1,1,2])); if(S.junk[q].length>n0) awayLog.push(AWAYMSG[t](QUADS.find(x=>x.id===q).name)); } } }
     if(S.oil>0){ S.oil--; if(S.oil===0) logEvent('Lampeoljen er brukt opp. Lyktene slukner til du kjøper mer.'); }
     if(restored('beite')&&S.flock.hunger>=40) produce(d);
     if(restored('beite')){ growYoung(); if((S.flock.hens||0)>=2&&kornOK()&&Math.random()<.15&&addYoung('kylling')) logEvent('En kylling har klekket på beitet.'); }
@@ -1910,7 +1921,9 @@ function dailyCheck(){
   S.fruit=S.fruit.filter(t=>{ if(t.h==='dmg'&&t.dd&&dayDiff(t.dd,today)>=4){ logEvent(`Et ${FRUITNAME[t.type].toLowerCase()} døde. Stubben må sages bort.`); addJunk('frukt','stubbe',1); return false;} return true; });
   S.roses=S.roses.filter(p=>{ if(p.h==='dead'){ addJunk('roser','stubbe',1); return false; } return true; });
   if(!S.doneDays.includes(addDays(today,-1))&&!S.doneDays.includes(today)) S.streak=0;
-  S.lastCheck=today; save();
+  const missed=Array.from({length:passed},(_,k)=>addDays(S.lastCheck,k)).filter(d=>!S.doneDays.includes(d)).length;
+  if(missed>0&&S.introSeen) S.away={days:missed,msgs:[...new Set(awayLog)].slice(0,4),seen:false};
+  awayLog=[]; S.lastCheck=today; save();
 }
 
 /* ================= STJERNEFALL ================= */
@@ -2289,7 +2302,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
   const lockNote=(f,what)=>`<div class="card" style="margin:6px 0"><b style="color:var(--gold2)">${what}</b><p style="margin:4px 0 0">Åpnes etter ${GATE[f]} vers-økter (${Math.min(S.vs,GATE[f])}/${GATE[f]}).</p></div>`;
   const decoRows=cat=>Object.entries(DECOR).filter(([k,d])=>d.cat===cat).map(([k,d])=>row(decoThumb(k),d.name,d.desc+(S.inv[k]?` · ${S.inv[k]} på lager`:''),buyBtn(`data-deco="${k}"`,d.price))).join('');
   if(shopTab==='varer'){ body='<h4>Forbruk</h4>'+Object.entries(WARES).map(([k,w])=>row(ico(k),w.name,w.desc+(k==='fro'&&!restored('frukt')?' Frukthagen må være gjenopprettet først.':''),buyBtn(`data-ware="${k}"`,w.price,w.once&&S.upg[k]))).join('');
-    body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur. Verktøyene blir slitne og hviler over natta. Bedre verktøy orker mer.</p>'+row(ico('slipestein'),'Slipestein','Gir alle verktøyene 3 ekstra ryddinger i dag.'+(toolDay().bonus?` Brukt i dag: +${toolDay().bonus}.`:''),buyBtn('data-sharpen="1"',12))+''+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>j.type===t.for&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(L?` Orker ${TUSE[L]} ryddinger per dag, ${usesLeft(k)} igjen i dag.`:` Orker ${TUSE[1]} ryddinger per dag.`)+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} rydder ${SIZEPL[L+1]} ting og orker ${TUSE[L+1]} per dag.`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
+    body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur. Verktøyene blir slitne og hviler over natta. Bedre verktøy orker mer.</p>'+row(ico('slipestein'),'Slipestein','Gir alle verktøyene 3 ekstra ryddinger i dag.'+(toolDay().bonus?` Brukt i dag: +${toolDay().bonus}.`:''),buyBtn('data-sharpen="1"',12))+''+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>toolFor(j.type)===k&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(L?` Orker ${TUSE[L]} ryddinger per dag, ${usesLeft(k)} igjen i dag.`:` Orker ${TUSE[1]} ryddinger per dag.`)+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} rydder ${SIZEPL[L+1]} ting og orker ${TUSE[L+1]} per dag.`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
   if(shopTab==='vern'){ body=unl('vern')?'<h4>Vern og nytte</h4>'+decoRows('vern')+'<h4>Flere dyr</h4>'+decoRows('dyr'):lockNote('vern','Vern og nytte'); }
   if(shopTab==='gard'){ const rb=restored('beite'), F=S.flock;
     body=`<p style="font-size:13px">Flokken: ${F.sheep} sauer, ${F.cows} kyr, ${F.goats||0} geiter, ${F.hens||0} høner${(S.young||[]).length?`, ${S.young.length} ungdyr`:''} · plass til ${farmCap()} · ${S.fish||0} fisker</p>`;
@@ -2498,7 +2511,9 @@ function weekly(){ if(new Date().getDay()!==5||S.weekShown===dayStr()||!S.introS
   <h4>Ukens vers</h4>${J.slice(0,7).map(e=>`<div class="card" style="margin-top:6px"><div class="ar shown" style="font-size:18px;line-height:1.8;text-shadow:none">${esc(e.ar.slice(0,160))}${e.ar.length>160?' …':''}</div><div style="font-size:13px;color:var(--muted)">${esc(e.name)} ${esc(e.ref)} · ${esc(e.f)}</div></div>`).join('')}
   <button class="btn" id="wkOk">Bismillah, en ny uke</button>`); $('wkOk').onclick=closeSheet; return true; }
 function showUnseen(){
-  if(!S.unseen||S.active||!S.introSeen) return; const ev=S.events.slice(0,Math.min(S.unseen,6)); S.unseen=0; save();
+  if(titleOn||S.active||!S.introSeen) return;
+  if(S.away&&!S.away.seen){ const ev=S.unseen?S.events.slice(0,Math.min(S.unseen,4)).map(e=>e.text):[]; S.unseen=0; S.away.msgs=[...S.away.msgs,...ev].slice(0,6); return showAway(); }
+  if(!S.unseen) return; const ev=S.events.slice(0,Math.min(S.unseen,6)); S.unseen=0; save();
   openSheet(`<h3>Mens du var borte …</h3><div class="card log">${ev.map(e=>`<div>${esc(e.text)}</div>`).join('')}</div><p>Fullfør en økt for å reparere. Trykk på et skadet område i en del for en tawbah-økt som reparerer alt.</p><button class="btn" id="seeG">Se hagen</button>`);
   $('seeG').onclick=()=>{ closeSheet(); toOverview(); };
 }
@@ -2546,6 +2561,25 @@ function openGuide(){ const st=[
  ['🕊','Mer etter hvert','Hærfuglen kommer med brev fra ekte steder i den muslimske verden (Rihla). Lysets tårn er for å lære utenat, og Dagens ord gir ett arabisk ord om dagen.']];
   openSheet(`<h3>Slik fungerer Rawdah</h3>${st.map(([i,t,d])=>`<div class="card" style="display:flex;gap:12px;align-items:flex-start;margin:8px 0"><div style="font-size:22px;min-width:30px;text-align:center;color:var(--gold)">${i}</div><div><b style="color:var(--gold2)">${t}</b><p style="margin:3px 0 0;font-size:13.5px">${d}</p></div></div>`).join('')}<p style="font-size:12.5px;color:var(--muted)">Du finner denne forklaringen igjen under Meg.</p><button class="btn" id="gOk">Skjønner, gå til hagen</button>`);
   $('gOk').onclick=()=>{ closeSheet(); if(!S.active&&view!=='sec') enterQuad(0); }; }
+/* ---- Når du har vært borte: hva som skjedde, og et vers ---- */
+const AWAYV=[
+ [1,'2:152','«Husk Meg, så husker Jeg dere.» Hagen har savnet deg, og det er aldri for sent å komme tilbake.'],
+ [1,'13:28','Hjertene finner ro i ihukommelsen av Allah. Kanskje det var nettopp det som manglet de siste dagene?'],
+ [2,'18:24','«Husk Herren din når du har glemt.» Glemsel er menneskelig. Det viktigste er å vende tilbake.'],
+ [3,'59:19','Koranen advarer mot å bli som dem som glemte Allah, så Han fikk dem til å glemme seg selv. Glemselen var det som la Rawdah i ruiner.'],
+ [3,'57:16','«Er det ikke på tide for de troende at hjertene deres blir ydmyke ved ihukommelsen av Allah?»'],
+ [5,'20:124','Den som vender seg bort fra ihukommelsen av Meg, får et trangt liv. Hagen har kjent det på kroppen.'],
+ [7,'13:11','Allah endrer ikke et folks tilstand før de endrer det som er i dem selv. Gjenoppbyggingen begynner med deg, i dag.'],
+];
+function showAway(){ const A=S.away; if(!A||A.seen) return; A.seen=true; save();
+  const pool=AWAYV.filter(v=>v[0]<=A.days), v=pool.length>2&&A.days>=3?rnd(pool.slice(-3)):rnd(pool), hope=A.days>=3;
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${A.days===1?'DU VAR BORTE I GÅR':`DU VAR BORTE I ${A.days} DAGER`}</p><h3>${A.days>=5?'Glemselen har satt spor i hagen':A.days>=2?'Åh nei, hagen er skadet':'Hagen savnet deg'}</h3>
+  ${A.msgs.length?`<ul style="padding-left:18px;font-size:14px;line-height:1.55;margin:6px 0">${A.msgs.map(m=>`<li>${esc(m)}</li>`).join('')}</ul>`:''}
+  <div class="card"><p style="margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.45">${esc(v[2])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">Koranen ${v[1]}</p></div>
+  ${hope?`<div class="card" style="margin-top:8px"><p style="margin:0;font-size:14.5px">Men fortvil aldri: «Mine tjenere, som har gått for langt mot dere selv, fortvil ikke om Allahs nåde.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">Koranen 39:53</p></div>`:''}
+  <button class="btn" id="awGo">${doneToday()?'Gå til hagen':'Start dagens vers'}</button><button class="btn ghost" id="awRead">Les verset</button>`);
+  $('awGo').onclick=()=>{ closeSheet(); if(!doneToday()&&!S.active) spin(); };
+  $('awRead').onclick=()=>openVerseRef(v[1],'KORANEN '+v[1]); }
 /* ---- Åpningsskjerm ---- */
 let titleOn=false;
 function titleScene(){ const P=PAL[skyKey]||PAL.natt, pct=restorePct(), lit=Math.round(pct/100*9), day=skyKey==='dag';
@@ -2579,7 +2613,7 @@ function showTitle(){ titleOn=true; const el=$('title'), pct=restorePct(), a=S.a
   $('tGuide').onclick=ev=>{ ev.stopPropagation(); titleOn=false; unlockAudio(); el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650); openGuide(); };
   el.onclick=()=>{ if(!titleOn) return; titleOn=false; snd.chime([523,659,784],.06); if(sess){ userPaused=false; playCurrent(); } else unlockAudio();
     el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650);
-    if(!S.active&&view!=='sec') enterQuad(0); lastTick=performance.now(); }; }
+    if(!S.active&&view!=='sec') enterQuad(0); lastTick=performance.now(); setTimeout(showUnseen,700); }; }
 function goldenAge(){
   const G='url(#goldG)', dome=(cx,by,w,hh)=>`<path d="M${cx-w} ${by} Q${cx-w} ${by-hh*.8} ${cx} ${by-hh} Q${cx+w} ${by-hh*.8} ${cx+w} ${by}Z" fill="${G}" stroke="#7a5a20" stroke-width=".8"/><path d="M${cx} ${by-hh} v-10" stroke="#e7c26b" stroke-width="1.4"/><path d="M${cx-3} ${by-hh-10} q3 -6 6 0" fill="none" stroke="#e7c26b" stroke-width="1.2"/>`;
   const min=(x,b,hh)=>`<path d="M${x-4} ${b} V${b-hh} h8 V${b}Z" fill="#f2e6c8" stroke="#7a5a20" stroke-width=".6"/><path d="M${x-6} ${b-hh*.62} h12 v-3 h-12Z M${x-6} ${b-hh*.85} h12 v-3 h-12Z" fill="${G}"/><path d="M${x-4} ${b-hh} Q${x} ${b-hh-14} ${x+4} ${b-hh}Z" fill="${G}"/><circle cx="${x}" cy="${b-hh-16}" r="1.4" fill="#ffe6a6"/>`;
@@ -2747,7 +2781,7 @@ else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&
 setTimeout(()=>{ if(!weekly()) showUnseen(); },500);
 fetchSurahList().then(l=>{ surahMeta=surahMeta||l; if((S.rihla||0)>0&&!S.rihlaIntro&&S.introSeen){ S.rihlaIntro=1; save(); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) openRihlaIntro(latestMon()); else S.rihlaIntro=0; },1500); } const before=S.rihla||0; if(rihlaEarned()>before&&S.introSeen) checkRihla(); }).catch(()=>{});
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.__rawdah={signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
+window.__rawdah={showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
 }
 </script>
 </body>
