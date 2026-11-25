@@ -392,6 +392,20 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 #iModes{position:absolute;left:0;right:0;bottom:calc(var(--safe-b) + 96px);top:calc(var(--safe-t) + 54px);padding:18px;overflow:auto;display:none;background:rgba(8,6,22,.86);border-top:1px solid rgba(231,194,107,.35);border-bottom:1px solid rgba(231,194,107,.35)}
 .s6 #iModes{display:block}
 .s6 .icap{display:none}
+.icap .iv{display:block;margin:12px auto 0;max-width:340px;padding:10px 14px;border-radius:14px;background:rgba(9,7,26,.7);border:1px solid rgba(231,194,107,.4);font-size:16px;line-height:1.35;color:#f2e6c8;opacity:0;animation:ivIn 1.2s 1.6s ease forwards}
+.icap .iva{display:block;font-family:Amiri,serif;direction:rtl;font-size:20px;line-height:1.8;color:#ffe6a6;margin-bottom:4px}
+.icap .iv em{display:block;font-style:normal;font-size:11.5px;letter-spacing:.6px;color:var(--gold);margin-top:5px;font-family:Inter,system-ui,sans-serif}
+@keyframes ivIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#intro.hush #iScene{filter:brightness(.35) saturate(.6);transition:filter 2s}#intro.hush .ilonehud{opacity:0!important}
+#intro.hush .icap .iv{animation-delay:.9s}
+#intro .ibolt{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:2}
+#intro.s3 .ibolt{animation:bolt 4.2s .6s ease-out 1 both}
+#intro .ibolt svg{position:absolute;left:58%;top:4%;width:22%;height:46%}
+@keyframes bolt{0%{opacity:0}3%{opacity:1}7%{opacity:.15}10%{opacity:.9}16%{opacity:0}40%{opacity:0}43%{opacity:.85}50%{opacity:0}100%{opacity:0}}
+#intro .iflash{position:absolute;inset:0;pointer-events:none;background:#eef2ff;opacity:0;z-index:2}
+#intro.s3 .iflash{animation:flash 4.2s .6s ease-out 1 both}
+@keyframes flash{0%{opacity:0}3%{opacity:.55}8%{opacity:0}43%{opacity:.4}48%{opacity:0}100%{opacity:0}}
+@media (prefers-reduced-motion: reduce){#intro.s3 .ibolt{animation:none;opacity:.6}#intro.s3 .iflash{animation:none}.icap .iv{animation:none;opacity:1}}
 .s6 #iScene{filter:saturate(.25) brightness(.35)}
 .tabs{display:flex;gap:6px;margin:6px 0 10px}
 .tabs button{flex:1;min-height:40px;border-radius:12px;border:1px solid rgba(231,194,107,.35);font-size:14px}
@@ -539,6 +553,7 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
         <radialGradient id="ilg"><stop offset="0" stop-color="#ffd27a" stop-opacity=".9"/><stop offset="1" stop-color="#ff9c3a" stop-opacity="0"/></radialGradient>
       </defs><g id="iScene"></g></svg>
       <div class="storm" id="storm"></div>
+      <div class="iflash"></div><div class="ibolt"><svg viewBox="0 0 60 160"><path d="M34 0 L12 72 H30 L16 160 L50 58 H32 L46 0Z" fill="#f4f6ff" style="filter:drop-shadow(0 0 8px #bcd0ff) drop-shadow(0 0 22px #8aa8ff)"/></svg></div>
       <div class="dust" id="dust"></div>
     </div>
     <div class="idots" id="idots"></div>
@@ -769,8 +784,8 @@ async function fetchWords(s,a){ const k=s+':'+a; if(WCACHE[k]) return WCACHE[k];
   }catch(e){ return null; } }
 function loadWords(vs){ (vs||[]).forEach(v=>{ if(v.words) return; fetchWords(v.surah,v.ayah).then(w=>{ if(!w) return; v.words=w; if(sess&&verses===vs&&(sess.ph||0)===0) quizSetup(); }); }); }
 function fitVerse(){ const v=$('verse'); if(!v.classList.contains('on')||!sess||(sess.ph||0)!==0){ v.classList.remove('scrolly'); v.style.maxHeight=''; return; }
-  const top=v.getBoundingClientRect().top, sb=$('sbar').getBoundingClientRect().top; v.style.maxHeight=Math.max(150,sb-top-10)+'px';
-  const over=v.scrollHeight>v.clientHeight+4; v.classList.toggle('scrolly',over); v.classList.toggle('atend',!over||v.scrollTop+v.clientHeight>=v.scrollHeight-6); }
+  const top=v.getBoundingClientRect().top, sb=$('sbar').getBoundingClientRect().top, mh=Math.round(Math.max(150,sb-top-10))+'px'; if(v.style.maxHeight!==mh&&Math.abs(parseFloat(v.style.maxHeight||0)-parseFloat(mh))>6) v.style.maxHeight=mh;
+  const over=v.scrollHeight>v.clientHeight+4; if(v.classList.contains('scrolly')!==over) v.classList.toggle('scrolly',over); v.classList.toggle('atend',!over||v.scrollTop+v.clientHeight>=v.scrollHeight-6); }
 $('verse').addEventListener('scroll',fitVerse,{passive:true});
 const fetchSurahList=()=>getJSON(`${API}/surah`,'surahlist');
 
@@ -2155,7 +2170,7 @@ function unlockAudio(){ try{ audio.src='data:audio/mp3;base64,//uQxAAAAAAAAAAAAA
 function setIcon(p){ $('playIco').innerHTML=p?'<path d="M8 5h3v14H8zM14 5h3v14h-3z"/>':'<path d="M8 5v14l11-7z"/>'; }
 function setPlaylist(u,u2){ playlist=u.filter(Boolean); playlist2=(u2||[]).slice(0,playlist.length); plIdx=0; userPaused=false; playCurrent(); }
 audio.addEventListener('error',()=>{ const alt=playlist2[plIdx]; if(alt&&playlist[plIdx]&&audio.src===playlist[plIdx]&&audio.src!==alt){ playlist[plIdx]=alt; playCurrent(); } });
-function playCurrent(){ if(!playlist.length) return setIcon(false); audio.src=playlist[plIdx]; audio.play().then(()=>setIcon(true)).catch(()=>setIcon(false)); }
+function playCurrent(){ if(!playlist.length) return setIcon(false); const u=playlist[plIdx]; if(audio.src===u&&audio.readyState>=2){ try{ audio.currentTime=0; }catch(e){} } else audio.src=u; audio.play().then(()=>setIcon(true)).catch(()=>setIcon(false)); }
 audio.addEventListener('ended',()=>{ if(!playlist.length) return; plIdx++;
   if(plIdx>=playlist.length){ plIdx=0; repDone(); if(!loop) return setIcon(false); setTimeout(()=>{ if(!userPaused&&sess) playCurrent(); },1200); return; } playCurrent(); });
 $('aPlay').onclick=()=>{ if(!audio.paused&&audio.src.startsWith('http')){ audio.pause(); userPaused=true; setIcon(false);} else { userPaused=false; if(audio.src.startsWith('http')) audio.play().then(()=>setIcon(true)).catch(()=>{}); else playCurrent(); } };
@@ -2678,13 +2693,14 @@ function showUnseen(){
 const CAPS=[
   'Det var en gang en hage som het Rawdah.<small>Rundt den lå en by i gull. Om morgenen fylte duften av brød og roser gatene, karavaner kom inn fra ørkenen, og skip fra hele verden la til ved elva. Om natten brant tusen lykter.</small>',
   'Hjertet i byen var Koranen.<small>Den ble resitert fra vinduene ved fajr. Lærde satt under trærne og underviste alle som ville lære, gammel og ung, kvinner og menn. Den rike delte med den fattige, og ingen gikk sulten til sengs. Rawdah var et bilde på ummaen da den blomstret.</small>',
-  'Men med tiden glemte folk.<small>Det begynte smått. En dag uten Koranen ble til en uke. Hagen ble ikke lenger pleid, folk ble opptatt av sitt eget, og lyktene sluknet én etter én uten at noen tente dem igjen.</small>',
-  'Glemselen ble til en storm.<small>En virvelvind av sand rev gjennom byen. Kuplene raste, tårnene falt, fontenen sprakk, og elvene tørket inn.</small>',
+  'Men med tiden glemte folk.<small>Byen ble rik. Folk ble opptatt av handel, eiendom og underholdning, og alltid var det noe annet som virket viktigere. Tålmodigheten ble kortere, og ingen orket å sitte stille med et vers. Én dag uten Koranen ble til en uke. Hagen ble ikke lenger pleid, og lyktene sluknet én etter én uten at noen tente dem igjen.</small>',
+  'Glemselen ble til en storm.<small>Lynet slo ned. En virvelvind av sand rev gjennom byen, kuplene raste, tårnene falt, fontenen sprakk, og elvene tørket inn.</small><span class="iv"><span class="iva">وَلَا تَكُونُوا۟ كَٱلَّذِينَ نَسُوا۟ ٱللَّهَ فَأَنسَىٰهُمْ أَنفُسَهُمْ</span>«Vær ikke som dem som glemte Allah, så Han fikk dem til å glemme seg selv.»<em>Koranen 59:19</em></span>',
+  'Så ble det stille.<span class="iv"><span class="iva">وَقَالَ ٱلرَّسُولُ يَـٰرَبِّ إِنَّ قَوْمِى ٱتَّخَذُوا۟ هَـٰذَا ٱلْقُرْءَانَ مَهْجُورًا</span>«Og Sendebudet sier: Herre, mitt folk har behandlet denne Koranen som noe forlatt.»<em>Koranen 25:30</em></span>',
   'Byen og hagen ble lagt i ruiner.<small>Alle dro. Bare én liten lykt brant fortsatt, og ved den satt en hærfugl, hudhud, alene på muren. Den nektet å forlate hagen.</small>',
   'Det gikk mange tiår.<small>Sand og ugress dekket ruinene. Lykta brant svakere og svakere, men hærfuglen voktet den, natt etter natt.</small>',
   'Den natten lykta holdt på å slukne, tok hærfuglen den siste flammen.<small>Den fløy høyt opp over ruinene med lyset, så høyt at den ble til en stjerne. Der ble den hengende og lyste, i håp om at noen skulle se den.</small>',
   'Noen gjetere så stjernen.<small>De fulgte lyset gjennom ørkenen med dyrene sine, og fant ruinene av Rawdah. Der bestemte de seg for å bli og bygge opp igjen.</small>',
-  'Ummaen ble ikke bygd på én dag.<small>Den gjenoppbygges heller ikke på én dag. Hver gang du trykker på stjernen, kommer hærfuglen ned med et vers til deg. Din rolle er å gjenopprette hagen: én dag, ett vers, ett hjerte om gangen. Når hagen blomstrer igjen, kommer hærfuglen hjem.</small>',
+  'Ummaen ble ikke bygd på én dag.<small>Den gjenoppbygges heller ikke på én dag. Hver gang du trykker på stjernen, kommer hærfuglen ned med et vers til deg. Din rolle er å gjenopprette hagen: én dag, ett vers, ett hjerte om gangen. Når hagen blomstrer igjen, kommer hærfuglen hjem.</small><span class="iv"><span class="iva">أَلَمْ يَأْنِ لِلَّذِينَ ءَامَنُوٓا۟ أَن تَخْشَعَ قُلُوبُهُمْ لِذِكْرِ ٱللَّهِ</span>«Er ikke tiden inne for at de troendes hjerter ydmyker seg ved ihukommelsen av Allah?»<em>Koranen 57:16</em></span>',
   'Blant gjeterne er en gammel, vis mann.<small>Han kjenner hagen bedre enn noen. Av og til vil han be deg ta en ekstra titt et sted. Det som gjemmer seg der, er tegn fra Koranens fortellinger, små ting du kan samle i boka di.</small>',
 ];
 /* ---- Gullalderens Rawdah: vises bare i første bilde av fortellingen og når hagen er 100 % ---- */
@@ -2828,14 +2844,14 @@ function introScene(){
   ${lan(70,120)}${lan(320,120)}${lan(195,40,'last')}
   <g class="istar"><circle cx="195" cy="200" r="5" fill="#fff5d6"/><circle class="p" cx="195" cy="200" r="10" fill="none" stroke="#ffe6a6" stroke-width="1.5"/><circle cx="195" cy="200" r="30" fill="url(#ilg)"/></g>`;
 }
-const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#1c2a6a','#9a6a8a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a']];
-const IVIS=['s1','s1 heart','s2','s3','s4','s4 decades','s4 rise','s4 herders star','s5 herders','s5 herders','s6 herders'];
+const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#1c2a6a','#9a6a8a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#030208','#07060f','#0d0a16'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a']];
+const IVIS=['s1','s1 heart','s2','s3','s4 hush','s4','s4 decades','s4 rise','s4 herders star','s5 herders','s5 herders','s6 herders'];
 let iStep=0;
 function playIntro(){
   $('intro').classList.add('on'); $('iScene').innerHTML=introScene();
   let st='';for(let i=0;i<70;i++) st+=`<i style="top:${(Math.random()*100).toFixed(1)}%;width:${(20+Math.random()*60).toFixed(0)}px;animation-duration:${(.5+Math.random()*.8).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s"></i>`; $('storm').innerHTML=st;
   let du='';for(let i=0;i<40;i++) du+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*60).toFixed(1)}%;animation-duration:${(6+Math.random()*6).toFixed(1)}s;animation-delay:-${(Math.random()*6).toFixed(1)}s"></i>`; $('dust').innerHTML=du;
-  $('idots').innerHTML=Array.from({length:11},()=>'<i></i>').join('');
+  $('idots').innerHTML=Array.from({length:12},()=>'<i></i>').join('');
   $('iModes').innerHTML=`<h3 style="font-family:var(--serif);color:var(--gold2);font-size:26px;margin:0 0 4px">Slik bygger du opp igjen</h3>${modesHTML()}<div class="mode"><div class="ic">نور</div><div><b>Nur og Basaren</b><p>Nur betyr lys. Du tjener det på økter, oppgaver og stell, og bruker det i Basaren på fôr, verktøy, dyr, gjerder og byggverk. Ingenting kan kjøpes for ekte penger.</p></div></div>`;
   introMode='intro'; $('iSkip').style.display=S.introSeen?'':'none'; iStep=0; showStep();
 }
@@ -2843,13 +2859,14 @@ function showStep(){
   const el=$('intro'); el.className='on '+IVIS[iStep];
   ['is1','is2','is3'].forEach((id,k)=>$(id).setAttribute('stop-color',ISKY[iStep][k]));
   [...$('idots').children].forEach((d,k)=>d.classList.toggle('on',k===iStep));
-  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<10){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
-  if(iStep===6) setTimeout(()=>snd.chime([523,659,784,1047],.08),2600);
+  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<11){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
+  if(iStep===7) setTimeout(()=>snd.chime([523,659,784,1047],.08),2600);
+  iShownAt=Date.now(); if(iStep===3&&!fxOff()){ [700,2300].forEach(t=>setTimeout(()=>{ if(iStep===3) snd.puff(); },t)); }
   if(iStep===3){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
-  $('iNext').textContent=iStep<9?'Trykk for å fortsette':iStep===9?'Slik fungerer det':'Begynn';
+  $('iNext').textContent=iStep<10?'Trykk for å fortsette':iStep===10?'Slik fungerer det':'Begynn';
 }
-let iTapT=0;
-$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(iStep<10){ iStep++; showStep(); } else endIntro(); };
+let iTapT=0, iShownAt=0; const IDWELL={3:3200,4:2600};
+$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(IDWELL[iStep]&&Date.now()-iShownAt<IDWELL[iStep]) return; if(iStep<11){ iStep++; showStep(); } else endIntro(); };
 $('intro').addEventListener('click',e=>{ if(!$('intro').classList.contains('on')||e.target.closest('#iSkip,a,input,select')) return; $('iNext').onclick(); });
 $('iSkip').onclick=()=>introMode==='chapter'?endChapter():endIntro();
 const CHAPTERS=[
