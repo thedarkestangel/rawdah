@@ -2,13 +2,18 @@
 """Bygger testversjonen «Rawdah Kahwa 7142» fra index.html.
 Bruk: python3 tools/build_kahwa.py  (kjør fra repo-roten etter hver endring i index.html)
 Hver tester får egen mappe, egen lagring og egen tidsforskyvning."""
-import json, os
+import json, os, subprocess, time
 TESTERS = {
     'saleem': {'who': 'Saleem', 'form': 'https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform'},
 }
 src = open('index.html', encoding='utf-8').read()
+try:
+    rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'], text=True).strip()
+except Exception:
+    rev = '?'
+BUILD = 'bygg ' + time.strftime('%d.%m.%Y') + ' · ' + rev
 for name, cfg in TESTERS.items():
-    cfg = dict(cfg, name=name)
+    cfg = dict(cfg, name=name, build=BUILD)
     head = ('<script>window.KAHWA=' + json.dumps(cfg, ensure_ascii=False) + ';'
             '(function(){var o=+(localStorage.getItem("kahwa_' + name + '_off")||0);if(!o)return;var D=Date,sh=o*864e5;'
             'class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}'
