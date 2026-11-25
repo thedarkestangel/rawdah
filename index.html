@@ -558,7 +558,11 @@ const TOOLS={
 };
 const TIERS={rive:[['Rive',15],['Stålrive',45],['Ljå',110]],spade:[['Spade',25],['Hakke',70],['Trillebår',160]],sag:[['Sag',20],['Øks',60],['Tømmersag',140]],krukke:[['Vannkrukke',10],['Bøtte',35],['Messingkanne',90]]};
 const tLvl=k=>S.tools[k]===true?1:(+S.tools[k]||0);
-const SIZE=['','liten','middels','stor'];
+const TUSE=[0,4,7,12];
+function toolDay(){ if(!S.toolUse||S.toolUse.day!==dayStr()) S.toolUse={day:dayStr(),used:{},bonus:0}; return S.toolUse; }
+const usesLeft=k=>{ const T=toolDay(); return Math.max(0,TUSE[tLvl(k)]+(T.bonus||0)-(T.used[k]||0)); };
+const usesMax=k=>TUSE[tLvl(k)]+(toolDay().bonus||0);
+const SIZE=['','liten','middels','stor'], SIZEPL=['','små','middels store','store'];
 const JUNKNAME={stein:'Steinrester',ugress:'Ugress',stubbe:'Død stubbe',stov:'Sand og støv'};
 const DECOR={
   lykt:{name:'Lyktestolpe',price:20,desc:'Lyser opp hagen om natten.'},
@@ -922,14 +926,16 @@ function clean(id,e){
   const tk=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type);
   if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
   const need=j.z||1, have=tLvl(tk);
-  if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZE[need][0].toUpperCase()+SIZE[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
+  if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZEPL[need][0].toUpperCase()+SIZEPL[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
+  if(usesLeft(tk)<=0){ const nm=TIERS[tk][tLvl(tk)-1][0]; snd.puff(); return toast(`${nm} er sliten og hviler til i morgen. Oppgrader for mer utholdenhet, eller slip den med en slipestein fra Basaren.`,4200); }
+  toolDay().used[tk]=(toolDay().used[tk]||0)+1;
   haptic(need>1?[18,30,18]:18); { const el=document.querySelector(`.junk[data-j="${id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top; fxDust(cx,cy,need*.7+.3); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,8+need*6,30+need*16,4+need*2,10); if(need>=2) setTimeout(()=>fxBurst(cx,cy+6,JUNKFX[j.type]||JUNKFX.stein,10,50,5,-20),120); setTimeout(()=>fxNur(cx,cy-20,need),150); }
   S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need; taskHit('rydd');
   if(S.upg.messing){ const j2=S.junk[q].find(x=>x.type===j.type); if(j2){ S.junk[q]=S.junk[q].filter(x=>x!==j2); S.cleaned++; S.nur+=1; taskHit('rydd'); } } puff(e); snd.puff(); save(); renderTop(); renderSection(); say(e,keeper());
-  const left=S.junk[q].length; toast(left?`Ryddet. +${need} nur · ${left} igjen her`:`Denne delen er ryddet, alhamdulillah. +${need} nur`);
+  const left=S.junk[q].length, ul=usesLeft(tk), tn=TIERS[tk][tLvl(tk)-1][0]; toast(left?`Ryddet. +${need} nur · ${tn}: ${ul} av ${usesMax(tk)} igjen i dag`:`Denne delen er ryddet, alhamdulillah. +${need} nur`);
 }
 function junkLeft(){ return Object.values(S.junk||{}).reduce((n,a)=>n+a.length,0); }
-function canClean(q){ return (S.junk[q]||[]).some(j=>tLvl(Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type))>=(j.z||1)); }
+function canClean(q){ return (S.junk[q]||[]).some(j=>{ const k=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); }
 
 /* ================= SCENE ================= */
 function cyp(x,b,h,w,cls='sil'){
@@ -1284,7 +1290,7 @@ function renderSection(){
       const ri=S.fruit.findIndex((t,i)=>sl[i]&&t.st>=3&&t.h==='ok'&&S.harvested[i]!==dayStr()); if(ri>=0) b+=beacon(sl[ri].x,sl[ri].y-70*sl[ri].sc,'Trykk for å høste'); } }
   const J=(S.junk[q.id]||[]), D=S.decor.filter(d=>d.q===q.id);
   h=depth(J.map(j=>[SLOTS[j.s]?SLOTS[j.s].y:0,junkSvg(j)]).concat(D.map(d=>{const sp=SPOTS[d.spot];return [sp.y,decoSvg(d.type,sp.x,sp.y,sp.sc,d.id)];})))+h;
-  if(inStell()&&J.length){ const fj=J.find(j=>tLvl(Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type))>=(j.z||1)); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
+  if(inStell()&&J.length){ const fj=J.find(j=>{ const k=Object.keys(TOOLS).find(k=>TOOLS[k].for===j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,'Trykk for å rydde',-20); }
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
   if(ok && inStell() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   else if(inStell()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
@@ -2247,6 +2253,7 @@ const LN='stroke="#1a1030" stroke-width="2" stroke-linejoin="round"';
 function ico(k){ let g='';
   switch(k){
    case 'for10': g=`<path d="M-18 24 Q-24 -2 -14 -16 L14 -16 Q24 -2 18 24Z" fill="#d9b27a" ${LN}/><path d="M-14 -16 Q0 -24 14 -16" fill="none" ${LN}/><path d="M-6 -20 l-4 -12 M0 -21 v-13 M6 -20 l4 -12" stroke="#e7c26b" stroke-width="3" stroke-linecap="round"/>`; break;
+   case 'slipestein': g=`<path d="M-22 10 L-14 -8 H22 L14 10Z" fill="#8a8a92" ${LN}/><path d="M-14 -8 H22 L20 -4 H-12Z" fill="#b8b8c2"/><path d="M-4 -16 L10 -30" stroke="#c8d2dc" stroke-width="3" stroke-linecap="round"/>`; break;
    case 'korn': g=`<path d="M-16 24 Q-22 0 -12 -12 L12 -12 Q22 0 16 24Z" fill="#e8d4a0" ${LN}/>${[-6,0,6].map(x=>`<path d="M${x} -12 V-30" stroke="#c9922e" stroke-width="2"/><ellipse cx="${x}" cy="-30" rx="3" ry="6" fill="#e7c26b"/>`).join('')}`; break;
    case 'fiskemat': g=`<rect x="-14" y="-16" width="28" height="38" rx="4" fill="#3a7ac9" ${LN}/><path d="M-8 4 Q0 -4 8 4 Q0 12 -8 4Z M-8 4 l-5 -4 v8Z" fill="#f2913a"/>`; break;
    case 'lam': g=`<g transform="translate(0 14) scale(1.4)">${sheepSvg(0,0,.6,0)}</g>`; break;
@@ -2282,7 +2289,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
   const lockNote=(f,what)=>`<div class="card" style="margin:6px 0"><b style="color:var(--gold2)">${what}</b><p style="margin:4px 0 0">Åpnes etter ${GATE[f]} vers-økter (${Math.min(S.vs,GATE[f])}/${GATE[f]}).</p></div>`;
   const decoRows=cat=>Object.entries(DECOR).filter(([k,d])=>d.cat===cat).map(([k,d])=>row(decoThumb(k),d.name,d.desc+(S.inv[k]?` · ${S.inv[k]} på lager`:''),buyBtn(`data-deco="${k}"`,d.price))).join('');
   if(shopTab==='varer'){ body='<h4>Forbruk</h4>'+Object.entries(WARES).map(([k,w])=>row(ico(k),w.name,w.desc+(k==='fro'&&!restored('frukt')?' Frukthagen må være gjenopprettet først.':''),buyBtn(`data-ware="${k}"`,w.price,w.once&&S.upg[k]))).join('');
-    body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur.</p>'+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>j.type===t.for&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} (rydder ${SIZE[L+1]}e ting).`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
+    body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur. Verktøyene blir slitne og hviler over natta. Bedre verktøy orker mer.</p>'+row(ico('slipestein'),'Slipestein','Gir alle verktøyene 3 ekstra ryddinger i dag.'+(toolDay().bonus?` Brukt i dag: +${toolDay().bonus}.`:''),buyBtn('data-sharpen="1"',12))+''+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>j.type===t.for&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(L?` Orker ${TUSE[L]} ryddinger per dag, ${usesLeft(k)} igjen i dag.`:` Orker ${TUSE[1]} ryddinger per dag.`)+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} rydder ${SIZEPL[L+1]} ting og orker ${TUSE[L+1]} per dag.`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
   if(shopTab==='vern'){ body=unl('vern')?'<h4>Vern og nytte</h4>'+decoRows('vern')+'<h4>Flere dyr</h4>'+decoRows('dyr'):lockNote('vern','Vern og nytte'); }
   if(shopTab==='gard'){ const rb=restored('beite'), F=S.flock;
     body=`<p style="font-size:13px">Flokken: ${F.sheep} sauer, ${F.cows} kyr, ${F.goats||0} geiter, ${F.hens||0} høner${(S.young||[]).length?`, ${S.young.length} ungdyr`:''} · plass til ${farmCap()} · ${S.fish||0} fisker</p>`;
@@ -2314,8 +2321,9 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
     if(k==='for10') S.feed+=10; if(k==='korn') S.korn=(S.korn||0)+10; if(k==='fiskemat') S.fiskemat=(S.fiskemat||0)+10; if(k==='olje') S.oil+=5; if(k==='messing') S.upg.messing=true;
     if(k==='fro'){ const type=rnd(['sitron','mandel'].concat(FRUITS)); S.fruit.push({type:FRUITS.includes(type)?type:'oliven',st:1,h:'ok'}); }
     done(`${w.name} kjøpt`); });
-  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const k=b.dataset.tool, L=tLvl(k), nx=TIERS[k][L]; if(!nx||!pay(nx[1])) return; S.tools[k]=L+1; done(L?`Oppgradert til ${nx[0].toLowerCase()}. Nå kan du rydde ${SIZE[L+1]}e ting.`:`${nx[0]} kjøpt. Du rydder i «Stell».`); });
+  Q$('[data-tool]').forEach(b=>b.onclick=()=>{ const k=b.dataset.tool, L=tLvl(k), nx=TIERS[k][L]; if(!nx||!pay(nx[1])) return; S.tools[k]=L+1; done(L?`Oppgradert til ${nx[0].toLowerCase()}. Nå kan du rydde ${SIZEPL[L+1]} ting.`:`${nx[0]} kjøpt. Du rydder i «Stell».`); });
   Q$('[data-deco]').forEach(b=>b.onclick=()=>{ const k=b.dataset.deco, d=DECOR[k]; if(!pay(d.price)) return; S.inv[k]=(S.inv[k]||0)+1; done(`${d.name} er lagt på lageret`,'lager'); });
+  Q$('[data-sharpen]').forEach(b=>b.onclick=()=>{ if(!pay(12)) return; toolDay().bonus=(toolDay().bonus||0)+3; done('Verktøyene er slipt. +3 ryddinger i dag.','varer'); });
   Q$('[data-fence]').forEach(b=>b.onclick=()=>{ const nf=FENCE[(S.farm.fence||0)+1]; if(!nf||!pay(nf[1])) return; S.farm.fence=(S.farm.fence||0)+1; logEvent(`${nf[0]} er satt opp rundt beitet.`); done(`${nf[0]} er satt opp`,'gard'); });
   Q$('[data-farm]').forEach(b=>b.onclick=()=>{ const k=b.dataset.farm; if(!pay(FARMX[k].price)) return; S.farm[k]=true; logEvent(`${FARMX[k].name} er bygget på beitet.`); done(`${FARMX[k].name} er bygget`,'gard'); });
   Q$('[data-animal]').forEach(b=>b.onclick=()=>{ const k=b.dataset.animal, a=ANIMALS[k]; if(!pay(a.price)) return; if(k!=='fisk'&&flockN()+(k==='hone'?2:k==='kylling'?3:1)>farmCap()){ S.nur+=a.price; return toast('Beitet er fullt. Bygg et bedre gjerde eller en stall for å få plass.'); } if(k==='hone') S.flock.hens+=2; if(k==='geit') S.flock.goats++; if(k==='fisk') S.fish+=2; if(YOUNG[k]) addYoung(k,k==='kylling'?3:1); done(`${a.name} er på plass`,'gard'); });
@@ -2518,7 +2526,7 @@ function openNur(){ const row=(a,b)=>`<tr><td style="padding:4px 8px 4px 0">${a}
   <h4>Slik tjener du nur</h4><table style="width:100%;font-size:14px;border-collapse:collapse">${row('Hovedøkt med vers','10 (15 for sjeldne)')}${row('Hifz-økt i Lysets tårn','15')}${row('Kort økt','4')}${row('Dagens ord','3')}${row('Hver av Dagens oppgaver','5, bonus 10 for alle tre')}${row('Vanne fra elva','2')}${row('Rydde én ting','1')}${row('Al-Khwarizmis oppgave','5 om dagen')}${row('Selge ull, melk, egg, frukt og honning','på Markedet')}</table>
   <h4>Hva du bruker nur på</h4><ul style="padding-left:18px;font-size:14px;line-height:1.55">
   <li><b>Det hagen trenger:</b> høy til flokken, korn til hønene, fiskemat og lampeolje. Går fôret tomt, blir dyrene sultne. Uten korn legger hønene ikke egg.</li>
-  <li><b>Verktøy i tre nivåer:</b> rive, spade, sag og vannkrukke rydder små ting. Store steinblokker og tykke stubber krever oppgraderinger som hakke, trillebår og tømmersag.</li>
+  <li><b>Verktøy i tre nivåer:</b> rive, spade, sag og vannkrukke rydder små ting. Verktøyene blir slitne og orker 4, 7 eller 12 ryddinger per dag, etter nivå. En slipestein gir 3 ekstra. Store steinblokker og tykke stubber krever oppgraderinger som hakke, trillebår og tømmersag.</li>
   <li><b>Gården:</b> ungdyr som vokser opp, gjerde i tre nivåer, stall og vanntrau. Bedre gjerde gir plass til flere dyr.</li>
   <li><b>Vern</b> mot katastrofer: fuglehus, sandvegg, sluse og gjeterhund.</li>
   <li><b>Dyr:</b> høner, geiter og nye fisker.</li>
