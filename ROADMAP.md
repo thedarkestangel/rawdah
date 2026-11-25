@@ -36,3 +36,10 @@ Hver lærd i Visdommens hus skal etter hvert få en liten aktivitet. Bibliotekar
 - [ ] Kreditering av oversettelser, resitatører og fonter; sjekk vilkår før appen spres bredt.
 - [ ] Faglig gjennomlesning av vers, hadith og historiske tekster av en lærd.
 - [ ] Ekte push-varsler (krever server, f.eks. OneSignal).
+
+## Testversjoner (Rawdah Kahwa 7142)
+
+- Testversjonene lages fra `index.html` med `python3 tools/build_kahwa.py`. Kjør skriptet etter hver endring i appen, ellers får testerne en gammel versjon.
+- Ny tester: legg til et navn i `TESTERS` i skriptet. Hver tester får egen mappe (`kahwatest-<navn>/`), egen lagring og egen «tidsmaskin».
+- Mannen med rosinhodet (al-Bukhārī 7142) finnes bare i testversjonene, ikke i hovedutgaven.
+- Tilbakemeldinger: Google-skjemaet som er lenket i `TESTERS`.
