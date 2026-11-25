@@ -4,7 +4,7 @@ Ting vi har bestemt at skal komme, men som ikke er laget ennå. Oppdater lista n
 
 ## Viktigst: interaktiv del i Bayt al-Ḥikma (Visdommens hus)
 
-Hver lærd i Visdommens hus skal etter hvert få en liten aktivitet. Bibliotekaren hinter allerede til disse i appen (`HTEASE` i `index.html`), så løftet er gitt til brukerne.
+Hver lærd i Visdommens hus skal etter hvert få en liten aktivitet. Bibliotekaren hinter allerede til disse i appen (`HTEASE` i `index.html`), så løftet er gitt til brukerne. En planlagt påminnelse kommer den 1. i hver måned.
 
 - [ ] **al-Khwārizmī:** løs en enkel likning slik han gjorde, med kvadrater og rektangler («fullføre kvadratet»).
 - [ ] **al-Jazarī:** se elefantklokka gå, med figurer som beveger seg hver halvtime.
@@ -16,8 +16,8 @@ Hver lærd i Visdommens hus skal etter hvert få en liten aktivitet. Bibliotekar
 
 ## Innhold
 
-- [ ] Flere lærde i Visdommens hus etter de 12 første.
-- [ ] Ibn Sīnā og al-Fārābī: avgjør om de skal med, og forklar ærlig at al-Ghazālī kritiserte filosofene teologisk.
+- [ ] Flere lærde i Visdommens hus etter de 16 første.
+- [x] Ibn Sīnā, al-Fārābī, Ibn Rushd og Ibn al-Bayṭār lagt til (med ærlig merknad om al-Ghazālīs kritikk).
 - [ ] Påskeegg for resten av personene i Rihla-brevene.
 - [ ] Oppdater muslimtallene i Rihla når Pew Research Center publiserer nyere tall (dagens tall er anslag for 2020, publisert 2025).
 
