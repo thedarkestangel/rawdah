@@ -2859,7 +2859,7 @@ function wellDay(){ S.well=S.well||{goal:6,log:{}}; const d=dayStr(); S.well.log
   const ks=Object.keys(S.well.log).sort(); if(ks.length>21) ks.slice(0,ks.length-21).forEach(k=>delete S.well.log[k]); return S.well.log[d]; }
 function wellTabs(on){ return `<div class="tabs"><button data-mt="hage"${on==='hage'?' class="on"':''}>Din hage</button><button data-mt="well"${on==='well'?' class="on"':''}>Velvære</button></div>`; }
 function wireMegTabs(){ $('sheet').querySelectorAll('[data-mt]').forEach(b=>b.onclick=()=>b.dataset.mt==='well'?openWell():openMeg()); }
-function openWell(){ kMark('well'); const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026-01-01',dayStr())%WELLQ.length+WELLQ.length)%WELLQ.length];
+function openWell(){ kMark('well'); if(KAHWA&&!kt().n_well){ kt().q=(kt().q||[]).concat(['well']); save(); } const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026-01-01',dayStr())%WELLQ.length+WELLQ.length)%WELLQ.length];
   const last7=Array.from({length:7},(_,k)=>addDays(dayStr(),k-6)).map(d=>[d,S.well.log[d]]);
   const prayed=SALAH.filter(([k])=>L.p[k]).length;
   openSheet(`<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
@@ -2891,7 +2891,7 @@ function openWell(){ kMark('well'); const L=wellDay(), G=S.well.goal||6, q=WELLQ
   $('wlS').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ L.sl=+b.dataset.h; save(); haptic(8); openWell(); });
 }
 /* Milde påminnelser inne i appen, høyst én om dagen */
-function wellNudge(){ const L=wellDay(), h=new Date().getHours(); if(S.well.nudged===dayStr()) return;
+function wellNudge(){ if(KAHWA) return; const L=wellDay(), h=new Date().getHours(); if(S.well.nudged===dayStr()) return;
   let t=null;
   if(h>=23||h<4) t='Det er sent. Kroppen din har en rett over deg. Sov godt, in shā\' Allāh 🌙';
   else if(h>=13&&L.w<2&&!(hijri()&&hijri().m===9)) t='Har du husket å drikke vann i dag? 💧 Trykk på Velvære øverst for å notere.';
@@ -3222,6 +3222,7 @@ const KNOTES={
  apne:['Alt åpner fort','I testen åpner alt etter 1–3 økter. I den ekte appen åpner Basaren etter 1 økt, Dagens ord etter 3, hifz etter 4, Beitet med dyrene etter 5, Visdommens hus etter 10 og Frukthagen etter 12.'],
  rihla:['Slik fungerer Rihla','Her fikk du flere brev rett etter hverandre. I den ekte appen kommer hærfuglen hjem med et nytt brev av og til: etter den første økten, når fontenen er reparert, for hvert kapittel du fullfører, for hver uke du holder ut, og for hvert 20. vers du lærer utenat. Det er 26 steder å samle.'],
  tegn:['Skjulte tegn','I den ekte appen er det 15 tegn fra Koranens fortellinger, pluss et sjeldent bonustegn. Gjeteren sier fra omtrent hver 2.–4. dag, og hulen med hunden åpner seg bare på fredager. I denne testen finnes det ett tegn til, et du må finne helt selv. Se godt etter i hagene …'],
+ well:['Påminnelser fra Velvære','I den ekte appen gir Velvære deg milde påminnelser, høyst én om dagen og bare når appen er åpen. Har du drukket under 2 glass etter kl. 13, spør appen «Har du husket å drikke vann i dag?». Er klokka over 23, minner den deg om at kroppen din har en rett over deg, og ønsker deg god natt. I Ramadan er vannpåminnelsen slått av. I testen er påminnelsene skrudd av så de ikke forstyrrer.'],
  dag:['Du hoppet til en ny dag','I den ekte appen skjer dette av seg selv ved midnatt. Det kommer nytt rot i hagene, verktøyene hviler seg, og det kommer et nytt vers. Er du borte i flere dager, tar glemselen mer av hagen, og et vers møter deg når du kommer tilbake.']
 };
 function kNote(k){ if(!KAHWA||kt()['n_'+k]) return; const [t,x]=KNOTES[k]; if($('sheet').classList.contains('on')||$('intro').classList.contains('on')||titleOn){ kt().q=(kt().q||[]).filter(z=>z!==k).concat(k); save(); return; }
