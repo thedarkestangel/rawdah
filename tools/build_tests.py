@@ -8,13 +8,13 @@ Hver tester får egen mappe, egen lagring og egen logo per versjon."""
 import json, os, subprocess, time, shutil
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform'
 TESTERS = [
-    {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True, 'm64': 'ZGFuanVtYTE5OTRAZ21haWwuY29t'},
+    {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True},
     {'mode': 'jabal', 'name': 'haroon', 'who': 'Haroon', 'form': FORM},
     {'mode': 'jabal', 'name': 'najaat', 'who': 'Najaat', 'form': FORM},
     {'mode': 'jabal', 'name': 'sadia', 'who': 'Sadia', 'form': FORM},
     {'mode': 'jabal', 'name': 'luqman', 'who': 'Luqman', 'form': FORM},
-    {'mode': 'jabal', 'name': 'noxiphone', 'who': 'noxp (iPhone)', 'form': FORM, 'notes': True, 'skip': True, 'm64': 'ZGFuanVtYTE5OTRAZ21haWwuY29t'},
-    {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True, 'skip': True, 'm64': 'ZGFuanVtYTE5OTRAZ21haWwuY29t'},
+    {'mode': 'jabal', 'name': 'noxiphone', 'who': 'noxp (iPhone)', 'form': FORM, 'notes': True, 'skip': True},
+    {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True, 'skip': True},
     {'mode': 'jabal', 'name': 'ibrahim', 'who': 'Ibrahim', 'form': None, 'dev': True},
 ]
 src = open('index.html', encoding='utf-8').read()
