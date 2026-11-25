@@ -37,9 +37,11 @@ Hver lærd i Visdommens hus skal etter hvert få en liten aktivitet. Bibliotekar
 - [ ] Faglig gjennomlesning av vers, hadith og historiske tekster av en lærd.
 - [ ] Ekte push-varsler (krever server, f.eks. OneSignal).
 
-## Testversjoner (Rawdah Kahwa 7142)
+## Testversjoner
 
-- Testversjonene lages fra `index.html` med `python3 tools/build_kahwa.py`. Kjør skriptet etter hver endring i appen, ellers får testerne en gammel versjon.
-- Ny tester: legg til et navn i `TESTERS` i skriptet. Hver tester får egen mappe (`kahwatest-<navn>/`), egen lagring og egen «tidsmaskin».
-- Mannen med rosinhodet (al-Bukhārī 7142) finnes bare i testversjonene, ikke i hovedutgaven.
-- Tilbakemeldinger: Google-skjemaet som er lenket i `TESTERS`.
+Alle testversjoner lages fra `index.html` med `python3 tools/build_tests.py`. Kjør skriptet etter hver endring i appen, ellers får testerne en gammel versjon. Testerne står i `TESTERS` i skriptet.
+
+- **Rawdah Vanilla:** den ekte appen, versjon 1.0 (rot-mappen).
+- **Rawdah Kahwa 7142** (`kahwatest-<navn>/`): smakebit på 15–20 minutter med testrull, tidsmaskin og mannen med rosinhodet (al-Bukhārī 7142). Mannen med rosinhodet finnes bare her.
+- **Rawdah Jabal** (`jabal-<navn>/`): den fulle appen i 7 spilldager (en dag = en dag med fullført vers). 2 Rihla-brev (Jinnah og et tilfeldig land, dag 1 og dag 7), 3 skjulte tegn (dag 1, 4 og 6), hulen på fredag, Visdommens hus med al-Khwārizmī etter dag 3. Ingenting nytt låses opp etter dag 7. Ibrahim-versjonen har utviklerpanel (🛠).
+- Tilbakemeldinger: Google-skjemaet i `FORM` i skriptet.

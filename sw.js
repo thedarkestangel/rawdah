@@ -1,4 +1,4 @@
-const CACHE = 'rawdah-v70';
+const CACHE = 'rawdah-v71';
 const SHELL = ['./icon-maskable-192.png', './icon-maskable-512.png', './', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-180.png'];
 
 self.addEventListener('install', e => {
