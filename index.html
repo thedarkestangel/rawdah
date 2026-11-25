@@ -194,6 +194,7 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .smute{display:inline-flex;align-items:center;gap:6px;margin:6px auto 0;padding:6px 12px;border-radius:14px;border:1px solid rgba(231,194,107,.4);background:transparent;color:var(--ink,#efe6d2);font-size:13px}
 .bstar .sp{transform-box:fill-box;transform-origin:center;animation:bsp 2.4s ease-in-out infinite}@keyframes bsp{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.18);opacity:1}}
 .bstar.cmp text+text{display:none}
+.sflame{transform-box:fill-box;transform-origin:50% 100%;animation:sfl 1.6s ease-in-out infinite}@keyframes sfl{0%,100%{transform:scale(1,1)}50%{transform:scale(1.06,1.12)}}
 .bstar text{font:600 15px Inter,system-ui,sans-serif;fill:#ffe6a6;text-anchor:middle;paint-order:stroke;stroke:rgba(8,6,26,.7);stroke-width:3px}
 .tafl{color:var(--gold);font-size:11px;margin-left:6px;text-decoration:none;border:1px solid rgba(231,194,107,.45);border-radius:10px;padding:1px 7px;pointer-events:auto}
 .tr i{display:block;color:#d6cde6;font-size:calc(15px*var(--trs,1));margin-top:6px}
@@ -974,12 +975,12 @@ function handClean(q,j,e){ S.handClean=true; const el=document.querySelector(`.j
 function clean(id,e){
   const q=QUADS[curQ].id, j=S.junk[q].find(x=>x.id===id); if(!j) return;
   if(!unl('basar')){
-    if(!inStell()) return toast('Du rydder mens verset spiller, i «Stell»-delen av økten. Trykk på himmelen for å starte.');
+    if(!canTend()) return toast('Rydding skjer i «Stell»-delen av økten.');
     if(S.handClean) return toast('Riven tar du i bruk fra neste økt. Da åpner også Basaren med flere verktøy.',3600);
     if((j.z||1)>1) return toast('Den er for stor for hendene. Prøv noe mindre, som ugress eller visne blader.',3200);
     return handClean(q,j,e); }
   const tk=toolFor(j.type);
-  if(!inStell()) return toast(S.active?'Rydding skjer i «Stell»-delen av økten':'Du rydder mens verset står i himmelen. Trykk på himmelen for å starte.');
+  if(!canTend()) return toast('Rydding skjer i «Stell»-delen av økten. Du kan også rydde når økten er ferdig.');
   const need=j.z||1, have=tLvl(tk);
   if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZEPL[need][0].toUpperCase()+SIZEPL[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
   if(usesLeft(tk)<=0){ const nm=TIERS[tk][tLvl(tk)-1][0]; snd.puff(); return toast(`${nm} er sliten og hviler til i morgen. Oppgrader for mer utholdenhet, eller slip den med en slipestein fra Basaren.`,4200); }
@@ -1292,7 +1293,7 @@ function fishLayer(){ if(!fountainOK()) return ''; const n=Math.min(6,2+(S.fish|
     h+=`<g class="fishg" data-f="${k}" transform="translate(${x.toFixed(1)} ${y})"><g class="${fed?'fj':'frest'}" style="--dx:${dx}px;animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"><g transform="scale(${dx<0?-1:1} 1) scale(${(.8+y/1000).toFixed(2)})"><path d="M-9 0 Q-2 -6 7 0 Q-2 6 -9 0Z" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".5"/><path d="M-9 0 l-5 -4 v8Z" fill="${c2}"/><path d="M-2 -4 q2 2 0 4" stroke="${c2}" stroke-width="1" fill="none"/></g></g><ellipse class="fsplash" cx="0" cy="2" rx="7" ry="2" fill="none" stroke="rgba(220,240,255,.8)" style="animation-duration:${d}s;animation-delay:-${(k*2.3)%d}s"/><rect x="-16" y="-34" width="${Math.abs(dx)+32}" height="40" fill="transparent" transform="translate(${dx<0?dx:0} 0)"/></g>`; }
   return h; }
 function fishTap(k,e){ const f=FISH[k%FISH.length]; snd.splash(); ripple(e); haptic(6);
-  if(inStell()&&S.fishFed!==dayStr()){ if((S.fiskemat||0)<=0) return toast('Tom for fiskemat. Kjøp i Basaren (Gård og beite).'); S.fiskemat--; S.fishFed=dayStr(); taskHit('mat'); { const sr=stage.getBoundingClientRect(); fxBurst(e.clientX-sr.left,e.clientY-sr.top,['#e2b04a','#c9922e','#f2d94e'],14,34,3,8); } save(); renderSection(); document.querySelectorAll('.fj').forEach((f,i)=>{ f.style.animationDelay=`-${5.5-i*.25}s`; }); return toast(`Fiskene fikk mat · ${S.fiskemat} igjen`); }
+  if(canTend()&&S.fishFed!==dayStr()){ if((S.fiskemat||0)<=0) return toast('Tom for fiskemat. Kjøp i Basaren (Gård og beite).'); S.fiskemat--; S.fishFed=dayStr(); taskHit('mat'); { const sr=stage.getBoundingClientRect(); fxBurst(e.clientX-sr.left,e.clientY-sr.top,['#e2b04a','#c9922e','#f2d94e'],14,34,3,8); } save(); renderSection(); document.querySelectorAll('.fj').forEach((f,i)=>{ f.style.animationDelay=`-${5.5-i*.25}s`; }); return toast(`Fiskene fikk mat · ${S.fiskemat} igjen`); }
   floatWord(e,f[0]); }
 const FENCE=[['Ingen gjerde',0,'Gamle stolper etter stormen.'],['Tregjerde',40,'Holder flokken samlet. Dyrene blir 10 % saktere sultne, og det blir plass til flere.'],['Steingjerde',120,'Lav mur av stein. 20 % saktere sultne og enda mer plass.'],['Pyntet gjerde med port',250,'Hvitt gjerde med lykter på portstolpene. 30 % saktere sultne og plass til en stor flokk.']];
 const FARMX={stall:{name:'Stall',price:150,desc:'Ly for dyrene. De blir 20 % saktere sultne, og det blir plass til 4 dyr til.'},trau:{name:'Vanntrau',price:60,desc:'Friskt vann hele dagen. Dyrene blir 15 % saktere sultne.'}};
@@ -1319,12 +1320,25 @@ const SIGNS=[
  {id:'maur',q:'frukt',x:300,y:712,ref:'27:18',t:'Mauren i dalen',d:'Da Sulayman og hæren hans kom til mauredalen, advarte en maur de andre om å gå inn i boligene sine, så de ikke ble trampet ned. Sulayman smilte og takket Allah. Selv den minste skapning har en stemme.'},
  {id:'nett',q:'taarn',x:334,y:462,ref:'29:41',t:'Edderkoppens hus',d:'Koranen sammenligner dem som søker beskyttelse hos andre enn Allah med edderkoppen som bygger seg et hus. Det svakeste av alle hus er edderkoppens hus.'},
  {id:'dadler',q:'frukt',x:200,y:448,ref:'19:25',t:'Dadlene til Maryam',d:'Da Maryam fikk fødselsveer under en daddelpalme, ble hun bedt om å riste stammen. Da falt det modne, ferske dadler ned til henne. En trøst midt i det vanskeligste.'},
- {id:'hund',q:'beite',x:30,y:452,ref:'18:18',t:'Hunden ved hulen',d:'De unge mennene i hulen sov i mange år, og hunden deres lå med forbena strukket ut ved inngangen. Allah beskyttet dem alle sammen, også hunden som fulgte dem.'},
+ {id:'hund',q:'beite',x:30,y:452,ref:'18:18',fri:true,t:'Hulen og hunden',d:'De unge mennene i hulen sov i mange år, og hunden deres lå med forbena strukket ut ved inngangen. Allah beskyttet dem alle sammen, også hunden som fulgte dem.'},
+ {id:'penn',q:'taarn',x:62,y:612,ref:'19:56–57',t:'Idris og pennen',d:'Koranen kaller Idris sannferdig, en profet som Allah hevet til en høy plass. Ifølge tradisjonen var han den første som skrev med penn (svakt overlevert, så hold det løst). At pennen er stor, står derimot fast: Allah sverger ved pennen (68:1) og lærte mennesket ved pennen (96:4).'},
+ {id:'blad',q:'roser',x:44,y:560,ref:'7:22–23',t:'Bladene fra hagen',d:'Da Adam og Hawwa hadde spist av treet, begynte de å dekke seg med blader fra hagen. Koranen sier ikke hvilken frukt det var. Det den forteller, er bønnen deres: «Herre, vi har gjort urett mot oss selv. Tilgir Du oss ikke og viser oss nåde, er vi tapt.» Den første tawbah.'},
+ {id:'ild',q:'frukt',x:70,y:540,ref:'28:29–30',t:'Ilden ved Tur',d:'På vei hjem gjennom ørkenen så Musa en ild ved fjellet. Han gikk dit for å finne varme eller veiledning, og fra treet på det velsignede stedet ble han tiltalt: «Musa, Jeg er Allah, verdenenes Herre.»'},
+ {id:'ibrahim',q:'taarn',x:330,y:640,ref:'21:69',t:'Ilden som ble kjølig',d:'Folket kastet Ibrahim i et stort bål. Allah sa: «Ild, vær kjølig og fred for Ibrahim.» Det som skulle skade ham, ble trygt.'},
+ {id:'planke',q:'beite',x:356,y:610,ref:'54:13–14',t:'Plankene fra arken',d:'Nuh bygde arken mens folket hans lo av ham. Allah bar ham «på noe av planker og spikre», som seilte under Hans øyne. En lønn for den som ble avvist.'},
+ {id:'gresskar',q:'frukt',x:322,y:650,ref:'37:145–146',t:'Plantens skygge',d:'Da Yunus ble kastet opp på stranden, svak og syk, lot Allah en slyngplante av gresskarslekten vokse over ham. Skygge og næring der han lå.'},
  {id:'hval',q:'roser',x:195,y:668,ref:'21:87',t:'Yunus i fiskens buk',d:'I mørket i fiskens buk ba Yunus: «Lā ilāha illā anta, subḥānaka, innī kuntu mina ẓ-ẓālimīn.» Det finnes ingen gud uten Deg. Allah reddet ham fra sorgen, og slik redder Han de troende.'},
  {id:'bier',q:'roser',x:322,y:426,ref:'16:68–69',t:'Biene',d:'Herren din ga biene innskytelse om å bygge bolig i fjell, trær og det folk bygger. Fra dem kommer en drikk i ulike farger, som er legedom for menneskene.'},
  {id:'duer',q:'taarn',x:262,y:476,ref:'9:40',t:'To duer ved en hule',d:'Under hijra gjemte Profeten ﷺ og Abu Bakr seg i hulen Thawr. Allah sendte ro over dem. Ifølge tradisjonen bygde duer reir og en edderkopp spant nett ved inngangen. Vises bare i Muharram.',when:()=>{ const h=hijri(); return h&&h.m===1; }},
 ];
 function signArt(id){ return {
+ hule:`<path d="M-24 4 Q-24 -22 0 -26 Q22 -22 24 4Z" fill="#5a524c"/><path d="M-14 4 Q-14 -12 0 -14 Q14 -12 14 4Z" fill="#141010"/><ellipse cx="0" cy="-2" rx="11" ry="9" fill="#6a6058" opacity=".9"/>`,
+ penn:`<g transform="rotate(-35)"><path d="M0 -26 L3 -2 L0 4 L-3 -2Z" fill="#c9a272" stroke="#5a3a1a" stroke-width=".8"/><path d="M0 4 v4" stroke="#1a1010" stroke-width="1.2"/></g><path d="M-14 6 q8 -4 16 0 q8 4 14 -2" stroke="#2a1a10" stroke-width="1" fill="none"/>`,
+ blad:`${[[-8,0,-20],[4,-3,15],[-2,-10,-50]].map(([x,y,r])=>`<path transform="translate(${x} ${y}) rotate(${r})" d="M0 0 Q6 -10 0 -20 Q-6 -10 0 0Z" fill="#6aa84f" stroke="#3a6a2a" stroke-width=".7"/>`).join('')}`,
+ ild:`<path d="M0 4 Q-4 -2 -2 -8 Q-8 -4 -10 2 Q-12 -10 -4 -18 Q-2 -10 2 -12 Q0 -20 6 -26 Q6 -16 10 -12 Q14 -4 8 4Z" fill="#f2a14e" class="sflame"/><path d="M0 4 Q-3 -2 0 -8 Q4 -4 4 4Z" fill="#ffe6a6"/><path d="M-12 6 q4 -10 0 -16 M12 6 q-2 -8 2 -14" stroke="#4a3a2a" stroke-width="1.6" fill="none"/>`,
+ ibrahim:`<path d="M0 4 Q-8 -4 -4 -14 Q0 -8 2 -16 Q8 -8 6 4Z" fill="#9fd8ff" opacity=".85" class="sflame"/><path d="M-1 4 Q-3 -2 0 -7 Q3 -2 2 4Z" fill="#eaf8ff"/>${[[-10,-4],[10,-8],[-6,-16]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.4" fill="#eaf8ff"/>`).join('')}`,
+ planke:`<g transform="rotate(-8)"><rect x="-18" y="-4" width="36" height="6" rx="1" fill="#8a6038" stroke="#4a301a" stroke-width=".7"/><rect x="-14" y="-10" width="28" height="5" rx="1" fill="#9a6e42" stroke="#4a301a" stroke-width=".7"/><circle cx="-12" cy="-1" r=".9" fill="#2a2a2a"/><circle cx="12" cy="-1" r=".9" fill="#2a2a2a"/></g>`,
+ gresskar:`<path d="M-16 4 q6 -14 16 -12 q10 2 16 -6" stroke="#4a7a3a" stroke-width="1.6" fill="none"/>${[[-10,-6],[4,-10],[12,-12]].map(([x,y])=>`<path transform="translate(${x} ${y})" d="M0 0 q-6 -2 -6 -8 q4 0 6 4 q2 -4 6 -4 q0 6 -6 8Z" fill="#5c9a46"/>`).join('')}<ellipse cx="-4" cy="2" rx="5" ry="3.6" fill="#d9a040"/>`,
  maur:`${[0,1,2,3,4,5,6].map(k=>`<g transform="translate(${-k*7} ${Math.sin(k)*2})"><ellipse rx="1.6" ry="1.1" fill="#1a1010"/><ellipse cx="-1.8" rx="1.3" ry=".9" fill="#1a1010"/></g>`).join('')}<path d="M4 2 q4 -6 10 -2" fill="#6a4a2a"/>`,
  nett:`<g stroke="rgba(240,240,255,.55)" stroke-width=".6" fill="none">${[0,1,2,3,4,5].map(k=>{ const a=k*Math.PI/5; return `<path d="M0 0 L${(Math.cos(a)*22).toFixed(1)} ${(Math.sin(a)*22).toFixed(1)}"/>`; }).join('')}${[6,11,16,21].map(r=>`<path d="M${r} 0 ${[1,2,3,4,5].map(k=>{ const a=k*Math.PI/5; return `L${(Math.cos(a)*r).toFixed(1)} ${(Math.sin(a)*r).toFixed(1)}`; }).join(' ')}"/>`).join('')}</g><circle cx="9" cy="7" r="1.6" fill="#1a1010"/>`,
  dadler:`<path d="M0 0 Q-2 -24 1 -46" stroke="#7a5230" stroke-width="3" fill="none"/>${[-60,-25,10,45,80].map(a=>`<path d="M1 -46 q${Math.cos(a*Math.PI/180)*14} ${Math.sin(a*Math.PI/180)*6-6} ${Math.cos(a*Math.PI/180)*22} ${Math.sin(a*Math.PI/180)*10+2}" stroke="#4a7a3a" stroke-width="2.4" fill="none"/>`).join('')}<g class="sdate">${[-4,0,4].map(x=>`<ellipse cx="${x}" cy="-40" rx="1.6" ry="2.4" fill="#8a3a1a"/>`).join('')}</g>`,
@@ -1332,8 +1346,25 @@ function signArt(id){ return {
  hval:`<g class="swhale"><path d="M-24 0 Q0 -14 24 0 Q0 6 -24 0Z" fill="#2a3a5a" opacity=".85"/><path d="M24 0 l10 -10 l-2 10 l2 8Z" fill="#2a3a5a"/><path d="M-10 -4 q-2 -10 2 -14 M-8 -6 q4 -8 8 -10" stroke="#cfe6ff" stroke-width="1.2" fill="none" opacity=".7"/></g>`,
  bier:`${[0,1,2].map(k=>`<g class="sbee" style="animation-delay:-${k*1.3}s"><ellipse rx="2.6" ry="1.8" fill="#f2c94e"/><path d="M-1 -1.8 v3.6 M1 -1.8 v3.6" stroke="#2a1a10" stroke-width=".8"/><ellipse cx="-.5" cy="-2.4" rx="1.8" ry="1.1" fill="rgba(255,255,255,.7)"/></g>`).join('')}`,
  duer:`${[-6,6].map(x=>`<g transform="translate(${x} 0)"><ellipse rx="5" ry="3.4" fill="#eceaf2"/><circle cx="${x<0?-4:4}" cy="-3" r="2.2" fill="#eceaf2"/><path d="M${x<0?-6:6} -3 l${x<0?-2:2} 1" stroke="#c9922e" stroke-width="1"/></g>`).join('')}<path d="M-12 4 Q0 0 12 4" stroke="#7a5a3a" stroke-width="2" fill="none"/>` }[id]||''; }
-function signLayer(q){ if(S.active) return ''; return SIGNS.filter(g=>g.q===q&&(!g.when||g.when())).map(g=>`<g class="sign" onclick="signTap('${g.id}')" style="cursor:pointer" transform="translate(${g.x} ${g.y})">${signArt(g.id)}<rect x="-26" y="-50" width="52" height="58" fill="transparent"/></g>`).join(''); }
-function signTap(id){ if(S.active) return; const g=SIGNS.find(x=>x.id===id); if(!g) return; S.signs=S.signs||{}; const first=!S.signs[id]; S.signs[id]=dayStr(); save(); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
+const isFri=()=>new Date().getDay()===5;
+function kahfTap(g){ S.signs=S.signs||{}; const first=!S.signs[g.id]; S.signs[g.id]=dayStr(); save(); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
+  const n=Object.keys(S.signs).length, asked=(S.kahf||{})[dayStr()];
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${n} AV ${SIGNS.length} · FREDAG</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(g.id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen 18:9–26</p>
+   <div class="card" id="kfBox"><b style="color:var(--gold2)">Har du forresten husket å lese Surat al-Kahf i dag?</b>${asked?`<p style="margin:6px 0 0">${asked==='ja'?'Alḥamdulillāh, det har du.':'Ikke ennå i dag. Det er tid til solnedgang.'}</p>`:''}<div class="qrow" style="margin-top:8px"><button class="gb gold" id="kfJa">Ja, alḥamdulillāh</button><button class="gb" id="kfNei">Nei, ikke ennå</button></div></div><button class="btn ghost" id="sgOk">Lukk</button>`);
+  $('sgOk').onclick=closeSheet;
+  const ans=v=>{ S.kahf=S.kahf||{}; S.kahf[dayStr()]=v; save(); $('kfBox').innerHTML=v==='ja'?`<b style="color:var(--gold2)">Alḥamdulillāh</b><p style="margin:6px 0 0">Profeten ﷺ sa at den som leser Surat al-Kahf på fredag, får et lys som skinner for ham mellom de to fredagene (al-Ḥākim og al-Bayhaqī, sahih ifølge al-Albānī).</p>`:`<b style="color:var(--gold2)">Det er ikke for sent</b><p style="margin:6px 0 0">Fredagen varer til solnedgang. 110 vers, rundt 20–30 minutter med lytting.</p><a class="btn" href="https://quran.com/18" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Les al-Kahf på quran.com</a>`; snd.chime([523,659]); };
+  $('kfJa').onclick=()=>ans('ja'); $('kfNei').onclick=()=>ans('nei'); }
+function openSigns(){ bookTab='tegn'; const F=S.signs||{}, got=SIGNS.filter(g=>F[g.id]);
+  openSheet(`<h3>Skjulte tegn</h3><div class="tabs"><button data-b="dagbok">Dagbok</button><button data-b="album">Album</button><button data-b="rihla">Rihla</button><button data-b="tegn" class="on">Tegn</button></div>
+  <p>${got.length} av ${SIGNS.length} funnet. Små tegn fra Koranens fortellinger gjemmer seg rundt i hagen. Noen kommer bare til visse tider.</p>
+  ${SIGNS.map(g=>F[g.id]?`<div class="card mod" style="margin-top:8px;cursor:pointer" data-sg="${g.id}"><svg viewBox="-34 -54 68 66" width="56" height="54" style="flex:0 0 56px">${signArt(g.id)}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(g.t)}</b><div style="font-size:12px;color:var(--muted)">Koranen ${esc(g.ref)} · funnet ${esc(F[g.id].split('-').reverse().join('.'))}</div></div></div>`:`<div class="card mod" style="margin-top:8px;opacity:.55"><div class="mi">?</div><div style="flex:1"><b>Ikke funnet ennå</b><div style="font-size:12px;color:var(--muted)">${QUADS.find(q=>q.id===g.q).name}${g.fri?' · bare på fredager':g.when?' · bare i visse måneder':''}</div></div></div>`).join('')}`);
+  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():bookTab==='tegn'?openSigns():openBook(); });
+  $('sheet').querySelectorAll('[data-sg]').forEach(c=>c.onclick=()=>{ const g=SIGNS.find(x=>x.id===c.dataset.sg); openSheet(`<h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(g.id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgB">Tilbake</button>`); $('sgB').onclick=openSigns; }); }
+function signLayer(q){ if(S.active) return ''; return SIGNS.filter(g=>g.q===q&&(!g.when||g.when())).map(g=>`<g class="sign" onclick="signTap('${g.id}')" style="cursor:pointer" transform="translate(${g.x} ${g.y})">${signArt(g.fri&&!isFri()?'hule':g.id)}<rect x="-26" y="-50" width="52" height="58" fill="transparent"/></g>`).join(''); }
+function signTap(id){ if(S.active) return; const g=SIGNS.find(x=>x.id===id); if(!g) return;
+  if(g.fri&&!isFri()){ snd.chime([392,494],.05); haptic(8); openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN STEIN FORAN EN HULE</p><h3>Hva skjuler seg her, mon tro?</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt('hule')}</svg></div><p>Kom tilbake på fredag og finn ut, in shā' Allāh.</p><p style="font-size:13px;color:var(--muted)">Hint: Allah lærer oss i samme surah å aldri si «jeg gjør det i morgen» uten å legge til «in shā' Allāh» (18:23–24).</p><button class="btn" id="sgOk">In shā' Allāh</button>`); $('sgOk').onclick=closeSheet; return; }
+  if(g.fri) return kahfTap(g);
+  S.signs=S.signs||{}; const first=!S.signs[id]; S.signs[id]=dayStr(); save(); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
   const n=Object.keys(S.signs).length;
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${n} AV ${SIGNS.length}</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgRead">Les verset</button>`);
   $('sgRead').onclick=()=>openVerseRef(g.ref.replace('–','-'),'KORANEN '+g.ref); }
@@ -1358,9 +1389,9 @@ function renderSection(){
       const ysl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(k); (S.young||[]).forEach((y,i)=>{ const q2=ysl[i]; if(!q2) return; const f={lam:sheepSvg,kalv:cowSvg,kje:goatSvg,kylling:henSvg}[y.t], sc={lam:.6,kalv:.5,kje:.55,kylling:.5}[y.t]; L2.push([q2.y,`<g class="ani" data-a="${YOUNG[y.t][0]==='hens'?'hen':YOUNG[y.t][0]==='cows'?'cow':YOUNG[y.t][0]==='goats'?'goat':'sheep'}">${f(q2.x,q2.y,q2.sc*sc,i+20)}</g>`]); });
       if(S.grownFx&&!S.active){ const gw=S.grownFx; S.grownFx=null; save(); setTimeout(()=>{ toast(`Ungdyr har vokst opp: ${gw.join(', ')}. Alhamdulillah.`,3200); snd.chime([523,659,784],.06); document.querySelectorAll('#items .ani').forEach((g,i)=>{ if(i<gw.length+3){ const r=g.getBoundingClientRect(), sr=stage.getBoundingClientRect(); fxBurst(r.left+r.width/2-sr.left,r.top+r.height/2-sr.top,['#ffe6a6','#fff'],10,30,4,10); } }); },600); }
       h+=`<g class="${window.fxNew&&Date.now()-window.fxNew<8000?'landed':''}">`+fenceSvg()+farmExtras()+'</g>'+`<g id="flock" style="cursor:pointer">${depth(L2)}<g class="keeper">${shepherdSvg(60,650)}</g></g>`+depth(S.picks.map(p=>[SLOTS[p.s]?SLOTS[p.s].y:0,pickSvg(p)]));
-      if(inStell()&&S.picks.length){ const p0=SLOTS[S.picks[0].s]; if(p0) b+=beacon(p0.x,p0.y-24,'Trykk for å samle',-18); }
+      if(canTend()&&S.picks.length){ const p0=SLOTS[S.picks[0].s]; if(p0) b+=beacon(p0.x,p0.y-24,'Trykk for å samle',-18); }
       h+=`<g transform="translate(120 404)"><rect width="150" height="5" rx="2.5" fill="rgba(255,255,255,.15)"/><rect width="${1.5*F.hunger}" height="5" rx="2.5" fill="${F.hunger<25?'#e0806a':'#e7c26b'}"/><text x="75" y="-6" text-anchor="middle" font-size="11" fill="#d8d1e6">Mett ${Math.round(F.hunger)}% · ${S.feed} høy${F.hens||(S.young||[]).some(y=>y.t==='kylling')?` · ${S.korn||0} korn`:''} · ${flockN()}/${farmCap()} dyr</text></g>`;
-      if(inStell()&&F.hunger<100) b+=beacon(300,446,'Gi mat: trykk på dyrene',-16);
+      if(canTend()&&F.hunger<100&&(S.feed||0)>0) b+=beacon(300,446,'Gi mat: trykk på dyrene',-16);
       else if(F.hunger<35&&!S.active) b+=beacon(250,600,'Sultne. Gi mat i neste økt'); } }
   if(q.id==='frukt'){ const sl=SLOTS.filter(s=>s.y>440&&(s.x<170||s.x>220)).filter((s,i)=>i%2===0);
     if(!ok) h+=depth(sl.slice(0,6).map(s=>[s.y,deadTree(s)]));
@@ -1368,10 +1399,10 @@ function renderSection(){
       const ri=S.fruit.findIndex((t,i)=>sl[i]&&t.st>=3&&t.h==='ok'&&S.harvested[i]!==dayStr()); if(ri>=0) b+=beacon(sl[ri].x,sl[ri].y-70*sl[ri].sc,'Trykk for å høste'); } }
   const J=(S.junk[q.id]||[]), D=S.decor.filter(d=>d.q===q.id);
   h=depth(J.map(j=>[SLOTS[j.s]?SLOTS[j.s].y:0,junkSvg(j)]).concat(D.map(d=>{const sp=SPOTS[d.spot];return [sp.y,decoSvg(d.type,sp.x,sp.y,sp.sc,d.id)];})))+h;
-  if(inStell()&&J.length){ const hand=!unl('basar')&&!S.handClean, fj=J.find(j=>hand?(j.z||1)===1:(()=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; })()); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,hand?'Rydd én ting med hendene':'Trykk for å rydde',-20); }
+  if(canTend()&&J.length){ const hand=!unl('basar')&&!S.handClean, fj=J.find(j=>hand?(j.z||1)===1:(()=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; })()); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,hand?'Rydd én ting med hendene':'Trykk for å rydde',-20); }
   if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
-  if(ok && inStell() && fountainOK() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
-  else if(inStell()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
+  if(ok && canTend() && fountainOK() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
+  else if(canTend()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,doneToday()?`${countDamage(q.id)} skadet · tawbah i morgen`:`${countDamage(q.id)} skadet · trykk for tawbah`);
   if(!S.active && !busy) b+=(doneToday()?starBeaconDone(195,200):starBeacon(195,200));
   if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
@@ -1490,8 +1521,8 @@ function renderCarpet(){
   $('fountain').onclick=()=>{ if(S.active) enterQuad(Math.max(0,QUADS.findIndex(q=>q.id===S.active.q))); else { enterQuad(0); setTimeout(()=>spin(),650); } };
 }
 function needs(id){
-  if(id==='taarn'){ if(!S.active&&canClean(id)) return 'Rydd i neste økt'; if(!S.hifz.current) return 'I ruiner'; if(hifzLearned().some(t=>t.dim)) return 'Repeter'; return ''; }
-  if(!S.active&&canClean(id)) return 'Rydd i neste økt';
+  if(id==='taarn'){ if(!S.active&&canClean(id)) return 'Rydd her'; if(!S.hifz.current) return 'I ruiner'; if(hifzLearned().some(t=>t.dim)) return 'Repeter'; return ''; }
+  if(!S.active&&canClean(id)) return 'Rydd her';
   if(!restored(id)) return S.vs>=AT[id]-1?'Snart gjenopprettet':'I ruiner';
   if(id==='beite'&&S.flock.hunger<35) return 'Sultne dyr';
   if(id==='frukt'&&S.fruit.some((t,i)=>t.st>=3&&t.h==='ok'&&S.harvested[i]!==dayStr())) return 'Moden frukt';
@@ -1566,7 +1597,7 @@ $('items').addEventListener('click',e=>{
   const pc=e.target.closest('.perch'); if(pc) return perchTap(pc);
   const fg=e.target.closest('.fishg'); if(fg) return fishTap(+fg.dataset.f,e);
   const kp=e.target.closest('.keeper'); if(kp&&!(inStell()&&q==='beite')) return keeperTap(e);
-  const an=e.target.closest('.ani'); if(an&&!inStell()) return animalTap(an.dataset.a,an,e);
+  const an=e.target.closest('.ani'); if(an&&!(canTend()&&S.flock.hunger<100&&(S.feed||0)>0)) return animalTap(an.dataset.a,an,e);
   const rz=e.target.closest('.rz'); if(rz&&!S.active&&!e.target.closest('.junk')) { const p=S.roses[+rz.dataset.r]; if(p&&p.h!=='dmg') return roseTap(+rz.dataset.r); }
   if(e.target.closest('.hud')){ S.hud.seen=true; save(); unlockAudio(); toast('Hærfuglen har med seg et budskap',2200); return setTimeout(()=>startSession({kind:'spin',cat:'sjelden',ref:'27:20-22',q:QUADS[curQ].id}),900); }
   const pk=e.target.closest('.pick'); if(pk) return collect(pk.dataset.p,e);
@@ -1585,9 +1616,11 @@ $('scene').addEventListener('click',e=>{
   if(!S.active&&countDamage(q)&&e.clientY>stage.clientHeight*.5) spin('tawbah');
 });
 function inStell(){ return !!(S.active&&sess&&verses&&sess.ph===2); }
+// Stell kan gjøres i økten (med verset i bakgrunnen) eller når som helst utenfor en økt.
+function canTend(){ return inStell()||!S.active; }
 function grains(e){ for(let i=0;i<8;i++){ const g=document.createElement('i'); g.className='grain'; g.style.left=(e.clientX+(Math.random()-.5)*30)+'px'; g.style.top=(e.clientY-30+Math.random()*10)+'px'; g.style.animationDelay=(i*40)+'ms'; stage.appendChild(g); setTimeout(()=>g.remove(),1400);} }
 function feed(e){
-  if(!inStell()){ toast(S.active?'Dyrene får mat i «Stell»-delen':'Dyrene får mat mens verset står i himmelen. Trykk på himmelen.'); return; }
+  if(!canTend()){ toast('Dyrene får mat i «Stell»-delen, eller når økten er ferdig.'); return; }
   if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast('Tomt for høy. Kjøp høy i Basaren (Gård og beite).'); }
   S.feed--; if(((S.flock.hens||0)||(S.young||[]).some(y=>y.t==='kylling'))&&(S.korn||0)>0&&S.kornDay!==dayStr()){ S.korn--; S.kornDay=dayStr(); toast('Hønene fikk korn',1200); } taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); { const sr=stage.getBoundingClientRect(); fxFall(e.clientX-sr.left,e.clientY-sr.top,'#e2c46a',12); } document.querySelectorAll('#items .ani').forEach((g,i)=>setTimeout(()=>bounce(g),120+i*60)); save(); renderSection();
   say(e,rnd(['– sauene','– kua','– flokken']));
@@ -1596,7 +1629,7 @@ function feed(e){
 }
 function water(e){
   const q=QUADS[curQ].id;
-  if(!inStell()){ if(fountainOK()) return ripple(e); toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
+  if(!canTend()||(fountainOK()&&S.watered[q]===dayStr())){ if(fountainOK()) return ripple(e); toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
   if(!fountainOK()){ toast(`Elven renner først når fontenen er reparert (${S.vs}/${AT.fountain})`); return; }
   if(S.watered[q]===dayStr()){ toast('Denne delen er vannet i dag'); return; }
   S.watered[q]=dayStr(); S.nur+=2; taskHit('vann'); let fixed=0; if(e){ const sr=stage.getBoundingClientRect(), x=e.clientX-sr.left, y=e.clientY-sr.top; fxWater(x,y); setTimeout(()=>fxNur(x,y-30,2),200); setTimeout(()=>{ const it=$('items'); if(it){ it.classList.add('perk'); setTimeout(()=>it.classList.remove('perk'),900); } },650); }
@@ -1622,7 +1655,7 @@ function pickSvg(p){ const sl=SLOTS[p.s]; if(!sl) return ''; const x=sl.x, y=sl.
   if(p.type==='egg') g=`<ellipse cx="${x}" cy="${y-2*s}" rx="${9*s}" ry="${3.5*s}" fill="#b08a4a" stroke="#1a1030" stroke-width="1"/><ellipse cx="${x-3*s}" cy="${y-5*s}" rx="${3*s}" ry="${3.8*s}" fill="#fff6e4" stroke="#1a1030" stroke-width="1"/><ellipse cx="${x+3*s}" cy="${y-5*s}" rx="${3*s}" ry="${3.8*s}" fill="#f7e6c8" stroke="#1a1030" stroke-width="1"/>`;
   return `<g class="pick" data-p="${p.id}" style="cursor:pointer">${g}<rect x="${x-14*s}" y="${y-22*s}" width="${28*s}" height="${26*s}" fill="transparent"/></g>`; }
 function collect(id,e){
-  if(!inStell()) return toast(S.active?'Du samler i «Stell»-delen':'Du samler mens verset står i himmelen. Trykk på himmelen for å starte.');
+  if(!canTend()) return toast('Du samler i «Stell»-delen, eller når økten er ferdig.');
   const p=S.picks.find(x=>x.id===id); if(!p) return; S.picks=S.picks.filter(x=>x!==p); S.goods[p.type]++; taskHit('samle'); snd.pop(); haptic(12);
   save(); renderSection(); say(e,p.type==='ull'?'– sauene':p.type==='egg'?'– hønene':'– kua'); toast(`+1 ${GOODS[p.type].name.toLowerCase()} · selg på markedet i basaren`,1800); }
 
@@ -1901,13 +1934,13 @@ function openRihla(){ const n=S.rihla||0;
   const dots=MONS.map((m,i)=>{ const [x,y]=mapXY(m.lon,m.lat); const got=isUnl(i); let lab='';
     if(got&&!seen.has(m.country)){ seen.add(m.country); const o=CO[m.country]||[7,3,'start']; lab=`<text x="${(x+o[0]).toFixed(1)}" y="${(y+o[1]).toFixed(1)}" text-anchor="${o[2]}" font-size="7.5" fill="#d8d1e6">${esc(m.country)}</text>`; }
     if(!got) return ''; return `<g data-pc="${i}" style="cursor:pointer"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#ffe6a6" stroke="#e7c26b"/>${got?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="transparent"/>`:''}${lab}</g>`; }).join('');
-  openSheet(`<div class="tabs"><button data-b="dagbok">Dagbok</button><button data-b="album">Album</button><button data-b="rihla" class="on">Rihla</button></div>
+  openSheet(`<div class="tabs"><button data-b="dagbok">Dagbok</button><button data-b="album">Album</button><button data-b="rihla" class="on">Rihla</button><button data-b="tegn">Tegn</button></div>
   <h3>Rihla · reiseboken</h3><p>Hærfuglen flyr ut fra hagen og kommer hjem med brev fra hele den muslimske verden. Brevene kan ikke kjøpes.</p>
   <div class="card" style="padding:6px"><svg viewBox="0 0 320 220" style="width:100%;display:block"><rect width="320" height="220" rx="8" fill="#0c1530"/>${[40,80,120,160,200].map(y=>`<path d="M10 ${y} H310" stroke="#16224a" stroke-width=".5"/>`).join('')}${worldSvg()}${dots}</svg></div>
   <p style="text-align:center">${n} av ${MONS.length} monumenter funnet</p>${n<MONS.length?`<div class="card"><b style="color:var(--gold2)">Neste milepæler</b>${rihlaNext().map(t=>`<p style="margin:4px 0">· ${esc(t)}</p>`).join('')}</div>`:''}<button class="btn ghost" id="riHow">Hvordan fungerer Rihla?</button>
   <div class="seg" style="margin:6px 0 10px"><button data-h="" class="${!S.horizon?'on':''}">Standard horisont</button>${S.palace?`<button data-h="palass" class="${S.horizon==='palass'?'on':''}">Palasset</button>`:''}</div>
   ${rOrder().map(i=>[MONS[i],i]).map(([m,i],k)=>k<n?`<div class="si" data-pc="${i}" style="cursor:pointer">${monThumb(m.id).replace('<svg ','<svg style="flex:0 0 64px;width:64px;height:64px;border-radius:12px" ')}<div class="tx"><b>${esc(m.name)}</b><small>${flagSvg(m.country,16)} ${esc(m.city)}, ${esc(m.country)} · ${esc(m.built)}${S.horizon===m.id?' · i horisonten':''}</small></div></div>`:'').join('')}${n<MONS.length?`<div class="si" style="opacity:.8"><svg viewBox="0 0 64 64" style="flex:0 0 64px;width:64px;height:64px"><rect width="64" height="64" rx="12" fill="#15122e"/>${[0,1,2].map(k=>`<g transform="translate(${14+k*4} ${18+k*5}) rotate(${-8+k*6})"><rect width="30" height="20" rx="2" fill="#efe4cc" stroke="#b08a4a"/><path d="M0 0 L15 11 L30 0" fill="none" stroke="#b08a4a"/></g>`).join('')}<circle cx="44" cy="46" r="5" fill="#b0283a"/></svg><div class="tx"><b>${MONS.length-n} brev venter ute i verden</b><small>Hærfuglen henter dem når du når neste milepæl</small></div></div>`:''}`);
-  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():openBook(); });
+  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():bookTab==='tegn'?openSigns():openBook(); });
   $('sheet').querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>openPostcard(+b.dataset.pc,false)); $('riHow').onclick=()=>openRihlaIntro(latestMon());
   $('sheet').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ S.horizon=b.dataset.h||null; save(); renderAll(); openRihla(); }); }
 
@@ -2463,12 +2496,12 @@ function openAlbum(){ const J=S.journal||[];
   const rows=CATS.filter(c=>c.id!=='hele').map(c=>{ const got=new Set(J.filter(e=>e.cat===c.id).map(e=>e.ref)); const tot=c.refs.length; const n=Math.min(got.size,tot);
     return `<div class="card" style="margin-top:8px"><div style="display:flex;justify-content:space-between;align-items:center"><b style="color:${c.col}">${c.name} <span style="font-family:var(--ar)">${c.ar}</span></b><span style="font-size:13px">${n} av ${tot}</span></div><div class="meter" style="height:6px;margin-top:6px;background:rgba(255,255,255,.1);border-radius:6px;overflow:hidden"><i style="display:block;height:100%;width:${tot?n/tot*100:0}%;background:${c.col}"></i></div>${n?`<p style="font-size:12px;margin:6px 0 0;color:var(--muted)">${[...got].slice(0,24).map(esc).join(' · ')}</p>`:''}</div>`; }).join('');
   const hele=new Set(J.filter(e=>e.cat==='hele').map(e=>e.ref)).size;
-  openSheet(`<h3>Versalbum</h3><div class="tabs"><button data-b="dagbok">Dagbok</button><button data-b="album" class="on">Album</button><button data-b="rihla">Rihla</button></div><p>Versene du har funnet, tema for tema. Det er ingen merker og ingen konkurranse, bare en oversikt over hva som har funnet veien til deg.</p>${rows}<div class="card" style="margin-top:8px"><b style="color:#9fd8c8">Fra hele Koranen</b><p style="margin:4px 0 0">${hele} av 6236 vers</p></div>`);
-  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():openBook(); }); }
+  openSheet(`<h3>Versalbum</h3><div class="tabs"><button data-b="dagbok">Dagbok</button><button data-b="album" class="on">Album</button><button data-b="rihla">Rihla</button><button data-b="tegn">Tegn</button></div><p>Versene du har funnet, tema for tema. Det er ingen merker og ingen konkurranse, bare en oversikt over hva som har funnet veien til deg.</p>${rows}<div class="card" style="margin-top:8px"><b style="color:#9fd8c8">Fra hele Koranen</b><p style="margin:4px 0 0">${hele} av 6236 vers</p></div>`);
+  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():bookTab==='tegn'?openSigns():openBook(); }); }
 function openBook(){
   const J=S.journal||[], feels=[...new Set(J.map(e=>e.f))];
   const list=J.filter(e=>!jFilter||e.f===jFilter);
-  openSheet(`<h3>Dagbok av vers</h3><div class="tabs"><button data-b="dagbok" class="on">Dagbok</button><button data-b="album">Album</button><button data-b="rihla">Rihla</button></div><p>${J.length?`${J.length} vers har funnet veien til deg.`:'Her samles hvert vers du fullfører, med det som traff deg og tankene dine. Etter et år har du din egen bok.'}</p>
+  openSheet(`<h3>Dagbok av vers</h3><div class="tabs"><button data-b="dagbok" class="on">Dagbok</button><button data-b="album">Album</button><button data-b="rihla">Rihla</button><button data-b="tegn">Tegn</button></div><p>${J.length?`${J.length} vers har funnet veien til deg.`:'Her samles hvert vers du fullfører, med det som traff deg og tankene dine. Etter et år har du din egen bok.'}</p>
   ${feels.length?`<div class="reflect on" style="justify-content:flex-start">${['Alle'].concat(feels).map(f=>`<button data-f="${esc(f)}" style="animation:none;${(f==='Alle'&&!jFilter)||f===jFilter?'background:var(--gold);color:#2a1a06':''}">${esc(f)}</button>`).join('')}</div>`:''}
   <div id="jl">${list.map((e,i)=>`<div class="card" style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span>${new Date(e.ts).toLocaleDateString('no-NO',{day:'numeric',month:'long',year:'numeric'})}</span><span>${esc(e.name)} ${esc(e.ref)}</span></div>
    <div class="ar shown" style="font-size:20px;line-height:1.8;margin:6px 0;text-shadow:none">${esc(e.ar)}</div>
@@ -2476,7 +2509,7 @@ function openBook(){
    <div style="margin-top:8px;font-size:13px"><a class="tafl" style="margin:0 6px 0 0" href="https://quran.com/${String(e.ref).replace(':','/').split(/[–-]/)[0]}" target="_blank" rel="noopener">Les tafsir på quran.com ↗</a><span class="root" style="margin:0">${esc(e.f)}</span> ${e.cat==='hifz'?'<span class="root" style="margin:0">Hifz</span>':''}</div>
    ${e.note?`<p style="font-style:italic;margin:8px 0 0">«${esc(e.note)}»</p>`:''}
    <div class="qrow"><button class="gb" data-play="${esc(e.ref)}">Hør</button><button class="gb" data-gift="${S.journal.indexOf(e)}">Send som rose</button></div></div>`).join('')}</div>`);
-  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():openBook(); });
+  $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():bookTab==='tegn'?openSigns():openBook(); });
   $('sheet').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ jFilter=b.dataset.f==='Alle'?null:b.dataset.f; openBook(); });
   $('sheet').querySelectorAll('[data-play]').forEach(b=>b.onclick=async()=>{ unlockAudio(); try{ const vs=await fetchVerse(b.dataset.play.includes('-')?b.dataset.play:b.dataset.play); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); }catch(e){ toast('Fikk ikke hentet lyden'); } });
   $('sheet').querySelectorAll('[data-gift]').forEach(b=>b.onclick=()=>giftRose(S.journal[+b.dataset.gift]));
