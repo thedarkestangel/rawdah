@@ -126,7 +126,7 @@ svg.full{position:absolute;inset:0;width:100%;height:100%;display:block}
 .frest{opacity:.55;transform:rotate(-8deg);animation:frest 3s ease-in-out infinite alternate}@keyframes frest{to{transform:translate(4px,1px) rotate(-4deg)}}
 .fj{animation:fj 7s ease-in-out infinite}@keyframes fj{0%,78%{transform:translate(0,4px) rotate(-35deg);opacity:0}80%{transform:translate(0,0) rotate(-40deg);opacity:1}88%{transform:translate(calc(var(--dx)*.5),-26px) rotate(0deg);opacity:1}96%{transform:translate(var(--dx),0) rotate(40deg);opacity:1}100%{transform:translate(var(--dx),4px) rotate(45deg);opacity:0}}
 .fsplash{animation:fspl 7s linear infinite;transform-box:fill-box;transform-origin:center}@keyframes fspl{0%,79%{opacity:0;transform:scale(.3)}81%{opacity:1;transform:scale(.5)}86%{opacity:0;transform:scale(2)}100%{opacity:0}}
-.sign{opacity:.85}.sdate{transform-box:fill-box}.sign:active .sdate{animation:sdrop .8s ease-in forwards}@keyframes sdrop{to{transform:translateY(40px)}}
+.sign{opacity:.85}.sign.glim{opacity:1;animation:glim 1.8s ease-in-out infinite}@keyframes glim{0%,100%{filter:drop-shadow(0 0 2px #ffe6a6)}50%{filter:drop-shadow(0 0 10px #ffe6a6) brightness(1.3)}}.sdate{transform-box:fill-box}.sign:active .sdate{animation:sdrop .8s ease-in forwards}@keyframes sdrop{to{transform:translateY(40px)}}
 .swhale{animation:swh 38s ease-in-out infinite}@keyframes swh{0%,82%,100%{opacity:0;transform:translateY(8px)}86%,94%{opacity:1;transform:translateY(0)}}
 .sbee{animation:sbee 4s ease-in-out infinite}@keyframes sbee{0%{transform:translate(0,0)}25%{transform:translate(10px,-6px)}50%{transform:translate(2px,-12px)}75%{transform:translate(-8px,-4px)}100%{transform:translate(0,0)}}
 .fxp{position:absolute;z-index:7;border-radius:50%;margin:-3px 0 0 -3px;pointer-events:none;animation:fxp .7s cubic-bezier(.2,.8,.4,1) forwards}@keyframes fxp{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),calc(var(--dy) + 26px)) scale(.4);opacity:0}}
@@ -321,6 +321,12 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 #title .ta{font-family:Amiri,serif;font-size:64px;color:#ffe6a6;text-shadow:0 0 24px rgba(255,217,138,.55)}
 #title .tn{font-family:var(--serif);letter-spacing:.55em;font-size:15px;color:#f2e6c8;margin-top:-6px;padding-left:.55em}
 #title .tl{margin-top:14px;font-size:13px;color:#d8d1e6;opacity:.85}
+#title .tdua{margin:18px auto 0;max-width:300px;padding:10px 14px;border-radius:16px;background:rgba(9,7,26,.45);border:1px solid rgba(231,194,107,.25);animation:tUp 1.8s .3s ease both}
+#title .tdua .da{font-family:Amiri,serif;direction:rtl;font-size:19px;line-height:1.75;color:#ffe6a6}
+#title .tdua .dt{font-size:11.5px;font-style:italic;color:#cfc6e0;margin-top:2px}
+#title .tdua .dn{font-family:var(--serif);font-size:14.5px;line-height:1.35;color:#f2e6c8;margin-top:5px}
+#title .tdua .dr{font-size:11px;color:var(--gold);margin-top:4px;letter-spacing:.5px}
+@media (max-height:700px){#title .ta{font-size:50px}#title .tdua{margin-top:10px;padding:8px 12px}#title .tdua .da{font-size:17px}#title .tdua .dn{font-size:13.5px}#title .tdua .dt{display:none}}
 #title .tb{position:absolute;left:24px;right:24px;bottom:calc(env(safe-area-inset-bottom,0px) + 7vh);text-align:center;animation:tUp 1.6s .4s ease both}
 #title .tb .btn{display:block;margin:0 auto;width:100%;max-width:340px;font-size:16px;box-shadow:0 0 28px rgba(231,194,107,.35)}
 #title .tb .tguide{display:block;margin:14px auto 0;background:none;border:0;color:#ffe6a6;font-size:14px;text-decoration:underline;text-underline-offset:4px;opacity:.9}
@@ -985,10 +991,10 @@ function clean(id,e){
   if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZEPL[need][0].toUpperCase()+SIZEPL[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
   if(usesLeft(tk)<=0){ const nm=TIERS[tk][tLvl(tk)-1][0]; snd.puff(); return toast(`${nm} er sliten og hviler til i morgen. Oppgrader for mer utholdenhet, eller slip den med en slipestein fra Basaren.`,4200); }
   toolDay().used[tk]=(toolDay().used[tk]||0)+1;
-  haptic(need>1?[18,30,18]:18); { const el=document.querySelector(`.junk[data-j="${id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top; fxDust(cx,cy,need*.7+.3); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,8+need*6,30+need*16,4+need*2,10); if(need>=2) setTimeout(()=>fxBurst(cx,cy+6,JUNKFX[j.type]||JUNKFX.stein,10,50,5,-20),120); setTimeout(()=>fxNur(cx,cy-20,need),150); }
-  S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need; taskHit('rydd');
+  haptic(need>1?[18,30,18]:18); { const el=document.querySelector(`.junk[data-j="${id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top; fxDust(cx,cy,need*.7+.3); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,8+need*6,30+need*16,4+need*2,10); if(need>=2) setTimeout(()=>fxBurst(cx,cy+6,JUNKFX[j.type]||JUNKFX.stein,10,50,5,-20),120); setTimeout(()=>fxNur(cx,cy-20,need*(inStell()?2:1)),150); }
+  const mult=inStell()?2:1; S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need*mult; taskHit('rydd');
   if(S.upg.messing){ const j2=S.junk[q].find(x=>x.type===j.type); if(j2){ S.junk[q]=S.junk[q].filter(x=>x!==j2); S.cleaned++; S.nur+=1; taskHit('rydd'); } } puff(e); snd.puff(); save(); renderTop(); renderSection(); say(e,keeper());
-  const left=S.junk[q].length, ul=usesLeft(tk), tn=TIERS[tk][tLvl(tk)-1][0]; toast(left?`Ryddet. +${need} nur · ${tn}: ${ul} av ${usesMax(tk)} igjen i dag`:`Denne delen er ryddet, alhamdulillah. +${need} nur`);
+  const left=S.junk[q].length, ul=usesLeft(tk), tn=TIERS[tk][tLvl(tk)-1][0]; toast((left?`Ryddet. +${need*mult} nur`:`Denne delen er ryddet, alhamdulillah. +${need*mult} nur`)+(mult>1?' (dobbelt mens verset spiller)':'')+(left?` · ${tn}: ${ul} av ${usesMax(tk)} igjen i dag`:''));
 }
 function junkLeft(){ return Object.values(S.junk||{}).reduce((n,a)=>n+a.length,0); }
 function canClean(q){ return (S.junk[q]||[]).some(j=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); }
@@ -1329,9 +1335,13 @@ const SIGNS=[
  {id:'gresskar',q:'frukt',x:322,y:650,ref:'37:145–146',t:'Plantens skygge',d:'Da Yunus ble kastet opp på stranden, svak og syk, lot Allah en slyngplante av gresskarslekten vokse over ham. Skygge og næring der han lå.'},
  {id:'hval',q:'roser',x:195,y:668,ref:'21:87',t:'Yunus i fiskens buk',d:'I mørket i fiskens buk ba Yunus: «Lā ilāha illā anta, subḥānaka, innī kuntu mina ẓ-ẓālimīn.» Det finnes ingen gud uten Deg. Allah reddet ham fra sorgen, og slik redder Han de troende.'},
  {id:'bier',q:'roser',x:322,y:426,ref:'16:68–69',t:'Biene',d:'Herren din ga biene innskytelse om å bygge bolig i fjell, trær og det folk bygger. Fra dem kommer en drikk i ulike farger, som er legedom for menneskene.'},
- {id:'duer',q:'taarn',x:262,y:476,ref:'9:40',t:'To duer ved en hule',d:'Under hijra gjemte Profeten ﷺ og Abu Bakr seg i hulen Thawr. Allah sendte ro over dem. Ifølge tradisjonen bygde duer reir og en edderkopp spant nett ved inngangen. Vises bare i Muharram.',when:()=>{ const h=hijri(); return h&&h.m===1; }},
+ {id:'stav',q:'beite',x:232,y:616,ref:'20:17–18',t:'Musas stav',d:'«Hva er det du har i høyre hånd, Musa?» «Det er staven min. Jeg støtter meg på den, slår ned løv med den til sauene mine, og jeg har annen bruk for den også.» En gjeters stav, før den ble et tegn for Farao.'},
+ {id:'skjorte',q:'roser',x:350,y:610,ref:'12:93–96',t:'Yusufs skjorte',d:'Ya‘qub gråt over Yusuf i mange år til synet svant. Yusuf sendte skjorta si og sa: «Legg den over ansiktet til far.» Da den kom, fikk Ya‘qub synet tilbake. Han hadde aldri sluttet å håpe på Allah.'},
+ {id:'duer',bonus:true,q:'taarn',x:262,y:476,ref:'9:40',t:'To duer ved en hule',d:'Under hijra gjemte Profeten ﷺ og Abu Bakr seg i hulen Thawr. Allah sendte ro over dem. Ifølge tradisjonen bygde duer reir og en edderkopp spant nett ved inngangen. Vises bare i Muharram.',when:()=>{ const h=hijri(); return h&&h.m===1; }},
 ];
 function signArt(id){ return {
+ stav:`<g transform="rotate(14)"><path d="M0 6 V-34 Q0 -42 7 -42 Q12 -42 12 -37" stroke="#8a6038" stroke-width="3" fill="none" stroke-linecap="round"/></g>${[[-10,-6],[-14,-12],[-6,-14]].map(([x,y])=>`<path transform="translate(${x} ${y})" d="M0 0 Q4 -5 0 -9 Q-4 -5 0 0Z" fill="#6aa84f"/>`).join('')}`,
+ skjorte:`<path d="M-12 -18 L-4 -22 Q0 -18 4 -22 L12 -18 L16 -8 L10 -6 L10 6 H-10 V-6 L-16 -8Z" fill="#efe4cc" stroke="#8a6a3a" stroke-width=".8"/><path d="M-4 -22 Q0 -16 4 -22" fill="none" stroke="#8a6a3a" stroke-width=".8"/>`,
  hule:`<path d="M-24 4 Q-24 -22 0 -26 Q22 -22 24 4Z" fill="#5a524c"/><path d="M-14 4 Q-14 -12 0 -14 Q14 -12 14 4Z" fill="#141010"/><ellipse cx="0" cy="-2" rx="11" ry="9" fill="#6a6058" opacity=".9"/>`,
  penn:`<g transform="rotate(-35)"><path d="M0 -26 L3 -2 L0 4 L-3 -2Z" fill="#c9a272" stroke="#5a3a1a" stroke-width=".8"/><path d="M0 4 v4" stroke="#1a1010" stroke-width="1.2"/></g><path d="M-14 6 q8 -4 16 0 q8 4 14 -2" stroke="#2a1a10" stroke-width="1" fill="none"/>`,
  blad:`${[[-8,0,-20],[4,-3,15],[-2,-10,-50]].map(([x,y,r])=>`<path transform="translate(${x} ${y}) rotate(${r})" d="M0 0 Q6 -10 0 -20 Q-6 -10 0 0Z" fill="#6aa84f" stroke="#3a6a2a" stroke-width=".7"/>`).join('')}`,
@@ -1347,26 +1357,36 @@ function signArt(id){ return {
  bier:`${[0,1,2].map(k=>`<g class="sbee" style="animation-delay:-${k*1.3}s"><ellipse rx="2.6" ry="1.8" fill="#f2c94e"/><path d="M-1 -1.8 v3.6 M1 -1.8 v3.6" stroke="#2a1a10" stroke-width=".8"/><ellipse cx="-.5" cy="-2.4" rx="1.8" ry="1.1" fill="rgba(255,255,255,.7)"/></g>`).join('')}`,
  duer:`${[-6,6].map(x=>`<g transform="translate(${x} 0)"><ellipse rx="5" ry="3.4" fill="#eceaf2"/><circle cx="${x<0?-4:4}" cy="-3" r="2.2" fill="#eceaf2"/><path d="M${x<0?-6:6} -3 l${x<0?-2:2} 1" stroke="#c9922e" stroke-width="1"/></g>`).join('')}<path d="M-12 4 Q0 0 12 4" stroke="#7a5a3a" stroke-width="2" fill="none"/>` }[id]||''; }
 const isFri=()=>new Date().getDay()===5;
+const SIGNN=()=>SIGNS.filter(g=>!g.bonus).length, signFound=()=>SIGNS.filter(g=>!g.bonus&&(S.signs||{})[g.id]).length;
+// Tegn er skjult til gjeteren peker på dem. Hulen (fredag) og duene (Muharram) kommer av seg selv.
+const signVisible=g=>g.fri||g.bonus||(S.signs||{})[g.id]||(S.signRev||{})[g.id];
+function signHint(first){ if(S.active) return false; if($('sheet').classList.contains('on')||$('intro').classList.contains('on')||titleOn){ S._hintPend=true; return false; } const pool=SIGNS.filter(g=>!g.fri&&!g.bonus&&!signVisible(g)); if(!pool.length) return false;
+  const g=first?(pool.find(x=>x.id==='blad')||pool[0]):rnd(pool), qn=QUADS.find(q=>q.id===g.q).name;
+  S.signRev=S.signRev||{}; S.signRev[g.id]=dayStr(); S.signNext=addDays(dayStr(),2+Math.floor(Math.random()*3)); save(); snd.chime([440,554,659],.05); haptic(10);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">GJETEREN</p><h3>${first?'Før du går …':'Oi, jeg fant noe!'}</h3><p>${first?`Ta en ekstra titt i ${esc(qn)}. Noe glimter der som ikke var der i går.`:`Det glimter noe i ${esc(qn)}. Vil du se hva det er?`}</p><p style="font-size:13px;color:var(--muted)">Tegnene fra Koranens fortellinger samles i boka di, under «Tegn».</p><button class="btn" id="shGo">Ja, vis meg</button><button class="btn ghost" id="shLater">Senere</button>`);
+  $('shGo').onclick=()=>{ closeSheet(); enterQuad(QUADS.findIndex(q=>q.id===g.q)); }; $('shLater').onclick=closeSheet; return true; }
+function maybeSignHint(){ if(!doneToday()) return; const first=!Object.keys(S.signRev||{}).length&&!Object.keys(S.signs||{}).filter(k=>k!=='hund'&&k!=='duer').length; if(!first&&S.signNext&&dayStr()<S.signNext) return; if(!first&&!S.signNext){ S.signNext=dayStr(); }
+  if(!first&&dayStr()<S.signNext) return; signHint(first); }
 function kahfTap(g){ S.signs=S.signs||{}; const first=!S.signs[g.id]; S.signs[g.id]=dayStr(); save(); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
   const n=Object.keys(S.signs).length, asked=(S.kahf||{})[dayStr()];
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${n} AV ${SIGNS.length} · FREDAG</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(g.id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen 18:9–26</p>
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${signFound()} AV ${SIGNN()}${g.bonus?' · SJELDEN BONUS':''} · FREDAG</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(g.id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen 18:9–26</p>
    <div class="card" id="kfBox"><b style="color:var(--gold2)">Har du forresten husket å lese Surat al-Kahf i dag?</b>${asked?`<p style="margin:6px 0 0">${asked==='ja'?'Alḥamdulillāh, det har du.':'Ikke ennå i dag. Det er tid til solnedgang.'}</p>`:''}<div class="qrow" style="margin-top:8px"><button class="gb gold" id="kfJa">Ja, alḥamdulillāh</button><button class="gb" id="kfNei">Nei, ikke ennå</button></div></div><button class="btn ghost" id="sgOk">Lukk</button>`);
   $('sgOk').onclick=closeSheet;
   const ans=v=>{ S.kahf=S.kahf||{}; S.kahf[dayStr()]=v; save(); $('kfBox').innerHTML=v==='ja'?`<b style="color:var(--gold2)">Alḥamdulillāh</b><p style="margin:6px 0 0">Profeten ﷺ sa at den som leser Surat al-Kahf på fredag, får et lys som skinner for ham mellom de to fredagene (al-Ḥākim og al-Bayhaqī, sahih ifølge al-Albānī).</p>`:`<b style="color:var(--gold2)">Det er ikke for sent</b><p style="margin:6px 0 0">Fredagen varer til solnedgang. 110 vers, rundt 20–30 minutter med lytting.</p><a class="btn" href="https://quran.com/18" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none">Les al-Kahf på quran.com</a>`; snd.chime([523,659]); };
   $('kfJa').onclick=()=>ans('ja'); $('kfNei').onclick=()=>ans('nei'); }
 function openSigns(){ bookTab='tegn'; const F=S.signs||{}, got=SIGNS.filter(g=>F[g.id]);
   openSheet(`<h3>Skjulte tegn</h3><div class="tabs"><button data-b="dagbok">Dagbok</button><button data-b="album">Album</button><button data-b="rihla">Rihla</button><button data-b="tegn" class="on">Tegn</button></div>
-  <p>${got.length} av ${SIGNS.length} funnet. Små tegn fra Koranens fortellinger gjemmer seg rundt i hagen. Noen kommer bare til visse tider.</p>
-  ${SIGNS.map(g=>F[g.id]?`<div class="card mod" style="margin-top:8px;cursor:pointer" data-sg="${g.id}"><svg viewBox="-34 -54 68 66" width="56" height="54" style="flex:0 0 56px">${signArt(g.id)}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(g.t)}</b><div style="font-size:12px;color:var(--muted)">Koranen ${esc(g.ref)} · funnet ${esc(F[g.id].split('-').reverse().join('.'))}</div></div></div>`:`<div class="card mod" style="margin-top:8px;opacity:.55"><div class="mi">?</div><div style="flex:1"><b>Ikke funnet ennå</b><div style="font-size:12px;color:var(--muted)">${QUADS.find(q=>q.id===g.q).name}${g.fri?' · bare på fredager':g.when?' · bare i visse måneder':''}</div></div></div>`).join('')}`);
+  <p>${signFound()} av ${SIGNN()} funnet. Små tegn fra Koranens fortellinger gjemmer seg rundt i hagen. Gjeteren sier fra når han har sett noe. Hulen åpner seg bare på fredager.</p>
+  ${SIGNS.filter(g=>!g.bonus||F[g.id]).map(g=>F[g.id]?`<div class="card mod" style="margin-top:8px;cursor:pointer" data-sg="${g.id}"><svg viewBox="-34 -54 68 66" width="56" height="54" style="flex:0 0 56px">${signArt(g.id)}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(g.t)}</b><div style="font-size:12px;color:var(--muted)">Koranen ${esc(g.ref)} · funnet ${esc(F[g.id].split('-').reverse().join('.'))}</div></div></div>`:`<div class="card mod" style="margin-top:8px;opacity:.55"><div class="mi">?</div><div style="flex:1"><b>${(S.signRev||{})[g.id]?'Glimter i '+QUADS.find(q=>q.id===g.q).name:'Ikke funnet ennå'}</b><div style="font-size:12px;color:var(--muted)">${g.fri?QUADS.find(q=>q.id===g.q).name+' · bare på fredager':(S.signRev||{})[g.id]?'Gå dit og trykk på det som glimter':'Gjeteren sier fra'}</div></div></div>`).join('')}`);
   $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():bookTab==='tegn'?openSigns():openBook(); });
   $('sheet').querySelectorAll('[data-sg]').forEach(c=>c.onclick=()=>{ const g=SIGNS.find(x=>x.id===c.dataset.sg); openSheet(`<h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(g.id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgB">Tilbake</button>`); $('sgB').onclick=openSigns; }); }
-function signLayer(q){ if(S.active) return ''; return SIGNS.filter(g=>g.q===q&&(!g.when||g.when())).map(g=>`<g class="sign" onclick="signTap('${g.id}')" style="cursor:pointer" transform="translate(${g.x} ${g.y})">${signArt(g.fri&&!isFri()?'hule':g.id)}<rect x="-26" y="-50" width="52" height="58" fill="transparent"/></g>`).join(''); }
+function signLayer(q){ if(S.active) return ''; return SIGNS.filter(g=>g.q===q&&(!g.when||g.when())&&signVisible(g)).map(g=>`<g class="sign${!(S.signs||{})[g.id]&&!g.fri?' glim':''}" onclick="signTap('${g.id}')" style="cursor:pointer" transform="translate(${g.x} ${g.y})">${signArt(g.fri&&!isFri()?'hule':g.id)}<rect x="-26" y="-50" width="52" height="58" fill="transparent"/></g>`).join(''); }
 function signTap(id){ if(S.active) return; const g=SIGNS.find(x=>x.id===id); if(!g) return;
   if(g.fri&&!isFri()){ snd.chime([392,494],.05); haptic(8); openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN STEIN FORAN EN HULE</p><h3>Hva skjuler seg her, mon tro?</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt('hule')}</svg></div><p>Kom tilbake på fredag og finn ut, in shā' Allāh.</p><p style="font-size:13px;color:var(--muted)">Hint: Allah lærer oss i samme surah å aldri si «jeg gjør det i morgen» uten å legge til «in shā' Allāh» (18:23–24).</p><button class="btn" id="sgOk">In shā' Allāh</button>`); $('sgOk').onclick=closeSheet; return; }
   if(g.fri) return kahfTap(g);
   S.signs=S.signs||{}; const first=!S.signs[id]; S.signs[id]=dayStr(); save(); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
   const n=Object.keys(S.signs).length;
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${n} AV ${SIGNS.length}</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgRead">Les verset</button>`);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${signFound()} AV ${SIGNN()}${g.bonus?' · SJELDEN BONUS':''}</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgRead">Les verset</button>`);
   $('sgRead').onclick=()=>openVerseRef(g.ref.replace('–','-'),'KORANEN '+g.ref); }
 function renderSection(){
   const q=QUADS[curQ], ok=restored(q.id);
@@ -1405,6 +1425,7 @@ function renderSection(){
   else if(canTend()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,doneToday()?`${countDamage(q.id)} skadet · tawbah i morgen`:`${countDamage(q.id)} skadet · trykk for tawbah`);
   if(!S.active && !busy) b+=(doneToday()?starBeaconDone(195,200):starBeacon(195,200));
+  if(!S.active){ const gs=SIGNS.find(g=>g.q===q.id&&!g.fri&&!g.bonus&&(S.signRev||{})[g.id]&&!(S.signs||{})[g.id]); if(gs) b+=beacon(gs.x,gs.y-58,'Noe glimter her',-14); }
   if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
   if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
@@ -2248,7 +2269,7 @@ function finish(refl){
   const rw=a._gain&&a.kind!=='hifz';
   if(rw&&a._rose&&!(view==='sec'&&curQ===QUADS.findIndex(q=>q.id==='roser'))){ const sp=S.sprout; S.sprout=null; renderSection(); S.sprout=sp; } else renderSection();
   renderTop(); barakah(); snd.chime(); sparkle(); if(rw) rewardSeq(a._nur0,a._gain,!!a._rose);
-  setTimeout(()=>{ toast(msgs.join(' · '),rw?2900:4200); },rw?1700:0); setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); },rw?(a._rose?6200:3200):0);
+  setTimeout(()=>{ toast(msgs.join(' · '),rw?2900:4200); },rw?1700:0); setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
 }
 function markDone(){ const t=dayStr(); if(!S.doneDays.includes(t)){ S.streak=S.doneDays.includes(addDays(t,-1))?S.streak+1:1; S.best=Math.max(S.best,S.streak); S.daysTotal=(S.daysTotal||0)+1; S.doneDays.push(t); S.doneDays=S.doneDays.slice(-120);} save(); drawLanterns(); }
 function barakah(){ $('vSec').classList.add('barakah'); setTimeout(()=>$('vSec').classList.remove('barakah'),12000); }
@@ -2334,7 +2355,7 @@ $('qPeek').onclick=()=>{ $('verse').classList.add('on'); $('tr').classList.remov
 
 /* ================= ARK ================= */
 function openSheet(html){ $('sheet').innerHTML='<div class="grab"></div>'+html; $('sheet').classList.add('on'); $('scrim').classList.add('on'); $('sheet').scrollTop=0; }
-function closeSheet(){ $('sheet').classList.remove('on'); $('scrim').classList.remove('on'); }
+function closeSheet(){ $('sheet').classList.remove('on'); $('scrim').classList.remove('on'); if(S._hintPend&&!S.active){ S._hintPend=false; setTimeout(()=>{ if(!$('sheet').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },900); } }
 $('scrim').onclick=closeSheet;
 let ty=null; $('sheet').addEventListener('touchstart',e=>{ ty=$('sheet').scrollTop<=0?e.touches[0].clientY:null; },{passive:true});
 $('sheet').addEventListener('touchend',e=>{ if(ty!=null&&e.changedTouches[0].clientY-ty>90) closeSheet(); ty=null; });
@@ -2616,7 +2637,7 @@ function openMeg(){
   <h4>Størrelse på oversettelsen</h4><div class="seg" id="trSeg">${[[.9,'Liten'],[1,'Normal'],[1.18,'Stor'],[1.36,'Ekstra stor']].map(([v,l])=>`<button data-t="${v}" class="${(S.settings.trSize||1)===v?'on':''}" style="font-size:${12*v}px">${l}</button>`).join('')}</div><p style="font-family:var(--serif);font-size:calc(16.5px*${S.settings.trSize||1});margin:8px 0 4px">Si: «Mine tjenere som har syndet mot seg selv, fortvil ikke om Guds nåde!»</p><p style="font-size:12.5px;color:var(--muted)">Gjelder den engelske og norske oversettelsen under verset.</p>
   <h4>Versutvalg</h4><div class="seg" id="poolSeg">${[['tema','Tematisk'],['blandet','Blandet'],['hele','Hele Koranen']].map(([k,l])=>`<button data-p="${k}" class="${(S.settings.pool||'blandet')===k?'on':''}">${l}</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Tematisk: rundt 190 utvalgte vers i elleve temaer, også advarsler og karakter. Hele Koranen: et tilfeldig vers av alle 6236. Blandet: begge deler. På fredager, i Ramadan og i Dhul Hijjah kommer det i tillegg egne vers.</p>
   <button class="btn" id="bkBtn">Sikkerhetskopi av hagen</button>
-  <p style="font-size:13px;color:var(--muted);text-align:center">Skjulte tegn i hagen: <b style="color:var(--gold2)">${Object.keys(S.signs||{}).length} av ${SIGNS.length}</b> funnet. Se godt etter.</p>
+  <p style="font-size:13px;color:var(--muted);text-align:center">Skjulte tegn i hagen: <b style="color:var(--gold2)">${signFound()} av ${SIGNN()}</b> funnet. Se godt etter.</p>
   <button class="btn ghost" id="guideB">Slik fungerer Rawdah</button>
   <button class="btn ghost" id="replay">Se historien igjen</button>
   <button class="btn ghost" id="resetBtn">Slett all fremgang</button>`);
@@ -2647,8 +2668,8 @@ function weekly(){ if(new Date().getDay()!==5||S.weekShown===dayStr()||!S.introS
   <button class="btn" id="wkOk">Bismillah, en ny uke</button>`); $('wkOk').onclick=closeSheet; return true; }
 function showUnseen(){
   if(titleOn||S.active||!S.introSeen) return;
-  if(S.away&&!S.away.seen){ const ev=S.unseen?S.events.slice(0,Math.min(S.unseen,4)).map(e=>e.text):[]; S.unseen=0; S.away.msgs=[...S.away.msgs,...ev].slice(0,6); return showAway(); }
-  if(!S.unseen) return; const ev=S.events.slice(0,Math.min(S.unseen,6)); S.unseen=0; save();
+  if(S.away&&!S.away.seen){ S._hintPend=true; const ev=S.unseen?S.events.slice(0,Math.min(S.unseen,4)).map(e=>e.text):[]; S.unseen=0; S.away.msgs=[...S.away.msgs,...ev].slice(0,6); return showAway(); }
+  if(!S.unseen){ setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!titleOn) maybeSignHint(); },1200); return; } S._hintPend=true; const ev=S.events.slice(0,Math.min(S.unseen,6)); S.unseen=0; save();
   openSheet(`<h3>Mens du var borte …</h3><div class="card log">${ev.map(e=>`<div>${esc(e.text)}</div>`).join('')}</div><p>Fullfør en økt for å reparere. Trykk på et skadet område i en del for en tawbah-økt som reparerer alt.</p><button class="btn" id="seeG">Se hagen</button>`);
   $('seeG').onclick=()=>{ closeSheet(); toOverview(); };
 }
@@ -2664,6 +2685,7 @@ const CAPS=[
   'Den natten lykta holdt på å slukne, tok hærfuglen den siste flammen.<small>Den fløy høyt opp over ruinene med lyset, så høyt at den ble til en stjerne. Der ble den hengende og lyste, i håp om at noen skulle se den.</small>',
   'Noen gjetere så stjernen.<small>De fulgte lyset gjennom ørkenen med dyrene sine, og fant ruinene av Rawdah. Der bestemte de seg for å bli og bygge opp igjen.</small>',
   'Ummaen ble ikke bygd på én dag.<small>Den gjenoppbygges heller ikke på én dag. Hver gang du trykker på stjernen, kommer hærfuglen ned med et vers til deg. Din rolle er å gjenopprette hagen: én dag, ett vers, ett hjerte om gangen. Når hagen blomstrer igjen, kommer hærfuglen hjem.</small>',
+  'Blant gjeterne er en gammel, vis mann.<small>Han kjenner hagen bedre enn noen. Av og til vil han be deg ta en ekstra titt et sted. Det som gjemmer seg der, er tegn fra Koranens fortellinger, små ting du kan samle i boka di.</small>',
 ];
 /* ---- Gullalderens Rawdah: vises bare i første bilde av fortellingen og når hagen er 100 % ---- */
 const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 0 Q-7 -14 -4 -20 H4 Q7 -14 6 0Z" fill="${robe}" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-24" r="4.2" fill="#c58c5c"/><path d="M-4.6 -25 Q0 -32 4.6 -25 Q0 -27 -4.6 -25Z" fill="${turb}"/></g>`;
@@ -2743,7 +2765,7 @@ function titleScene(){ const P=PAL[skyKey]||PAL.natt, pct=restorePct(), lit=Math
 function showTitle(){ titleOn=true; const el=$('title'), pct=restorePct(), a=S.active;
   const line=(S.vs||0)>0?`${pct} % gjenopprettet${S.streak>0?` · ${S.streak} ${S.streak===1?'dag':'dager'} på rad`:''}`:'Hagen venter på deg';
   const cta=a?'Fortsett økta':doneToday()?'Gå inn i hagen':'Dagens vers venter';
-  el.innerHTML=titleScene()+`<div class="tt"><div class="ta">روضة</div><div class="tn">RAWDAH</div><div class="tl">${esc(line)}</div></div><div class="tb"><button class="btn" id="tGo">${cta}</button><button class="tguide" id="tGuide">${(S.vs||0)<3?'Første gang? Få en rask forklaring':'Hvordan fungerer Rawdah?'}</button></div>`;
+  el.innerHTML=titleScene()+`<div class="tt"><div class="ta">روضة</div><div class="tn">RAWDAH</div><div class="tl">${esc(line)}</div><div class="tdua"><div class="da">رَبِّ ٱجْعَلْنِى مُقِيمَ ٱلصَّلَوٰةِ وَمِن ذُرِّيَّتِى ۚ رَبَّنَا وَتَقَبَّلْ دُعَآءِ</div><div class="dt">Rabbi-jʿalnī muqīma ṣ-ṣalāti wa min dhurriyyatī, rabbanā wa taqabbal duʿāʾ</div><div class="dn">«Herre, la meg holde fast ved bønnen, og også mine etterkommere. Vår Herre, ta imot min bønn.»</div><div class="dr">IBRAHIMS DUA · KORANEN 14:40</div></div></div><div class="tb"><button class="btn" id="tGo">${cta}</button><button class="tguide" id="tGuide">${(S.vs||0)<3?'Første gang? Få en rask forklaring':'Hvordan fungerer Rawdah?'}</button></div>`;
   el.classList.add('on');
   $('tGuide').onclick=ev=>{ ev.stopPropagation(); titleOn=false; unlockAudio(); el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650); openGuide(); };
   el.onclick=()=>{ if(!titleOn) return; titleOn=false; snd.chime([523,659,784],.06); if(sess){ userPaused=false; playCurrent(); } else unlockAudio();
@@ -2806,14 +2828,14 @@ function introScene(){
   ${lan(70,120)}${lan(320,120)}${lan(195,40,'last')}
   <g class="istar"><circle cx="195" cy="200" r="5" fill="#fff5d6"/><circle class="p" cx="195" cy="200" r="10" fill="none" stroke="#ffe6a6" stroke-width="1.5"/><circle cx="195" cy="200" r="30" fill="url(#ilg)"/></g>`;
 }
-const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#1c2a6a','#9a6a8a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a'],['#05071a','#111641','#28205a']];
-const IVIS=['s1','s1 heart','s2','s3','s4','s4 decades','s4 rise','s4 herders star','s5 herders','s6 herders'];
+const ISKY=[['#1c2a6a','#b07a6a','#f6cf86'],['#1c2a6a','#9a6a8a','#f6cf86'],['#3a3a5e','#7a6a7a','#c9a27a'],['#3a2414','#6a4422','#b07a3a'],['#0b0a18','#1a1628','#2a2232'],['#2a3a5a','#8a7a6a','#d9b07a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a'],['#0b1238','#2a3a6a','#c98a6a'],['#05071a','#111641','#28205a']];
+const IVIS=['s1','s1 heart','s2','s3','s4','s4 decades','s4 rise','s4 herders star','s5 herders','s5 herders','s6 herders'];
 let iStep=0;
 function playIntro(){
   $('intro').classList.add('on'); $('iScene').innerHTML=introScene();
   let st='';for(let i=0;i<70;i++) st+=`<i style="top:${(Math.random()*100).toFixed(1)}%;width:${(20+Math.random()*60).toFixed(0)}px;animation-duration:${(.5+Math.random()*.8).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s"></i>`; $('storm').innerHTML=st;
   let du='';for(let i=0;i<40;i++) du+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*60).toFixed(1)}%;animation-duration:${(6+Math.random()*6).toFixed(1)}s;animation-delay:-${(Math.random()*6).toFixed(1)}s"></i>`; $('dust').innerHTML=du;
-  $('idots').innerHTML=Array.from({length:10},()=>'<i></i>').join('');
+  $('idots').innerHTML=Array.from({length:11},()=>'<i></i>').join('');
   $('iModes').innerHTML=`<h3 style="font-family:var(--serif);color:var(--gold2);font-size:26px;margin:0 0 4px">Slik bygger du opp igjen</h3>${modesHTML()}<div class="mode"><div class="ic">نور</div><div><b>Nur og Basaren</b><p>Nur betyr lys. Du tjener det på økter, oppgaver og stell, og bruker det i Basaren på fôr, verktøy, dyr, gjerder og byggverk. Ingenting kan kjøpes for ekte penger.</p></div></div>`;
   introMode='intro'; $('iSkip').style.display=S.introSeen?'':'none'; iStep=0; showStep();
 }
@@ -2821,13 +2843,13 @@ function showStep(){
   const el=$('intro'); el.className='on '+IVIS[iStep];
   ['is1','is2','is3'].forEach((id,k)=>$(id).setAttribute('stop-color',ISKY[iStep][k]));
   [...$('idots').children].forEach((d,k)=>d.classList.toggle('on',k===iStep));
-  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<9){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
+  const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ if(iStep<10){ cap.innerHTML=CAPS[iStep]; cap.classList.add('on'); } },iStep?700:300);
   if(iStep===6) setTimeout(()=>snd.chime([523,659,784,1047],.08),2600);
   if(iStep===3){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
-  $('iNext').textContent=iStep<8?'Trykk for å fortsette':iStep===8?'Slik fungerer det':'Begynn';
+  $('iNext').textContent=iStep<9?'Trykk for å fortsette':iStep===9?'Slik fungerer det':'Begynn';
 }
 let iTapT=0;
-$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(iStep<9){ iStep++; showStep(); } else endIntro(); };
+$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(iStep<10){ iStep++; showStep(); } else endIntro(); };
 $('intro').addEventListener('click',e=>{ if(!$('intro').classList.contains('on')||e.target.closest('#iSkip,a,input,select')) return; $('iNext').onclick(); });
 $('iSkip').onclick=()=>introMode==='chapter'?endChapter():endIntro();
 const CHAPTERS=[
@@ -2843,7 +2865,7 @@ function playChapter(n){ introMode='chapter'; $('iSkip').style.display=''; $('in
   $('iScene').style.filter=`saturate(${.45+n*.18}) brightness(${.75+n*.07})`;
   const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ cap.innerHTML=`<span style="font-size:13px;letter-spacing:1px;color:var(--gold)">KAPITTEL ${n+1}</span><br>${CHAPTERS[n-1][0]}<small>${CHAPTERS[n-1][1]}</small>`; cap.classList.add('on'); },500);
   $('iNext').textContent='Fortsett'; snd.chime([523,659,784,1047],.08); logEvent(`Kapittel ${n+1}: ${CHAPTERS[n-1][0]}`); }
-function endChapter(){ introMode='intro'; $('iScene').style.filter=''; $('intro').className=''; renderAll(); }
+function endChapter(){ introMode='intro'; $('iScene').style.filter=''; $('intro').className=''; renderAll(); if(S._hintPend){ S._hintPend=false; setTimeout(()=>{ if(!$('sheet').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },1200); } }
 function endIntro(){ $('intro').className=''; introMode=null; S.introSeen=true; save(); toOverview();
   if(!S.settings.gender){ setTimeout(()=>{ openSheet(`<h3>Hvem pleier hagen?</h3><p>Hagen får en gjeter eller en gjeterinne, og takken på arabisk får riktig form. Du kan endre dette under Meg.</p><div class="qrow"><button class="gb gold" data-g="m">Mann</button><button class="gb gold" data-g="f">Kvinne</button></div>`);
     $('sheet').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ S.settings.gender=b.dataset.g; save(); closeSheet(); renderAll(); showTitle(); }); },700); }
