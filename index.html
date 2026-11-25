@@ -2185,11 +2185,12 @@ const MODS=[['dagbok','📖','Bok (dagbok)','Hvert vers du fullfører lagres her
  ['hifz','🗼','Lysets tårn','Lær en surah utenat, vers for vers. Hvert vers du kan, tenner et vindu i tårnet.'],
  ['beite','🐑','Beitet og dyrene','Sauer og kyr kommer tilbake. Gi dem mat, samle ull, melk og egg, og selg dem i Basaren.'],
  ['vern','🛡','Vern og flere dyr','Fuglehus, sandvegg, gjeterhund, bikube og flere dyr i Basaren.'],
+ ['well','💧','Velvære','Bønn, vann og søvn. En muslim trenger også hvile. Finn det under Meg → Velvære.'],
  ['hikma','📚','Bayt al-Ḥikma','Visdommens hus. Lærde fra gullalderen kommer én etter én: algebra, optikk, kirurgi, maskiner og stjerner. Finn det nede til høyre i oversikten.'],
  ['bygg','🏛','Bygg og himmel','Paviljong, kaskade, minaret, nordlys og til slutt palasset.'],
  ['frukt','🌴','Frukthagen','Plant og høst daddel, granateple, fiken og oliven.']];
-const modAt=k=>k==='frukt'?AT.frukt:k==='beite'?AT.beite:GATE[k];
-const modOpen=k=>k==='frukt'||k==='beite'?restored(k):unl(k);
+const modAt=k=>k==='well'?0:k==='frukt'?AT.frukt:k==='beite'?AT.beite:GATE[k];
+const modOpen=k=>k==='well'?true:k==='frukt'||k==='beite'?restored(k):unl(k);
 function openModules(focus){ const rows=MODS.map(([k,ic,nm,tx])=>{ const n=modAt(k), o=modOpen(k), v=Math.min(S.vs,n);
    return `<div class="card mod${k===focus?' focus':''}" style="margin-top:8px" id="mod_${k}"><div class="mi">${ic}</div><div style="flex:1"><b style="color:var(--gold2)">${nm}</b> <span style="font-size:12px;color:${o?'#a9e6bd':'var(--muted)'}">${o?'· åpen':`· åpner etter ${n} vers-økt${n>1?'er':''}`}</span><p style="margin:3px 0 0;font-size:13.5px">${tx}</p>${o?'':`<div class="bar"><b style="width:${v/n*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${v} av ${n} økt${n>1?'er':''}</div>`}</div></div>`; }).join('');
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">HAGENS DELER</p><h3>Det som åpner seg underveis</h3><p style="font-size:13.5px;margin:4px 0 0">Hver dag du fullfører dagens vers, åpner en ny del av hagen seg. Ingenting kan kjøpes seg forbi.</p>${rows}<button class="btn" id="modOk">Fint</button>`);
@@ -2471,7 +2472,7 @@ function finish(refl){
   if(rw&&a._rose&&!(view==='sec'&&curQ===QUADS.findIndex(q=>q.id==='roser'))){ const sp=S.sprout; S.sprout=null; renderSection(); S.sprout=sp; } else renderSection();
   renderTop(); barakah(); snd.chime(); sparkle(); if(rw) rewardSeq(a._nur0,a._gain,!!a._rose);
   if(a.kind!=='hifz'&&hikmaTick()){ msgs.push(hikmaState().n===1?'Visdommens hus har åpnet dørene':'en ny lærd har kommet til Visdommens hus'); updHikmaPill(); }
-  setTimeout(()=>{ toast(msgs.join(' · '),rw?2900:4200); },rw?1700:0); setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
+  setTimeout(()=>{ toast(msgs.join(' · '),rw?2900:4200); },rw?1700:0); { const hh=new Date().getHours(); if(hh>=23||hh<4) setTimeout(()=>wellNudge(),5200); } setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
 }
 function markDone(){ const t=dayStr(); if(!S.doneDays.includes(t)){ S.streak=S.doneDays.includes(addDays(t,-1))?S.streak+1:1; S.best=Math.max(S.best,S.streak); S.daysTotal=(S.daysTotal||0)+1; S.doneDays.push(t); S.doneDays=S.doneDays.slice(-120);} save(); drawLanterns(); }
 function barakah(){ $('vSec').classList.add('barakah'); setTimeout(()=>$('vSec').classList.remove('barakah'),12000); }
@@ -2815,9 +2816,57 @@ function backupNudge(){ if(!S.introSeen||S.active||busy||(typeof sess!=='undefin
   S.backupNudgeDay=dayStr(); save();
   openSheet(`<h3>Ta vare på hagen din</h3><p>All fremgang ligger bare på denne telefonen. Telefonen kan i sjeldne tilfeller slette lagrede data, og da forsvinner hagen og reisebrevene. Det tar ti sekunder å lagre en kopi.</p><p style="font-size:12.5px;color:var(--muted)">${S.lastBackup?`Siste kopi: ${new Date(S.lastBackup).toLocaleDateString('no-NO',{day:'numeric',month:'long'})}.`:'Du har ikke tatt noen kopi ennå.'}</p><button class="btn" id="bnGo">Lagre kopi nå</button><button class="btn ghost" id="bnLater">Påminn meg neste uke</button>`);
   $('bnGo').onclick=openBackup; $('bnLater').onclick=()=>{ S.firstBackupNudge=Date.now(); if(S.lastBackup) S.lastBackup=Math.max(S.lastBackup,Date.now()-6*864e5); save(); closeSheet(); }; return true; }
+/* ================= VELVÆRE · hvile, vann, søvn og bønn ================= */
+const WELLQ=[
+ ['«Kroppen din har en rett over deg, øynene dine har en rett over deg, og din kone har en rett over deg.»','Profeten ﷺ til ʻAbdullāh ibn ʻAmr, som fastet hver dag og ba hele natten. Al-Bukhārī'],
+ ['«To velsignelser som mange mennesker taper på: god helse og fritid.»','Al-Bukhārī'],
+ ['«Blant Hans tegn er søvnen deres om natten og om dagen.»','Koranen 30:23'],
+ ['«Vi gjorde søvnen deres til hvile.»','Koranen 78:9'],
+ ['«Vi gjorde alt levende av vann.»','Koranen 21:30'],
+ ['«Gi oss ro med den, Bilāl.»','Profeten ﷺ om bønnen. Abū Dāwūd, sahih ifølge al-Albānī'],
+ ['«Allah ønsker det lette for dere, og ikke det tunge.»','Koranen 2:185'],
+ ['«Allah legger ikke på noen sjel mer enn den kan bære.»','Koranen 2:286'],
+ ['«Spis og drikk, men ikke overdriv.»','Koranen 7:31']
+];
+const SALAH=[['fajr','Fajr'],['dhuhr','Dhuhr'],['asr','ʻAsr'],['maghrib','Maghrib'],['isha','ʻIshāʼ']];
+function wellDay(){ S.well=S.well||{goal:6,log:{}}; const d=dayStr(); S.well.log[d]=S.well.log[d]||{w:0,sl:null,p:{}};
+  const ks=Object.keys(S.well.log).sort(); if(ks.length>21) ks.slice(0,ks.length-21).forEach(k=>delete S.well.log[k]); return S.well.log[d]; }
+function wellTabs(on){ return `<div class="tabs"><button data-mt="hage"${on==='hage'?' class="on"':''}>Din hage</button><button data-mt="well"${on==='well'?' class="on"':''}>Velvære</button></div>`; }
+function wireMegTabs(){ $('sheet').querySelectorAll('[data-mt]').forEach(b=>b.onclick=()=>b.dataset.mt==='well'?openWell():openMeg()); }
+function openWell(){ const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026-01-01',dayStr())%WELLQ.length+WELLQ.length)%WELLQ.length];
+  const last7=Array.from({length:7},(_,k)=>addDays(dayStr(),k-6)).map(d=>[d,S.well.log[d]]);
+  const prayed=SALAH.filter(([k])=>L.p[k]).length;
+  openSheet(`${wellTabs('well')}<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
+  <div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.4">${esc(q[0])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">${esc(q[1])}</p></div>
+  <h4>🕌 Bønnen</h4><p style="font-size:13.5px;margin-top:0">Bønnen er ikke bare en plikt, den er også hvile. Profeten ﷺ sa til Bilāl: «Gi oss ro med den.»</p>
+  <div class="qrow" id="wlP" style="flex-wrap:wrap">${SALAH.map(([k,n])=>`<button class="gb${L.p[k]?' gold':''}" data-p="${k}" style="flex:1 1 30%">${L.p[k]?'✓ ':''}${n}</button>`).join('')}</div>
+  <p style="font-size:12.5px;color:var(--muted)">${prayed} av 5 i dag. Bare for deg selv. Ingen poeng, ingen straff.</p>
+  <h4>💧 Vann</h4><p style="font-size:13.5px;margin-top:0">Sunna er å sitte, si bismillāh og drikke i tre åndedrag (al-Bukhārī og Muslim).</p>
+  <div class="card" style="display:flex;align-items:center;gap:10px"><div style="flex:1;display:flex;gap:4px;flex-wrap:wrap">${Array.from({length:Math.max(G,L.w)},(_,k)=>`<span style="font-size:22px;opacity:${k<L.w?1:.25}">💧</span>`).join('')}</div><button class="gb gold" id="wlW" style="flex:0 0 auto">+1 glass</button></div>
+  <p style="font-size:12.5px;color:var(--muted)">${L.w} av ${G} glass i dag. <a href="#" id="wlG" style="color:var(--gold2)">Endre mål</a> · <a href="#" id="wlWm" style="color:var(--gold2)">Angre</a>. Behovet varierer med vekt, vær og aktivitet. Har du sykdom som påvirker væskebalansen, følg rådet fra legen din.</p>
+  <h4>🌙 Søvn</h4><p style="font-size:13.5px;margin-top:0">Profeten ﷺ likte ikke å sove før ʻishāʼ eller å sitte oppe og prate etter den (al-Bukhārī). De fleste voksne trenger 7–9 timer.</p>
+  <p style="font-size:13.5px;margin:0 0 6px">Hvor mye sov du i natt?</p>
+  <div class="qrow" id="wlS">${[5,6,7,8,9].map(h=>`<button class="gb${L.sl===h?' gold':''}" data-h="${h}">${h===5?'≤5':h===9?'9+':h} t</button>`).join('')}</div>
+  ${L.sl!=null?`<p style="font-size:13px;margin:6px 0 0">${L.sl<=5?'Det er lite. Prøv å legge deg litt tidligere i kveld. Kroppen din har en rett over deg.':L.sl===6?'Litt i underkant for de fleste. En kort hvil midt på dagen (qaylūla) er også sunna.':'Godt. Alḥamdulillāh.'}</p>`:''}
+  <h4>Siste 7 dager</h4><div class="card" style="display:flex;justify-content:space-between;font-size:11px;text-align:center">${last7.map(([d,l])=>`<div style="flex:1"><div style="color:var(--muted)">${['sø','ma','ti','on','to','fr','lø'][new Date(d+'T12:00').getDay()]}</div><div title="bønn">${l?SALAH.filter(([k])=>l.p[k]).length:'–'}🕌</div><div>${l?l.w:'–'}💧</div><div>${l&&l.sl!=null?(l.sl>=9?'9+':l.sl):'–'}🌙</div></div>`).join('')}</div>
+  <p style="font-size:12px;color:var(--muted)">Dette er en påminnelse, ikke medisinske råd. Er du bekymret for søvn eller helse, snakk med fastlegen din.</p>
+  <button class="btn ghost" id="wlOk">Lukk</button>`);
+  wireMegTabs(); $('wlOk').onclick=closeSheet;
+  $('wlW').onclick=()=>{ L.w++; save(); haptic(10); snd.splash&&snd.splash(); if(L.w===G) toast('Dagens vannmål er nådd. Alḥamdulillāh',2200); openWell(); };
+  $('wlWm').onclick=e=>{ e.preventDefault(); if(L.w>0){ L.w--; save(); openWell(); } };
+  $('wlG').onclick=e=>{ e.preventDefault(); const opts=[4,6,8,10]; S.well.goal=opts[(opts.indexOf(G)+1)%opts.length]; save(); openWell(); };
+  $('wlP').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const k=b.dataset.p; L.p[k]=!L.p[k]; save(); haptic(8); if(L.p[k]) snd.chime([523,659],.04); openWell(); });
+  $('wlS').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ L.sl=+b.dataset.h; save(); haptic(8); openWell(); });
+}
+/* Milde påminnelser inne i appen, høyst én om dagen */
+function wellNudge(){ const L=wellDay(), h=new Date().getHours(); if(S.well.nudged===dayStr()) return;
+  let t=null;
+  if(h>=23||h<4) t='Det er sent. Kroppen din har en rett over deg. Sov godt, in shā\' Allāh 🌙';
+  else if(h>=13&&L.w<2) t='Har du husket å drikke vann i dag? 💧 Trykk på Meg → Velvære for å notere.';
+  if(t){ S.well.nudged=dayStr(); save(); toast(t,4200); } }
 function openMeg(){
   const top=Object.entries(S.stats.reflect).sort((a,b)=>b[1]-a[1])[0], url=location.href.split('?')[0].split('#')[0]+'?spin=1';
-  openSheet(`<h3>Din hage</h3>
+  openSheet(`${wellTabs('hage')}<h3>Din hage</h3>
   <div class="card stats"><div><b>${restorePct()}%</b><span>gjenopprettet</span></div><div><b>${S.streak}</b><span>dager på rad</span></div><div><b>${Math.round(S.stats.seconds/60)}</b><span>minutter</span></div><div><b>${S.stats.interrupts}</b><span>stoppet før app</span></div></div>
   <p>${S.stats.interrupts?`Du har stoppet ${S.stats.interrupts} ganger før en app og brukt ${Math.round(S.stats.seconds/60)} minutter med Koranen i stedet.`:(IS_ANDROID?'Sett opp MacroDroid under':'Sett opp Snarveier under')+', så ser du hvor ofte du stoppet før en app.'}${top?` Det som oftest treffer deg: ${top[0].toLowerCase()}.`:''}</p>
   <h4>De tre måtene å pleie hagen på</h4>${modesHTML()}
@@ -2846,7 +2895,7 @@ function openMeg(){
   $('shSeg').onclick=e=>{ const k=e.target.dataset.n; if(k!=null){ S.settings.shortPerDay=+k; S.shortTimes=null; save(); openMeg(); } }; if($('shNew')) $('shNew').onclick=()=>{ S.shortTimes={week:weekKey(),t:genShortTimes(shortLimit())}; save(); openMeg(); };
   $('durSeg').onclick=e=>{ const m=+e.target.dataset.m; if(m){ S.settings.reps=m; save(); openMeg(); } };
   $('replay').onclick=()=>{ closeSheet(); playIntro(); };
-  $('guideB').onclick=()=>openGuide();
+  $('guideB').onclick=()=>openGuide(); wireMegTabs();
   $('bkBtn').onclick=openBackup;
   $('genSeg').onclick=e=>{ const g=e.target.dataset.g; if(g){ S.settings.gender=g; save(); openMeg(); if(view==='sec') renderSection(); } };
   $('openSeg').onclick=e=>{ const o=e.target.dataset.o; if(o!=null){ S.settings.allOpen=o==='1'; save(); renderAll(); openMeg(); } };
@@ -2973,7 +3022,7 @@ function showTitle(){ titleOn=true; const el=$('title'), pct=restorePct(), a=S.a
   $('tGuide').onclick=ev=>{ ev.stopPropagation(); titleOn=false; unlockAudio(); el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650); openGuide(); };
   el.onclick=()=>{ if(!titleOn) return; titleOn=false; snd.chime([523,659,784],.06); if(sess){ userPaused=false; playCurrent(); } else unlockAudio();
     el.classList.add('out'); setTimeout(()=>{ el.className=''; el.innerHTML=''; },650);
-    if(!S.active&&view!=='sec') enterQuad(0); lastTick=performance.now(); setTimeout(showUnseen,700); }; }
+    if(!S.active&&view!=='sec') enterQuad(0); lastTick=performance.now(); setTimeout(showUnseen,700); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) wellNudge(); },5000); }; }
 function goldenAge(){
   const G='url(#goldG)', dome=(cx,by,w,hh)=>`<path d="M${cx-w} ${by} Q${cx-w} ${by-hh*.8} ${cx} ${by-hh} Q${cx+w} ${by-hh*.8} ${cx+w} ${by}Z" fill="${G}" stroke="#7a5a20" stroke-width=".8"/><path d="M${cx} ${by-hh} v-10" stroke="#e7c26b" stroke-width="1.4"/><path d="M${cx-3} ${by-hh-10} q3 -6 6 0" fill="none" stroke="#e7c26b" stroke-width="1.2"/>`;
   const min=(x,b,hh)=>`<path d="M${x-4} ${b} V${b-hh} h8 V${b}Z" fill="#f2e6c8" stroke="#7a5a20" stroke-width=".6"/><path d="M${x-6} ${b-hh*.62} h12 v-3 h-12Z M${x-6} ${b-hh*.85} h12 v-3 h-12Z" fill="${G}"/><path d="M${x-4} ${b-hh} Q${x} ${b-hh-14} ${x+4} ${b-hh}Z" fill="${G}"/><circle cx="${x}" cy="${b-hh-16}" r="1.4" fill="#ffe6a6"/>`;
@@ -3142,7 +3191,7 @@ else if(S.snooze&&S.snooze.until<Date.now()&&S.snooze.until>Date.now()-6*3600e3&
 setTimeout(()=>{ if(!weekly()) showUnseen(); },500);
 fetchSurahList().then(l=>{ surahMeta=surahMeta||l; if((S.rihla||0)>0&&!S.rihlaIntro&&S.introSeen){ S.rihlaIntro=1; save(); setTimeout(()=>{ if(!$('sheet').classList.contains('on')) openRihlaIntro(latestMon()); else S.rihlaIntro=0; },1500); } const before=S.rihla||0; if(rihlaEarned()>before&&S.introSeen) checkRihla(); }).catch(()=>{});
 if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
-window.__rawdah={openHikma,openScholar,hikmaTick,HIKMA,showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
+window.__rawdah={openWell,wellNudge,openHikma,openScholar,hikmaTick,HIKMA,showAway,dailyCheck,signTap,SIGNS,openNur,openGuide,showTitle,EGGS,eggTap,enoughToday,backupNudge,shortHTML,travTalk,lifeLayer,spin,openRihlaIntro,rihlaNext,openRihla,openPostcard,MONS,checkRihla,playChapter,openAlbum,weekly,snd,openShop,openBook,openBackup,receiveRose,giftRose,b64e,special,S,save,renderAll,enterQuad,toOverview,dayStr,addDays,openWord,openHifz,openMeg,get Q(){return Q;},get sess(){return sess;}};
 }
 </script>
 </body>
