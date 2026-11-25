@@ -453,6 +453,11 @@ code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px;font-siz
 .kbub2{background:#fbf4e4;color:#3a2414;border-radius:14px;padding:9px 12px;font-size:14px;line-height:1.4;position:relative}.kbub2::before{content:'';position:absolute;left:-7px;top:16px;border:7px solid transparent;border-right-color:#fbf4e4;border-left:0}
 @media (prefers-reduced-motion: reduce){.khw.giggle svg,.khw.giggle .ks{animation:none}}
 a.btn{display:flex!important;align-items:center;justify-content:center;box-sizing:border-box}
+#noteBtn{position:fixed;right:10px;top:42%;z-index:120;width:40px;height:40px;border-radius:50%;background:#e7c26b;color:#2a1a06;font-size:22px;font-weight:800;border:2px solid #fff3cf;box-shadow:0 4px 14px rgba(0,0,0,.45)}#noteBtn b{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:#c0392b;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
+#noteBox{position:fixed;inset:0;z-index:130;background:rgba(5,4,15,.55);display:flex;align-items:flex-start;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 60px) 14px 14px}
+#noteBox .nbx{width:100%;max-width:420px;background:#17133a;border:1px solid rgba(231,194,107,.5);border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#noteBox textarea{width:100%;box-sizing:border-box;font-size:16px;border-radius:12px;border:1px solid rgba(231,194,107,.45);background:rgba(0,0,0,.3);color:#efe6d2;padding:10px;font-family:inherit}
+#noteBox .nbc{background:none;border:0;color:#efe6d2;font-size:20px}
 #jabalBtn{left:12px;bottom:calc(var(--safe-b) + 58px)}#devBtn{left:120px;bottom:calc(var(--safe-b) + 58px);background:rgba(20,40,60,.85);border-color:#8ac;color:#def}
 .jpill{position:absolute;z-index:6;height:32px;padding:0 12px;border-radius:999px;background:rgba(14,30,40,.85);border:1px solid #9fc7d6;color:#e8f6fb;font-size:12.5px;font-weight:700;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #hikmaPill{position:absolute;right:12px;bottom:calc(var(--safe-b) + 14px);z-index:6;display:flex;gap:6px;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:rgba(11,9,32,.72);border:1px solid rgba(231,194,107,.5);font-size:13px;color:var(--ink,#efe6d2);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
@@ -3407,6 +3412,39 @@ function openDev(){ const st=`Spilldag: ${jDay()} · økter: ${S.vs} · nur: ${S
     if(k==='reset'){ if(!confirm('Slette alt i Ibrahim-versjonen og starte på nytt?')) return; localStorage.removeItem(KEY); localStorage.removeItem('jabal_'+JABAL.name+'_off'); location.reload(); } }); }
 function devComplete(){ if(doneToday()) return toast('Dagens vers er allerede fullført. Hopp til neste dag først.'); closeSheet(); S.active={kind:'spin',cat:CATS[0].id,ref:'1:1',elapsed:60,ph:3,reps:6,solved:3,stellT:30,hiddenAt:null}; sess=null; finish('Test'); }
 
+/* ================= TESTNOTATER («?»-knappen, bare når JABAL.notes er satt) ================= */
+function nList(){ try{ return JSON.parse(localStorage.getItem('rawdah_notes_'+JABAL.name)||'[]'); }catch(e){ return []; } }
+function nSave(L){ try{ localStorage.setItem('rawdah_notes_'+JABAL.name,JSON.stringify(L)); }catch(e){} }
+function nCtx(){ const sh=$('sheet').classList.contains('on')?(($('sheet').querySelector('h3')||{}).textContent||'ark'):'', a=S.active, q=QUADS[curQ]||{};
+  return [view==='sec'?'Hage: '+(q.name||''):'Oversikt', a?'Økt: '+['Lytt og les','Lær','Stell','Refleksjon'][a.ph||0]:'', sh?'Åpent: '+sh:'', $('intro').classList.contains('on')?'Intro/kapittel':'', 'Dag '+jDay()+'/7'].filter(Boolean).join(' · '); }
+function nUpd(){ const b=$('noteBtn'); if(!b) return; const n=nList().filter(x=>!x.sent).length; b.innerHTML='?'+(n?`<b>${n}</b>`:''); }
+async function nSend(x){ const F=JABAL.notesForm; if(!F||!navigator.onLine) return false;
+  try{ const fd=new URLSearchParams(); fd.append(F.msg,x.t); if(F.type) fd.append(F.type,x.k); if(F.ctx) fd.append(F.ctx,`${x.c} | ${x.d} | ${JABAL.build||''} | ${navigator.userAgent}`); if(F.who) fd.append(F.who,JABAL.who||JABAL.name);
+    await fetch(F.action,{method:'POST',mode:'no-cors',body:fd}); return true; }catch(e){ return false; } }
+async function nFlush(){ const L=nList(); let ch=false; for(const x of L){ if(!x.sent&&await nSend(x)){ x.sent=1; ch=true; } } if(ch){ nSave(L); nUpd(); } }
+function nOpen(){ if($('noteBox')) return; const ctx=nCtx(); const d=document.createElement('div'); d.id='noteBox';
+  d.innerHTML=`<div class="nbx"><div style="display:flex;justify-content:space-between;align-items:center"><b style="color:var(--gold2);font-size:16px">Meld fra</b><button id="nbX" class="nbc">✕</button></div>
+  <div class="qrow" id="nbK" style="margin:8px 0"><button class="gb gold" data-k="Feil">🐞 Feil</button><button class="gb" data-k="Forbedring">✨ Forbedring</button><button class="gb" data-k="Annet">💬 Annet</button></div>
+  <textarea id="nbT" placeholder="Hva skjedde, eller hva kan bli bedre?" rows="4"></textarea>
+  <div style="font-size:11.5px;color:var(--muted);margin:4px 0 8px">Lagres med: ${esc(ctx)}</div>
+  <button class="btn" id="nbS">Lagre</button><button class="btn ghost" id="nbA">Se alle (${nList().length}) og send</button></div>`;
+  document.body.appendChild(d); let kind='Feil';
+  d.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{ kind=b.dataset.k; d.querySelectorAll('[data-k]').forEach(x=>x.classList.toggle('gold',x===b)); });
+  $('nbX').onclick=()=>d.remove(); setTimeout(()=>{ const t=$('nbT'); if(t) t.focus(); },100);
+  $('nbS').onclick=()=>{ const t=$('nbT').value.trim(); if(!t){ $('nbT').focus(); return; } const L=nList(); const x={t,k:kind,c:ctx,d:new Date().toLocaleString('no-NO')}; L.push(x); nSave(L); d.remove(); nUpd(); toast(JABAL.notesForm?'Lagret og sendt. Takk!':'Lagret. Takk!',2000); nFlush(); };
+  $('nbA').onclick=()=>{ d.remove(); nAll(); }; }
+function nText(){ const L=nList(); return `Rawdah Jabal – notater fra ${JABAL.who||JABAL.name} (${JABAL.build||''})\nEnhet: ${navigator.userAgent}\n\n`+L.map((x,i)=>`${i+1}. [${x.k}] ${x.d}\n   Hvor: ${x.c}\n   ${x.t}`).join('\n\n'); }
+function nAll(){ const L=nList();
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DINE NOTATER</p><h3>${L.length} notat${L.length===1?'':'er'}</h3>
+  ${L.length?L.map((x,i)=>`<div class="card" style="margin-top:6px"><div style="font-size:11.5px;color:var(--muted)">${esc(x.k)} · ${esc(x.d)}${x.sent?' · ✓ sendt':''}</div><p style="margin:4px 0 0;font-size:14px">${esc(x.t)}</p><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${esc(x.c)}</div><button class="gb" data-del="${i}" style="margin-top:6px;font-size:12px">Slett</button></div>`).join(''):'<p>Ingen notater ennå. Trykk på «?» når du finner noe.</p>'}
+  ${JABAL.notesForm?'<p style="font-size:13px;color:var(--muted)">Notatene sendes automatisk til Ibrahim når du er på nett.</p>':''}
+  <button class="btn" id="naSh">Send alle til Ibrahim</button><button class="btn ghost" id="naCp">Kopier alle</button><button class="btn ghost" id="naOk">Lukk</button>`);
+  $('naOk').onclick=closeSheet;
+  $('sheet').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ if(!confirm('Slette dette notatet?')) return; const L2=nList(); L2.splice(+b.dataset.del,1); nSave(L2); nUpd(); nAll(); });
+  $('naCp').onclick=async()=>{ try{ await navigator.clipboard.writeText(nText()); toast('Kopiert. Lim inn i en melding til Ibrahim.'); }catch(e){ toast('Kunne ikke kopiere'); } };
+  $('naSh').onclick=async()=>{ const txt=nText(); if(navigator.share){ try{ await navigator.share({title:'Rawdah-notater',text:txt}); return; }catch(e){ if(e&&e.name==='AbortError') return; } } location.href='mailto:'+(JABAL.mail||'')+'?subject='+encodeURIComponent('Rawdah Jabal – notater fra '+(JABAL.who||''))+'&body='+encodeURIComponent(txt); }; }
+
+if(JABAL&&JABAL.notes){ const nb=document.createElement('button'); nb.id='noteBtn'; nb.setAttribute('aria-label','Meld fra'); document.body.appendChild(nb); nb.onclick=nOpen; nUpd(); setTimeout(nFlush,4000); addEventListener('online',nFlush); }
 if(JABAL){ $('jabalBtn').onclick=openJabal; $('devBtn').onclick=openDev; updJabalBtn(); if(JABAL.dev&&localStorage.getItem('jabal_'+JABAL.name+'_auto')){ localStorage.removeItem('jabal_'+JABAL.name+'_auto'); setTimeout(()=>{ if(titleOn) $('title').click(); setTimeout(devComplete,1200); },900); } }
 if(KAHWA){ $('kahwaBtn').onclick=openKahwa; updKahwaBtn(); if(S.kt&&S.kt.jumped){ S.kt.jumped=0; S.kt.q=(S.kt.q||[]).concat(['dag']); } }
 if(KAHWA){ Object.assign(GATE,{dagbok:1,basar:1,ord:1,hifz:1,beite:2,vern:2,hikma:2,bygg:3}); Object.assign(AT,{fountain:1,beite:2,frukt:3}); }
