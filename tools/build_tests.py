@@ -9,6 +9,7 @@ import json, os, subprocess, time, shutil
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform'
 TESTERS = [
     {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True},
+    {'mode': 'kahwa', 'name': 'light', 'who': 'Ibrahim', 'form': FORM, 'notes': True, 'title': 'Rawdah Kahwa Light'},
     {'mode': 'jabal', 'name': 'haroon', 'who': 'Haroon', 'form': FORM},
     {'mode': 'jabal', 'name': 'najaat', 'who': 'Najaat', 'form': FORM},
     {'mode': 'jabal', 'name': 'sadia', 'who': 'Sadia', 'form': FORM},
@@ -27,7 +28,8 @@ NAMES = {'kahwa': ('Rawdah Kahwa 7142', 'Rawdah Kahwa', 'kahwatest-', '#140a04')
 for t in TESTERS:
     mode, name = t['mode'], t['name']
     title, short, prefix, bg = NAMES[mode]
-    cfg = {k: v for k, v in t.items() if k != 'mode'}
+    title = t.get('title', title); short = t.get('title', short).replace('Rawdah ', '')
+    cfg = {k: v for k, v in t.items() if k not in ('mode', 'title')}
     cfg['build'] = BUILD
     var = 'KAHWA' if mode == 'kahwa' else 'JABAL'
     shift = (('kahwa_' if mode == 'kahwa' else 'jabal_') + name + '_off')
