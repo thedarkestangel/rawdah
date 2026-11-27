@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.KAHWA={"name": "light", "who": "Ibrahim", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "resetv": 2, "build": "bygg 27.11.2026 · cc30c17"};(function(){var k="rawdah_resetv_light",v="2";if(localStorage.getItem(k)!==v){["rawdah_kahwa_light","kahwa_light_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("kahwa_light_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.KAHWA={"name": "light", "who": "Ibrahim", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "resetv": 2, "build": "bygg 27.11.2026 · 0b3d375"};(function(){var k="rawdah_resetv_light",v="2";if(localStorage.getItem(k)!==v){["rawdah_kahwa_light","kahwa_light_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("kahwa_light_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -482,6 +482,7 @@ body:has(.sheet.on) #bellBtn,body:has(#baytScene) #bellBtn,body:has(#tour) #bell
 .si.core{border:1px solid rgba(231,194,107,.55);border-radius:12px;background:rgba(231,194,107,.06)}.card.deed{border-color:rgba(169,230,189,.45);background:rgba(169,230,189,.05)}
 body:has(#rumiScn) #items .wise{opacity:0}
 #tfScn{position:fixed;inset:0;z-index:119;background:#05040f;opacity:0;transition:opacity .6s}#tfScn.on{opacity:1}#tfScn svg{position:absolute;inset:0;width:100%;height:100%}.trock{transform-box:fill-box;transform-origin:50% 100%;animation:trock 2.2s ease-in-out infinite alternate}@keyframes trock{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+.rz.droop>g{transform-box:fill-box;transform-origin:50% 100%;transform:rotate(24deg);filter:saturate(.45) brightness(.8)}
 #rumiScn{position:fixed;inset:0;z-index:117;background:linear-gradient(rgba(5,4,15,.15),rgba(5,4,15,.5));opacity:0;transition:opacity .5s}#rumiScn.on{opacity:1}#rumiScn svg{position:absolute;inset:0;width:100%;height:100%}
 #bellBtn{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:60;height:38px;min-width:38px;padding:0 10px;border-radius:19px;background:rgba(23,19,58,.92);border:1px solid rgba(231,194,107,.6);color:#ffe6a6;font-size:17px;box-shadow:0 4px 14px rgba(0,0,0,.4)}#bellBtn b{margin-left:4px;font-size:13px;background:#c0392b;color:#fff;border-radius:9px;padding:0 6px}
 .inbr{display:flex;width:100%;text-align:left;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;color:inherit;font:inherit}.inbr span{display:flex;flex-direction:column}.inbr small{color:var(--muted);font-size:11.5px}.inbr em{font-style:normal;font-size:11px;color:var(--muted);white-space:nowrap}.inbr i{width:8px;height:8px;border-radius:4px;background:#e7c26b;display:inline-block;margin-bottom:3px}.inbr.new{border-color:rgba(231,194,107,.6)}
@@ -660,7 +661,7 @@ const QUADS=[
   {id:'beite',name:'Beitet',ar:'المرعى',river:['#d9a441','#6a4512']},
   {id:'frukt',name:'Frukthagen',ar:'البستان',river:['#9a3050','#3a0c1e']},
 ];
-const AT={fountain:3,beite:5,frukt:12}; // antall vers-økter før gjenoppretting
+const AT={fountain:3,beite:5,frukt:(window.JABAL||window.KAHWA)?6:12}; // antall vers-økter før gjenoppretting
 const FRUITS=['daddel','oliven','fiken','granateple','drue'];
 const FRUITNAME={daddel:'Daddelpalme',oliven:'Oliventre',fiken:'Fikentre',granateple:'Granatepletre',drue:'Vinranke'};
 const REFLECT=['Håp','Ro','Anger','Takknemlighet','Styrke','Trenger mer tid'];
@@ -951,8 +952,8 @@ function shepherdSvg(x,y){
   <path d="M6 -34 L14 -26" stroke="#8a3f62" stroke-width="5" stroke-linecap="round"/>
   <circle cx="15" cy="-26" r="2.6" fill="#c58c5c" ${L}/>
   <path d="M-13 -36 Q-15 -62 0 -63 Q15 -62 13 -36 Q8 -30 0 -31 Q-8 -30 -13 -36Z" fill="#efe4cc" ${L}/>
-  <ellipse cx="1" cy="-48" rx="5.6" ry="6.4" fill="#120c24"/>
-  <path d="M-11 -44 Q-12 -58 0 -59 Q12 -58 11 -44" fill="none" stroke="#d9c9a8" stroke-width="1.2"/>
+  <ellipse cx="1" cy="-48" rx="5.6" ry="6.4" fill="#c58c5c"/>
+  <path d="M-11 -44 Q-12 -58 0 -59 Q12 -58 11 -44" fill="none" stroke="#d9c9a8" stroke-width="1.2"/>${S.cap?`<g transform="translate(0 -4) scale(1.08)"><path d="M-9.5 -54 Q-10 -62 -6 -64.5 L0 -61.5 L6 -64.5 Q10 -62 9.5 -54 Q0 -51.5 -9.5 -54Z" fill="#4a3d36" ${L}/><path d="M0 -61.5 V-53" stroke="#2a201c" stroke-width="1"/>${[[-6,-59],[-3,-56],[4,-59],[6,-56],[-7,-55],[2,-56]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="1.1" fill="#6a5a50"/>`).join('')}</g>`:''}
   </g></g></g></g>`;
   return `<g class="walk"><g class="fl"><g transform="translate(${x} ${y})"><g class="bb">
   <ellipse cx="0" cy="2" rx="13" ry="3" fill="rgba(0,0,0,.3)"/>
@@ -963,8 +964,7 @@ function shepherdSvg(x,y){
   <path d="M-8 -22 L8 -22" stroke="#b0453a" stroke-width="3"/>
   <path d="M6 -34 L14 -26" stroke="#e9dcc0" stroke-width="5" stroke-linecap="round"/><path d="M6 -34 L14 -26" fill="none" ${L} opacity=".0"/>
   <circle cx="15" cy="-26" r="2.6" fill="#c58c5c" ${L}/>
-  <path d="M-10 -40 Q-12 -58 0 -60 Q12 -58 10 -40 Q0 -36 -10 -40Z" fill="#3b2f6b" ${L}/>
-  <ellipse cx="1" cy="-47" rx="6" ry="6.5" fill="#120c24"/>${S.cap?`<g><path d="M-9.5 -54 Q-10 -62 -6 -64.5 L0 -61.5 L6 -64.5 Q10 -62 9.5 -54 Q0 -51.5 -9.5 -54Z" fill="#4a3d36" ${L}/><path d="M0 -61.5 V-53" stroke="#2a201c" stroke-width="1"/>${[[-6,-59],[-3,-56],[4,-59],[6,-56],[-7,-55],[2,-56]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="1.1" fill="#6a5a50"/>`).join('')}</g>`:''}
+  <ellipse cx="1" cy="-47" rx="6.6" ry="7.2" fill="#c58c5c" ${L}/><path d="M-5.6 -44 Q-5 -36 1 -35 Q7 -36 7.6 -44 Q4 -40 1 -40 Q-2 -40 -5.6 -44Z" fill="#2a1e18"/>${S.cap?`<g transform="translate(1 1.5)"><path d="M-9.5 -54 Q-10 -62 -6 -64.5 L0 -61.5 L6 -64.5 Q10 -62 9.5 -54 Q0 -51.5 -9.5 -54Z" fill="#4a3d36" ${L}/><path d="M0 -61.5 V-53" stroke="#2a201c" stroke-width="1"/>${[[-6,-59],[-3,-56],[4,-59],[6,-56],[-7,-55],[2,-56]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="1.1" fill="#6a5a50"/>`).join('')}</g>`:`<g><ellipse cx="1" cy="-54" rx="9" ry="5.6" fill="#efe4cc" ${L}/><path d="M-7 -53 Q1 -60 9 -55 M-6 -56 Q2 -61 8 -57" stroke="#cdbf9e" stroke-width="1" fill="none"/></g>`}
   </g></g></g></g>`;
 }
 
@@ -975,7 +975,7 @@ function freeRoseSlot(){ /* roser fyller hele bedet */ const used=new Set(S.rose
 function addJunk(q,type,n=1,sz){ for(let k=0;k<n;k++){ const s=freeJunkSlot(q); if(s==null) return; const z=sz||(Math.random()<.5?1:Math.random()<.7?2:3); S.junk[q].push({id:Date.now().toString(36)+(junkSeq++),type,s,z}); } }
 function initJunk(){ if(S.junk) return; S.junk={roser:[],taarn:[],beite:[],frukt:[]};
   addJunk('roser','stein',3,1); addJunk('roser','stein',1,2); addJunk('roser','ugress',4,1); addJunk('roser','ugress',1,2); addJunk('roser','stov',2,1);
-  addJunk('taarn','stein',2,1); addJunk('taarn','stein',1,2); addJunk('taarn','stein',1,3); addJunk('taarn','stov',1,1);
+  if(!(window.JABAL||window.KAHWA)){ addJunk('taarn','stein',2,1); addJunk('taarn','stein',1,2); addJunk('taarn','stein',1,3); addJunk('taarn','stov',1,1); }
   addJunk('beite','stein',2,1); addJunk('beite','stein',1,3); addJunk('beite','ugress',3,1);
   addJunk('frukt','stubbe',2,1); addJunk('frukt','stubbe',1,3); addJunk('frukt','ugress',3,1); addJunk('frukt','stov',1,2); save(); }
 function junkSvg(j){ const sl=SLOTS[j.s]; if(!sl) return ''; const z=j.z||1, s=sl.sc*[1,1,1.35,1.75][z], x=sl.x, y=sl.y; let g='';
@@ -1206,6 +1206,7 @@ function leafSpray(x,y,len,ang,cls='bush2'){ const f=n=>n.toFixed(1), a=ang*Math
 function roseSvg(p,sl){
   const c=catById(p.c), r=8*sl.sc*(0.75+p.st*.2), dmg=p.h==='dmg';
   if(p.h==='dead') return stump(sl);
+  if(p.bud){ const r0=8*sl.sc; return `<g class="sway">${blob(sl.x,sl.y-r0*.5,r0*.7,sl.x+sl.y,'leaf')}<path d="M${sl.x} ${sl.y-r0*.4} V${sl.y-r0*1.6}" stroke="#3f7a3c" stroke-width="${1.6*sl.sc}"/><ellipse cx="${sl.x}" cy="${sl.y-r0*1.9}" rx="${r0*.32}" ry="${r0*.5}" fill="#3f8a4c"/><path d="M${sl.x-r0*.18} ${sl.y-r0*2.2} q${r0*.18} -${r0*.4} ${r0*.36} 0" fill="${(catById(p.c)||{col:'#d9475e'}).col}"/></g>`; }
   const fl=[[-.4,-.6],[.5,-.3],[0,-1],[-.7,-.1],[.6,-.9]].slice(0,1+p.st).map(([dx,dy])=>animeRose(sl.x+dx*r,sl.y-r*.4+dy*r,r*.34,c.col)).join('');
   const rib=p.gift?`<path d="M${sl.x-3} ${sl.y-2} l3 -4 l3 4 M${sl.x} ${sl.y-6} l-2 6 M${sl.x} ${sl.y-6} l2 6" stroke="#ffe6a6" stroke-width="1.4" fill="none"/>`:'';
   return `<g class="${dmg?'dmg':''}${p.n&&Date.now()-p.n<9000?' grow':''}"><g class="sway">${p.rare||p.gift?`<circle cx="${sl.x}" cy="${sl.y-r*.5}" r="${r*2.6}" fill="url(#lglow)" opacity=".7"/>`:''}${blob(sl.x,sl.y-r*.55,r*.85,sl.x+sl.y,'leaf')}${leafSpray(sl.x-r*.9,sl.y-r*.2,r*.7,200,'leaf2')}${leafSpray(sl.x+r*.9,sl.y-r*.25,r*.7,-20,'leaf2')}${fl}${rib}</g></g>`;
@@ -1368,7 +1369,7 @@ function rewardSeq(nur0,gain,rose){ flyNur(nur0,gain);
 const GREET=[['As-salāmu ʿalaykum!','Fred være med deg.'],['Bismillāh','I Guds navn. Godt å se deg i hagen.'],['Alḥamdulillāh','Takk og lov for en ny dag.'],['Subḥān Allāh','Se hvor vakkert det vokser!'],['Rabbi zidnī ʿilmā','Herre, øk meg i kunnskap. (20:114)'],['Lā ḥawla wa lā quwwata illā billāh','Det finnes ingen styrke uten hos Gud.'],['Bārak Allāhu fīk','Gud velsigne deg for at du kom.']];
 function keeperTap(e){ kLek('gjeter'); const [a,n]=rnd(GREET); haptic(8); snd.chime([440,554],.05); const old=document.getElementById('kpB'); if(old) old.remove();
   const d=document.createElement('div'); d.id='kpB'; d.className='kbub'; d.innerHTML=`<b>${esc(a)}</b><span>${esc(n)}</span><i>${esc(keeper())}</i>`; d.style.left=Math.min(Math.max(e.clientX,120),stage.clientWidth-120)+'px'; d.style.top=(e.clientY-20)+'px'; stage.appendChild(d); setTimeout(()=>d.remove(),4200); }
-async function roseTap(i){ kMark('rose'); taskHit('rose'); const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
+async function roseTap(i){ if(R2&&S.roses[i]&&S.roses[i].bud) return budTap(i); if(R2&&S.droop&&S.droop.i===i&&!S.droop.done) return droopTap(i); kMark('rose'); const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN ROSE FRA ${esc((p.day||'').split('-').reverse().join('.'))}</p><h3>${esc(cat.name)}${p.rare?' · sjelden':''}</h3><div id="rzV"><p style="color:var(--muted)">Henter verset …</p></div><button class="btn ghost" id="rzPlay">Hør verset</button>`);
   let vs=null; try{ vs=await fetchVerse(p.ref); }catch(e){}
   const el=$('rzV'); if(!el) return;
@@ -1412,21 +1413,21 @@ function farmExtras(){ let h=''; if(S.farm.stall) h+=`<g transform="translate(31
   if(S.farm.trau) h+=`<g transform="translate(262 712)"><path d="M-26 -10 H26 L22 4 H-22Z" fill="#7a5230" stroke="#3a2414"/><ellipse cx="0" cy="-10" rx="25" ry="3" fill="#6fa9d6"/></g>`; return h; }
 /* ---- Skjulte tegn: små hint fra Koranens fortellinger, for de observante ---- */
 const SIGNS=[
- {id:'maur',q:'frukt',x:300,y:712,ref:'27:18',t:'Mauren i dalen',d:'Da Sulayman og hæren hans kom til mauredalen, advarte en maur de andre om å gå inn i boligene sine, så de ikke ble trampet ned. Sulayman smilte og takket Allah. Selv den minste skapning har en stemme.'},
- {id:'nett',q:'taarn',x:334,y:462,ref:'29:41',t:'Edderkoppens hus',d:'Koranen sammenligner dem som søker beskyttelse hos andre enn Allah med edderkoppen som bygger seg et hus. Det svakeste av alle hus er edderkoppens hus.'},
- {id:'dadler',q:'frukt',x:200,y:448,ref:'19:25',t:'Dadlene til Maryam',d:'Da Maryam fikk fødselsveer under en daddelpalme, ble hun bedt om å riste stammen. Da falt det modne, ferske dadler ned til henne. En trøst midt i det vanskeligste.'},
+ {id:'maur',q:'taarn',x:300,y:712,ref:'27:18',t:'Mauren i dalen',d:'Da Sulayman og hæren hans kom til mauredalen, advarte en maur de andre om å gå inn i boligene sine, så de ikke ble trampet ned. Sulayman smilte og takket Allah. Selv den minste skapning har en stemme.'},
+ {id:'nett',q:'taarn',x:334,y:430,ref:'29:41',t:'Edderkoppens hus',d:'Koranen sammenligner dem som søker beskyttelse hos andre enn Allah med edderkoppen som bygger seg et hus. Det svakeste av alle hus er edderkoppens hus.'},
+ {id:'dadler',q:'taarn',x:62,y:452,ref:'19:25',t:'Dadlene til Maryam',d:'Da Maryam fikk fødselsveer under en daddelpalme, ble hun bedt om å riste stammen. Da falt det modne, ferske dadler ned til henne. En trøst midt i det vanskeligste.'},
  {id:'hund',q:'beite',x:30,y:452,ref:'18:18',fri:true,t:'Hulen og hunden',d:'De unge mennene i hulen sov i mange år, og hunden deres lå med forbena strukket ut ved inngangen. Allah beskyttet dem alle sammen, også hunden som fulgte dem.'},
- {id:'penn',q:'taarn',x:62,y:612,ref:'19:56–57',t:'Idris og pennen',d:'Koranen kaller Idris sannferdig, en profet som Allah hevet til en høy plass. Ifølge tradisjonen var han den første som skrev med penn (svakt overlevert, så hold det løst). At pennen er stor, står derimot fast: Allah sverger ved pennen (68:1) og lærte mennesket ved pennen (96:4).'},
- {id:'blad',q:'roser',x:44,y:560,ref:'7:22–23',t:'Bladene fra hagen',d:'Da Adam og Hawwa hadde spist av treet, begynte de å dekke seg med blader fra hagen. Koranen sier ikke hvilken frukt det var. Det den forteller, er bønnen deres: «Herre, vi har gjort urett mot oss selv. Tilgir Du oss ikke og viser oss nåde, er vi tapt.» Den første tawbah.'},
- {id:'ild',q:'frukt',x:70,y:540,ref:'28:29–30',t:'Ilden ved Tur',d:'På vei hjem gjennom ørkenen så Musa en ild ved fjellet. Han gikk dit for å finne varme eller veiledning, og fra treet på det velsignede stedet ble han tiltalt: «Musa, Jeg er Allah, verdenenes Herre.»'},
- {id:'ibrahim',q:'taarn',x:330,y:640,ref:'21:69',t:'Ilden som ble kjølig',d:'Folket kastet Ibrahim i et stort bål. Allah sa: «Ild, vær kjølig og fred for Ibrahim.» Det som skulle skade ham, ble trygt.'},
- {id:'planke',q:'beite',x:356,y:610,ref:'54:13–14',t:'Plankene fra arken',d:'Nuh bygde arken mens folket hans lo av ham. Allah bar ham «på noe av planker og spikre», som seilte under Hans øyne. En lønn for den som ble avvist.'},
- {id:'gresskar',q:'frukt',x:322,y:650,ref:'37:145–146',t:'Plantens skygge',d:'Da Yunus ble kastet opp på stranden, svak og syk, lot Allah en slyngplante av gresskarslekten vokse over ham. Skygge og næring der han lå.'},
- {id:'hval',q:'roser',x:195,y:668,ref:'21:87',t:'Yunus i fiskens buk',d:'I mørket i fiskens buk ba Yunus: «Lā ilāha illā anta, subḥānaka, innī kuntu mina ẓ-ẓālimīn.» Det finnes ingen gud uten Deg. Allah reddet ham fra sorgen, og slik redder Han de troende.'},
- {id:'bier',q:'roser',x:322,y:426,ref:'16:68–69',t:'Biene',d:'Herren din ga biene innskytelse om å bygge bolig i fjell, trær og det folk bygger. Fra dem kommer en drikk i ulike farger, som er legedom for menneskene.'},
- {id:'stav',q:'beite',x:232,y:616,ref:'20:17–18',t:'Musas stav',d:'«Hva er det du har i høyre hånd, Musa?» «Det er staven min. Jeg støtter meg på den, slår ned løv med den til sauene mine, og jeg har annen bruk for den også.» En gjeters stav, før den ble et tegn for Farao.'},
- {id:'skjorte',q:'roser',x:350,y:610,ref:'12:93–96',t:'Yusufs skjorte',d:'Ya‘qub gråt over Yusuf i mange år til synet svant. Yusuf sendte skjorta si og sa: «Legg den over ansiktet til far.» Da den kom, fikk Ya‘qub synet tilbake. Han hadde aldri sluttet å håpe på Allah.'},
- {id:'duer',bonus:true,q:'taarn',x:262,y:476,ref:'9:40',t:'To duer ved en hule',d:'Under hijra gjemte Profeten ﷺ og Abu Bakr seg i hulen Thawr. Allah sendte ro over dem. Ifølge tradisjonen bygde duer reir og en edderkopp spant nett ved inngangen. Vises bare i Muharram.',when:()=>{ const h=hijri(); return h&&h.m===1; }},
+ {id:'penn',q:'taarn',x:70,y:612,ref:'19:56–57',t:'Idris og pennen',d:'Koranen kaller Idris sannferdig, en profet som Allah hevet til en høy plass. Ifølge tradisjonen var han den første som skrev med penn (svakt overlevert, så hold det løst). At pennen er stor, står derimot fast: Allah sverger ved pennen (68:1) og lærte mennesket ved pennen (96:4).'},
+ {id:'blad',q:'taarn',x:42,y:530,ref:'7:22–23',t:'Bladene fra hagen',d:'Da Adam og Hawwa hadde spist av treet, begynte de å dekke seg med blader fra hagen. Koranen sier ikke hvilken frukt det var. Det den forteller, er bønnen deres: «Herre, vi har gjort urett mot oss selv. Tilgir Du oss ikke og viser oss nåde, er vi tapt.» Den første tawbah.'},
+ {id:'ild',q:'taarn',x:112,y:700,ref:'28:29–30',t:'Ilden ved Tur',d:'På vei hjem gjennom ørkenen så Musa en ild ved fjellet. Han gikk dit for å finne varme eller veiledning, og fra treet på det velsignede stedet ble han tiltalt: «Musa, Jeg er Allah, verdenenes Herre.»'},
+ {id:'ibrahim',q:'taarn',x:332,y:640,ref:'21:69',t:'Ilden som ble kjølig',d:'Folket kastet Ibrahim i et stort bål. Allah sa: «Ild, vær kjølig og fred for Ibrahim.» Det som skulle skade ham, ble trygt.'},
+ {id:'planke',q:'taarn',x:256,y:716,ref:'54:13–14',t:'Plankene fra arken',d:'Nuh bygde arken mens folket hans lo av ham. Allah bar ham «på noe av planker og spikre», som seilte under Hans øyne. En lønn for den som ble avvist.'},
+ {id:'gresskar',q:'taarn',x:352,y:560,ref:'37:145–146',t:'Plantens skygge',d:'Da Yunus ble kastet opp på stranden, svak og syk, lot Allah en slyngplante av gresskarslekten vokse over ham. Skygge og næring der han lå.'},
+ {id:'hval',q:'taarn',x:160,y:722,ref:'21:87',t:'Yunus i fiskens buk',d:'I mørket i fiskens buk ba Yunus: «Lā ilāha illā anta, subḥānaka, innī kuntu mina ẓ-ẓālimīn.» Det finnes ingen gud uten Deg. Allah reddet ham fra sorgen, og slik redder Han de troende.'},
+ {id:'bier',q:'taarn',x:304,y:392,ref:'16:68–69',t:'Biene',d:'Herren din ga biene innskytelse om å bygge bolig i fjell, trær og det folk bygger. Fra dem kommer en drikk i ulike farger, som er legedom for menneskene.'},
+ {id:'stav',q:'taarn',x:92,y:388,ref:'20:17–18',t:'Musas stav',d:'«Hva er det du har i høyre hånd, Musa?» «Det er staven min. Jeg støtter meg på den, slår ned løv med den til sauene mine, og jeg har annen bruk for den også.» En gjeters stav, før den ble et tegn for Farao.'},
+ {id:'skjorte',q:'taarn',x:350,y:500,ref:'12:93–96',t:'Yusufs skjorte',d:'Ya‘qub gråt over Yusuf i mange år til synet svant. Yusuf sendte skjorta si og sa: «Legg den over ansiktet til far.» Da den kom, fikk Ya‘qub synet tilbake. Han hadde aldri sluttet å håpe på Allah.'},
+ {id:'duer',bonus:true,q:'taarn',x:268,y:330,ref:'9:40',t:'To duer ved en hule',d:'Under hijra gjemte Profeten ﷺ og Abu Bakr seg i hulen Thawr. Allah sendte ro over dem. Ifølge tradisjonen bygde duer reir og en edderkopp spant nett ved inngangen. Vises bare i Muharram.',when:()=>{ const h=hijri(); return h&&h.m===1; }},
 ];
 function signArt(id){ return {
  stav:`<g transform="rotate(14)"><path d="M0 6 V-34 Q0 -42 7 -42 Q12 -42 12 -37" stroke="#8a6038" stroke-width="3" fill="none" stroke-linecap="round"/></g>${[[-10,-6],[-14,-12],[-6,-14]].map(([x,y])=>`<path transform="translate(${x} ${y})" d="M0 0 Q4 -5 0 -9 Q-4 -5 0 0Z" fill="#6aa84f"/>`).join('')}`,
@@ -1486,10 +1487,10 @@ function renderSection(){
   $('chan').classList.toggle('dry',!flowing()); $('chan').setAttribute('opacity',flowing()?1:.3);
   $('secTitle').innerHTML=`<div class="a">${q.ar}</div><div class="n">${q.name}</div><div class="s">${esc(sectionSub(q.id))}</div>`;
   let h='', b='';
-  if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz${S.sprout===p.s&&q.id==='roser'?' sprout':''}" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`])); if(q.id==='roser'&&S.sprout!=null&&!S.active){ const sp=S.sprout; setTimeout(()=>{ if(S.sprout===sp){ S.sprout=null; save(); const g=document.querySelector('.rz.sprout'); if(g){ const r=g.getBoundingClientRect(), sr=stage.getBoundingClientRect(); fxBurst(r.left+r.width/2-sr.left,r.top+r.height/2-sr.top,['#e46a8a','#ffe6a6','#7fd36a'],18,40,4,12); fxRing(r.left+r.width/2-sr.left,r.top+r.height-sr.top); } } },2900); }
+  if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz${S.sprout===p.s&&q.id==='roser'?' sprout':''}${R2&&S.droop&&S.droop.i===i&&!S.droop.done?' droop':''}" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`])); if(q.id==='roser'&&S.sprout!=null&&!S.active){ const sp=S.sprout; setTimeout(()=>{ if(S.sprout===sp){ S.sprout=null; save(); const g=document.querySelector('.rz.sprout'); if(g){ const r=g.getBoundingClientRect(), sr=stage.getBoundingClientRect(); fxBurst(r.left+r.width/2-sr.left,r.top+r.height/2-sr.top,['#e46a8a','#ffe6a6','#7fd36a'],18,40,4,12); fxRing(r.left+r.width/2-sr.left,r.top+r.height-sr.top); } } },2900); }
     if(!S.roses.length) b+=beacon(110,560,'Hver økt planter en rose her',24); }
   if(q.id==='taarn'){ const Lr=hifzLearned(); h+=depth(SLOTS.filter(s=>s.x<150||s.x>240).slice(0,Math.min(Lr.length,20)).map((sl,i)=>[sl.y,cyp(sl.x,sl.y,(36+Lr[i].lv*10)*sl.sc,9*sl.sc,'bush2')]))+towerScene();
-    if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en surah',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
+    if(R2) h+=towerShadow(); else if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en surah',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
   if(q.id==='beite'){
     if(!ok){ h+=rubble(90,600,1.4)+rubble(260,640,1.6)+`<path d="M60 560 l40 -6 M110 552 l30 4 M250 570 l50 -8" stroke="#5a4a3a" stroke-width="3"/>`+`<g class="campf"><path d="M150 672 l20 -6 M152 666 l18 6" stroke="#4a3020" stroke-width="3.5" stroke-linecap="round"/><path class="flm" d="M161 668 Q154 656 160 644 Q163 652 166 648 Q170 658 161 668Z" fill="#ffb347"/><path class="flm b" d="M161 668 Q157 660 161 653 Q165 660 161 668Z" fill="#ffe6a6"/><circle cx="161" cy="660" r="26" fill="#ffb347" opacity=".12"/></g><g class="keeper" style="cursor:pointer">${shepherdSvg(196,676).replace('class="walk"','')}</g>`; }
     else { const F=S.flock, sl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(0,(F.sheep||0)+(F.cows||0)+(F.goats||0)+(F.hens||0)), L2=[]; let k=0;
@@ -1520,13 +1521,13 @@ function renderSection(){
   if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
   if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
-  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+wiseLayer(q.id)+(KAHWA?raisinLayer(q.id)+rumiLayer(q.id):'')+weatherLayer(); }
-  $('items').innerHTML=h; $('beacons').innerHTML=b; requestAnimationFrame(placeStar);
+  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+wiseLayer(q.id)+r2Layer(q.id)+(KAHWA?raisinLayer(q.id)+rumiLayer(q.id):'')+weatherLayer(); }
+  b+=r2Beacons(q.id); $('items').innerHTML=h; $('beacons').innerHTML=b; requestAnimationFrame(placeStar);
   $('prevQ').style.visibility=curQ>0?'visible':'hidden'; $('nextQ').style.visibility=curQ<3?'visible':'hidden';
 }
 function sectionSub(id){
   if(id==='roser') return `${S.roses.filter(p=>p.h!=='dead').length} av ${MAXROSE} roser`;
-  if(id==='taarn'){ if(!S.hifz.current) return 'I ruiner · velg en surah'; const L2=hifzLearned(); return `${surahMeta?surahMeta[S.hifz.current-1].englishName:'Surah '+S.hifz.current} · ${L2.length} vers utenat`; }
+  if(id==='taarn'){ if(R2) return `I skyggen · ${SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length} tegn funnet`; if(!S.hifz.current) return 'I ruiner · velg en surah'; const L2=hifzLearned(); return `${surahMeta?surahMeta[S.hifz.current-1].englishName:'Surah '+S.hifz.current} · ${L2.length} vers utenat`; }
   if(!restored(id)) return 'I ruiner';
   if(id==='beite') return `${S.flock.sheep} sauer · ${S.flock.cows} ${S.flock.cows===1?'ku':'kyr'}`;
   if(id==='frukt') return `${S.fruit.length} trær · ${S.fruit.filter(t=>t.st>=3).length} modne`;
@@ -1755,7 +1756,7 @@ function harvest(i){
   if(t.st<3) return toast(`${FRUITNAME[t.type]} · vokser (${t.st}/3)`);
   if(t.h==='dmg') return toast('Treet er skadet. Vann eller gjør tawbah.');
   if(S.harvested[i]===dayStr()) return toast('Allerede høstet i dag');
-  if(window.event) say(window.event,keeper()); S.harvested[i]=dayStr(); S.goods.frukt+=2; taskHit('host'); save(); renderTop(); renderSection(); toast(`Høstet ${FRUITNAME[t.type].toLowerCase()}. +2 frukt til markedet`);
+  if(window.event) say(window.event,keeper()); S.harvested[i]=dayStr(); S.goods.frukt+=2; taskHit('host'); save(); renderTop(); renderSection(); if(R2) harvestCard(i); else toast(`Høstet ${FRUITNAME[t.type].toLowerCase()}. +2 frukt til markedet`);
 }
 
 /* ================= VARER FRA BEITET ================= */
@@ -1938,7 +1939,7 @@ function rOrder(){ const N=MONS.length; let o=Array.isArray(S.rorder)?S.rorder.f
   return o; }
 const isUnl=i=>rOrder().indexOf(i)<(S.rihla||0);
 const latestMon=()=>rOrder()[Math.max(0,(S.rihla||1)-1)];
-function checkRihla(){ rOrder(); const n=rihlaEarned(); S.rihla=S.rihla||0; if(n>S.rihla){ const first=S.rihla; S.rihla=n; S.rdates=S.rdates||{}; const O=rOrder(); for(let k=first;k<n;k++){ const m=MONS[O[k]]; S.rdates[m.id]=S.rdates[m.id]||dayStr(); logEvent('Rihla: hærfuglen kom hjem med et forseglet brev.'); } save(); const show=()=>{ if($('intro').classList.contains('on')||document.querySelector('.sheetwrap.on,#sheetWrap.on')) return setTimeout(show,2500); if(!S.rihlaIntro){ S.rihlaIntro=1; save(); snd.hoopoe(); openRihlaIntro(rOrder()[n-1]); } else openPostcard(rOrder()[n-1],true); }; setTimeout(show,5200); } }
+function checkRihla(){ rOrder(); const n=rihlaEarned(); S.rihla=S.rihla||0; if(n>S.rihla){ const first=S.rihla; S.rihla=n; S.rdates=S.rdates||{}; const O=rOrder(); for(let k=first;k<n;k++){ const m=MONS[O[k]]; S.rdates[m.id]=S.rdates[m.id]||dayStr(); logEvent('Rihla: hærfuglen kom hjem med et forseglet brev.'); } save(); const show=()=>{ if($('intro').classList.contains('on')||document.querySelector('.sheetwrap.on,#sheetWrap.on')) return setTimeout(show,2500); if(!S.rihlaIntro){ S.rihlaIntro=1; save(); snd.hoopoe(); openRihlaIntro(rOrder()[n-1]); } else openPostcard(rOrder()[n-1],true); }; if(R2){ _postShow=show; setTimeout(()=>{ renderSection(); toast('Hærfuglen har landet på hageporten',2600); },1500); } else setTimeout(show,5200); } }
 const FLAGS={
  Pakistan:`<rect width="30" height="20" fill="#01411c"/><rect width="7.5" height="20" fill="#fff"/><circle cx="19.5" cy="10" r="5.2" fill="#fff"/><circle cx="21" cy="8.8" r="4.6" fill="#01411c"/><circle cx="22.6" cy="7.2" r="1.3" fill="#fff"/>`,
  India:`<rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#ff9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".7"/>`,
@@ -2202,11 +2203,11 @@ function openPostcard(i,isNew,opened){ if(isNew&&!opened) return openEnvelope(i)
   <h4>Fra stedet</h4>${m.people.map(([n,t,bk],k)=>{ if(bk){ const hi=HIKMA.findIndex(h=>h.id===bk), here=hi>=0&&hi<hikmaState().n; return `<div class="card mod" style="margin-top:6px"><svg viewBox="-16 -16 32 32" width="34" height="34" style="flex:0 0 34px">${hi>=0?hikmaEm(HIKMA[hi].em):''}</svg><div style="flex:1"><b style="color:var(--gold2)">${esc(n)}</b><p style="margin:2px 0 0;font-size:13.5px">${esc(t)} ${here?'Les mer i Visdommens hus.':'Kommer til Visdommens hus etter hvert.'}</p>${here?`<button class="gb" style="margin-top:6px" data-hkgo="${hi}">Åpne i Visdommens hus</button>`:''}</div></div>`; } return `<div class="card" style="margin-top:6px"><b style="color:var(--gold2)">${esc(n)}</b><p style="margin:4px 0 0">${esc(t)}</p>${lnk(k)}</div>`; }).join('')}
   ${kildeNote(false)}<p style="font-size:12px;color:var(--muted);margin:8px 2px 4px;line-height:1.5">Bruk gjerne tiden på å bli kjent med søsknene våre i ummaen, både de som kom før oss og de som lever i dag.</p>
   ${eggCards(m)}
-  ${m.id==='mazar'?`<div class="card" style="margin-top:8px"><b style="color:var(--gold2)">Jinnah-lua</b><p style="margin:4px 0 8px">${isF()?'Karakul-lua bæres tradisjonelt av menn, så gjeterinnen beholder hijaben. Velger du Mann under Meg, kan gjeteren bruke den.':'Du har låst opp Jinnah-lua av karakulpels. Gjeteren kan bruke den i hagen.'}</p>${isF()?'':`<button class="btn ghost" id="pcCap">${S.cap?'Ta av lua':'Gi gjeteren Jinnah-lua'}</button>`}</div>`:''}
+  ${m.id==='mazar'?`<div class="card" style="margin-top:8px"><b style="color:var(--gold2)">Jinnah-lua</b><p style="margin:4px 0 8px">${isF()?'Du har låst opp Jinnah-lua av karakulpels. Gjeterinnen kan bære den over hijaben.':'Du har låst opp Jinnah-lua av karakulpels. Gjeteren kan bytte turbanen med den.'}</p><button class="btn ghost" id="pcCap">${S.cap?'Ta av lua':isF()?'Gi gjeterinnen Jinnah-lua':'Gi gjeteren Jinnah-lua'}</button></div>`:''}
   <button class="btn" id="pcHz">Sett i horisonten</button><button class="btn ghost" id="pcBook">Til reiseboken</button>`);
   $('pcHz').onclick=()=>{ S.horizon=m.id; save(); closeSheet(); renderAll(); toast(`${m.name} står nå i horisonten`); };
   $('sheet').querySelectorAll('[data-hkgo]').forEach(b=>b.onclick=()=>openScholar(+b.dataset.hkgo));
-  $('pcBook').onclick=()=>openRihla(); eggToggleWire(()=>openPostcard(i,false,true)); if($('pcCap')) $('pcCap').onclick=()=>{ S.cap=!S.cap; save(); renderAll(); openPostcard(i,false); toast(S.cap?'Gjeteren har fått Jinnah-lua':'Lua er tatt av'); }; snd.chime([523,784,1047],.08); }
+  $('pcBook').onclick=()=>openRihla(); eggToggleWire(()=>openPostcard(i,false,true)); if($('pcCap')) $('pcCap').onclick=()=>{ S.cap=!S.cap; save(); renderAll(); openPostcard(i,false); toast(S.cap?(isF()?'Gjeterinnen har fått Jinnah-lua':'Gjeteren har fått Jinnah-lua'):'Lua er tatt av'); }; snd.chime([523,784,1047],.08); }
 const LANDS=[
  [[-17,21],[-16,28],[-10,30],[-6,36],[10,37],[11,33],[20,31],[32,31],[34,28],[37,22],[39,15],[43,12],[51,11],[48,5],[41,-2],[40,-11],[35,-24],[32,-29],[27,-34],[20,-35],[18,-32],[14,-22],[12,-12],[13,-5],[9,4],[5,5],[-4,5],[-8,4],[-13,8],[-17,13]],
  [[-9,37],[-6,36],[-2,37],[0,39],[3,42],[8,44],[12,44],[16,41],[18,40],[20,40],[23,38],[26,40],[29,41],[28,46],[-2,46],[-9,43]],
@@ -2240,7 +2241,7 @@ function openRihla(){ const n=S.rihla||0;
   $('sheet').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ S.horizon=b.dataset.h||null; save(); renderAll(); openRihla(); }); }
 
 /* ================= GRADVIS OPPLÅSING ================= */
-const GATE={dagbok:1,basar:1,ord:3,hifz:(window.JABAL||window.KAHWA)?2:5,beite:5,vern:7,hikma:10,bygg:12};
+const GATE={dagbok:1,basar:1,ord:3,hifz:(window.JABAL||window.KAHWA)?99999:5,beite:5,vern:7,hikma:10,bygg:12};
 const unl=f=>!!S.settings.allOpen||vsEff()>=GATE[f];
 const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den under Samling øverst.'],
@@ -2265,7 +2266,7 @@ const MODS=[['dagbok','📖','Bok (dagbok)','Hvert vers du fullfører lagres her
  ['frukt','🌴','Frukthagen','Plant og høst daddel, granateple, fiken og oliven.']];
 const modAt=k=>k==='well'?0:k==='frukt'?AT.frukt:k==='beite'?AT.beite:GATE[k];
 const modOpen=k=>k==='well'?true:k==='frukt'||k==='beite'?restored(k):unl(k);
-function openModules(focus){ const rows=MODS.filter(([k])=>!(JABAL&&k==='hikma'&&!hikmaOpen())).map(([k,ic,nm,tx])=>{ const n=modAt(k), o=modOpen(k), v=Math.min(S.vs,n); if(k==='hikma'&&o){ ic='📚'; nm='Bayt al-Ḥikma'; tx='Visdommens hus. Lærde fra gullalderen kommer én etter én. Finn det nede til høyre i oversikten.'; }
+function openModules(focus){ const rows=MODS.filter(([k])=>!(JABAL&&k==='hikma'&&!hikmaOpen())&&!(R2&&k==='hifz')).map(([k,ic,nm,tx])=>{ const n=modAt(k), o=modOpen(k), v=Math.min(S.vs,n); if(k==='hikma'&&o){ ic='📚'; nm='Bayt al-Ḥikma'; tx='Visdommens hus. Lærde fra gullalderen kommer én etter én. Finn det nede til høyre i oversikten.'; }
    return `<div class="card mod${k===focus?' focus':''}" style="margin-top:8px" id="mod_${k}"><div class="mi">${ic}</div><div style="flex:1"><b style="color:var(--gold2)">${nm}</b> <span style="font-size:12px;color:${o?'#a9e6bd':'var(--muted)'}">${o?'· åpen':`· åpner etter ${n} vers-økt${n>1?'er':''}`}</span><p style="margin:3px 0 0;font-size:13.5px">${tx}</p>${o?'':`<div class="bar"><b style="width:${v/n*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${v} av ${n} økt${n>1?'er':''}</div>`}</div></div>`; }).join('');
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">HAGENS DELER</p><h3>Det som åpner seg underveis</h3><p style="font-size:13.5px;margin:4px 0 0">Hver dag du fullfører dagens vers, åpner en ny del av hagen seg. Ingenting kan kjøpes seg forbi.</p>${rows}<button class="btn" id="modOk">Fint</button>`);
   $('modOk').onclick=closeSheet; if(focus){ const el=$('mod_'+focus); if(el) setTimeout(()=>{ const sh=$('sheet'); sh.scrollTo({top:sh.scrollTop+el.getBoundingClientRect().top-sh.getBoundingClientRect().top-sh.clientHeight*.35,behavior:'smooth'}); },250); } }
@@ -2288,7 +2289,17 @@ function taskPool(){ const V=[], w=(x,n)=>{ for(let i=0;i<n;i++) V.push(x); };
   if(hikmaOpen()&&((JABAL||KAHWA)?tMet()>0:hikmaState().n>0)) w({id:'laerd',text:'Besøk en lærd i Visdommens hus',goal:1},1);
   w({id:'lytt',text:'Hør dagens vers en gang til',goal:1},1); w({id:'vis',text:'Trykk på vismannen og hør hva han sier',goal:1},1);
   return V; }
-function makeTasks(){ const L=[{id:'vers',text:'Les og bygg dagens vers',goal:1,core:1}], c=cleanCap();
+function makeTasksR2(){ const L=[{id:'vers',text:'Les og bygg dagens vers',goal:1,core:1},{id:'knopp',text:'Vann dagens knopp i Rosehagen',goal:1}], P=[];
+  if(junkLeft()&&cleanCap()) P.push({id:'rydd',text:'Rydd én ting i ruinene',goal:1});
+  if(restored('beite')) P.push({id:'dyr',text:'Hjelp dagens dyr på beitet',goal:1});
+  droopPick(); if(S.droop&&S.droop.i>=0) P.push({id:'rose',text:'Få en rose til å rette seg opp',goal:1});
+  if(restored('frukt')&&S.fruit.some(t=>t.st>=3&&t.h==='ok')) P.push({id:'host',text:'Høst et modent tre',goal:1});
+  if(restored('frukt')&&S.seeds>0&&S.fruit.length<12) P.push({id:'seed',text:'Så et frø i Frukthagen',goal:1});
+  if(unl('ord')) P.push({id:'ord',text:'Lær dagens arabiske ord',goal:1});
+  if(!P.length) P.push({id:'vis',text:'Trykk på vismannen og hør hva han sier',goal:1},{id:'lytt',text:'Hør dagens vers en gang til',goal:1});
+  const prio=['dyr','rose','host','seed','rydd','ord','vis','lytt']; P.sort((a,b)=>prio.indexOf(a.id)-prio.indexOf(b.id));
+  L.push(P[Math.random()<.7?0:Math.floor(Math.random()*P.length)]); return L.map(x=>Object.assign({},x,{prog:0})); }
+function makeTasks(){ if(R2) return makeTasksR2(); const L=[{id:'vers',text:'Les og bygg dagens vers',goal:1,core:1}], c=cleanCap();
   if(c) L.push({id:'rydd',text:c>=3?'Rydd 3 ting i hagen':`Rydd ${c} ting i hagen`,goal:Math.min(3,c)});
   else if(junkLeft()&&unl('basar')){ const k=needTool(); if(k&&S.nur>=TIERS[k][0][1]) L.push({id:'rydd',text:`Kjøp ${TIERS[k][0][0].toLowerCase()} i Basaren og rydd 1 ting`,goal:1}); }
   let V=taskPool(); while(L.length<3){ V=V.filter(x=>!L.some(y=>y.id===x.id)); if(!V.length) break; L.push(V[Math.floor(Math.random()*V.length)]); }
@@ -2322,7 +2333,7 @@ const DEEDS=[
 const DEED_FRI=['Les surah al-Kahf i dag, det er fredag.','Det er overlevert at den som leser al-Kahf på fredag, får lys mellom de to fredagene.','Profeten ﷺ · al-Ḥākim'];
 function ensureDeed(){ if(!S.tasks) return; if(!S.tasks.deed){ const fri=new Date().getDay()===5; S.tasks.deed={i:fri?-1:Math.floor(Math.random()*DEEDS.length),done:0}; } }
 const deedOf=d=>d.i<0?DEED_FRI:DEEDS[d.i%DEEDS.length];
-function deedDone(){ const d=S.tasks.deed; d.done=1; save(); renderTasks();
+function deedDone(){ const d=S.tasks.deed; d.done=1; S.seeds=(S.seeds||0)+1; save(); renderTasks();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🤲 DAGENS GODE GJERNING</p><h3>Mellom deg og Allah</h3>
   <p>Dette gjorde du ikke for nur eller for å bli sett. Ingen andre trenger å vite det, men Allah så det. Måtte Allah ta imot det fra deg og belønne deg rikelig.</p>
   <div class="card"><p style="margin:0;font-family:var(--serif);font-size:16px;line-height:1.45">Blant de sju som får skygge på dagen da det ikke finnes annen skygge, er den som gir så i det skjulte at venstre hånd ikke vet hva den høyre gir.</p><p style="margin:6px 0 0;font-size:12px;color:var(--muted)">Profeten ﷺ · Bukhari og Muslim</p></div>
@@ -2365,7 +2376,7 @@ const AWAYMSG={rotter:n=>`Rottene har gravd seg inn i ${n}. Det er hull og rotte
 let awayLog=[];
 function dailyCheck(){
   flockTick();
-  if(!S.hud||S.hud.day!==dayStr()) S.hud={day:dayStr(),show:Math.random()<.12,seen:false};
+  if(!S.hud||S.hud.day!==dayStr()) S.hud={day:dayStr(),show:!R2&&Math.random()<.12,seen:false};
   const today=dayStr(); if(!S.lastCheck){S.lastCheck=today;save();return;} if(S.lastCheck===today) return;
   const passed=Math.min(dayDiff(S.lastCheck,today),14); let dis=0;
   for(let k=0;k<passed;k++){ const d=addDays(S.lastCheck,k); S.nur-=5;
@@ -2586,7 +2597,7 @@ function finish(refl){
   } else {
     const vsBefore=S.vs; S.vs++; announceUnlocks(vsBefore);
     const gain=cat.rare?15:10; a._nur0=S.nur; a._gain=gain; S.nur+=gain; msgs.push(`+${gain} nur`);
-    const slot=freeRoseSlot(), rose={n:Date.now(),c:cat.id,st:1,h:'ok',ref:(verses&&verses[0])?`${verses[0].surah}:${verses[0].ayah}`:a.ref,day:dayStr(),rare:!!cat.rare,s:slot};
+    const slot=freeRoseSlot(), rose={bud:R2?1:0,n:Date.now(),c:cat.id,st:1,h:'ok',ref:(verses&&verses[0])?`${verses[0].surah}:${verses[0].ayah}`:a.ref,day:dayStr(),rare:!!cat.rare,s:slot};
     if(slot!=null){ S.roses.push(rose); S.sprout=slot; a._rose=true; msgs.push('en ny rose'); }
     else if(S.roses.length<MAXROSE){ msgs.push('ingen ledig jord: rydd i Rosehagen for å plante flere'); }
     else { const g=S.roses.filter(p=>p.h==='ok'&&p.st<3); if(g.length) rnd(g).st++; }
@@ -2713,7 +2724,10 @@ function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser')
   const bi=QUADS.findIndex(q=>q.id==='beite');
   if(id==='lytt'){ if(!doneToday()) return taskGo('vers'); closeSheet(); return setTimeout(comeBackTomorrow,300); }
   if(id==='vis') return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på den vise mannen helt til venstre');
-  if(id==='rose'){ const ri=QUADS.findIndex(q=>q.id==='roser'); return goTend(ri,'Trykk på en av rosene dine for å lese verset igjen'); }
+  if(id==='rose'){ const ri=QUADS.findIndex(q=>q.id==='roser'); return goTend(ri,R2?'En rose henger med hodet. Trykk på den':'Trykk på en av rosene dine for å lese verset igjen'); }
+  if(id==='knopp'){ if(!doneToday()) return taskGo('vers'); return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på knoppen i bedet'); }
+  if(id==='dyr') return goTend(QUADS.findIndex(q=>q.id==='beite'),'Trykk på dyret som trenger hjelp');
+  if(id==='seed') return goTend(QUADS.findIndex(q=>q.id==='frukt'),'Trykk på «Så et frø»');
   if(id==='laerd'){ closeSheet(); return setTimeout(()=>{ toOverview(); setTimeout(()=>openHikma(),600); },300); }
   if(id==='vers') return doneToday()?toast('Dagens vers er allerede tatt. Kom tilbake i morgen.'):pulse();
   if(id==='ord') return openWord(); if(id==='hifz') return openHifz();
@@ -2724,6 +2738,133 @@ function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser')
   if(id==='selg') return (closeSheet(),setTimeout(()=>openShop('marked'),350));
   if(id==='vann'){ const qi=QUADS.findIndex(q=>restored(q.id)&&S.watered[q.id]!==dayStr()); return goTend(qi>=0?qi:0,'Trykk på «Vann fra elven» i hagen'); }
   if(id==='host') return goTend(QUADS.findIndex(q=>q.id==='frukt'),'Trykk på de modne trærne for å høste'); }
+
+/* ================= 2.0-HAGENE (testversjonene): ritualer i hver hage ================= */
+const R2=!!(window.JABAL||window.KAHWA);
+const ANIMAL_H=[
+ ['«En mann så en hund som var så tørst at den slikket den fuktige jorda. Han fylte skoen sin med vann og ga den å drikke. Allah takket ham og tilga ham.» De spurte: «Får vi belønning for dyrene også?» Han svarte: «I hver levende skapning er det belønning.»','Profeten ﷺ · Bukhari'],
+ ['«En kvinne ble straffet på grunn av en katt. Hun stengte den inne uten å gi den mat, og uten å la den finne mat selv.»','Profeten ﷺ · Bukhari og Muslim'],
+ ['Profeten ﷺ kom inn i en hage der en kamel gråt. Han strøk den og spurte hvem som eide den: «Frykter du ikke Allah når det gjelder dette dyret? Den klager til meg over at du sulter den og sliter den ut.»','Abu Dawud'],
+ ['Noen tok to unger fra et fuglerede, og moren fløy urolig omkring. Profeten ﷺ sa: «Hvem har plaget denne fuglen ved å ta ungene hennes? Gi dem tilbake.»','Abu Dawud'],
+ ['«Vis barmhjertighet mot dem som er på jorda, så viser Han som er i himmelen barmhjertighet mot dere.»','Profeten ﷺ · Tirmidhi'],
+ ['«Allah har foreskrevet godhet i alle ting.» Når man har dyr i sin omsorg, skal man være skånsom og ikke påføre dem unødig smerte.','Profeten ﷺ · Muslim']];
+const ANIMAL_EV=[
+ {t:'lam',txt:'Et lam er tørst og finner ikke vannet.',how:'hold',act:'Hold fingeren på lammet for å lede det til vannet',done:'Lammet drikker. Det rister på seg og løper tilbake til flokken.'},
+ {t:'sau',txt:'En sau har satt seg fast i en tornebusk.',how:'tap',act:'Trykk raskt fem ganger for å løsne greinene',done:'Sauen er fri. Den breker takknemlig og trasker bort.'},
+ {t:'kalv',txt:'En kalv har gått seg bort fra moren sin.',how:'hold',act:'Hold fingeren på kalven for å følge den hjem',done:'Kalven finner moren sin. De går side om side.'},
+ {t:'lam',txt:'Et lam har fått en tagg i ulla og klager.',how:'tap',act:'Trykk raskt fem ganger for å pirke den ut',done:'Taggen er ute. Lammet hopper glad av gårde.'}];
+const FRUITCARDS={
+ daddel:{k:'HADITH',l:[
+  ['Intensjonen','«Handlingene bedømmes etter intensjonene, og hver person får det han hadde til hensikt.»','Bukhari og Muslim · an-Nawawīs 40, nr. 1'],
+  ['Islams fem søyler','«Islam er bygd på fem: å vitne at det ikke finnes noen gud unntatt Allah og at Muhammad er Allahs sendebud, å be bønnen, å gi zakat, å valfarte til Huset og å faste i Ramadan.»','Bukhari og Muslim · nr. 3'],
+  ['Det klare og det uklare','«Det tillatte er tydelig, og det forbudte er tydelig. Mellom dem er uklare ting som mange ikke kjenner.»','Bukhari og Muslim · nr. 6'],
+  ['Oppriktighet','«Religionen er oppriktighet (naṣīḥa).»','Muslim · nr. 7'],
+  ['Det som ikke angår deg','«Blant det som gjør en persons islam god, er at han lar være det som ikke angår ham.»','Tirmidhi · nr. 12'],
+  ['Ikke bli sint','En mann ba om et råd. Profeten ﷺ sa: «Ikke bli sint.» Mannen spurte flere ganger, og han svarte hver gang: «Ikke bli sint.»','Bukhari · nr. 16'],
+  ['Godhet i alt','«Allah har foreskrevet godhet (iḥsān) i alle ting.»','Muslim · nr. 17'],
+  ['Følg det dårlige med det gode','«Vær bevisst på Allah hvor du enn er. Følg en dårlig handling med en god, så visker den den ut. Og omgås folk med god karakter.»','Tirmidhi · nr. 18'],
+  ['Vær bevisst på Allah','«Vær bevisst på Allah, så beskytter Han deg. Når du ber om noe, be Allah. Når du søker hjelp, søk hjelp hos Allah.»','Tirmidhi · nr. 19'],
+  ['Skam','«Hvis du ikke skammer deg, så gjør hva du vil.»','Bukhari · nr. 20'],
+  ['Stå støtt','«Si: Jeg tror på Allah, og vær så rettskaffen.»','Muslim · nr. 21'],
+  ['Renhet','«Renhet er halve troen.»','Muslim · nr. 23'],
+  ['Ingen skade','«Det skal ikke påføres skade, og skade skal ikke gjengjeldes med skade.»','Ibn Mājah · nr. 32'],
+  ['En reisende','«Vær i denne verden som en fremmed eller en som er på reise.»','Bukhari · nr. 40']]},
+ oliven:{k:'ALLAHS NAVN',l:[
+  ['Ar-Raḥmān, ar-Raḥīm','Den Nåderike, Den Barmhjertige. Hans nåde omfatter alt, og den er det første vi nevner i hver surah.','Koranen 1:3'],
+  ['An-Nūr','Lyset. «Allah er himlenes og jordens lys.»','Koranen 24:35'],
+  ['As-Salām','Freden, Den som er fri for all mangel, og kilden til all fred.','Koranen 59:23'],
+  ['Al-Ghaffār','Den som tilgir igjen og igjen. «Be deres Herre om tilgivelse, Han er alltid tilgivende.»','Koranen 71:10'],
+  ['Ar-Razzāq','Den som forsørger. All næring kommer fra Ham.','Koranen 51:58'],
+  ['As-Samīʿ, al-Baṣīr','Den Allhørende, Den Allseende. «Intet er som Ham, og Han hører og ser alt.»','Koranen 42:11'],
+  ['Al-Laṭīf','Den Fine, Den Milde. Han kjenner det skjulte og er nær på måter vi ikke merker.','Koranen 67:14'],
+  ['Al-Wadūd','Den Kjærlige. Han elsker sine tjenere, og Hans kjærlighet er grunnlaget for alt godt.','Koranen 85:14'],
+  ['Ash-Shakūr','Den Takknemlige. Han lar ingen liten god gjerning gå upåaktet hen.','Koranen 35:30'],
+  ['Al-Ḥalīm','Den Overbærende. Han straffer ikke i hast, men gir tid til å vende tilbake.','Koranen 2:225'],
+  ['Al-Karīm','Den Gavmilde. «Hva har fått deg til å glemme din gavmilde Herre?»','Koranen 82:6'],
+  ['Al-Qarīb, al-Mujīb','Den Nære, Den som svarer. «Min Herre er nær og svarer.»','Koranen 11:61'],
+  ['Al-Ḥayy, al-Qayyūm','Den Levende, Den som opprettholder alt. Ayat al-Kursī begynner med disse navnene.','Koranen 2:255']]},
+ granateple:{k:'DUʿĀʾ FOR HVERDAGEN',l:[
+  ['Når du våkner','Al-ḥamdu lillāhi lladhī aḥyānā baʿda mā amātanā wa ilayhi n-nushūr. «All lovprisning tilhører Allah, som ga oss liv etter å ha latt oss sove, og til Ham er oppstandelsen.»','Bukhari'],
+  ['Før du sovner','Bismika llāhumma amūtu wa aḥyā. «I Ditt navn, å Allah, dør jeg og lever jeg.»','Bukhari'],
+  ['Hvis du glemte bismillāh før maten','Bismillāhi awwalahu wa ākhirah. «I Allahs navn, i begynnelsen og i slutten.»','Abu Dawud og Tirmidhi'],
+  ['Etter maten','Al-ḥamdu lillāhi lladhī aṭʿamanī hādhā wa razaqanīhi min ghayri ḥawlin minnī wa lā quwwa. «Lovet være Allah som ga meg dette å spise, uten noen kraft eller styrke fra meg.»','Abu Dawud og Tirmidhi'],
+  ['Når du går ut','Bismillāh, tawakkaltu ʿala llāh, wa lā ḥawla wa lā quwwata illā billāh. «I Allahs navn. Jeg setter min lit til Allah, og det finnes ingen makt eller styrke uten hos Allah.»','Abu Dawud og Tirmidhi'],
+  ['Når du er bekymret','Allāhumma innī aʿūdhu bika mina l-hammi wa l-ḥazan. «Å Allah, jeg søker tilflukt hos Deg fra bekymring og sorg.»','Bukhari'],
+  ['For kunnskap','Rabbi zidnī ʿilmā. «Min Herre, gi meg mer kunnskap.»','Koranen 20:114'],
+  ['For dette livet og det neste','Rabbanā ātinā fi d-dunyā ḥasanatan wa fi l-ākhirati ḥasanatan wa qinā ʿadhāba n-nār. «Vår Herre, gi oss det gode i denne verden og det gode i den neste, og vern oss mot Ildens straff.»','Koranen 2:201'],
+  ['Om tilgivelse','Astaghfiru llāha wa atūbu ilayh. «Jeg ber Allah om tilgivelse og vender meg til Ham.» Profeten ﷺ sa det mer enn sytti ganger om dagen.','Bukhari'],
+  ['For et fast hjerte','Yā muqalliba l-qulūb, thabbit qalbī ʿalā dīnik. «Du som snur hjertene, gjør hjertet mitt fast i Din religion.»','Tirmidhi'],
+  ['Når det regner','Allāhumma ṣayyiban nāfiʿā. «Å Allah, la det bli et regn som gagner.»','Bukhari'],
+  ['Når du ser deg i speilet','Allāhumma ḥassanta khalqī fa-ḥassin khuluqī. «Å Allah, Du har gjort meg vakker av utseende, gjør også min karakter vakker.»','Ahmad']]},
+ druer:{k:'FORTELLING',l:[
+  ['Yūnus i hvalens mørke','I mørket inne i hvalen ba Yūnus: «Det finnes ingen gud unntatt Deg. Lovet være Du, jeg har vært blant dem som gjør urett.» Og Allah reddet ham.','Koranen 21:87–88'],
+  ['Ibrāhīm og ilden','Da de kastet Ibrāhīm i ilden, sa Allah: «Ild, vær kjølig og fred for Ibrāhīm.»','Koranen 21:69'],
+  ['Mūsā ved havet','Da hæren nærmet seg, sa folket: «Vi blir tatt!» Mūsā svarte: «Nei! Min Herre er med meg, Han vil vise meg veien.» Og havet delte seg.','Koranen 26:61–63'],
+  ['Yūsuf tilgir','Da brødrene som hadde kastet ham i brønnen sto foran ham, sa Yūsuf: «Ingen bebreidelse mot dere i dag. Allah tilgir dere.»','Koranen 12:92'],
+  ['Maryam og palmen','Under smertene fikk Maryam beskjed: «Rist palmestammen mot deg, så faller det friske, modne dadler ned til deg.»','Koranen 19:25'],
+  ['Sulaymān og mauren','En maur ropte til de andre: «Gå inn i boligene deres, så Sulaymān og hæren ikke knuser dere uten å merke det.» Sulaymān smilte og takket Allah.','Koranen 27:18–19'],
+  ['De unge i hulen','De unge mennene flyktet til hulen og ba: «Vår Herre, gi oss barmhjertighet fra Deg, og led oss rett i vår sak.»','Koranen 18:10'],
+  ['Nūḥ bygger arken','Nūḥ bygde arken på tørt land mens folk lo av ham. Han fortsatte, fordi han stolte på Allah.','Koranen 11:37–38'],
+  ['Luqmāns råd','«Gå ikke hovmodig på jorda, og vend ikke kinnet bort fra folk i stolthet.»','Koranen 31:18'],
+  ['Hājar og Zamzam','Hājar løp sju ganger mellom aṣ-Ṣafā og al-Marwa for å finne vann til sønnen sin. Da sprang kilden Zamzam fram.','Bukhari'],
+  ['I hulen Thawr','Da forfølgerne sto rett utenfor hulen, sa Profeten ﷺ til Abu Bakr: «Vær ikke bekymret, Allah er med oss.»','Koranen 9:40'],
+  ['Kappløpet','Profeten ﷺ løp om kapp med Aisha. Først vant hun. Senere vant han, og sa med et smil: «Denne er for den gangen.»','Abu Dawud']]}};
+FRUITCARDS.oliven.l.forEach(x=>x); FRUITCARDS.sitron=FRUITCARDS.daddel; FRUITCARDS.mandel=FRUITCARDS.oliven;
+function cardSheet(c,kick,after){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${esc(kick)}</p><h3>${esc(c[0])}</h3><div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.5">${esc(c[1])}</p><p style="margin:8px 0 0;font-size:12px;color:var(--gold2)">${esc(c[2])}</p></div><p style="font-size:12.5px;color:var(--muted)">Lagret i Lær → Frukter.</p><button class="btn" id="cdOk">Alḥamdulillāh</button>`); $('cdOk').onclick=()=>{ closeSheet(); after&&after(); }; }
+/* Rosehagen: knoppen og rosen som henger med hodet */
+async function verseQuiz(ref,title,kick,onOk){ const [s,a]=String(ref).split(':').map(Number); openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${esc(kick)}</p><h3>${esc(title)}</h3><p id="vqW">Henter verset …</p>`);
+  const w=await fetchWords(s,a); if(!$('vqW')) return;
+  if(!w||w.length<3){ $('sheet').querySelector('#vqW').outerHTML=`<p>Verset er ${s}:${a}. Les det for deg selv, og trykk når du er klar.</p><button class="btn" id="vqOk">Jeg har lest det</button>`; $('vqOk').onclick=()=>{ closeSheet(); onOk(); }; return; }
+  const i=1+Math.floor(Math.random()*(w.length-1)), opts=[w[i].ar].concat(w.filter((x,k)=>k!==i&&x.ar!==w[i].ar).sort(()=>Math.random()-.5).slice(0,2).map(x=>x.ar)).sort(()=>Math.random()-.5);
+  $('sheet').querySelector('#vqW').outerHTML=`<p style="margin-top:0">Hvilket ord mangler? <span style="color:var(--muted);font-size:12.5px">(${s}:${a})</span></p><div class="card" style="direction:rtl;text-align:center;font-family:var(--arq);font-size:24px;line-height:2">${w.map((x,k)=>k===i?'<span style="display:inline-block;min-width:60px;border-bottom:2px dashed var(--gold)">&nbsp;</span>':esc(x.ar)).join(' ')}</div><div class="qrow" style="flex-wrap:wrap;direction:rtl">${opts.map(o=>`<button class="gb" data-vq="${esc(o)}" style="font-family:var(--arq);font-size:22px">${esc(o)}</button>`).join('')}</div><p id="vqM" style="min-height:22px;font-size:14px;margin:6px 0 0"></p>`;
+  $('sheet').querySelectorAll('[data-vq]').forEach(b=>b.onclick=()=>{ if(b.dataset.vq===w[i].ar){ b.classList.add('gold'); haptic(10); snd.chime([659,784,988],.05); $('vqM').textContent=`Riktig: ${w[i].ar}${w[i].en?' ('+w[i].en+')':''}`; setTimeout(()=>{ closeSheet(); onOk(); },1100); } else { b.style.opacity=.35; haptic(20); $('vqM').textContent='Ikke helt. Prøv igjen.'; } }); }
+function budTap(i){ const p=S.roses[i]; if(!p||!p.bud) return; verseQuiz(p.ref,'Vann knoppen','DAGENS KNOPP',()=>{ p.bud=0; p.n=Date.now(); save(); renderSection(); toast('Knoppen blomstret 🌹',2200); taskHit('knopp'); }); }
+function droopPick(){ const t=dayStr(); if(S.droop&&S.droop.d===t) return; const C=S.roses.map((p,i)=>[p,i]).filter(([p])=>p.h==='ok'&&!p.bud&&p.day!==t&&dayDiff(p.rev||p.day,t)>=3); S.droop={d:t,i:C.length?rnd(C)[1]:-1,done:0}; save(); }
+function droopTap(i){ const p=S.roses[i]; if(!p) return; verseQuiz(p.ref,'Husker du dette verset?','EN ROSE HENGER MED HODET',()=>{ p.rev=dayStr(); S.droop.done=1; save(); renderSection(); toast('Rosen retter seg opp igjen',2200); taskHit('rose'); }); }
+function bouquetCheck(){ if(S.roses.length<MAXROSE||S.roses.some(p=>p.bud)) return; const n=(S.bouquets||[]).length+1; S.bouquets=(S.bouquets||[]).concat([{n,d:dayStr(),v:S.roses.map(p=>p.ref).filter(Boolean)}]); S.roses=[]; save();
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">BUKETT ${n}</p><h3>36 vers, bundet sammen</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Se hva du har gjort. 36 vers, ett om gangen. Jeg binder dem sammen for deg, så du alltid kan finne dem igjen. Bedet er klart for nye roser.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p>Buketten ligger i Lær → Buketter, og en vase står ved fontenen.</p><button class="btn" id="bqOk">Alḥamdulillāh</button>`); $('bqOk').onclick=()=>{ closeSheet(); renderAll(); }; }
+/* Beitet: dagens dyr */
+function animalPick(){ const t=dayStr(); if(!restored('beite')) return; if(S.animal&&S.animal.d===t) return; S.animal={d:t,e:Math.floor(Math.random()*ANIMAL_EV.length),done:0}; save(); }
+function animalTap(){ const A=S.animal; if(!A||A.done) return; const E=ANIMAL_EV[A.e];
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DAGENS DYR</p><h3>${esc(E.txt)}</h3><div class="card" style="text-align:center;padding:18px"><div id="anB" style="width:110px;height:110px;margin:0 auto;border-radius:55px;border:3px solid rgba(231,194,107,.35);display:flex;align-items:center;justify-content:center;font-size:54px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer;background:conic-gradient(#e7c26b 0deg, transparent 0deg)">${E.t==='kalv'?'🐄':'🐑'}</div><p style="margin:10px 0 0;font-size:14px">${esc(E.act)}</p></div>`);
+  const b=$('anB'); let p=0, tm=null, taps=0; const set=v=>{ b.style.background=`conic-gradient(rgba(231,194,107,.55) ${v*360}deg, transparent 0deg)`; };
+  const win=()=>{ clearInterval(tm); b.onpointerdown=b.onpointerup=b.onpointerleave=b.onclick=null; haptic([10,40,10]); snd.chime([523,659,784,1047],.06); A.done=1; save(); renderSection(); taskHit('dyr'); const H=rnd(ANIMAL_H); setTimeout(()=>{ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">BARMHJERTIGHET</p><h3>${esc(E.done)}</h3><div class="card"><p style="margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.5">${esc(H[0])}</p><p style="margin:8px 0 0;font-size:12px;color:var(--gold2)">${esc(H[1])}</p></div><button class="btn" id="anOk">Alḥamdulillāh</button>`); $('anOk').onclick=closeSheet; },500); };
+  if(E.how==='hold'){ b.onpointerdown=()=>{ clearInterval(tm); tm=setInterval(()=>{ p=Math.min(1,p+.04); set(p); if(p>=1) win(); },60); }; b.onpointerup=b.onpointerleave=()=>{ clearInterval(tm); tm=setInterval(()=>{ p=Math.max(0,p-.05); set(p); if(!p) clearInterval(tm); },60); }; }
+  else b.onclick=()=>{ taps++; set(taps/5); haptic(8); b.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:180}); if(taps>=5) win(); }; }
+/* Frukthagen: høst kort, så frø */
+function harvestCard(i){ const t=S.fruit[i]; if(!t) return; const set=FRUITCARDS[t.type]||FRUITCARDS.daddel; S.cards=S.cards||[]; const seen=new Set(S.cards.filter(c=>c.ty===t.type).map(c=>c.i)); let k=set.l.findIndex((c,j)=>!seen.has(j)); if(k<0) k=Math.floor(Math.random()*set.l.length);
+  S.cards.push({ty:t.type,i:k,d:dayStr()}); save(); cardSheet(set.l[k],`${(FRUITNAME[t.type]||'Frukt').toUpperCase()} · ${set.k}`); }
+function seedTap(){ if(!(S.seeds>0)||S.fruit.length>=12) return; S.seeds--; const type=FRUITS[S.fruit.length%FRUITS.length]; S.fruit.push({type,st:1,h:'ok'}); save(); renderSection(); snd.chime([523,659],.05);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">ET FRØ ER SÅDD</p><h3>Et godt ord er som et godt tre</h3><div class="card"><p style="margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.5">«Et godt ord er som et godt tre: røttene står fast, og greinene strekker seg mot himmelen. Det bærer frukt til alle tider med sin Herres tillatelse.»</p><p style="margin:8px 0 0;font-size:12px;color:var(--gold2)">Koranen 14:24–25</p></div><p>Frøet kom fra dagens gode gjerning. Ingen andre vet om den, men nå vokser et ${esc((FRUITNAME[type]||'tre').toLowerCase())} i hagen.</p><button class="btn" id="sdOk">Āmīn</button>`); $('sdOk').onclick=closeSheet; }
+/* Vismannen i bakgrunnen: leser om dagen, sitter ved bålet om kvelden */
+const isEve=()=>{ const h=new Date().getHours(); return h>=18||h<6; };
+function lampDue(){ const d=new Date(); return isEve()&&[1,4].includes(d.getDay())&&(S.lamp||{}).d!==dayStr(); }
+function wiseSeated(){ const eve=isEve(); return `<ellipse cx="0" cy="3" rx="22" ry="4" fill="rgba(0,0,0,.3)"/>${eve?`<g transform="translate(26 0)"><path d="M-7 2 l14 -4 M-6 -3 l12 5" stroke="#4a3020" stroke-width="2.6" stroke-linecap="round"/><path class="flm" d="M0 -1 Q-5 -9 0 -18 Q2 -11 4 -14 Q7 -6 0 -1Z" fill="#ffb347"/><circle cx="0" cy="-6" r="20" fill="#ffb347" opacity=".14"/></g>`:''}
+  <path d="M-14 0 Q-15 -16 -8 -24 Q0 -28 8 -24 Q15 -16 14 0Z" fill="#d9d0b8" stroke="rgba(0,0,0,.3)" stroke-width=".6"/><g class="${eve?'':'trock'}"><ellipse cx="0" cy="-32" rx="6" ry="7" fill="#b58a62"/><path d="M-6 -31 Q-6 -22 0 -21 Q6 -22 6 -31 Q3 -27 0 -27 Q-3 -27 -6 -31Z" fill="#ece8de"/><ellipse cx="0" cy="-37" rx="7.6" ry="4.4" fill="#ece8de"/></g>
+  <path d="M5 -6 L-10 -26" stroke="#6a4a2a" stroke-width="2" stroke-linecap="round"/>${eve?'':`<g transform="translate(0 4)"><path d="M-9 6 L9 -4 M9 6 L-9 -4" stroke="#6a4a2a" stroke-width="1.7"/><path d="M-10 -5 L0 -2 L10 -5 L10 -1 L0 2 L-10 -1Z" fill="#f4efe2" stroke="#a08a5e" stroke-width=".5"/></g>`}`; }
+function wiseLayer(q){ if(q!=='roser'||S.active) return ''; const lamp=lampDue(); return `<g class="wise" style="cursor:pointer" transform="translate(46 486) scale(1.05)">${wiseSeated()}<rect x="-24" y="-48" width="58" height="56" fill="transparent"/></g>${lamp?`<g onclick="event.stopPropagation();lampTap()" style="cursor:pointer" transform="translate(82 486)"><path d="M-4 -10 h8 l3 4 v9 l-3 4 h-8 l-3 -4 v-9Z" fill="#2a1a0e" stroke="#d9b25f" stroke-width=".8"/><rect x="-26" y="-30" width="52" height="44" fill="transparent"/></g>`:''}`; }
+function lampTap(){ S.lamp={d:dayStr()}; save(); renderSection(); haptic([8,30,8]); snd.chime([659,784,988],.05);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">KVELDSLAMPEN</p><h3>Lyset ditt tente lampen hans</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Takk, gjeter. Måtte Allah lyse opp hjertet ditt slik du lyste opp natten min, og gjøre Koranen til lyset i brystet ditt.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p style="font-size:13px;color:var(--muted)">Du mistet ingen nur. Lys blir ikke mindre av å deles.</p><button class="btn" id="lpOk">Āmīn</button>`); $('lpOk').onclick=closeSheet; }
+/* Hærfuglen er postbudet: sitter på hageporten når et brev har kommet */
+let _postShow=null;
+function postLayer(q){ if(q!=='roser'||S.active||!_postShow) return ''; return `<g onclick="event.stopPropagation();postTap()" style="cursor:pointer" transform="translate(320 440) scale(.75)">${hudSvg(0,0).replace('class="hud"','class="hudpost"')}<g transform="translate(22 -4)">${typeof scrollSvg==='function'?scrollSvg(.7):''}</g></g>`; }
+function postTap(){ const f=_postShow; _postShow=null; renderSection(); if(f) f(); }
+/* Tårnet i skyggen */
+const shadowOp=()=>{ const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length, T=SIGNS.filter(g=>!g.fri).length||1; return Math.max(.25,.85-.6*n/T); };
+function towerShadow(){ return `<defs><radialGradient id="tShG" cx=".5" cy=".55" r=".55"><stop offset="0" stop-color="#05040f" stop-opacity=".95"/><stop offset=".7" stop-color="#0b0920" stop-opacity=".7"/><stop offset="1" stop-color="#0b0920" stop-opacity="0"/></radialGradient></defs><g class="tshadow" style="opacity:${shadowOp().toFixed(2)};pointer-events:none"><ellipse cx="180" cy="470" rx="150" ry="250" fill="url(#tShG)"/></g>`; }
+function towerInfo(){ const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length;
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">LYSETS TÅRN · I SKYGGEN</p><h3>Tårnet sover</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Hver gang du finner et av tegnene fra Koranens fortellinger, letter skyggen litt. En dag skal lyset tennes her igjen, in shā' Allāh.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p>Tegn funnet: <b style="color:var(--gold2)">${n}</b>. Tegnene dukker opp her i tårnhagen når vismannen har sett dem.</p><p style="font-size:12.5px;color:var(--muted)">🚧 Lysets tårn er under arbeid og åpner i en senere versjon.</p><button class="btn" id="tiOk">Fint</button>`); $('tiOk').onclick=closeSheet; }
+function r2Layer(q){ if(!R2||S.active) return ''; let h='';
+  if(q==='roser'){ droopPick(); h+=postLayer(q); const vb=(S.bouquets||[]).length; if(vb) h+=`<g transform="translate(238 566)">${Array.from({length:Math.min(vb,6)},(_,k)=>`<g transform="translate(${k*11} 0)"><path d="M-4 0 Q-6 -8 -3 -12 H3 Q6 -8 4 0Z" fill="#c9962e" stroke="#7a5a20" stroke-width=".6"/><circle cx="0" cy="-14" r="3.4" fill="#d9475e"/></g>`).join('')}</g>`; }
+  if(q==='beite'){ animalPick(); const A=S.animal; if(A&&!A.done&&restored('beite')){ const E=ANIMAL_EV[A.e]; h+=`<g onclick="event.stopPropagation();animalTap()" style="cursor:pointer" transform="translate(300 650)">${E.t==='kalv'?cowSvg(0,0,.8,1):sheepSvg(0,0,.8,1)}<g transform="translate(6 -40)"><circle r="10" fill="#e7c26b"/><text y="5" text-anchor="middle" font-size="14" font-weight="800" fill="#2a1a06">!</text></g><rect x="-40" y="-50" width="80" height="70" fill="transparent"/></g>`; } }
+  if(q==='frukt'&&restored('frukt')&&S.seeds>0&&S.fruit.length<12) h+=`<g onclick="event.stopPropagation();seedTap()" style="cursor:pointer" transform="translate(195 700)"><ellipse rx="22" ry="6" fill="#4a3424"/><circle cx="-4" cy="-3" r="3" fill="#c9962e"/><circle cx="4" cy="-4" r="2.6" fill="#c9962e"/><rect x="-40" y="-30" width="80" height="44" fill="transparent"/></g>`;
+  return h; }
+function r2Beacons(q){ if(!R2||S.active||busy) return ''; let b='';
+  if(q==='roser'){ const bi=S.roses.findIndex(p=>p.bud), sl=bi>=0&&SLOTS[S.roses[bi].s]; if(sl) b+=beacon(sl.x,sl.y-50*sl.sc,'Vann knoppen'); const D=S.droop; if(D&&D.i>=0&&!D.done&&S.roses[D.i]){ const s2=SLOTS[S.roses[D.i].s]; if(s2) b+=beacon(s2.x,s2.y-50*s2.sc,'En rose henger med hodet'); } if(_postShow) b+=beacon(320,404,'Hærfuglen har med et brev'); if(lampDue()) b+=beacon(82,458,'Lampen hans har sluknet',-20); }
+  if(q==='beite'&&S.animal&&!S.animal.done&&restored('beite')) b+=beacon(300,596,ANIMAL_EV[S.animal.e].txt.split(' ').slice(0,4).join(' ')+' …');
+  if(q==='frukt'&&restored('frukt')&&S.seeds>0&&S.fruit.length<12) b+=beacon(195,670,'Så et frø');
+  if(q==='taarn') b+=beacon(180,600,'I skyggen',-24);
+  return b; }
 
 /* ================= VISMANNENS OMVISNING DAG 0 ================= */
 function seatedReader(x,y,s,robe,rock){ return `<g transform="translate(${x} ${y}) scale(${s})"><g class="${rock?'trock':''}" style="animation-delay:-${(Math.random()*2).toFixed(1)}s"><path d="M-13 0 Q-14 -14 -7 -22 Q0 -26 7 -22 Q14 -14 13 0Z" fill="${robe}" stroke="rgba(0,0,0,.3)" stroke-width=".6"/><ellipse cx="0" cy="-30" rx="5.4" ry="6.2" fill="#b07a4e"/><ellipse cx="0" cy="-34" rx="6.6" ry="3.8" fill="#efe4cc"/></g>
@@ -2849,11 +2990,10 @@ function openInbox(){ if(sqNext()) return; const L=S.inbox||[], f=d=>{ try{ retu
 
 /* ================= ROLLER: du er gjeteren, vismannen er en egen figur ================= */
 function wiseFig(id){ return sageSvg(id,'#d9d0b8','#8a7a5a','#b58a62',['#ece8de',12],TURBAN('#ece8de')).replace(`id="${id}_aR" transform="translate(8 -37)">`,`id="${id}_aR" transform="translate(8 -37)"><path d="M1 -16 L1 44" stroke="#6a4a2a" stroke-width="2.2" stroke-linecap="round"/>`); }
-function wiseLayer(q){ if(q!=='roser'||S.active) return ''; return `<g class="wise" style="cursor:pointer" transform="translate(44 478) scale(.8)">${wiseFig('gWise')}<rect x="-20" y="-70" width="40" height="76" fill="transparent"/></g>`; }
 function wiseTap(e){ kLek('gjeter'); taskHit('vis'); keeperTap(e); }
 function wiseIcon(){ return `<svg viewBox="-24 -70 48 76" width="46" height="80" style="flex:0 0 46px">${wiseFig('wIc'+Math.random().toString(36).slice(2,6))}</svg>`; }
 /* Trykk på deg selv: hjelp med dagens oppgaver */
-const TASKWHERE={lytt:{q:'roser',el:'#beacons .bstar path',t:'Trykk på stjernen, så «Les dagens vers igjen» og «Hør verset». Har du ikke tatt verset ennå, gjør det først.'},vis:{q:'roser',el:'#items .wise',t:'Trykk på den vise mannen ved kanten av Rosehagen.'},rose:{q:'roser',el:'#items .rz',t:'Trykk på en av rosene dine. Da kan du lese og høre verset igjen.'},vers:{q:'roser',el:'#beacons .bstar path',t:'Trykk på den glødende stjernen. Den gir deg dagens vers.'},dagbok:{q:'roser',el:'#beacons .bstar path',t:'Ta dagens vers. På slutten av økten kan du skrive en tanke.'},ord:{el:'#learnBtn',t:'Trykk på Lær. Dagens ord ligger der.'},hifz:{el:'#learnBtn',t:'Trykk på Lær og gå til Lysets tårn.'},
+const TASKWHERE={rose:{q:'roser',el:'#beacons .beacon',t:'Én av de gamle rosene henger med hodet. Trykk på den og husk verset.'},knopp:{q:'roser',el:'#beacons .beacon',t:'Ta dagens vers først. Etterpå står det en knopp i bedet. Trykk på den og fyll inn ordet som mangler.'},dyr:{q:'beite',el:'#beacons .beacon',t:'Trykk på dyret med det gule utropstegnet.'},seed:{q:'frukt',el:'#beacons .beacon',t:'Trykk på «Så et frø». Frøet kom fra dagens gode gjerning.'},lytt:{q:'roser',el:'#beacons .bstar path',t:'Trykk på stjernen, så «Les dagens vers igjen» og «Hør verset». Har du ikke tatt verset ennå, gjør det først.'},vis:{q:'roser',el:'#items .wise',t:'Trykk på den vise mannen ved kanten av Rosehagen.'},vers:{q:'roser',el:'#beacons .bstar path',t:'Trykk på den glødende stjernen. Den gir deg dagens vers.'},dagbok:{q:'roser',el:'#beacons .bstar path',t:'Ta dagens vers. På slutten av økten kan du skrive en tanke.'},ord:{el:'#learnBtn',t:'Trykk på Lær. Dagens ord ligger der.'},hifz:{el:'#learnBtn',t:'Trykk på Lær og gå til Lysets tårn.'},
   rydd:{junk:1,t:'Trykk på de lysende prikkene over rotet. Hver prikk er én rydding.'},mat:{q:'beite',el:'#flock',t:'Trykk på dyrene for å gi dem mat.'},samle:{q:'beite',el:'#flock',t:'Trykk på varene ved dyrene for å samle dem.'},selg:{el:'#shopBtn',t:'Trykk på Basar og velg Marked.'},vann:{water:1,el:'#beacons .beacon',t:'Trykk på «Vann fra elven».'},host:{q:'frukt',el:'#beacons .beacon',t:'Trykk på de modne trærne.'}};
 function flash(sel){ const e=typeof sel==='string'?document.querySelector(sel):sel; if(!e) return; e.classList.remove('flashme'); void e.getBoundingClientRect(); e.classList.add('flashme'); setTimeout(()=>e.classList.remove('flashme'),6500); }
 function taskGuide(id){ const w=TASKWHERE[id]; if(!w) return taskGo(id); closeSheet(); let qi=-1, el=w.el;
@@ -3041,7 +3181,7 @@ let ty=null; $('sheet').addEventListener('touchstart',e=>{ ty=$('sheet').scrollT
 $('sheet').addEventListener('touchend',e=>{ if(ty!=null&&e.changedTouches[0].clientY-ty>90) closeSheet(); ty=null; });
 
 /* --- Lysets tårn --- */
-async function openHifz(){
+async function openHifz(){ if(R2) return towerInfo();
   if(!unl('hifz')) return toast(`Lysets tårn åpnes etter ${GATE.hifz} vers-økter (${S.vs}/${GATE.hifz})`);
   if(S.active){ toast('Fullfør økten først'); return; }
   try{ surahMeta=surahMeta||await fetchSurahList(); }catch(e){}
