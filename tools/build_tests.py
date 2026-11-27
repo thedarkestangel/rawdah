@@ -5,18 +5,19 @@ Bruk: python3 tools/build_tests.py  (kjør fra repo-roten etter hver endring i i
 - Kahwa 7142: kort smakebit (15–20 min) med testrull, tidsmaskin og mannen med rosinhodet.
 - Jabal: den fulle appen i 7 spilldager (en dag = en dag med fullført vers). Ibrahim-versjonen har utviklerpanel.
 Hver tester får egen mappe, egen lagring og egen logo per versjon."""
-import json, os, subprocess, time, shutil
+import json, os, subprocess, time, shutil, sys
+ONLY = sys.argv[1:]  # f.eks. light  -> bygger bare de navngitte; uten argument: alle som ikke er frosset
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform'
 TESTERS = [
-    {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True},
-    {'mode': 'kahwa', 'name': 'light', 'who': 'Ibrahim', 'form': FORM, 'notes': True, 'title': 'Rawdah Kahwa Light'},
-    {'mode': 'jabal', 'name': 'haroon', 'who': 'Haroon', 'form': FORM},
-    {'mode': 'jabal', 'name': 'najaat', 'who': 'Najaat', 'form': FORM},
-    {'mode': 'jabal', 'name': 'sadia', 'who': 'Sadia', 'form': FORM},
-    {'mode': 'jabal', 'name': 'luqman', 'who': 'Luqman', 'form': FORM},
-    {'mode': 'jabal', 'name': 'noxiphone', 'who': 'noxp (iPhone)', 'form': FORM, 'notes': True, 'skip': True},
-    {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True, 'skip': True},
-    {'mode': 'jabal', 'name': 'ibrahim', 'who': 'Ibrahim', 'form': None, 'dev': True},
+    {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True, 'resetv': 2},
+    {'mode': 'kahwa', 'name': 'light', 'who': 'Ibrahim', 'form': FORM, 'notes': True, 'title': 'Rawdah Kahwa Light', 'resetv': 2},
+    {'mode': 'jabal', 'name': 'haroon', 'who': 'Haroon', 'form': FORM, 'freeze': True},
+    {'mode': 'jabal', 'name': 'najaat', 'who': 'Najaat', 'form': FORM, 'freeze': True},
+    {'mode': 'jabal', 'name': 'sadia', 'who': 'Sadia', 'form': FORM, 'freeze': True},
+    {'mode': 'jabal', 'name': 'luqman', 'who': 'Luqman', 'form': FORM, 'freeze': True},
+    {'mode': 'jabal', 'name': 'noxiphone', 'who': 'noxp (iPhone)', 'form': FORM, 'notes': True, 'skip': True, 'resetv': 2},
+    {'mode': 'jabal', 'name': 'noxpixl', 'who': 'noxp (Pixel)', 'form': FORM, 'notes': True, 'skip': True, 'resetv': 2},
+    {'mode': 'jabal', 'name': 'ibrahim', 'who': 'Ibrahim', 'form': None, 'dev': True, 'freeze': True},
 ]
 src = open('src/rawdah.html', encoding='utf-8').read()
 try:
@@ -27,13 +28,16 @@ BUILD = 'bygg ' + time.strftime('%d.%m.%Y') + ' · ' + rev
 NAMES = {'kahwa': ('Rawdah Kahwa 7142', 'Rawdah Kahwa', 'kahwatest-', '#140a04'), 'jabal': ('Rawdah Jabal', 'Rawdah Jabal', 'jabal-', '#08121a')}
 for t in TESTERS:
     mode, name = t['mode'], t['name']
+    if (ONLY and name not in ONLY) or (not ONLY and t.get('freeze')):
+        continue
     title, short, prefix, bg = NAMES[mode]
     title = t.get('title', title); short = t.get('title', short).replace('Rawdah ', '')
-    cfg = {k: v for k, v in t.items() if k not in ('mode', 'title')}
+    cfg = {k: v for k, v in t.items() if k not in ('mode', 'title', 'freeze')}
     cfg['build'] = BUILD
     var = 'KAHWA' if mode == 'kahwa' else 'JABAL'
     shift = (('kahwa_' if mode == 'kahwa' else 'jabal_') + name + '_off')
-    head = ('<script>window.' + var + '=' + json.dumps(cfg, ensure_ascii=False) + ';'
+    rv = ('(function(){var k="rawdah_resetv_' + name + '",v="' + str(cfg.get('resetv', 0)) + '";if(localStorage.getItem(k)!==v){["rawdah_' + mode + '_' + name + '","' + shift + '"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();') if cfg.get('resetv') else ''
+    head = ('<script>window.' + var + '=' + json.dumps(cfg, ensure_ascii=False) + ';' + rv +
             '(function(){var o=+(localStorage.getItem("' + shift + '")||0);if(!o)return;var D=Date,sh=o*864e5;'
             'class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}'
             'window.Date=F;})();</script>')
