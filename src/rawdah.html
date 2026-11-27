@@ -473,7 +473,15 @@ body:has(.sheet.on) #bellBtn,body:has(#baytScene) #bellBtn,body:has(#tour) #bell
 .tspot{position:fixed;box-shadow:0 0 0 9999px rgba(5,4,18,.74),0 0 0 2px #e7c26b,0 0 26px 8px rgba(231,194,107,.5);transition:left .55s cubic-bezier(.3,.7,.2,1),top .55s cubic-bezier(.3,.7,.2,1),width .55s cubic-bezier(.3,.7,.2,1),height .55s cubic-bezier(.3,.7,.2,1),border-radius .55s;pointer-events:none}
 .tcard{position:fixed;left:14px;right:14px;max-width:440px;margin:0 auto;background:#17133a;border:1px solid rgba(231,194,107,.55);border-radius:18px;padding:14px;color:#efe6d2;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;box-shadow:0 10px 30px rgba(0,0,0,.5)}.tcard.on{opacity:1;transform:none}
 .tk{display:flex;justify-content:space-between;color:#e7c26b;font-size:11.5px;letter-spacing:1px}.tk span{color:var(--muted)}.tcard h4{margin:4px 0 6px;font-family:var(--serif);font-size:20px;color:var(--gold2);font-weight:600}.tcard p{margin:0 0 12px;font-size:14.5px;line-height:1.5}.tcard b{color:#ffe6a6}.tlock{display:block;margin-top:8px;font-size:12.5px;color:var(--muted)}
-body.eerie .season,body.eerie .smoke{display:none!important}body.eerie #lanterns{filter:saturate(.1) brightness(.45);transition:filter .6s}.efog{animation:efog 26s ease-in-out infinite alternate}.efog.f2{animation-duration:34s;animation-direction:alternate-reverse}@keyframes efog{from{transform:translateX(-40px)}to{transform:translateX(40px)}}.ecrow{animation:ecrow 5s ease-in-out infinite;transform-box:fill-box}@keyframes ecrow{0%,86%,100%{opacity:1}90%{opacity:.6}}
+body.eerie .season,body.eerie .smoke{display:none!important}body.eerie #lanterns{filter:saturate(.1) brightness(.45);transition:filter .6s}.hzlamp{animation:hzl 2.6s ease-in-out infinite}@keyframes hzl{50%{opacity:.35}}.hzflag{animation:hzf 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:left center}@keyframes hzf{50%{transform:scaleX(.7) skewY(4deg)}}
+.hzsmk circle{animation:hzs 3.9s linear infinite;transform-box:fill-box}@keyframes hzs{0%{transform:translate(0,0) scale(1);opacity:.4}100%{transform:translate(6px,-34px) scale(3);opacity:0}}
+.hzcam{animation:hzc 7s ease-in-out infinite}@keyframes hzc{50%{transform:translateY(-1px)}}.hzarm{animation:hza 18s linear infinite}@keyframes hza{to{transform:rotate(360deg)}}
+.hzwin.fresh{animation:hzw 1.8s ease-in-out infinite}@keyframes hzw{50%{fill-opacity:.35}}.hzwin.rev{animation:hzwr 3s ease-out both}@keyframes hzwr{0%,40%{fill-opacity:0}100%{fill-opacity:.9}}
+.hzfog ellipse{animation:hzfd 9s ease-in-out infinite alternate}@keyframes hzfd{to{transform:translateX(10px)}}.hzfog.part .fl{animation:hzpl 3s ease-in forwards}.hzfog.part .fr{animation:hzpr 3s ease-in forwards}@keyframes hzpl{to{transform:translateX(-190px);opacity:0}}@keyframes hzpr{to{transform:translateX(190px);opacity:0}}
+body.r2 #shopBtn{display:none!important}.ecirc{animation:ecirc 16s linear infinite;transform-origin:195px 300px}.ecirc.b{animation-duration:23s;animation-direction:reverse}@keyframes ecirc{to{transform:rotate(360deg)}}
+.hudpost.hfly{animation:hfly 2.4s cubic-bezier(.3,.7,.4,1) both}@keyframes hfly{0%{transform:translate(-340px,-260px) scale(.5)}100%{transform:none}}
+.manglint{animation:mgl 7s ease-in-out infinite}@keyframes mgl{0%,80%,100%{opacity:.08}88%{opacity:.35}}
+.efog{animation:efog 26s ease-in-out infinite alternate}.efog.f2{animation-duration:34s;animation-direction:alternate-reverse}@keyframes efog{from{transform:translateX(-40px)}to{transform:translateX(40px)}}.ecrow{animation:ecrow 5s ease-in-out infinite;transform-box:fill-box}@keyframes ecrow{0%,86%,100%{opacity:1}90%{opacity:.6}}
 .starfly{position:fixed;z-index:30;font-size:46px;color:#fff3cf;text-shadow:0 0 18px #ffd27a,0 0 40px #ffb347;pointer-events:none;line-height:1}
 .startrail{position:fixed;z-index:29;width:6px;height:6px;margin:-3px;border-radius:3px;background:#ffe6a6;box-shadow:0 0 10px #ffd27a;pointer-events:none;animation:strl .9s ease-out forwards}@keyframes strl{to{opacity:0;transform:scale(.2) translateY(10px)}}
 .bstar.nudge .sp{animation:nud .7s ease-in-out}@keyframes nud{0%,100%{transform:scale(1)}30%{transform:scale(1.45) rotate(12deg)}60%{transform:scale(.9) rotate(-8deg)}}
@@ -1164,6 +1172,7 @@ function regionScene(id,thumb){ const rb=regionBack(id), rl=regionLayer(id,thumb
 function drawHorizon(){
   const ok=fountainOK();
   const hzTrees=[30,52,78,104,286,312,338,360].map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join('');
+  if(R2&&view==='sec'&&QUADS[curQ]&&QUADS[curQ].id!=='roser'){ $('horizon').innerHTML=QUADS[curQ].id==='taarn'?'':hzTrees; return; }
   if(S.horizon&&S.horizon!=='palass'&&MONS.some((m,i)=>m.id===S.horizon&&isUnl(i))){ $('horizon').innerHTML=regionScene(S.horizon,false); return; }
   if((S.palace||0)>0&&S.horizon!=='album'){ $('horizon').innerHTML=palaceSvg(S.palace)+[30,52,78,104,286,312,338,360].map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join(''); return; }
   const st=S.vs>=AT.frukt?2:ok?1:0, cyps=(st===0?[30,78,312,360]:[30,52,78,104,286,312,338,360]).map((x,i)=>cyp(x,334,34+(i%3)*8,6)).join('');
@@ -1514,7 +1523,7 @@ function renderSection(){
   const J=(S.junk[q.id]||[]), D=S.decor.filter(d=>d.q===q.id);
   h=depth(J.map(j=>[SLOTS[j.s]?SLOTS[j.s].y:0,junkSvg(j)]).concat(D.map(d=>{const sp=SPOTS[d.spot];return [sp.y,decoSvg(d.type,sp.x,sp.y,sp.sc,d.id)];})))+h;
   if(canTend()&&J.length){ const hand=!unl('basar')&&!S.handClean, fj=J.find(j=>hand?(j.z||1)===1:(()=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; })()); if(fj&&SLOTS[fj.s]) b+=beacon(SLOTS[fj.s].x,SLOTS[fj.s].y-18,hand?'Rydd én ting med hendene':'Trykk for å rydde',-20); }
-  if(!ok && q.id!=='taarn') b+=beacon(195,520,restoreText(q.id),-26);
+  if(!ok && q.id!=='taarn' && !(R2&&q.id==='frukt'&&hikmaOpen()&&tMet()<tAvail())) b+=beacon(195,520,restoreText(q.id),-26);
   if(ok && canTend() && fountainOK() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   else if(canTend()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,doneToday()?`${countDamage(q.id)} skadet · tawbah i morgen`:`${countDamage(q.id)} skadet · trykk for tawbah`);
@@ -1523,7 +1532,7 @@ function renderSection(){
   if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
   if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
-  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=(R2&&q.id==='beite'?pastureBack():'')+LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+wiseLayer(q.id)+r2Layer(q.id)+(KAHWA?raisinLayer(q.id)+rumiLayer(q.id):'')+weatherLayer()+(R2&&q.id==='taarn'?eerieFront():''); }
+  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=hzLayer(q.id)+(R2&&q.id==='beite'?pastureBack():'')+LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+wiseLayer(q.id)+r2Layer(q.id)+(KAHWA?raisinLayer(q.id)+rumiLayer(q.id):'')+weatherLayer()+(R2&&q.id==='taarn'?eerieFront():''); }
   b+=r2Beacons(q.id); $('items').innerHTML=h; $('beacons').innerHTML=b; requestAnimationFrame(placeStar);
   $('prevQ').style.visibility=curQ>0?'visible':'hidden'; $('nextQ').style.visibility=curQ<3?'visible':'hidden';
 }
@@ -1737,7 +1746,7 @@ function canTend(){ return inStell()||!S.active; }
 function grains(e){ for(let i=0;i<8;i++){ const g=document.createElement('i'); g.className='grain'; g.style.left=(e.clientX+(Math.random()-.5)*30)+'px'; g.style.top=(e.clientY-30+Math.random()*10)+'px'; g.style.animationDelay=(i*40)+'ms'; stage.appendChild(g); setTimeout(()=>g.remove(),1400);} }
 function feed(e){
   if(!canTend()){ toast('Dyrene får mat i «Stell»-delen, eller når økten er ferdig.'); return; }
-  if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast('Tomt for høy. Kjøp høy i Basaren (Gård og beite).'); }
+  if((S.feed||0)<=0){ $('shopBtn').classList.add('ping'); return toast(R2?'Tomt for høy. Bytt til deg høy i markedet bak Beitet.':'Tomt for høy. Kjøp høy i Basaren (Gård og beite).'); }
   S.feed--; if(((S.flock.hens||0)||(S.young||[]).some(y=>y.t==='kylling'))&&(S.korn||0)>0&&S.kornDay!==dayStr()){ S.korn--; S.kornDay=dayStr(); toast('Hønene fikk korn',1200); } taskHit('mat'); snd.bleat(); haptic(10); const F=S.flock; F.hunger=Math.min(100,F.hunger+15); F.ts=Date.now(); grains(e); { const sr=stage.getBoundingClientRect(); fxFall(e.clientX-sr.left,e.clientY-sr.top,'#e2c46a',12); } document.querySelectorAll('#items .ani').forEach((g,i)=>setTimeout(()=>bounce(g),120+i*60)); save(); renderSection();
   say(e,rnd(['– sauene','– kua','– flokken']));
   const fl=$('flock'); if(fl){ fl.classList.add('joy'); setTimeout(()=>{ const f2=$('flock'); if(f2) f2.classList.remove('joy'); },1800); }
@@ -2190,7 +2199,7 @@ function openScholar(k){ taskHit('laerd'); const h=HIKMA[k], sk=['#c08a5e','#b07
   <a class="tafl" style="display:inline-block;margin:8px 0 0" href="${h.w}" target="_blank" rel="noopener">Les mer på Wikipedia ↗</a>
   ${kildeNote(true)}
   <button class="btn ghost" id="skB">Tilbake til Visdommens hus</button>`); $('skB').onclick=openHikma; }
-function updHikmaPill(){ const el=$('hikmaPill'); if(!el) return; el.style.display=view==='over'&&!S.active&&!(JABAL&&!hikmaOpen())?'':'none'; const H=hikmaState();
+function updHikmaPill(){ const el=$('hikmaPill'); if(!el) return; if(R2){ el.style.display='none'; return; } el.style.display=view==='over'&&!S.active&&!(JABAL&&!hikmaOpen())?'':'none'; const H=hikmaState();
   el.innerHTML=hikmaOpen()?`<span>📚</span> Visdommens hus${H.n>(H.seen||0)?' <b style="color:var(--gold2)">· ny</b>':''}`:`<span>🌫</span> Noe i tåka · ${Math.min(S.vs,GATE.hikma)}/${GATE.hikma}`;
   el.classList.toggle('ping',hikmaOpen()&&H.n>(H.seen||0)); }
 function kildeNote(kort){ return `<div class="card" style="margin-top:12px;border-color:rgba(231,194,107,.45);background:rgba(231,194,107,.06)"><b style="color:var(--gold2)">📜 Les deg opp selv</b><p style="margin:4px 0 0;font-size:13px;line-height:1.5">${kort?'Tekstene i Rawdah er korte og skrevet med omhu, men de kan inneholde feil og forenklinger. Bruk dem som en døråpner, og les mer om disse menneskene på egen hånd.':'Tekstene om personene og stedene i Rawdah er korte og skrevet med omhu, men de er ikke kontrollert av historikere eller lærde, og de kan inneholde feil og forenklinger. Noen fortellinger bygger på sene eller usikre kilder. Bruk dem som en døråpner, ikke som fasit. Les deg opp på disse menneskene på egen hånd, i gode bøker og hos lærde du stoler på. Wikipedia er et greit sted å begynne, men ikke det beste stedet å slutte. Ser du noe som er feil, si gjerne fra til den som delte appen med deg.'}</p></div>`; }
@@ -2619,7 +2628,7 @@ function finish(refl){
   const rw=a._gain&&a.kind!=='hifz';
   if(rw&&a._rose&&!(view==='sec'&&curQ===QUADS.findIndex(q=>q.id==='roser'))){ const sp=S.sprout; S.sprout=null; renderSection(); S.sprout=sp; } else renderSection();
   renderTop(); barakah(); snd.chime(); sparkle(); if(rw) rewardSeq(a._nur0,a._gain,!!a._rose);
-  if(a.kind!=='hifz'&&hikmaTick()){ msgs.push(hikmaState().n===1?'Visdommens hus har åpnet dørene':'en ny lærd har kommet til Visdommens hus'); updHikmaPill(); }
+  if(a.kind!=='hifz'&&hikmaTick()){ msgs.push(hikmaState().n===1?'Visdommens hus har åpnet dørene':'en ny lærd har kommet til Visdommens hus'); updHikmaPill(); if(R2&&KAHWA&&hikmaState().n===1) setTimeout(baytCall,2600); }
   { const extra=rw?msgs.filter(m=>!/^\+\d+ nur$/.test(m)&&m!=='en ny rose'):msgs; if(extra.length) setTimeout(()=>{ toast(extra.join(' · '),3800); },rw?(a._rose?9800:7400):0); } { const hh=new Date().getHours(); if(hh>=23||hh<4) setTimeout(()=>wellNudge(),5200); } setTimeout(()=>{ checkChapter(); setTimeout(checkRihla,300); setTimeout(()=>{ if(!$('sheet').classList.contains('on')&&!$('intro').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },3000); },rw?(a._rose?6200:3200):0);
 }
 function markDone(){ const t=dayStr(); if(!S.doneDays.includes(t)){ S.streak=S.doneDays.includes(addDays(t,-1))?S.streak+1:1; S.best=Math.max(S.best,S.streak); S.daysTotal=(S.daysTotal||0)+1; S.doneDays.push(t); S.doneDays=S.doneDays.slice(-120);} save(); drawLanterns(); }
@@ -2730,7 +2739,7 @@ function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser')
   if(id==='knopp'){ if(!doneToday()) return taskGo('vers'); return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på knoppen i bedet'); }
   if(id==='dyr') return goTend(QUADS.findIndex(q=>q.id==='beite'),'Trykk på dyret som trenger hjelp');
   if(id==='seed') return goTend(QUADS.findIndex(q=>q.id==='frukt'),'Trykk på «Så et frø»');
-  if(id==='laerd'){ closeSheet(); return setTimeout(()=>{ toOverview(); setTimeout(()=>openHikma(),600); },300); }
+  if(id==='laerd'){ closeSheet(); return setTimeout(()=>{ (R2?goBayt():(toOverview(), setTimeout(()=>openHikma(),600))); },300); }
   if(id==='vers') return doneToday()?toast('Dagens vers er allerede tatt. Kom tilbake i morgen.'):pulse();
   if(id==='ord') return openWord(); if(id==='hifz') return openHifz();
   if(id==='dagbok') return doneToday()?toast('Du skriver en tanke på slutten av neste vers-økt.',3800):pulse();
@@ -2849,10 +2858,53 @@ function lampTap(){ S.lamp={d:dayStr()}; save(); renderSection(); haptic([8,30,8
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">KVELDSLAMPEN</p><h3>Lyset ditt tente lampen hans</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Takk, gjeter. Måtte Allah lyse opp hjertet ditt slik du lyste opp natten min, og gjøre Koranen til lyset i brystet ditt.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p style="font-size:13px;color:var(--muted)">Du mistet ingen nur. Lys blir ikke mindre av å deles.</p><button class="btn" id="lpOk">Āmīn</button>`); $('lpOk').onclick=closeSheet; }
 /* Hærfuglen er postbudet: sitter på hageporten når et brev har kommet */
 let _postShow=null;
-function postLayer(q){ if(q!=='roser'||S.active||!_postShow) return ''; return `<g onclick="event.stopPropagation();postTap()" style="cursor:pointer" transform="translate(320 440) scale(.75)">${hudSvg(0,0).replace('class="hud"','class="hudpost"')}<g transform="translate(22 -4)">${typeof scrollSvg==='function'?scrollSvg(.7):''}</g></g>`; }
-function postTap(){ const f=_postShow; _postShow=null; renderSection(); if(f) f(); }
+function postLayer(q){ if(q!=='roser'||S.active||!_postShow) return ''; return `<g onclick="event.stopPropagation();postTap()" style="cursor:pointer" transform="translate(320 440) scale(.75)">${hudSvg(0,0).replace('class="hud"',`class="hudpost${window._pfly?'':' hfly'}"`)}${(window._pfly=1,'')}<g transform="translate(22 -4)">${typeof scrollSvg==='function'?scrollSvg(.7):''}</g></g>`; }
+function postTap(){ const f=_postShow; _postShow=null; window._pfly=0; renderSection(); if(f) f(); }
 /* Tårnet i skyggen */
 const shadowOp=()=>{ const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length, T=SIGNS.filter(g=>!g.fri).length||1; return Math.max(.25,.85-.6*n/T); };
+
+/* ================= 2.0: BYGG I HORISONTEN ================= */
+const FRI=()=>QUADS.findIndex(x=>x.id==='frukt');
+function suqSvg(){ const lamps=[[128,299],[150,304],[172,307],[228,305],[252,301],[274,297]];
+  return `<g class="hzb" onclick="event.stopPropagation();hzTap('suq')" style="cursor:pointer"><rect x="96" y="248" width="214" height="92" fill="transparent"/>
+  <g class="hzcam">${camel(92,331,.95)}</g><g class="hzcam" style="animation-delay:-2s">${camel(318,329,.8)}</g>
+  <g class="sil"><path d="M120 334 V306 h56 V334Z M224 334 V300 h66 V334Z"/><path d="M176 334 V282 h48 V334Z"/><path d="M182 282 Q182 264 200 257 Q218 264 218 282Z"/><path d="M200 257 v-8"/>${[124,134,144,154,164,228,240,252,264,276].map(x=>`<path d="M${x} ${x<200?306:300} v-4 h6 v4Z"/>`).join('')}</g>
+  <circle cx="200" cy="248" r="2.4" fill="#e7c26b"/>
+  <path d="M192 334 V312 Q192 302 200 299 Q208 302 208 312 V334Z" fill="#ffcf7a" style="fill-opacity:calc(.35 + .35*var(--glow,.5))"/>
+  <path d="M120 306 L178 306 L172 318 L126 318Z" fill="#a8452f"/><path d="M130 306 l-3 12 M142 306 l-2 12 M154 306 v12 M166 306 l2 12" stroke="#efe4cc" stroke-width="2.4" opacity=".75"/>
+  <path d="M222 300 L292 300 L286 314 L228 314Z" fill="#2f5a7a"/><path d="M234 300 l-2 14 M248 300 v14 M262 300 v14 M276 300 l2 14" stroke="#e7c26b" stroke-width="2.4" opacity=".7"/>
+  ${[[134,327],[146,328],[158,326],[238,325],[254,327],[270,326]].map(([x,y],i)=>`<ellipse cx="${x}" cy="${y}" rx="4.5" ry="${i%2?5.5:4}" fill="${['#c08a3e','#8a5a2a','#d9a441'][i%3]}" stroke="#1a1030" stroke-width=".8"/>`).join('')}
+  <path d="M118 296 Q150 310 176 306 M224 304 Q256 304 292 294" stroke="#3a2a1a" stroke-width=".8" fill="none"/>
+  ${lamps.map(([x,y],i)=>`<circle class="hzlamp" style="animation-delay:${(i*.37).toFixed(2)}s" cx="${x}" cy="${y}" r="2.2" fill="#ffd27a"/>`).join('')}
+  <path d="M290 300 V276" stroke="#3a2a1a" stroke-width="1.4"/><path class="hzflag" d="M290 277 l14 4 l-14 4Z" fill="#a8452f"/><path d="M120 306 V284" stroke="#3a2a1a" stroke-width="1.4"/><path class="hzflag" style="animation-delay:-.7s" d="M120 285 l12 4 l-12 4Z" fill="#e7c26b"/>
+  <g class="hzsmk"><circle cx="262" cy="292" r="3" fill="#cfc6b6" opacity=".35"/><circle cx="262" cy="292" r="3" fill="#cfc6b6" opacity=".35" style="animation-delay:-1.3s"/><circle cx="262" cy="292" r="3" fill="#cfc6b6" opacity=".35" style="animation-delay:-2.6s"/></g>
+  </g>`; }
+function baytSvg(){ const open=hikmaOpen(), fresh=open&&tMet()<tAvail(), rev=open&&!S.hzRev;
+  if(rev) setTimeout(()=>{ if(!S.hzRev){ S.hzRev=1; save(); } },200);
+  const win=(x,y)=>`<path class="hzwin${rev?' rev':''}${fresh?' fresh':''}" d="M${x-4} ${y} V${y-10} Q${x} ${y-16} ${x+4} ${y-10} V${y}Z" fill="${open?'#ffcf7a':'#2a2440'}" style="fill-opacity:${open?'calc(.55 + .4*var(--glow,.5))':'1'}"/>`;
+  const fog=(cls,op)=>`<g class="hzfog ${cls}" style="pointer-events:none">${[[150,316,90,22,'fl'],[250,312,96,24,'fr'],[196,290,80,30,'fl'],[216,262,70,26,'fr'],[178,330,120,16,'fr'],[260,244,40,22,'fl']].map(([x,y,rx,ry,c])=>`<ellipse class="${c}" cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#8f8ca6" opacity="${op}"/>`).join('')}</g>`;
+  return `<g class="hzb" onclick="event.stopPropagation();hzTap('bayt')" style="cursor:pointer"><rect x="130" y="210" width="150" height="128" fill="transparent"/>
+  <g class="sil"><path d="M146 334 V292 h98 V334Z"/><path d="M158 292 V278 h74 V292Z"/><path d="M162 278 Q162 246 195 236 Q228 246 228 278Z"/><path d="M195 236 v-10"/><path d="M146 292 Q146 280 156 276 Q166 280 166 292Z M224 292 Q224 280 234 276 Q244 280 244 292Z"/>
+  <path d="M248 334 V244 h14 V334Z"/><path d="M246 244 Q246 230 255 226 Q264 230 264 244Z"/><path d="M134 334 V304 h12 V334Z"/></g>
+  <path d="M188 226 q7 -6 0 -10 q10 4 0 10Z" fill="#e7c26b"/>
+  <g class="hzarm" style="transform-origin:255px 220px"><ellipse cx="255" cy="220" rx="9" ry="3.4" fill="none" stroke="#e7c26b" stroke-width="1"/><ellipse cx="255" cy="220" rx="3.4" ry="9" fill="none" stroke="#e7c26b" stroke-width=".8"/></g><path d="M255 226 v4" stroke="#e7c26b"/>
+  ${win(160,326)+win(176,326)+win(214,326)+win(230,326)+win(255,270)+win(255,300)}
+  <path d="M189 334 V314 Q189 304 195 301 Q201 304 201 314 V334Z" fill="${open?'#ffcf7a':'#1a1530'}" style="fill-opacity:${open?'.7':'1'}"/>
+  ${!open?fog('',.5)+fog('',.35):rev?fog('part',.5)+fog('part',.35):''}
+  </g>`; }
+function hzLayer(q){ if(!R2) return ''; if(q==='beite') return suqSvg(); if(q==='frukt') return baytSvg(); return ''; }
+function hzTap(k){ if(S.active) return toast('Fullfør økten først');
+  if(k==='suq'){ if(!unl('basar')) return toast(`Markedet åpner etter ${GATE.basar} økt${GATE.basar>1?'er':''}`,2600); if(!S.suqOk){ S.suqOk=1; save(); return suqIntro(); } return openShop('gard'); }
+  if(k==='bayt'){ if(hikmaOpen()) return openHikma();
+    openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🌫 I TÅKA</p><h3>Noe venter der inne</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Et hus med en kuppel og et tårn mot stjernene. Jeg har ikke sett det klart på mange år. Fortsett med versene dine, så letter tåka, in shā' Allāh.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><button class="btn" id="fgOk">Fint</button>`); $('fgOk').onclick=closeSheet; S.fogTap=1; save(); } }
+function suqIntro(){ const i=QUADS.findIndex(x=>x.id==='beite'); tourRun([
+  {q:'beite',svg:[205,296,210,96],zoom:1.9,w:1,k:'MARKEDET',t:'Suqen er åpen',d:'«Her bytter folk det de har: melk for korn, ull for frø. Ingen nur skifter hender her. Lyset ditt er ikke til salgs.»'},
+  {q:'beite',svg:[205,296,210,96],zoom:1.9,w:1,last:'Til markedet',k:'VISMANNEN',t:'Vær raus når du handler',d:'«Profeten ﷺ sa: Må Allah vise barmhjertighet mot den som er raus når han selger, når han kjøper og når han krever inn det han har til gode.» <span style="font-size:12px;color:var(--muted)">(Bukhari 2076)</span>'}],()=>setTimeout(()=>openShop('gard'),300)); }
+function goBayt(){ closeSheet(); setTimeout(()=>{ enterQuad(FRI()); renderAll(); setTimeout(()=>{ if(!S.active&&!sheetBusy()&&hikmaOpen()) openHikma(); },3000); },300); }
+function baytCall(){ const F=isF()?'gjeterinne':'gjeter';
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Tåka har lettet</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Ser du, ${F}? Tåka har lettet over Frukthagen. Der står et hus jeg ikke har sett på mange år, og det lyser i et vindu. Kom, så går vi dit.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><button class="btn" id="bcGo">Gå dit</button><button class="btn ghost" id="bcL">Senere</button>`);
+  $('bcGo').onclick=goBayt; $('bcL').onclick=()=>{ closeSheet(); toast('Huset står bak Frukthagen.',3000); }; }
+const HZTXT=()=>R2?'Huset står bak Frukthagen.':'Huset i tåka finner du nede til høyre i oversikten.';
 
 /* ---- Beitet: et skikkelig beite ---- */
 function pasSlots(){ const c=SLOTS.filter(s=>s.y>470&&s.y<(R2?690:720)&&(!R2||Math.abs(s.x-195)>34&&s.x<350)).sort((a,b)=>a.y-b.y||a.x-b.x); if(!R2) return c; const n=c.length; if(n<3) return c; let st=Math.max(1,Math.round(n*.618)); const g=(a,b)=>b?g(b,a%b):a; while(g(st,n)!==1) st++; const o=[], used=[]; for(let i=0;i<n;i++){ const s=c[(i*st)%n]; if(used.some(u=>Math.hypot(u.x-s.x,(u.y-s.y)*1.6)<38)&&i<n*0.7) { o.push(null); continue; } used.push(s); o.push(s); } const out=o.filter(Boolean); c.forEach(s=>{ if(!out.includes(s)) out.push(s); }); return out; }
@@ -2877,16 +2929,27 @@ function eerieBack(){ const o=shadowOp(), n=skyKey==='natt';
   <rect width="390" height="760" fill="#0b0f18" opacity="${(.7*o+.12).toFixed(2)}"/>
   <circle cx="200" cy="300" r="120" fill="url(#eeM)" opacity="${(.5*o).toFixed(2)}"/><circle cx="200" cy="300" r="22" fill="#dfe8ea" opacity="${(.55*o).toFixed(2)}"/><circle cx="208" cy="294" r="20" fill="#0d1020" opacity="${(.5*o).toFixed(2)}"/>
   ${[[38,520,1.1],[350,500,1],[70,660,1.4],[330,690,1.3]].map(([x,y,sc],i)=>`<g transform="translate(${x} ${y}) scale(${sc})" opacity="${(.6+.4*o).toFixed(2)}"><path d="M0 0 V-70 M0 -40 l-18 -16 l-6 -12 M-18 -56 l-10 -2 M0 -52 l16 -18 l4 -12 M16 -70 l10 -4 M0 -66 l-8 -14 M0 -24 l12 -10" stroke="#07070d" stroke-width="${i%2?3:3.6}" stroke-linecap="round" fill="none"/><path d="M-6 0 Q0 -4 6 0" stroke="#07070d" stroke-width="5"/></g>`).join('')}`; }
-function towerR2(){ const o=shadowOp();
-  return `<g><ellipse cx="195" cy="702" rx="78" ry="10" fill="rgba(0,0,0,.55)"/>
-  <path d="M158 700 V470 L150 462 V420 L164 412 V330 L172 318 L178 330 L186 300 L194 316 L200 296 L208 322 L216 310 L226 336 V412 L240 420 V462 L232 470 V700Z" fill="#0b0a14" stroke="#4a4c60" stroke-opacity=".55" stroke-width="1.2"/>
-  <path d="M172 360 l8 22 l-6 18 M214 450 l-10 26 l8 20 M180 560 l12 18 l-4 24" stroke="#2a2c3c" stroke-width="1.2" fill="none"/>
-  ${[[195,360],[182,440],[208,440],[195,520],[195,600]].map(([x,y],i)=>`<path d="M${x-7} ${y} V${y-12} Q${x} ${y-22} ${x+7} ${y-12} V${y}Z" fill="#030308" stroke="#2a2c3c" stroke-width=".8"/>`).join('')}
-  <path d="M150 462 Q170 520 160 600 Q176 650 166 700 M232 470 Q218 540 230 620" stroke="#1d2a1e" stroke-width="3" fill="none" opacity=".9"/>
-  ${[[168,318,1],[214,312,.9],[236,418,1.1],[152,420,.8]].map(([x,y,s],i)=>`<g class="ecrow" style="animation-delay:${i*1.3}s" transform="translate(${x} ${y}) scale(${s})"><path d="M-6 0 Q-4 -7 2 -6 L7 -9 L5 -4 Q7 1 2 2 L-2 2 L-8 4Z" fill="#050508"/></g>`).join('')}
+function towerR2(){ const o=shadowOp(), st='stroke="#3c4054" stroke-width="1.1"';
+  return `<g><ellipse cx="195" cy="704" rx="70" ry="9" fill="rgba(0,0,0,.55)"/>
+  <path d="M146 702 V566 H244 V702Z" fill="#0c0b15" ${st}/><path d="M146 600 H244 M146 636 H244 M146 670 H244" stroke="#1c1d2a" stroke-width="1"/>
+  <path d="M184 702 V672 Q184 658 195 654 Q206 658 206 672 V702Z" fill="#030308" stroke="#2a2c3c"/>
+  <path d="M140 566 H250 L246 558 H144Z" fill="#14131f" ${st}/>
+  <path d="M160 558 V424 H230 V558Z" fill="#0b0a14" ${st}/><path d="M176 558 V424 M214 558 V424" stroke="#1a1b28" stroke-width="1.2"/>
+  <path d="M154 424 H236 L232 416 H158Z" fill="#14131f" ${st}/>
+  <path d="M174 416 V334 H216 V416Z" fill="#0a0912" ${st}/>
+  <path d="M164 334 H226 V328 H164Z" fill="#14131f" ${st}/>${[168,176,184,192,200,208,216,222].map(x=>`<path d="M${x} 328 v-8" stroke="#2a2c3c" stroke-width="1.4"/>`).join('')}<path d="M164 320 H226" stroke="#2a2c3c" stroke-width="1.2"/>
+  <defs><linearGradient id="manG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2232"/><stop offset="1" stop-color="#070a12"/></linearGradient></defs>
+  <path d="M181 328 V292 H209 V328Z" fill="url(#manG)" stroke="#4a4c60" stroke-width="1"/><path d="M190 292 V328 M200 292 V328 M181 310 H209" stroke="#2e3244" stroke-width="1"/>
+  <path class="manglint" d="M184 296 l4 0 l-2 10Z" fill="#9fb4c2" opacity=".25"/>
+  <path d="M177 292 Q177 270 195 262 Q213 270 213 292Z" fill="#0b0a14" ${st}/><path d="M195 262 v-12" stroke="#4a4c60" stroke-width="1.4"/><path d="M190 250 q6 -5 0 -9 q9 3 0 9Z" fill="#5a5e70"/>
+  ${[[186,380],[204,380],[195,470],[195,520]].map(([x,y])=>`<path d="M${x-5} ${y} V${y-10} Q${x} ${y-16} ${x+5} ${y-10} V${y}Z" fill="#030308" stroke="#2a2c3c" stroke-width=".8"/>`).join('')}
+  <path d="M168 440 l10 24 l-6 20 M222 590 l-12 22 l6 22 M180 350 l6 14" stroke="#262838" stroke-width="1.2" fill="none"/>
+  <path d="M146 566 Q160 610 152 660 Q162 690 156 702 M244 566 Q232 620 240 702 M160 424 Q170 480 164 540" stroke="#1d2a1e" stroke-width="2.6" fill="none" opacity=".85"/>
+  ${[[150,556,.9],[236,556,1],[162,414,.8],[226,414,.9],[208,322,.75]].map(([x,y,s2],i)=>`<g class="ecrow" style="animation-delay:${i*1.1}s" transform="translate(${x} ${y}) scale(${s2})"><path d="M-6 0 Q-4 -7 2 -6 L7 -9 L5 -4 Q7 1 2 2 L-2 2 L-8 4Z" fill="#050508"/></g>`).join('')}
+  <g class="ecirc"><path d="M255 300 q5 -4 10 0 q5 -4 10 0" stroke="#08080d" stroke-width="2" fill="none"/></g><g class="ecirc b"><path d="M120 280 q4 -3 8 0 q4 -3 8 0" stroke="#08080d" stroke-width="1.8" fill="none"/></g>
   </g>`; }
 function eerieFront(){ const o=shadowOp();
-  return `<g style="pointer-events:none" opacity="${(.35+.65*o).toFixed(2)}"><g class="efog f1"><ellipse cx="120" cy="640" rx="200" ry="34" fill="#9aa8b8" opacity=".16"/><ellipse cx="330" cy="700" rx="180" ry="28" fill="#9aa8b8" opacity=".14"/></g><g class="efog f2"><ellipse cx="260" cy="560" rx="220" ry="26" fill="#b4c0cc" opacity=".1"/><ellipse cx="40" cy="720" rx="160" ry="30" fill="#9aa8b8" opacity=".18"/></g><rect width="390" height="760" fill="url(#eeV)"/></g>`; }
+  return `<g style="pointer-events:none" opacity="${(.45+.55*o).toFixed(2)}"><g class="efog f2"><ellipse cx="195" cy="470" rx="260" ry="70" fill="#8f9cae" opacity=".2"/><ellipse cx="80" cy="400" rx="170" ry="40" fill="#a2adbd" opacity=".16"/><ellipse cx="320" cy="430" rx="170" ry="46" fill="#a2adbd" opacity=".16"/></g><g class="efog f1"><ellipse cx="195" cy="560" rx="270" ry="80" fill="#8f9cae" opacity=".26"/><ellipse cx="195" cy="660" rx="260" ry="90" fill="#9aa8b8" opacity=".3"/><ellipse cx="195" cy="360" rx="150" ry="26" fill="#b4c0cc" opacity=".12"/></g><g class="efog f1"><ellipse cx="120" cy="640" rx="200" ry="34" fill="#9aa8b8" opacity=".16"/><ellipse cx="330" cy="700" rx="180" ry="28" fill="#9aa8b8" opacity=".14"/></g><g class="efog f2"><ellipse cx="260" cy="560" rx="220" ry="26" fill="#b4c0cc" opacity=".1"/><ellipse cx="40" cy="720" rx="160" ry="30" fill="#9aa8b8" opacity=".18"/></g><rect width="390" height="760" fill="url(#eeV)"/></g>`; }
 function towerShadow(){ return `<defs><radialGradient id="tShG" cx=".5" cy=".55" r=".55"><stop offset="0" stop-color="#05040f" stop-opacity=".95"/><stop offset=".7" stop-color="#0b0920" stop-opacity=".7"/><stop offset="1" stop-color="#0b0920" stop-opacity="0"/></radialGradient></defs><g class="tshadow" style="opacity:${shadowOp().toFixed(2)};pointer-events:none"><ellipse cx="180" cy="470" rx="150" ry="250" fill="url(#tShG)"/></g>`; }
 function towerInfo(){ const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length;
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">LYSETS TÅRN · I SKYGGEN</p><h3>Tårnet sover</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Hver gang du finner et av tegnene fra Koranens fortellinger, letter skyggen litt. En dag skal lyset tennes her igjen, in shā' Allāh.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p>Tegn funnet: <b style="color:var(--gold2)">${n}</b>. Tegnene dukker opp her i tårnhagen når vismannen har sett dem.</p><p style="font-size:12.5px;color:var(--muted)">🚧 Lysets tårn er under arbeid og åpner i en senere versjon.</p><button class="btn" id="tiOk">Fint</button>`); $('tiOk').onclick=closeSheet; }
@@ -2899,7 +2962,9 @@ function r2Beacons(q){ if(!R2||S.active||busy) return ''; let b='';
   if(q==='roser'){ const bi=S.roses.findIndex(p=>p.bud), sl=bi>=0&&SLOTS[S.roses[bi].s]; if(sl) b+=beacon(sl.x,sl.y-50*sl.sc,'Vann knoppen'); const D=S.droop; if(D&&D.i>=0&&!D.done&&S.roses[D.i]){ const s2=SLOTS[S.roses[D.i].s]; if(s2) b+=beacon(s2.x,s2.y-50*s2.sc,'En rose henger med hodet'); } if(_postShow) b+=beacon(320,404,'Hærfuglen har med et brev'); if(lampDue()) b+=beacon(82,458,'Lampen hans har sluknet',-20); }
   if(q==='beite'&&S.animal&&!S.animal.done&&restored('beite')) b+=beacon(300,596,ANIMAL_EV[S.animal.e].txt.split(' ').slice(0,4).join(' ')+' …');
   if(q==='frukt'&&restored('frukt')&&S.seeds>0&&S.fruit.length<12) b+=beacon(195,670,'Så et frø');
-  if(q==='taarn') b+=beacon(180,600,'I skyggen',-24);
+  if(q==='taarn') b+=beacon(150,640,'I skyggen',-24);
+  if(q==='beite'&&!S.suqOk&&unl('basar')) b+=beacon(205,246,'Markedet',-12);
+  if(q==='frukt'){ if(hikmaOpen()&&tMet()<tAvail()) b+=beacon(195,206,tMet()?'En ny lærd har kommet':'Visdommens hus',-12); else if(!hikmaOpen()&&!S.fogTap) b+=beacon(195,214,'Noe i tåka',-12); }
   return b; }
 
 /* ================= VISMANNENS OMVISNING DAG 0 ================= */
@@ -2938,6 +3003,8 @@ function tour0(){ const q=id=>QUADS.findIndex(x=>x.id===id), F=isF()?'gjeterinne
    {q:'roser',el:'#taskPill',if:()=>$('taskPill').style.display!=='none',pad:6,w:1,k:'DAGENS OPPGAVER',t:'Tre små ting hver dag',d:W('Den viktigste står alltid øverst: dagens vers. Nederst står dagens gode gjerning. Den er mellom deg og Allah.')},
    {q:'roser',el:'#bellBtn',if:()=>$('bellBtn')&&$('bellBtn').style.display!=='none',pad:6,w:1,k:'BJELLA',t:'Meldinger',d:W('Har du gått glipp av noe, ligger det her.')},
    {q:'beite',svg:[180,620,220,160],zoom:1.6,w:1,k:'BEITET',t:'Her gikk dyrene',d:W('Her beitet flokkene en gang. Nå er det bare ruiner og bålet ditt. Dyrene kommer tilbake når hagen får liv igjen. Og trykker du på deg selv, viser jeg deg hva du kan gjøre.')},
+   {q:'beite',if:()=>R2,svg:[205,296,210,96],zoom:1.8,w:1,k:'MARKEDET',t:'Suqen bak beitet',d:W('Der borte er markedet. Der bytter du det hagen gir, melk, ull og frukt, mot det dyrene og hagen trenger.')},
+   {q:'frukt',if:()=>R2,svg:[200,290,200,120],zoom:1.7,w:1,k:'I TÅKA',t:'Noe bak Frukthagen',d:W('Og der, i tåka … det har stått et hus der en gang. Vi får se om tåka letter.')},
    {q:'frukt',svg:[195,560,280,200],zoom:1.4,w:1,k:'FRUKTHAGEN',t:'Trær som bar kunnskap',d:W('Her vokste trær som bar frukt av kunnskap. En dag skal du høste her igjen, in shā\' Allāh.')},
    {q:'taarn',center:1,w:1,k:'LYSETS TÅRN',t:'Tårnet',d:W('Du lurte på tårnet. La meg fortelle deg hva det var.'),btn:'Fortell'},
    {q:'taarn',pre:towerFlashback,svg:[180,500,170,240],zoom:1.6,w:1,k:'LYSETS TÅRN',t:'Slik står det nå',d:W('Mørkt. Stille. Men steinene står fortsatt.')},
@@ -2994,17 +3061,17 @@ function tourMain(){ const ri=QUADS.findIndex(q=>q.id==='roser'); if(curQ!==ri||
     {svg:[195,560,300,260],zoom:1,pad:0,k:'HAGEN',t:'Gjør hagen levende igjen',d:'Stell skjer inne i vers-økten: etter at du har lyttet og lært, får du rydde, vanne og gi mat. Se etter de små <b>lysende prikkene</b> i hagen. De viser hvor du kan trykke.',last:'Bismillāh!'}
   ].filter(Boolean),()=>{ S.tour1=1; save(); }),500); }
 const QTOUR={
-  taarn:()=>[{svg:[180,560,150,170],zoom:1.8,k:'LYSETS TÅRN',t:'Her lærer du utenat',d:'Lysets tårn er for hifz. Du velger en surah, og lærer den vers for vers. Hvert vers du kan, tenner et vindu i tårnet og planter en sypress rundt det. Appen minner deg på å repetere før du glemmer.'+lockTxt('hifz')}],
-  beite:()=>restored('beite')?[{svg:[230,560,260,180],zoom:1.5,k:'BEITET',t:'Dyrene er tilbake',d:'Gi dyrene mat i stell-delen av økten, ellers blir de sultne. Mette dyr får unger, og de gir melk og ull du kan selge i Basaren.'}]
+  taarn:()=>R2?[{svg:[195,330,140,140],zoom:1.7,w:1,k:'LYSETS TÅRN',t:'Manāraen sover',d:'«Tåka ligger tett rundt tårnet. Hver gang du finner et av tegnene fra Koranens fortellinger, letter den litt. En dag skal lykta der oppe lyse igjen.»'}]:[{svg:[180,560,150,170],zoom:1.8,k:'LYSETS TÅRN',t:'Her lærer du utenat',d:'Lysets tårn er for hifz. Du velger en surah, og lærer den vers for vers. Hvert vers du kan, tenner et vindu i tårnet og planter en sypress rundt det. Appen minner deg på å repetere før du glemmer.'+lockTxt('hifz')}],
+  beite:()=>restored('beite')?[{svg:[230,560,260,180],zoom:1.5,k:'BEITET',t:'Dyrene er tilbake',d:R2?'Trykk på dyrene for å gi dem mat, ellers blir de sultne. Mette dyr får unger og gir melk, ull og egg. Det bytter du i markedet bak beitet.':'Gi dyrene mat i stell-delen av økten, ellers blir de sultne. Mette dyr får unger, og de gir melk og ull du kan selge i Basaren.'}]
     :[{svg:[180,640,180,120],zoom:1.9,k:'BEITET',t:'Beitet ligger i ruiner',d:`Her ved bålet er deg, gjeter${isF()?'innen':'en'}. Etter ${AT.beite} vers-økter kommer dyrene tilbake (${Math.min(S.vs,AT.beite)}/${AT.beite}). Trykker du på deg selv, får du hjelp med dagens oppgaver.`}],
-  frukt:()=>[{svg:[195,560,280,200],zoom:1.5,k:'FRUKTHAGEN',t:restored('frukt')?'Trær som bærer frukt':'Frukthagen venter',d:restored('frukt')?'Nye trær plantes etter hvert som du gjør økter. Når frukten er moden, trykker du for å høste den og får nur.':`Etter ${AT.frukt} vers-økter kan de første trærne plantes her (${Math.min(S.vs,AT.frukt)}/${AT.frukt}). Til da er det bare ruiner og håp.`}]};
+  frukt:()=>[{svg:[195,560,280,200],zoom:1.5,k:'FRUKTHAGEN',t:restored('frukt')?'Trær som bærer frukt':'Frukthagen venter',d:restored('frukt')?(R2?'Når frukten er moden, trykker du for å høste et kort: daddel gir hadith, oliven Allahs navn, granateple duʿāʾ og druer fortellinger. Kortene samles i Lær.':'Nye trær plantes etter hvert som du gjør økter. Når frukten er moden, trykker du for å høste den og får nur.'):`Etter ${AT.frukt} vers-økter kan de første trærne plantes her (${Math.min(S.vs,AT.frukt)}/${AT.frukt}). Til da er det bare ruiner og håp.`}]};
 let _tourT=0;
 function tourCheck(){ if(S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
   if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<3200) return; _tourT=0;
   if(!S.tour1){ S.tour1=1; save(); return; }
-  if(R2&&S.vs>=1&&!S.starNudge&&view==='sec'){ S.starNudge=1; save(); const F=isF()?'gjeterinne':'gjeter', st='#beacons .bstar';
-    return tourRun([{q:'roser',el:()=>document.querySelector(st),if:()=>!!document.querySelector(st),pad:14,round:40,w:1,k:'VISMANNEN',t:'Stjernen lyser fortsatt',d:`«Ser du, ${F}? Stjernen lyser fortsatt. Den går ikke noe sted. I morgen har den et nytt vers til deg.»`},
-      {q:'roser',center:1,w:1,last:1,k:'VISMANNEN',t:'Litt hver dag',d:'«Profeten ﷺ sa: Den kjæreste handlingen for Allah er den som gjøres jevnlig, selv om den er liten.» <span style="font-size:12px;color:var(--muted)">(Bukhari 6464, Muslim 783)</span>'}]); }
+  if(R2&&S.vs>=1&&!S.starNudge&&view==='sec'&&QUADS[curQ].id==='roser'&&document.querySelector('#beacons .bstar')){ S.starNudge=1; save(); const F=isF()?'gjeterinne':'gjeter', st='#beacons .bstar';
+    return tourRun([{q:'roser',el:()=>document.querySelector(st),pad:14,round:40,w:1,k:'VISMANNEN',t:'Stjernen lyser fortsatt',d:`«Ser du, ${F}? Stjernen lyser fortsatt. Den går ikke noe sted. I morgen har den et nytt vers til deg.»`},
+      {q:'roser',center:1,w:1,last:'Fint',k:'VISMANNEN',t:'Litt hver dag',d:'«Profeten ﷺ sa: Den kjæreste handlingen for Allah er den som gjøres jevnlig, selv om den er liten.» <span style="font-size:12px;color:var(--muted)">(Bukhari 6464, Muslim 783)</span>'}]); }
   if(view!=='sec') return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
 setInterval(tourCheck,700);
 
@@ -3956,7 +4023,7 @@ function automationHTML(url){
 /* ================= START ================= */
 const NURLV=[[0,'Glød'],[40,'Talglys'],[120,'Lampe'],[260,'Lykt'],[480,'Fakkel'],[800,'Fullmåne'],[1300,'Morgenrøde']];
 function nurLv(n){ n=n==null?S.nur:n; let i=0; NURLV.forEach((l,k)=>{ if(n>=l[0]) i=k; }); return i; }
-function renderTop(){ if(R2){ $('bookLbl').textContent='Dagbok'; { const l=$('shopBtn').querySelector('.ibl'); if(l) l.textContent='Marked'; } const i=nurLv(); $('nur').textContent=S.nur; if(!$('nurLv')) $('nurChip').innerHTML='<b id="rest">0%</b> · ✦ <b id="nurLv"></b><b id="nur" hidden>0</b>'; $('nurLv').textContent=NURLV[i][1]; if(S.nurLv!=null&&i>S.nurLv){ S.nurLv=i; save(); setTimeout(()=>toast(`Lyset ditt har vokst: ${NURLV[i][1]} ✦`,3600),1200); } else if(S.nurLv==null){ S.nurLv=i; save(); } } $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
+function renderTop(){ if(R2){ document.body.classList.add('r2'); $('bookLbl').textContent='Dagbok'; { const l=$('shopBtn').querySelector('.ibl'); if(l) l.textContent='Marked'; } const i=nurLv(); $('nur').textContent=S.nur; if(!$('nurLv')) $('nurChip').innerHTML='<b id="rest">0%</b> · ✦ <b id="nurLv"></b><b id="nur" hidden>0</b>'; $('nurLv').textContent=NURLV[i][1]; if(S.nurLv!=null&&i>S.nurLv){ S.nurLv=i; save(); setTimeout(()=>toast(`Lyset ditt har vokst: ${NURLV[i][1]} ✦`,3600),1200); } else if(S.nurLv==null){ S.nurLv=i; save(); } } $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
 function renderAll(){ updateGates(); updHikmaPill(); if(KAHWA) $('kahwaBtn').style.display=S.active?'none':''; if(JABAL) updJabalBtn(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
 stage.classList.toggle('showtl',!!S.settings.tl); $('aTl').classList.toggle('on',!!S.settings.tl); $('qTlB').classList.toggle('on',!!S.settings.tl);
 S.farm=S.farm||{fence:0,stall:false,trau:false}; S.young=S.young||[]; S.korn=S.korn??0; S.fiskemat=S.fiskemat??5; S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
@@ -4051,7 +4118,7 @@ function scholarCard(si,score,nq){ const id=TSCH()[si], h=HIKMA.find(x=>x.id===i
   $('scOut').onclick=()=>baytExit(()=>afterBayt(si)); }
 function afterBayt(si){ renderAll&&renderAll(); if(KAHWA&&si===0&&!kt().k2) setTimeout(()=>{ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Lyset tennes igjen …</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Se dit. Det lyser i huset igjen, i et annet vindu. Jeg tror noen nye har kommet. Skal vi gå tilbake?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><button class="btn" id="k2Go">Ja, vi går tilbake</button><button class="btn ghost" id="k2L">Senere</button>`);
     const go=()=>{ kt().k2=1; save(); openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🧪 BARE I TESTEN</p><h3>To lærde med en gang</h3><p>Fordi dette er en testversjon, får du møte to lærde nesten på rad, så du ser hva Visdommens hus kan.</p><div class="card"><p style="margin:0;font-size:14px">I den ekte appen tar det lengre tid: én ny lærd kommer omtrent én gang i uka, når du holder deg til versene. Til sammen er det 16.</p></div><button class="btn" id="k2B">Gå til huset</button>`); $('k2B').onclick=()=>{ closeSheet(); setTimeout(()=>openHikma(),300); }; };
-    $('k2Go').onclick=go; $('k2L').onclick=()=>{ kt().k2=1; save(); closeSheet(); toast('Huset finner du nede til høyre i oversikten',3000); }; },1800); }
+    $('k2Go').onclick=go; $('k2L').onclick=()=>{ kt().k2=1; save(); closeSheet(); toast(HZTXT(),3000); }; },1800); }
 function kBayt(step=0,qi=0,score=0,si=null){ if(si==null) si=tMet(); si=Math.min(si,TSCH().length-1); const id=TSCH()[si], C=SCH[id], Q=C.quiz();
   if(step===0){ return baytScene('test',()=>kBayt(2,0,0,si),si); }
   if(step===2){ const [q,opts,ok,ex]=Q[qi]; openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VERKSTEDET · SPØRSMÅL ${qi+1} AV ${Q.length}</p><h3>${esc(C.qt)}</h3><div class="card" style="display:flex;gap:10px;align-items:center">${khwFig(si)}<div style="flex:1"><div class="kbub2" id="khwT">${esc(qi===0?C.q0:C.qn)}</div></div></div>
@@ -4138,7 +4205,7 @@ function jCaveNudge(){ if(!JABAL||S.active||(S.signs||{}).hund) return false; co
   if($('cvGo')) $('cvGo').onclick=()=>{ closeSheet(); setTimeout(()=>enterQuad(bi),50); }; $('cvOk').onclick=closeSheet; return true; }
 function jQueue(){ if(!JABAL) return false; if(!jt().welcome){ jWelcome(); return true; } const q=jt().q||[]; if(!q.length) return jCaveNudge(); const k=q.shift(); jt().q=q; save();
   setTimeout(()=>({teaser:jTeaser,finale:jFinale,lys:jLys})[k]&&({teaser:jTeaser,finale:jFinale,lys:jLys})[k](),500); return true; }
-function jLys(){ const n=SCH[TSCH()[tAvail()-1]]; openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Det lyser i huset igjen …</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«I natt så jeg lys i et nytt vindu i huset i tåka. Noen har kommet. Skal vi gå og se?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><button class="btn" id="jlGo">Ja, vi går</button><button class="btn ghost" id="jlL">Senere</button>`); $('jlGo').onclick=()=>{ closeSheet(); toOverview(); setTimeout(()=>openHikma(),600); }; $('jlL').onclick=()=>{ closeSheet(); toast('Huset i tåka finner du nede til høyre i oversikten.',3600); }; }
+function jLys(){ const n=SCH[TSCH()[tAvail()-1]]; openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Det lyser i huset igjen …</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«I natt så jeg lys i et nytt vindu i huset i tåka. Noen har kommet. Skal vi gå og se?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><button class="btn" id="jlGo">Ja, vi går</button><button class="btn ghost" id="jlL">Senere</button>`); $('jlGo').onclick=()=>{ closeSheet(); (R2?goBayt():(toOverview(), setTimeout(()=>openHikma(),600))); }; $('jlL').onclick=()=>{ closeSheet(); toast(HZTXT(),3600); }; }
 function updJabalBtn(){ const b=$('jabalBtn'); if(!b||!JABAL) return; b.style.display=S.active?'none':''; const d=Math.min(jDay(),7); b.innerHTML=`⛰️ Dag ${d}/7${d>=7?' ✓':''}`; const dv=$('devBtn'); if(dv) dv.style.display=JABAL.dev&&!S.active?'':'none'; }
 function jWelcome(){ jt().welcome=1; save();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">⛰️ RAWDAH JABAL · 7-DAGERS TEST</p><h3>Velkommen, ${esc(JABAL.who||'')}!</h3>
@@ -4173,9 +4240,9 @@ function openJabal(){ const d=jDay(), nsg=SIGNS.filter(g=>!g.fri&&!g.bonus&&(S.s
     $('jbSkip').onclick=()=>{ if(!doneToday()&&!confirm('Du har ikke tatt dagens vers. Da teller ikke denne dagen. Hoppe likevel?')) return; jJump(1); };
     $('jbReset').onclick=()=>{ if(!confirm('Slette all fremgang og starte helt fra begynnelsen?')) return; if(TCFG&&TCFG.notes&&nList().length&&confirm('Slette alle notatene i «?» også?')) localStorage.removeItem('rawdah_notes_'+TCFG.name); localStorage.removeItem(KEY); localStorage.removeItem('jabal_'+JABAL.name+'_off'); location.reload(); }; } }
 function jTeaser(){ jt().baytOpen=1; save(); updHikmaPill(); const lib=wiseIcon();
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Jeg så noe i tåka …</h3><div class="card mod">${lib}<div style="flex:1"><p style="margin:0;font-style:italic">«Da jeg gikk tur bak hagemuren i går, så jeg noe stort og skyggelagt i tåka. Et hus, tror jeg, med en kuppel og lys i ett vindu. Det er på tide at du ser det selv. Skal vi ta en tur og sjekke?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– ${esc(keeper())}</p></div></div>
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Jeg så noe i tåka …</h3><div class="card mod">${lib}<div style="flex:1"><p style="margin:0;font-style:italic">«Da jeg gikk tur bak ${R2?'Frukthagen':'hagemuren'} i går, så jeg noe stort og skyggelagt i tåka. Et hus, tror jeg, med en kuppel og lys i ett vindu. Det er på tide at du ser det selv. Skal vi ta en tur og sjekke?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– ${esc(keeper())}</p></div></div>
   <button class="btn" id="jtGo">Ta en tur og sjekk</button><button class="btn ghost" id="jtL">Senere</button>`);
-  $('jtGo').onclick=()=>{ jt().baytOpen=1; save(); updHikmaPill(); toOverview(); setTimeout(()=>openHikma(),600); }; $('jtL').onclick=()=>{ jt().baytOpen=1; save(); updHikmaPill(); closeSheet(); toast('Huset i tåka finner du nede til høyre i oversikten.',3600); }; }
+  $('jtGo').onclick=()=>{ jt().baytOpen=1; save(); updHikmaPill(); (R2?goBayt():(toOverview(), setTimeout(()=>openHikma(),600))); }; $('jtL').onclick=()=>{ jt().baytOpen=1; save(); updHikmaPill(); closeSheet(); toast(HZTXT(),3600); }; }
 function jFinale(){ snd.chime([523,659,784,1047,1319],.07); sparkle(); jt().finale=1; save();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">⛰️ 7 DAGER</p><h3>Mashallah, du klarte hele uka!</h3>
   <p>Du har fullført dagens vers 7 dager. Hærfuglen kom hjem med et siste brev, og det ligger i Samling → Rihla.</p>
