@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.KAHWA={"name": "light", "who": "Ibrahim", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "resetv": 2, "build": "bygg 27.11.2026 · cc0ea35"};(function(){var k="rawdah_resetv_light",v="2";if(localStorage.getItem(k)!==v){["rawdah_kahwa_light","kahwa_light_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("kahwa_light_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.KAHWA={"name": "light", "who": "Ibrahim", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "resetv": 2, "build": "bygg 27.11.2026 · 3190826"};(function(){var k="rawdah_resetv_light",v="2";if(localStorage.getItem(k)!==v){["rawdah_kahwa_light","kahwa_light_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("kahwa_light_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1519,7 +1519,7 @@ function renderSection(){
   if(ok && canTend() && fountainOK() && S.watered[q.id]!==dayStr()) b+=beacon(195,650,'Vann fra elven',28);
   else if(canTend()&&fountainOK()&&S.fishFed!==dayStr()&&(S.fiskemat||0)>0&&q.id==='roser') b+=beacon(195,560,'Gi fiskene mat',28);
   if(ok && !S.active && countDamage(q.id)) b+=beacon(195,470,doneToday()?`${countDamage(q.id)} skadet · tawbah i morgen`:`${countDamage(q.id)} skadet · trykk for tawbah`);
-  if(!S.active && !busy) b+=(doneToday()&&!pendingShort?starBeaconDone(195,200):starBeacon(195,200));
+  if(!S.active && !busy && (!R2||q.id==='roser')) b+=(doneToday()&&!pendingShort?starBeaconDone(195,200):starBeacon(195,200));
   if(!S.active){ const gs=SIGNS.find(g=>g.q===q.id&&!g.fri&&!g.bonus&&(S.signRev||{})[g.id]&&!(S.signs||{})[g.id]); if(gs) b+=beacon(gs.x,gs.y-58,'Noe glimter her',-14); if(JABAL&&q.id==='beite'&&caveOpen()&&!(S.signs||{}).hund){ const h=SIGNS.find(g=>g.id==='hund'); b+=beacon(h.x+24,h.y-58,'Hulen er åpen',-14); } }
   if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
