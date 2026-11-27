@@ -9,7 +9,7 @@ import json, os, subprocess, time, shutil, sys
 ONLY = sys.argv[1:]  # f.eks. light  -> bygger bare de navngitte; uten argument: alle som ikke er frosset
 FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform'
 TESTERS = [
-    {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True, 'resetv': 2},
+    {'mode': 'kahwa', 'name': 'saleem', 'who': 'Saleem', 'form': FORM, 'notes': True, 'resetv': 2, 'kskip': ['basar'], 'kfinal': True},
     {'mode': 'kahwa', 'name': 'light', 'who': 'Ibrahim', 'form': FORM, 'notes': True, 'title': 'Rawdah Kahwa Light', 'resetv': 2},
     {'mode': 'jabal', 'name': 'haroon', 'who': 'Haroon', 'form': FORM, 'notes': True, 'noteLock': True, 'sch': 2, 'egg': True, 'resetv': 2},
     {'mode': 'jabal', 'name': 'najaat', 'who': 'Najaat', 'form': FORM, 'notes': True, 'noteLock': True, 'sch': 2, 'egg': True, 'resetv': 2},

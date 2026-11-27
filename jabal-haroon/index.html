@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "haroon", "who": "Haroon", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "noteLock": true, "sch": 2, "egg": true, "resetv": 2, "build": "bygg 27.11.2026 · 5453451"};(function(){var k="rawdah_resetv_haroon",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_haroon","jabal_haroon_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_haroon_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "haroon", "who": "Haroon", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "noteLock": true, "sch": 2, "egg": true, "resetv": 2, "build": "bygg 27.11.2026 · 10ba256"};(function(){var k="rawdah_resetv_haroon",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_haroon","jabal_haroon_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_haroon_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -4389,6 +4389,8 @@ function prostrateSvg(){ return `<g id="fnSuj" opacity="0"><path d="M-34 0 Q-34 
 function finalLetter(){ snd.hoopoe&&snd.hoopoe(); kMark('brev');
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">ET SISTE BREV · FRA HÆRFUGLEN</p><h3>Sikre nyheter</h3><div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:16.5px;line-height:1.5">«Jeg har fått vite noe du ikke vet, og jeg kommer til deg med sikre nyheter.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">Koranen 27:22 · hærfuglen til Sulaymān</p></div><p>Hærfuglen har fløyet over hele hagen din. Han har sett rosene, flokken, suqen og huset i tåka. Og han har en nyhet til deg …</p><button class="btn" id="flGo">Hva er nyheten?</button>`);
   $('flGo').onclick=()=>{ closeSheet(); setTimeout(kDoneCall,500); }; }
+if(window.KAHWA&&KAHWA.kskip) for(let i=KDONE.length-1;i>=0;i--) if(KAHWA.kskip.includes(KDONE[i][0])) KDONE.splice(i,1);
+if(window.KAHWA&&KAHWA.kfinal){ const _kf=setInterval(()=>{ if(kt().fin){ clearInterval(_kf); return; } if(!S.tour0||S.active||stageBusy()||$('sheet').classList.contains('on')||$('tour')) return; clearInterval(_kf); if((kt().d||{}).brev) return; kt().finQ=1; save(); window.__evAt=Date.now(); letterCall(finalLetter); },2000); }
 function kDoneCall(){ if(!KAHWA||kt().fin) return; snd.chime([523,659,784,1047],.07); sparkle(); window.__lt=Date.now();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0" id="kdK">🎉 RAWDAH KAHWA 7142</p><h3 id="kdH">Gratulerer, du har nå<span id="kdD"></span></h3><p id="kdP">&nbsp;</p><div id="kdB"></div>`);
   let n=0; const dt=setInterval(()=>{ const d=$('kdD'); if(!d){ clearInterval(dt); return; } d.textContent=' '+'.'.repeat(++n); if(n>=8){ clearInterval(dt); kRumble(); } },330); }
