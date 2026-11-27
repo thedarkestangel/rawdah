@@ -571,7 +571,7 @@ body:has(#tour) #noteBtn,body:has(#tfScn) #noteBtn{display:none}
     <span class="sp"></span>
     <button class="ib" id="shopBtn" aria-label="Basar"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><span class="ibl">Basar</span></button>
     <button class="ib" id="learnBtn" aria-label="Lær"><svg viewBox="0 0 24 24"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg><span class="ibl">Lær</span></button>
-    <button class="ib" id="bookBtn" aria-label="Dagbok"><svg viewBox="0 0 24 24"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M4 17a3 3 0 0 1 3-3h11"/><path d="M9 8h5"/></svg><span class="ibl">Samling</span></button>
+    <button class="ib" id="bookBtn" aria-label="Dagbok"><svg viewBox="0 0 24 24"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M4 17a3 3 0 0 1 3-3h11"/><path d="M9 8h5"/></svg><span class="ibl" id="bookLbl">Samling</span></button>
     <button class="ib" id="wellBtn" aria-label="Velvære"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="ibl">Velvære</span></button>
     <button class="ib" id="megBtn" aria-label="Meg"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span class="ibl">Meg</span></button>
   </div>
@@ -713,7 +713,7 @@ Object.values(DECOR).forEach(d=>{ if(!d.cat) d.cat='pynt'; });
 const WARES={
   for10:{name:'Høy (10 fôr)',price:25,desc:'Til sauer, kyr og geiter. Hver gang du gir flokken mat, går det med 1.'},
   korn:{name:'Korn (10 porsjoner)',price:15,desc:'Til hønene. Uten korn legger de ikke egg.'},
-  fiskemat:{name:'Fiskemat (10 porsjoner)',price:10,desc:'Gi fiskene mat i Stell. Mette fisker hopper.'},
+  fiskemat:{name:'Fiskemat (10 porsjoner)',price:10,desc:'Gi fiskene mat. Mette fisker hopper.'},
   olje:{name:'Lampeolje (5 dager)',price:12,desc:'Lyktene brenner bare når det er olje.'},
   fro:{name:'Frøpose til frukttre',price:30,desc:'Planter et nytt tre i Frukthagen (maks 12).'},
   messing:{name:'Messingverktøy',price:120,desc:'Hvert trykk rydder to ting av samme slag.',once:true},
@@ -1068,24 +1068,25 @@ function handClean(q,j,e){ S.handClean=true; const el=document.querySelector(`.j
    <button class="btn" id="hcOk">Fint, videre</button>`); $('hcOk').onclick=closeSheet; snd.chime([523,659,784]); },900); }
 function clean(id,e){
   const q=QUADS[curQ].id, j=S.junk[q].find(x=>x.id===id); if(!j) return;
+  let need=j.z||1, tk=toolFor(j.type);
+  if(R2){ if(S.active) return; const t=dayStr(); if(!S.hq||S.hq.d!==t) S.hq={d:t,n:0}; if(S.hq.n>=3) return toast('Hendene dine er slitne for i dag. Du kan rydde mer i morgen.',3000); S.hq.n++; S.handClean=1; need=1; } else {
   if(!unl('basar')){
     if(!canTend()) return toast('Rydding skjer i «Stell»-delen av økten.');
     if(S.handClean) return toast('Riven tar du i bruk fra neste økt. Da åpner også Basaren med flere verktøy.',3600);
     if((j.z||1)>1) return toast('Den er for stor for hendene. Prøv noe mindre, som ugress eller visne blader.',3200);
     return handClean(q,j,e); }
-  const tk=toolFor(j.type);
   if(!canTend()) return toast('Rydding skjer i «Stell»-delen av økten. Du kan også rydde når økten er ferdig.');
-  const need=j.z||1, have=tLvl(tk);
+  const have=tLvl(tk);
   if(have<need){ const nm=TIERS[tk][need-1][0]; toast(have?`${SIZEPL[need][0].toUpperCase()+SIZEPL[need].slice(1)} ${JUNKNAME[j.type].toLowerCase()}: dette krever ${nm.toLowerCase()}. Oppgrader i Basaren.`:`${JUNKNAME[j.type]}: du trenger ${TIERS[tk][0][0].toLowerCase()}. Kjøp den i Basaren.`); $('shopBtn').classList.add('ping'); return; }
   if(usesLeft(tk)<=0){ const nm=TIERS[tk][tLvl(tk)-1][0]; snd.puff(); return toast(`${nm} er sliten og hviler til i morgen. Oppgrader for mer utholdenhet, eller slip den med en slipestein fra Basaren.`,4200); }
-  toolDay().used[tk]=(toolDay().used[tk]||0)+1;
+  toolDay().used[tk]=(toolDay().used[tk]||0)+1; }
   haptic(need>1?[18,30,18]:18); { const el=document.querySelector(`.junk[data-j="${id}"]`), r=el&&el.getBoundingClientRect(), sr=stage.getBoundingClientRect(), cx=r?r.left+r.width/2-sr.left:e.clientX-sr.left, cy=r?r.top+r.height/2-sr.top:e.clientY-sr.top; fxDust(cx,cy,need*.7+.3); fxBurst(cx,cy,JUNKFX[j.type]||JUNKFX.stein,8+need*6,30+need*16,4+need*2,10); if(need>=2) setTimeout(()=>fxBurst(cx,cy+6,JUNKFX[j.type]||JUNKFX.stein,10,50,5,-20),120); setTimeout(()=>fxNur(cx,cy-20,need*(inStell()?2:1)),150); }
   kMark('rydd'); const mult=inStell()?2:1; S.junk[q]=S.junk[q].filter(x=>x.id!==id); S.cleaned++; S.nur+=need*mult; taskHit('rydd');
   if(S.upg.messing){ const j2=S.junk[q].find(x=>x.type===j.type); if(j2){ S.junk[q]=S.junk[q].filter(x=>x!==j2); S.cleaned++; S.nur+=1; taskHit('rydd'); } } puff(e); snd.puff(); save(); renderTop(); renderSection(); say(e,keeper());
   const left=S.junk[q].length, ul=usesLeft(tk), tn=TIERS[tk][tLvl(tk)-1][0]; toast((left?`Ryddet. +${need*mult} nur`:`Denne delen er ryddet, alhamdulillah. +${need*mult} nur`)+(mult>1?' (dobbelt mens verset spiller)':'')+(left?` · ${tn}: ${ul} av ${usesMax(tk)} igjen i dag`:''));
 }
 function junkLeft(){ return Object.values(S.junk||{}).reduce((n,a)=>n+a.length,0); }
-function canClean(q){ return (S.junk[q]||[]).some(j=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); }
+function canClean(q){ if(R2) return (S.junk[q]||[]).length>0&&!(S.hq&&S.hq.d===dayStr()&&S.hq.n>=3); return (S.junk[q]||[]).some(j=>{ const k=toolFor(j.type); return tLvl(k)>=(j.z||1)&&usesLeft(k)>0; }); }
 
 /* ================= SCENE ================= */
 function cyp(x,b,h,w,cls='sil'){
@@ -2275,7 +2276,7 @@ function announceUnlocks(before){ const got=Object.keys(GATE).filter(k=>before<G
 
 /* ================= DAGENS TRE OPPGAVER ================= */
 /* ================= DAGENS OPPGAVER: vers først, rydding, én variert, og en god gjerning ================= */
-function cleanCap(){ if(!unl('basar')&&!S.handClean) return junkLeft()?1:0; const left={}; let n=0;
+function cleanCap(){ if(R2) return Math.min(junkLeft(),3-((S.hq&&S.hq.d===dayStr())?S.hq.n:0)); if(!unl('basar')&&!S.handClean) return junkLeft()?1:0; const left={}; let n=0;
   for(const q in S.junk||{}) for(const j of S.junk[q]){ const k=toolFor(j.type); if(!k||tLvl(k)<(j.z||1)) continue; if(left[k]==null) left[k]=usesLeft(k); if(left[k]>0){ left[k]--; n++; } } return n; }
 function taskPool(){ const V=[], w=(x,n)=>{ for(let i=0;i<n;i++) V.push(x); };
   if(unl('hifz')) w(S.hifz.current?{id:'hifz',text:'Lær et vers utenat i Lysets tårn',goal:1}:{id:'hifz',text:'Velg en surah i Lysets tårn og lær første vers',goal:1},3);
@@ -2363,11 +2364,11 @@ function disaster(reason){
     if(prot){ if(type==='Gresshopper'){ n=Math.floor(n/2); } else { logEvent(`${reason}: ${type} kom mot Rosehagen, men ${DECOR[{Flom:'sluse',Sandstorm:'sandvegg'}[type]].name.toLowerCase()} stoppet den.`); return; } }
     ok.slice(0,n).forEach(i=>{S.roses[i].h='dmg';S.roses[i].dd=dayStr();});
     addJunk('roser',type==='Gresshopper'?'ugress':type==='Sandstorm'?'stov':'stein',2,rnd([2,3])); if(fountainOK()) addJunk(rnd(['taarn','beite']),'stov',1);
-    logEvent(n?`${reason}: ${type} i Rosehagen. ${n} roser ble skadet.`:`${reason}: ${type}. −5 nur.`); if(!n) S.nur-=5; }
+    logEvent(n?`${reason}: ${type} i Rosehagen. ${n} roser ble skadet.`:`${reason}: ${type}. −5 nur.`); if(!n&&!R2) S.nur-=5; }
   else { const ok=S.fruit.map((t,i)=>t.h==='ok'?i:-1).filter(i=>i>=0); const n=Math.min(ok.length,1+Math.floor(Math.random()*2));
     const n2=has('frukt','fuglehus')?Math.floor(n/2):n; ok.sort(()=>Math.random()-.5).slice(0,n2).forEach(i=>{S.fruit[i].h='dmg';S.fruit[i].dd=dayStr();}); addJunk('frukt','ugress',2);
     if(n2<n) logEvent('Fuglene i fuglehuset tok mange av gresshoppene i Frukthagen.');
-    logEvent(n?`${reason}: Gresshopper i Frukthagen. ${n} ${n>1?'trær':'tre'} ble skadet.`:`${reason}: Gresshopper. −5 nur.`); if(!n) S.nur-=5; }
+    logEvent(n?`${reason}: Gresshopper i Frukthagen. ${n} ${n>1?'trær':'tre'} ble skadet.`:`${reason}: Gresshopper. −5 nur.`); if(!n&&!R2) S.nur-=5; }
 }
 const has=(q,type)=>S.decor.some(d=>d.q===q&&d.type===type);
 function flockTick(){ const F=S.flock, days=(Date.now()-F.ts)/864e5; if(days>0.01){ F.hunger=Math.max(0,F.hunger-days*(has('beite','hund')?15:30)*hungerMul()); F.ts=Date.now(); } }
@@ -2378,17 +2379,17 @@ function dailyCheck(){
   if(!S.hud||S.hud.day!==dayStr()) S.hud={day:dayStr(),show:!R2&&Math.random()<.12,seen:false};
   const today=dayStr(); if(!S.lastCheck){S.lastCheck=today;save();return;} if(S.lastCheck===today) return;
   const passed=Math.min(dayDiff(S.lastCheck,today),14); let dis=0;
-  for(let k=0;k<passed;k++){ const d=addDays(S.lastCheck,k); S.nur-=5;
+  for(let k=0;k<passed;k++){ const d=addDays(S.lastCheck,k); if(!R2) S.nur-=5;
     { const qs=['roser'].concat(['taarn','beite','frukt'].filter(q=>restored(q))), did=S.doneDays.includes(d), cap=q=>(S.junk[q]||[]).length<16;
       const light=()=>{ const q=rnd(qs); if(!cap(q)) return; const t=rnd(q==='frukt'?['blader','greiner']:q==='beite'?['blader','mokk','greiner']:['blader','ugress','greiner']); addJunk(q,t,1,1); };
-      light(); if(Math.random()<.6) light();
+      if(!R2){ light(); if(Math.random()<.6) light(); }
       if(!did){ const q=rnd(qs); if(cap(q)){ const t=rnd(q==='beite'?['rotter','mokk','mokk']:['rotter','ugress','blader']); const n0=S.junk[q].length; addJunk(q,t,2,rnd([1,1,2])); if(S.junk[q].length>n0) awayLog.push(AWAYMSG[t](QUADS.find(x=>x.id===q).name)); } } }
     if(S.oil>0){ S.oil--; if(S.oil===0) logEvent('Lampeoljen er brukt opp. Lyktene slukner til du kjøper mer.'); }
     if(restored('beite')&&S.flock.hunger>=40) produce(d);
     if(restored('beite')){ growYoung(); if((S.flock.hens||0)>=2&&kornOK()&&Math.random()<.15&&addYoung('kylling')) logEvent('En kylling har klekket på beitet.'); }
     if(S.doneDays.includes(d)&&S.decor.some(x=>x.type==='bikube')){ S.goods.honning++; }
     if(!S.doneDays.includes(d)&&dis<3){ disaster(`Forsømt ${d.slice(8)}.${d.slice(5,7)}`); dis++; }
-    if(S.nur<0&&dis<3){ disaster('Tom for nur'); dis++; }
+    if(!R2&&S.nur<0&&dis<3){ disaster('Tom for nur'); dis++; }
     if(restored('beite')){ if(S.flock.hunger<=0){ S.flock.zeroDays++; if(S.flock.zeroDays>=2&&S.flock.sheep+S.flock.cows>1){ if(S.flock.sheep>1) S.flock.sheep--; else S.flock.cows--; S.flock.zeroDays=0; logEvent('Et sultent dyr forlot beitet.'); } } else S.flock.zeroDays=0; }
   }
   S.picks=S.picks.filter(p=>{ if(dayDiff(p.day,today)>2){ S.spoiled=(S.spoiled||0)+1; return false; } return true; });
@@ -2538,7 +2539,7 @@ const roligToday=()=>ROLIG[(dayDiff('2026-01-01',dayStr())%ROLIG.length+ROLIG.le
 const QUICK=()=>!!(KAHWA||(JABAL&&(S.devShort||(JABAL.skip&&!S.fullSess))));
 const repGoal=()=>{ if(QUICK()) return 1; if(!sess) return 6; if(sess.short) return 3; const n=verses?verses.reduce((k,v)=>k+v.ar.length,0):0; return n>420?3:(S.settings.reps||6); };
 const learnGoal=()=>QUICK()?1:sess&&sess.short?2:3;
-const hasStell=()=>sess&&!sess.short&&sess.kind!=='hifz';
+const hasStell=()=>!R2&&sess&&!sess.short&&sess.kind!=='hifz';
 const repEst=()=>Math.max(6,(verses||[]).reduce((n,v)=>n+v.ar.split(/\s+/).length,0)*0.75);
 function repDone(){ if(!sess||!verses||sess.ph!==0) return; sess.reps=(sess.reps||0)+1; sess.repT=0; save(); if(sess.reps>=repGoal()) setTimeout(()=>{ if(sess&&sess.ph===0) setPh(1); },900); tick(); }
 function setPh(n){ if(!sess) return; if(n===2&&!hasStell()) n=3; sess.ph=n; sess.stellT=0; save(); tick(); if(navigator.vibrate) navigator.vibrate(40); }
@@ -2623,7 +2624,7 @@ function markDone(){ const t=dayStr(); if(!S.doneDays.includes(t)){ S.streak=S.d
 function barakah(){ $('vSec').classList.add('barakah'); setTimeout(()=>$('vSec').classList.remove('barakah'),12000); }
 function abandonCheck(){
   if(!S.active||S.active.hiddenAt==null) return;
-  if(Date.now()-S.active.hiddenAt>ABANDON_MS){ S.nur-=5; disaster('Avbrutt økt'); endSessionUI(); renderAll(); showUnseen(); }
+  if(Date.now()-S.active.hiddenAt>ABANDON_MS){ if(!R2) S.nur-=5; disaster('Avbrutt økt'); endSessionUI(); renderAll(); showUnseen(); }
   else { S.active.hiddenAt=null; save(); }
 }
 document.addEventListener('visibilitychange',()=>{
@@ -2817,7 +2818,7 @@ async function verseQuiz(ref,title,kick,onOk){ const [s,a]=String(ref).split(':'
   const i=1+Math.floor(Math.random()*(w.length-1)), opts=[w[i].ar].concat(w.filter((x,k)=>k!==i&&x.ar!==w[i].ar).sort(()=>Math.random()-.5).slice(0,2).map(x=>x.ar)).sort(()=>Math.random()-.5);
   $('sheet').querySelector('#vqW').outerHTML=`<p style="margin-top:0">Hvilket ord mangler? <span style="color:var(--muted);font-size:12.5px">(${s}:${a})</span></p><div class="card" style="direction:rtl;text-align:center;font-family:var(--arq);font-size:24px;line-height:2">${w.map((x,k)=>k===i?'<span style="display:inline-block;min-width:60px;border-bottom:2px dashed var(--gold)">&nbsp;</span>':esc(x.ar)).join(' ')}</div><div class="qrow" style="flex-wrap:wrap;direction:rtl">${opts.map(o=>`<button class="gb" data-vq="${esc(o)}" style="font-family:var(--arq);font-size:22px">${esc(o)}</button>`).join('')}</div><p id="vqM" style="min-height:22px;font-size:14px;margin:6px 0 0"></p>`;
   $('sheet').querySelectorAll('[data-vq]').forEach(b=>b.onclick=()=>{ if(b.dataset.vq===w[i].ar){ b.classList.add('gold'); haptic(10); snd.chime([659,784,988],.05); $('vqM').textContent=`Riktig: ${w[i].ar}${w[i].en?' ('+w[i].en+')':''}`; setTimeout(()=>{ closeSheet(); onOk(); },1100); } else { b.style.opacity=.35; haptic(20); $('vqM').textContent='Ikke helt. Prøv igjen.'; } }); }
-function budTap(i){ const p=S.roses[i]; if(!p||!p.bud) return; verseQuiz(p.ref,'Vann knoppen','DAGENS KNOPP',()=>{ p.bud=0; p.n=Date.now(); save(); renderSection(); toast('Knoppen blomstret 🌹',2200); taskHit('knopp'); }); }
+function budTap(i){ const p=S.roses[i]; if(!p||!p.bud) return; verseQuiz(p.ref,'Vann knoppen','DAGENS KNOPP',()=>{ p.bud=0; p.n=Date.now(); save(); renderSection(); toast('Knoppen blomstret 🌹',2200); taskHit('knopp'); setTimeout(bouquetCheck,2600); }); }
 function droopPick(){ const t=dayStr(); if(S.droop&&S.droop.d===t) return; const C=S.roses.map((p,i)=>[p,i]).filter(([p])=>p.h==='ok'&&!p.bud&&p.day!==t&&dayDiff(p.rev||p.day,t)>=3); S.droop={d:t,i:C.length?rnd(C)[1]:-1,done:0}; save(); }
 function droopTap(i){ const p=S.roses[i]; if(!p) return; verseQuiz(p.ref,'Husker du dette verset?','EN ROSE HENGER MED HODET',()=>{ p.rev=dayStr(); S.droop.done=1; save(); renderSection(); toast('Rosen retter seg opp igjen',2200); taskHit('rose'); }); }
 function bouquetCheck(){ if(S.roses.length<MAXROSE||S.roses.some(p=>p.bud)) return; const n=(S.bouquets||[]).length+1; S.bouquets=(S.bouquets||[]).concat([{n,d:dayStr(),v:S.roses.map(p=>p.ref).filter(Boolean)}]); S.roses=[]; save();
@@ -2965,6 +2966,9 @@ let _tourT=0;
 function tourCheck(){ if(S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
   if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<3200) return; _tourT=0;
   if(!S.tour1){ S.tour1=1; save(); return; }
+  if(R2&&S.vs>=1&&!S.starNudge&&view==='sec'){ S.starNudge=1; save(); const F=isF()?'gjeterinne':'gjeter', st='#beacons .bstar';
+    return tourRun([{q:'roser',el:()=>document.querySelector(st),if:()=>!!document.querySelector(st),pad:14,round:40,w:1,k:'VISMANNEN',t:'Stjernen lyser fortsatt',d:`«Ser du, ${F}? Stjernen lyser fortsatt. Den går ikke noe sted. I morgen har den et nytt vers til deg.»`},
+      {q:'roser',center:1,w:1,last:1,k:'VISMANNEN',t:'Litt hver dag',d:'«Profeten ﷺ sa: Den kjæreste handlingen for Allah er den som gjøres jevnlig, selv om den er liten.» <span style="font-size:12px;color:var(--muted)">(Bukhari 6464, Muslim 783)</span>'}]); }
   if(view!=='sec') return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
 setInterval(tourCheck,700);
 
@@ -2980,7 +2984,7 @@ function inboxLog(html){ const t=document.createElement('div'); t.innerHTML=html
   S.inbox=S.inbox||[]; const e={id:Date.now()+''+Math.random().toString(36).slice(2,5),h:h.textContent.trim(),k:k&&k!==h&&k.textContent.length<40?k.textContent.trim():'',html:t.innerHTML.slice(0,8000),d:new Date().toISOString(),seen:0};
   S.inbox=S.inbox.filter(x=>!(x.h===e.h&&x.html===e.html)); S.inbox.unshift(e); S.inbox=S.inbox.slice(0,30); save(); return e; }
 function inboxSeen(id){ setTimeout(()=>{ const e=(S.inbox||[]).find(x=>x.id===id); if(e&&$('sheet').classList.contains('on')&&$('sheet').dataset.nid===id){ e.seen=1; save(); updBell(); } },2200); }
-function updBell(){ const b=$('bellBtn'); if(!b) return; const n=SQ.length+(S.inbox||[]).filter(x=>!x.seen).length; b.style.display=n?'':'none'; b.innerHTML='🔔'+(n?`<b>${n}</b>`:''); }
+function updBell(){ const b=$('bellBtn'); if(!b) return; const n=SQ.length+(S.inbox||[]).filter(x=>!x.seen).length; b.style.display=(n||(R2&&!S.active&&S.tour0))?'':'none'; b.style.opacity=n?'1':'.65'; b.innerHTML='🔔'+(n?`<b>${n}</b>`:''); }
 function sqNext(){ if(stageBusy()||!SQ.length) return false; const it=SQ.shift(), sh=$('sheet'); sh.innerHTML=''; while(it.w.firstChild) sh.appendChild(it.w.firstChild); it.w.remove(); sh.dataset.nid=it.id||''; sh.classList.add('on'); $('scrim').classList.add('on'); sh.scrollTop=0; if(it.id) inboxSeen(it.id); updBell(); return true; }
 function openInbox(){ if(sqNext()) return; const L=S.inbox||[], f=d=>{ try{ return new Date(d).toLocaleString('no-NO',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } };
   _openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🔔 MELDINGER</p><h3>Det du har fått beskjed om</h3>${L.length?L.map(x=>`<button class="card inbr${x.seen?'':' new'}" data-id="${x.id}"><span>${x.seen?'':'<i></i>'}<b>${esc(x.h)}</b>${x.k?`<small>${esc(x.k)}</small>`:''}</span><em>${f(x.d)}</em></button>`).join(''):'<p>Ingen meldinger ennå.</p>'}<button class="btn ghost" id="ibOk">Lukk</button>`);
@@ -3229,8 +3233,17 @@ function openWord(){
   <p style="font-size:12px;color:var(--muted)">Ordene henger høyt i buene, aldri på bakken. I morgen får du en liten test på dagens ord.</p>`);
   const lb=$('learnW'); if(lb) lb.onclick=()=>{ S.words.learned.push(i); S.nur+=3; taskHit('ord'); save(); renderTop(); updatePings(); openWord(); };
 }
-function addLearnTabs(on){ const g=$('sheet').querySelector('.grab'); if(!g||$('sheet').querySelector('[data-lt]')) return; const d=document.createElement('div'); d.className='tabs'; d.innerHTML=`<button data-lt="ord"${on==='ord'?' class="on"':''}>Dagens ord</button><button data-lt="hifz"${on==='hifz'?' class="on"':''}>Hifz · Lysets tårn${unl('hifz')?'':' 🔒'}</button>`; g.after(d); d.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>openLearn(b.dataset.lt)); }
+function addLearnTabs(on){ const g=$('sheet').querySelector('.grab'); if(!g||$('sheet').querySelector('[data-lt]')) return; const d=document.createElement('div'); d.className='tabs';
+  if(R2){ d.style.flexWrap='wrap'; d.innerHTML=[['ord','Dagens ord'],['buk','Buketter'],['frukt','Frukter'],['laerde','De lærde']].map(([k,l])=>`<button data-lt="${k}"${on===k?' class="on"':''}>${l}</button>`).join(''); g.after(d); d.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>openLearn(b.dataset.lt)); return; } d.innerHTML=`<button data-lt="ord"${on==='ord'?' class="on"':''}>Dagens ord</button><button data-lt="hifz"${on==='hifz'?' class="on"':''}>Hifz · Lysets tårn${unl('hifz')?'':' 🔒'}</button>`; g.after(d); d.querySelectorAll('[data-lt]').forEach(b=>b.onclick=()=>openLearn(b.dataset.lt)); }
 async function openLearn(tab){ kMark('lear'); tab=tab||S.learnTab||'ord'; S.learnTab=tab; $('learnBtn').classList.remove('ping');
+  if(R2){ if(!['ord','buk','frukt','laerde'].includes(tab)) tab=S.learnTab='ord';
+    if(tab==='buk'){ const B=S.bouquets||[]; openSheet(`<h3>Buketter</h3><p>Hver gang 36 roser har blomstret, bindes de til en bukett. Den står her som et minne om versene.</p>${B.length?B.map(b=>`<div class="card" style="margin-top:10px"><b style="color:var(--gold2)">Bukett ${b.n}</b> <span style="font-size:12px;color:var(--muted)">· ${b.d.split('-').reverse().join('.')}</span><p style="margin:6px 0 0;font-size:13px">${b.v.map(esc).join(' · ')}</p></div>`).join(''):`<div class="card"><p style="margin:0">Ingen bukett ennå. Du har ${S.roses.filter(p=>!p.bud).length} av ${MAXROSE} roser i blomst.</p></div>`}`); }
+    else if(tab==='frukt'){ const C=S.cards||[]; const by={}; C.forEach(c=>{ const f=FRUITCARDS[c.ty]||FRUITCARDS.daddel, k=f.k; (by[k]=by[k]||new Map()).set(f.l[c.i][0],f.l[c.i]); });
+      openSheet(`<h3>Frukter</h3><p>Kortene du har høstet fra trærne: daddel gir hadith, oliven Allahs navn, granateple duʿāʾ og druer fortellinger.</p>${C.length?Object.entries(by).map(([k,m])=>`<h4>${esc(k)}</h4>`+[...m.values()].map(c=>`<div class="card" style="margin-top:8px"><b style="color:var(--gold2)">${esc(c[0])}</b><p style="margin:4px 0 0;font-family:var(--serif);font-size:15.5px;line-height:1.45">${esc(c[1])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--muted)">${esc(c[2])}</p></div>`).join('')).join(''):'<div class="card"><p style="margin:0">Ingen frukter ennå. Når trærne i Frukthagen bærer, trykker du på dem for å høste.</p></div>'}`); }
+    else if(tab==='laerde'){ const met=TSCH().slice(0,tMet()).map(id=>HIKMA.find(h=>h.id===id)).filter(Boolean);
+      openSheet(`<h3>De lærde</h3><p>De du har møtt i Visdommens hus.</p>${met.length?met.map(h=>`<div class="card" style="margin-top:10px"><b style="color:var(--gold2)">${esc(h.n)}</b> <span style="font-size:12px;color:var(--muted)">· ${esc(h.y)} · ${esc(h.pl)}</span><p style="margin:4px 0 0;font-size:13px;color:var(--gold)">${esc(h.ttl)}</p><p style="margin:6px 0 0;font-size:14px">${esc(h.who)}</p></div>`).join(''):'<div class="card"><p style="margin:0">Ingen ennå. Visdommens hus åpner etter hvert.</p></div>'}`); }
+    else openWord();
+    return addLearnTabs(tab); }
   if(tab==='hifz'){ if(!unl('hifz')){ openSheet(`<h3>Lysets tårn · Hifz</h3><p>Her lærer du en surah utenat, vers for vers. Hvert vers tenner et vindu i tårnet.</p><div class="card mod"><div class="mi">🔒</div><div style="flex:1"><b style="color:var(--gold2)">Åpner etter ${GATE.hifz} vers-økter</b><div class="bar"><b style="width:${Math.min(1,S.vs/GATE.hifz)*100}%"></b></div><div style="font-size:11.5px;color:var(--muted);margin-top:3px">${Math.min(S.vs,GATE.hifz)} av ${GATE.hifz} økter</div></div></div>`); }
     else if(S.active){ openSheet(`<h3>Lysets tårn · Hifz</h3><p>Fullfør økten først, så kan du fortsette med hifz.</p>`); }
     else await openHifz(); }
@@ -3241,9 +3254,11 @@ function updatePings(){ $('megBtn').classList.toggle('ping',S.stats.sessions>=3&
 
 /* --- Basar --- */
 let shopTab='varer';
-const TABS=[['varer','Varer'],['gard','Gård og beite'],['vern','Vern'],['pynt','Pynt og bygg'],['marked','Marked'],['lager','Lager']];
+const TABS=(window.JABAL||window.KAHWA)?[['gard','Gård og beite'],['varer','Varer'],['pynt','Pynt'],['marked','Gi bort'],['lager','Lager']]:[['varer','Varer'],['gard','Gård og beite'],['vern','Vern'],['pynt','Pynt og bygg'],['marked','Marked'],['lager','Lager']];
 const row=(thumb,name,desc,btn)=>`<div class="si">${thumb}<div class="tx"><b>${name}</b><small>${desc}</small></div>${btn}</div>`;
-const buyBtn=(attr,price,owned)=>owned?'<button class="buy own" disabled>Eid</button>':`<button class="buy" ${attr} ${S.nur<price?'disabled':''}>${price} nur</button>`;
+const goodsVal=()=>Object.entries(S.goods||{}).reduce((n,[k,v])=>n+v*(GOODS[k]?GOODS[k].p:0),0);
+function payGoods(n){ if(goodsVal()<n) return false; let left=n; for(const k of Object.keys(GOODS).sort((a,b)=>GOODS[b].p-GOODS[a].p)){ while(left>0&&S.goods[k]>0&&GOODS[k].p<=left){ S.goods[k]--; left-=GOODS[k].p; } } for(const k of Object.keys(GOODS).sort((a,b)=>GOODS[a].p-GOODS[b].p)){ while(left>0&&S.goods[k]>0){ S.goods[k]--; left-=GOODS[k].p; } } return true; }
+const buyBtn=(attr,price,owned)=>owned?'<button class="buy own" disabled>Eid</button>':R2?`<button class="buy" ${attr} ${goodsVal()<price?'disabled':''}>${price} ✦ varer</button>`:`<button class="buy" ${attr} ${S.nur<price?'disabled':''}>${price} nur</button>`;
 const LN='stroke="#1a1030" stroke-width="2" stroke-linejoin="round"';
 function ico(k){ let g='';
   switch(k){
@@ -3278,13 +3293,13 @@ function ico(k){ let g='';
    case 'honning': g=`<path d="M-14 -10 h28 v26 q0 6 -6 6 h-16 q-6 0 -6 -6Z" fill="#e0a030" ${LN}/><rect x="-16" y="-18" width="32" height="9" rx="2" fill="#c0653f" ${LN}/><path d="M-8 2 q8 -6 16 0" stroke="#ffd27a" stroke-width="2" fill="none"/>`; break;
   }
   return `<svg viewBox="-40 -40 80 80">${g}</svg>`; }
-function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping');
-  const head=`<h3>Basaren</h3><p>Du har <b style="color:var(--gold2)">${S.nur} nur</b> · ${S.feed} fôr · olje i ${S.oil} dag${S.oil===1?'':'er'}.</p><div class="tabs" style="flex-wrap:wrap">${TABS.map(([k,l])=>`<button data-t="${k}" class="${shopTab===k?'on':''}" style="flex:1 0 30%;min-height:36px;font-size:13px">${l}</button>`).join('')}</div>`;
+function openShop(tab){ if(tab) shopTab=tab; if(R2&&!TABS.some(([k])=>k===shopTab)) shopTab='gard'; $('shopBtn').classList.remove('ping');
+  const head=R2?`<h3>Markedet</h3><p>Her bytter du det hagen gir: ${Object.entries(GOODS).filter(([k])=>S.goods[k]).map(([k,g])=>`${S.goods[k]} ${g.name.toLowerCase()}`).join(', ')||'ingenting ennå'} · til sammen <b style="color:var(--gold2)">${goodsVal()} ✦</b>. Nur brukes aldri her: lyset ditt er ikke til salgs.</p><div class="tabs" style="flex-wrap:wrap">${TABS.map(([k,l])=>`<button data-t="${k}" class="${k===shopTab?'on':''}">${l}</button>`).join('')}</div>`:`<h3>Basaren</h3><p>Du har <b style="color:var(--gold2)">${S.nur} nur</b> · ${S.feed} fôr · olje i ${S.oil} dag${S.oil===1?'':'er'}.</p><div class="tabs" style="flex-wrap:wrap">${TABS.map(([k,l])=>`<button data-t="${k}" class="${shopTab===k?'on':''}" style="flex:1 0 30%;min-height:36px;font-size:13px">${l}</button>`).join('')}</div>`;
   let body='';
   const lockNote=(f,what)=>`<div class="card" style="margin:6px 0"><b style="color:var(--gold2)">${what}</b><p style="margin:4px 0 0">Åpnes etter ${GATE[f]} vers-økter (${Math.min(S.vs,GATE[f])}/${GATE[f]}).</p></div>`;
   const decoRows=cat=>Object.entries(DECOR).filter(([k,d])=>d.cat===cat).map(([k,d])=>row(decoThumb(k),d.name,d.desc+(S.inv[k]?` · ${S.inv[k]} på lager`:''),buyBtn(`data-deco="${k}"`,d.price))).join('');
   if(shopTab==='varer'){ body='<h4>Forbruk</h4>'+Object.entries(WARES).map(([k,w])=>row(ico(k),w.name,w.desc+(k==='fro'&&!restored('frukt')?' Frukthagen må være gjenopprettet først.':''),buyBtn(`data-ware="${k}"`,w.price,w.once&&S.upg[k]))).join('');
-    body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur. Verktøyene blir slitne og hviler over natta. Bedre verktøy orker mer.</p>'+row(ico('slipestein'),'Slipestein','Gir alle verktøyene 3 ekstra ryddinger i dag.'+(toolDay().bonus?` Brukt i dag: +${toolDay().bonus}.`:''),buyBtn('data-sharpen="1"',12))+''+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>toolFor(j.type)===k&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(L?` Orker ${TUSE[L]} ryddinger per dag, ${usesLeft(k)} igjen i dag.`:` Orker ${TUSE[1]} ryddinger per dag.`)+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} rydder ${SIZEPL[L+1]} ting og orker ${TUSE[L+1]} per dag.`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
+    if(!R2) body+='<h4>Verktøy</h4><p style="font-size:12.5px;color:var(--muted)">Ruinene finnes i tre størrelser. Store steinblokker og tykke stubber krever bedre verktøy. Større ting gir mer nur. Verktøyene blir slitne og hviler over natta. Bedre verktøy orker mer.</p>'+row(ico('slipestein'),'Slipestein','Gir alle verktøyene 3 ekstra ryddinger i dag.'+(toolDay().bonus?` Brukt i dag: +${toolDay().bonus}.`:''),buyBtn('data-sharpen="1"',12))+''+Object.entries(TOOLS).map(([k,t])=>{ const L=tLvl(k), T=TIERS[k], cnt=z=>Object.values(S.junk).reduce((s,a)=>s+a.filter(j=>toolFor(j.type)===k&&(j.z||1)===z).length,0); const left=[1,2,3].map(z=>cnt(z)?`${cnt(z)} ${SIZE[z]}`:'').filter(Boolean).join(', '); const nxt=T[L]; return row(toolThumb(k),L?`${T[L-1][0]} · nivå ${L} av 3`:T[0][0],t.desc+(L?` Orker ${TUSE[L]} ryddinger per dag, ${usesLeft(k)} igjen i dag.`:` Orker ${TUSE[1]} ryddinger per dag.`)+(left?` I hagen nå: ${left}.`:'')+(nxt&&L?` Neste: ${nxt[0]} rydder ${SIZEPL[L+1]} ting og orker ${TUSE[L+1]} per dag.`:''),nxt?buyBtn(`data-tool="${k}"`,nxt[1]):'<button class="buy own" disabled>Maks</button>'); }).join(''); }
   if(shopTab==='vern'){ body=unl('vern')?'<h4>Vern og nytte</h4>'+decoRows('vern')+'<h4>Flere dyr</h4>'+decoRows('dyr'):lockNote('vern','Vern og nytte'); }
   if(shopTab==='gard'){ const rb=restored('beite'), F=S.flock;
     body=`<p style="font-size:13px">Flokken: ${F.sheep} sauer, ${F.cows} kyr, ${F.goats||0} geiter, ${F.hens||0} høner${(S.young||[]).length?`, ${S.young.length} ungdyr`:''} · plass til ${farmCap()} · ${S.fish||0} fisker</p>`;
@@ -3300,14 +3315,15 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
       body+='<h4>Bygg</h4>'+decoRows('bygg')+'<h4>Himmel</h4>'+Object.entries(SKY).map(([k,t])=>row(ico(k),t.name,t.desc,buyBtn(`data-sky="${k}"`,t.price,S.themes[k]))).join('');
       body+=`<h4>Palasset</h4><p>Bygges i fire trinn når hagen er minst 90 % gjenopprettet. Det reiser seg i horisonten i alle delene.</p>`+PALACE.map((p,i)=>row(ico('p'+i),`${i+1}. ${p.name}`,i<S.palace?'Ferdig':i===S.palace?(pct>=90?'Neste trinn':`Låst til hagen er 90 % (nå ${pct} %)`):'Kommer etter forrige trinn',i<S.palace?'<button class="buy own" disabled>Ferdig</button>':(i===S.palace&&pct>=90)?buyBtn(`data-palace="${i}"`,p.price):'<button class="buy" disabled>Låst</button>')).join(''); }
     else body+=lockNote('bygg','Bygg, himmel og palasset'); }
-  if(shopTab==='marked'){ const tot=Object.entries(S.goods).reduce((n,[k,v])=>n+v*GOODS[k].p,0);
+  if(R2&&shopTab==='marked'){ body=`<div class="card" style="margin:6px 0"><b style="color:var(--gold2)">Gi bort av det hagen gir</b><p style="margin:4px 0 0;font-size:13.5px">«Sadaqa minsker ikke formuen.» (Muslim 2588). Gi en vare til en som trenger den. Du får ikke noe tilbake her, men det skrives i Dagboken din.</p></div>`+Object.entries(GOODS).map(([k,g])=>row(ico(k),`${g.name}: ${S.goods[k]}`,'Gi én bort',`<button class="buy" data-give="${k}" ${S.goods[k]?'':'disabled'}>Gi</button>`)).join('')+`<p style="font-size:12.5px;color:var(--muted)">Du har gitt bort ${S.given||0} ting.</p>`; }
+  else if(shopTab==='marked'){ const tot=Object.entries(S.goods).reduce((n,[k,v])=>n+v*GOODS[k].p,0);
     body=Object.entries(GOODS).map(([k,g])=>row(ico(k),`${g.name}: ${S.goods[k]}`,`${g.p} nur per stykk`,`<button class="buy" data-sell="${k}" ${S.goods[k]?'':'disabled'}>Selg</button>`)).join('')+`<button class="btn" id="sellAll" ${tot?'':'disabled'}>Selg alt · ${tot} nur</button>${S.spoiled?`<p style="font-size:12.5px;color:var(--muted)">${S.spoiled} varer har blitt ødelagt fordi de ikke ble samlet inn innen to dager.</p>`:''}`; }
   if(shopTab==='lager'){ const items=Object.entries(S.inv).filter(([k,n])=>n>0);
     const EU=EGGS.filter(eggUnl); const eggH=EU.length?`<h4>Fra reisen</h4>`+EU.map(e=>`<div class="si">${eggArt(e.id,48,40)}<div class="tx"><b>${esc(e.name)}</b><small>${S.eggs&&S.eggs[e.id]?'Står i '+QUADS.find(q=>q.id===e.q).name:'På lageret'}</small></div><button class="buy" data-eggt="${e.id}">${S.eggs&&S.eggs[e.id]?'Ta bort':'Sett ut'}</button></div>`).join('')+'<h4>Pynt</h4>':'';
     body=eggH+(items.length?items.map(([k,n])=>`<div class="si" style="flex-wrap:wrap">${decoThumb(k)}<div class="tx"><b>${DECOR[k].name}</b><small>${n} på lager · plasser i:</small><div class="place">${QUADS.map(q=>`<button data-place="${k}" data-q="${q.id}">${q.name}</button>`).join('')}</div></div></div>`).join(''):(EU.length?'<p>Ingen pynt på lageret.</p>':'<p>Lageret er tomt.</p>'));
     if(S.decor.length) body+=`<p style="font-size:12.5px;color:var(--muted)">Trykk på en ting i hagen for å flytte den tilbake hit.</p>`; }
   openSheet(head+`<div class="shop">${body}</div>`);
-  const Q$=s=>$('sheet').querySelectorAll(s), pay=n=>{ if(S.nur<n) return false; S.nur-=n; snd.coin(); kMark('basar'); return true; }, done=(msg,tab)=>{ const b=document.activeElement, r=b&&b.getBoundingClientRect&&b.getBoundingClientRect(), sr=stage.getBoundingClientRect(); save(); renderAll(); toast(msg); openShop(tab); if(r&&r.width){ const x=r.left+r.width/2-sr.left, y=r.top+r.height/2-sr.top; fxRing(x,y); fxBurst(x,y,['#ffe6a6','#e7c26b','#fff'],14,40,4,6); } window.fxNew=Date.now(); };
+  const Q$=s=>$('sheet').querySelectorAll(s), pay=n=>{ if(R2){ if(!payGoods(n)) return false; snd.coin(); kMark('basar'); return true; } if(S.nur<n) return false; S.nur-=n; snd.coin(); kMark('basar'); return true; }, done=(msg,tab)=>{ const b=document.activeElement, r=b&&b.getBoundingClientRect&&b.getBoundingClientRect(), sr=stage.getBoundingClientRect(); save(); renderAll(); toast(msg); openShop(tab); if(r&&r.width){ const x=r.left+r.width/2-sr.left, y=r.top+r.height/2-sr.top; fxRing(x,y); fxBurst(x,y,['#ffe6a6','#e7c26b','#fff'],14,40,4,6); } window.fxNew=Date.now(); };
   Q$('.tabs button').forEach(b=>b.onclick=()=>openShop(b.dataset.t));
   eggToggleWire(()=>openShop('lager'));
   Q$('[data-ware]').forEach(b=>b.onclick=()=>{ const k=b.dataset.ware, w=WARES[k];
@@ -3324,6 +3340,7 @@ function openShop(tab){ if(tab) shopTab=tab; $('shopBtn').classList.remove('ping
   Q$('[data-animal]').forEach(b=>b.onclick=()=>{ const k=b.dataset.animal, a=ANIMALS[k]; if(!pay(a.price)) return; if(k!=='fisk'&&flockN()+(k==='hone'?2:k==='kylling'?3:1)>farmCap()){ S.nur+=a.price; return toast('Beitet er fullt. Bygg et bedre gjerde eller en stall for å få plass.'); } if(k==='hone') S.flock.hens+=2; if(k==='geit') S.flock.goats++; if(k==='fisk') S.fish+=2; if(YOUNG[k]) addYoung(k,k==='kylling'?3:1); done(`${a.name} er på plass`,'gard'); });
   Q$('[data-sky]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sky; if(!pay(SKY[k].price)) return; S.themes[k]=true; applyThemes(); done(`${SKY[k].name} er lagt til himmelen`); });
   Q$('[data-palace]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.palace; if(!pay(PALACE[i].price)) return; S.palace=i+1; logEvent(`Palasset: ${PALACE[i].name} er ferdig.`); done(`${PALACE[i].name} er bygget`,'bygg'); });
+  Q$('[data-give]').forEach(b=>b.onclick=()=>{ const k=b.dataset.give; if(!S.goods[k]) return; S.goods[k]--; S.given=(S.given||0)+1; (S.diary=S.diary||[]).push({t:'sadaqa',d:dayStr(),x:`Ga bort ${GOODS[k].name.toLowerCase()}`}); snd.chime&&snd.chime([523,659]); done('Gitt bort. Må Allah ta imot det.','marked'); });
   Q$('[data-sell]').forEach(b=>b.onclick=()=>{ const k=b.dataset.sell; S.nur+=S.goods[k]*GOODS[k].p; S.goods[k]=0; taskHit('selg'); done('Solgt','marked'); });
   const sa=$('sellAll'); if(sa) sa.onclick=()=>{ let t=0; for(const k in S.goods){ t+=S.goods[k]*GOODS[k].p; S.goods[k]=0; } S.nur+=t; taskHit('selg'); done(`Solgt for ${t} nur`,'marked'); };
   Q$('[data-place]').forEach(b=>b.onclick=()=>{ const k=b.dataset.place, q=b.dataset.q; const used=S.decor.filter(d=>d.q===q).map(d=>d.spot); const spot=SPOTS.map((_,i)=>i).find(s=>!used.includes(s));
@@ -3361,7 +3378,12 @@ function openBook(){
   $('sheet').querySelectorAll('[data-play]').forEach(b=>b.onclick=async()=>{ unlockAudio(); try{ const vs=await fetchVerse(b.dataset.play.includes('-')?b.dataset.play:b.dataset.play); loop=false; setPlaylist(vs.map(v=>v.audio),vs.map(v=>v.audio2)); }catch(e){ toast('Fikk ikke hentet lyden'); } });
   $('sheet').querySelectorAll('[data-gift]').forEach(b=>b.onclick=()=>giftRose(S.journal[+b.dataset.gift]));
 }
-$('bookBtn').onclick=openBook;
+$('bookBtn').onclick=()=>R2?(bookTab==='tegn'?openSigns():bookTab==='rihla'?openRihla():bookTab==='gj'?openDeeds():openBook()):openBook();
+function openDeeds(){ bookTab='gj'; const L=(S.deedLog||[]).map(x=>({d:x.d,t:x.t,k:'Gjerning'})).concat((S.diary||[]).map(x=>({d:x.d,t:x.x,k:'Sadaqa'}))).sort((a,b)=>a.d<b.d?1:-1);
+  openSheet(`<h3>Gode gjerninger</h3><div class="tabs"></div><p style="font-size:13.5px">Bare for deg. Dette sendes aldri noe sted og gir ingen nur. «Den kjæreste handlingen for Allah er den som gjøres jevnlig, selv om den er liten.» (Bukhari og Muslim)</p>${L.length?L.map(x=>`<div class="card" style="margin-top:8px"><span style="font-size:12px;color:var(--muted)">${x.d.split('-').reverse().join('.')} · ${x.k}</span><p style="margin:4px 0 0">${esc(x.t)}</p></div>`).join(''):'<div class="card"><p style="margin:0">Ingenting skrevet ennå.</p></div>'}`); }
+function fixBookTabs(on){ if(!R2) return; const t=$('sheet').querySelector('.tabs'); if(!t) return; t.innerHTML=[['dagbok','Tanker'],['rihla','Brev'],['tegn','Tegn'],['gj','Gjerninger']].map(([k,l])=>`<button data-b2="${k}"${k===on?' class="on"':''}>${l}</button>`).join(''); t.style.flexWrap='wrap';
+  t.querySelectorAll('[data-b2]').forEach(b=>b.onclick=()=>{ const k=b.dataset.b2; k==='rihla'?openRihla():k==='tegn'?openSigns():k==='gj'?openDeeds():(bookTab='dagbok',openBook()); }); const h=$('sheet').querySelector('h3'); if(h&&on==='dagbok') h.textContent='Dagbok'; }
+{ const W=(f,k)=>function(){ const r=f.apply(this,arguments); fixBookTabs(k); return r; }; if(R2){ openBook=W(openBook,'dagbok'); openRihla=W(openRihla,'rihla'); openSigns=W(openSigns,'tegn'); openDeeds=W(openDeeds,'gj'); } }
 
 /* --- Send en rose --- */
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
@@ -3456,11 +3478,27 @@ function wellDay(){ S.well=S.well||{goal:6,log:{}}; const d=dayStr(); S.well.log
   const ks=Object.keys(S.well.log).sort(); if(ks.length>21) ks.slice(0,ks.length-21).forEach(k=>delete S.well.log[k]); return S.well.log[d]; }
 function wellTabs(on){ return `<div class="tabs"><button data-mt="hage"${on==='hage'?' class="on"':''}>Din hage</button><button data-mt="well"${on==='well'?' class="on"':''}>Velvære</button></div>`; }
 function wireMegTabs(){ $('sheet').querySelectorAll('[data-mt]').forEach(b=>b.onclick=()=>b.dataset.mt==='well'?openWell():openMeg()); }
+const MOVES=[
+ ['En rolig gåtur','Gå ti minutter ute, gjerne etter en bønn. Se på himmelen og trærne underveis.'],
+ ['Strekk deg mot himmelen','Stå med beina litt fra hverandre, strekk armene opp og pust dypt fem ganger.'],
+ ['Trappene','Ta trappen i stedet for heisen i dag, hver gang du kan.'],
+ ['Rull skuldrene','Rull skuldrene bakover ti ganger og fremover ti ganger. Godt etter mye skjermtid.'],
+ ['Gå til moskeen','Går du til bønn i dag, gå til fots hvis du kan. Hvert skritt teller hos Allah.'],
+ ['Nakken','Bøy hodet rolig mot hver skulder og hold i ti sekunder. Gjenta tre ganger.'],
+ ['Sitt mindre','Reis deg og gå litt rundt hver time i dag.'],
+ ['Lek','Lek med barn, søsken eller en venn i ti minutter, ute om mulig.'],
+ ['Strekk bena','Sett hælen på en stol eller et trinn og len deg rolig frem. Hold i tjue sekunder per side.'],
+ ['Pust ute','Gå ut, stå stille et minutt og pust rolig. Si subḥān Allāh for det du ser.'],
+ ['En lengre tur','Gå en tur på tjue minutter i ditt eget tempo.'],
+ ['Rygg og hofter','Stå på alle fire og rund ryggen opp og ned rolig ti ganger.'],
+ ['Besøk noen','Gå bort til en nabo, en slektning eller en som er syk. Bevegelse og god gjerning på én gang.'],
+ ['Balanse','Stå på ett bein i tretti sekunder mens du sier dhikr, så bytt bein.']];
 function openWell(){ kMark('well'); if(KAHWA&&!kt().n_well){ kt().q=(kt().q||[]).concat(['well']); save(); } const L=wellDay(), G=S.well.goal||6, q=WELLQ[(dayDiff('2026-01-01',dayStr())%WELLQ.length+WELLQ.length)%WELLQ.length];
   const last7=Array.from({length:7},(_,k)=>addDays(dayStr(),k-6)).map(d=>[d,S.well.log[d]]);
   const prayed=SALAH.filter(([k])=>L.p[k]).length;
   openSheet(`<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
   <div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.4">${esc(q[0])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">${esc(q[1])}</p></div>
+  ${R2?(()=>{ const m=MOVES[(dayDiff('2026-01-01',dayStr())%MOVES.length+MOVES.length)%MOVES.length]; return `<h4>🚶 Dagens bevegelse</h4><div class="card"><b style="color:var(--gold2)">${esc(m[0])}</b><p style="margin:4px 0 8px;font-size:14px">${esc(m[1])}</p><button class="gb${L.mv?' gold':''}" id="wlMv" style="width:100%">${L.mv?'✓ Gjort i dag':'Jeg har gjort det'}</button></div>`; })():''}
   <h4>🕌 Bønnen</h4><p style="font-size:13.5px;margin-top:0">Bønnen er ikke bare en plikt, den er også hvile. Profeten ﷺ sa til Bilāl: «Gi oss ro med den.»</p>
   <div class="qrow" id="wlP" style="flex-wrap:wrap${L.free?';opacity:.4;pointer-events:none':''}">${SALAH.map(([k,n])=>`<button class="gb${L.p[k]?' gold':''}" data-p="${k}" style="flex:1 1 30%">${L.p[k]?'✓ ':''}${n}</button>`).join('')}</div>
   ${isF()?`<button class="gb${L.free?' gold':''}" id="wlFree" style="width:100%;margin-top:6px">${L.free?'✓ ':''}Fri fra bønn i dag (mens eller nifās)</button>`:''}
@@ -3483,6 +3521,7 @@ function openWell(){ kMark('well'); if(KAHWA&&!kt().n_well){ kt().q=(kt().q||[])
   $('wlW').onclick=()=>{ L.w++; save(); haptic(10); snd.splash&&snd.splash(); if(L.w===G) toast('Dagens vannmål er nådd. Alḥamdulillāh',2200); openWell(); };
   $('wlWm').onclick=e=>{ e.preventDefault(); if(L.w>0){ L.w--; save(); openWell(); } };
   $('wlG').onclick=e=>{ e.preventDefault(); const opts=[4,6,8,10]; S.well.goal=opts[(opts.indexOf(G)+1)%opts.length]; save(); openWell(); };
+  if($('wlMv')) $('wlMv').onclick=()=>{ L.mv=!L.mv; save(); haptic(8); if(L.mv) snd.chime([523,659,784],.04); openWell(); };
   $('wlP').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const k=b.dataset.p; L.p[k]=!L.p[k]; save(); haptic(8); if(L.p[k]) snd.chime([523,659],.04); openWell(); });
   if($('wlFree')) $('wlFree').onclick=()=>{ L.free=!L.free; save(); haptic(8); openWell(); };
   $('wlS').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ L.sl=+b.dataset.h; save(); haptic(8); openWell(); });
@@ -3503,11 +3542,11 @@ function openPrivacy(){ openSheet(`<h3>Personvern</h3>
   <button class="btn ghost" id="pvB">Tilbake</button>`); $('pvB').onclick=openMeg; }
 function openMeg(){
   const top=Object.entries(S.stats.reflect).sort((a,b)=>b[1]-a[1])[0], url=location.href.split('?')[0].split('#')[0]+'?spin=1';
-  openSheet(`<h3>Din hage</h3>
+  openSheet(`<h3>Din hage</h3>${R2?'<button class="btn ghost" id="tourAgain" style="margin:0 0 10px">Ta omvisningen igjen</button>':''}
   <div class="card stats"><div><b>${restorePct()}%</b><span>gjenopprettet</span></div><div><b>${S.streak}</b><span>dager på rad</span></div><div><b>${Math.round(S.stats.seconds/60)}</b><span>minutter</span></div><div><b>${S.stats.interrupts}</b><span>stoppet før app</span></div></div>
   <p>${S.stats.interrupts?`Du har stoppet ${S.stats.interrupts} ganger før en app og brukt ${Math.round(S.stats.seconds/60)} minutter med Koranen i stedet.`:(IS_ANDROID?'Sett opp MacroDroid under':'Sett opp Snarveier under')+', så ser du hvor ofte du stoppet før en app.'}${top?` Det som oftest treffer deg: ${top[0].toLowerCase()}.`:''}</p>
   <h4>De tre måtene å pleie hagen på</h4>${modesHTML()}
-  <h4>Nur og basaren</h4><p>Du tjener nur på økter (10), hifz (15), Dagens ord (3), Dagens oppgaver (5 hver, 10 i bonus), vanning (2), rydding (1) og ved å selge ull, melk, egg, frukt og honning på markedet. Dyrene spiser fôr, og lyktene trenger lampeolje. I basaren kjøper du verktøy for å rydde ruinene og pynt til hagen. Ryddingen gjør du i «Stell»-delen av økten. Hagen bruker 5 nur til vann hver dag.</p>
+  ${R2?`<h4>Nur og markedet</h4><p>Nur er lyset ditt. Det vokser med hver økt og brukes aldri opp. I markedet bytter du med det hagen gir. Trykk på nur-merket øverst for å se lysets trinn.</p>`:''}<h4 ${R2?'hidden':''}>Nur og basaren</h4><p ${R2?'hidden':''}>Du tjener nur på økter (10), hifz (15), Dagens ord (3), Dagens oppgaver (5 hver, 10 i bonus), vanning (2), rydding (1) og ved å selge ull, melk, egg, frukt og honning på markedet. Dyrene spiser fôr, og lyktene trenger lampeolje. I basaren kjøper du verktøy for å rydde ruinene og pynt til hagen. Ryddingen gjør du i «Stell»-delen av økten. Hagen bruker 5 nur til vann hver dag.</p>
   <h4>Lyktene</h4><p>Den ene lykten tennes når du har fullført en økt i dag. Den andre tennes når du har holdt det gående i 7 dager på rad.</p>
   <h4>Gjentakelser</h4><div class="seg" id="durSeg">${[3,6,9].map(m=>`<button data-m="${m}" class="${(S.settings.reps||6)===m?'on':''}">${m} ganger</button>`).join('')}</div><p style="font-size:12.5px;color:var(--muted)">Hvor mange ganger verset spilles i «Lytt og les» før du går videre til Lær. 6 er anbefalt. Veldig lange vers spilles 3 ganger.</p>
   <h4>Hold deg i økta</h4><p style="font-size:12.5px;color:var(--muted)">Appen kan ikke hindre deg i å gå ut. Vil du ha en ekte lås, kan du feste skjermen: på Android heter det <b>Skjermfesting</b> (Innstillinger → Sikkerhet), og på iPhone <b>Veiledet tilgang</b> (Innstillinger → Tilgjengelighet).</p>
@@ -3534,6 +3573,7 @@ function openMeg(){
   $('replay').onclick=()=>{ closeSheet(); playIntro(); };
   $('guideB').onclick=()=>openGuide(); $('privB').onclick=openPrivacy; if($('kFin')) $('kFin').onclick=kFeedback; wireMegTabs();
   $('bkBtn').onclick=openBackup;
+  if($('tourAgain')) $('tourAgain').onclick=()=>{ closeSheet(); setTimeout(()=>{ enterQuad(QUADS.findIndex(x=>x.id==='roser')); renderAll(); setTimeout(tour0,600); },350); };
   $('genSeg').onclick=e=>{ const g=e.target.dataset.g; if(g){ S.settings.gender=g; save(); openMeg(); if(view==='sec') renderSection(); } };
   $('openSeg').onclick=e=>{ const o=e.target.dataset.o; if(o!=null){ S.settings.allOpen=o==='1'; save(); renderAll(); openMeg(); } };
   $('sndSeg').onclick=e=>{ const s=e.target.dataset.s; if(s!=null){ S.settings.sound=s==='1'; save(); snd.apply(); openMeg(); } };
@@ -3581,7 +3621,15 @@ const figure=(x,y,s,robe,turb)=>`<g transform="translate(${x} ${y}) scale(${s})"
 const scholar=(x,y)=>`<g transform="translate(${x} ${y})"><ellipse cx="0" cy="1" rx="12" ry="2.5" fill="rgba(0,0,0,.25)"/><path d="M-9 0 Q-9 -10 -4 -13 H4 Q9 -10 9 0Z" fill="#efe4cc" stroke="#1a1030" stroke-width=".6"/><circle cx="0" cy="-17" r="4" fill="#c58c5c"/><path d="M-4.4 -18 Q0 -24 4.4 -18Z" fill="#fff"/><path d="M-6 -6 L0 -9 L6 -6 L0 -4Z" fill="#7a2a2a"/><path d="M0 -9 V-4" stroke="#e7c26b" stroke-width=".6"/></g>`;
 const camel=(x,y,s,c='#2a1a10')=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="#d9b25f" stroke-width="${c==='#2a1a10'?0:.8}"><path d="M-14 -10 Q-12 -20 -4 -18 Q0 -26 6 -18 Q10 -18 12 -14 L16 -22 Q19 -24 20 -20 L16 -10 Q12 -8 10 -10 L10 0 H8 L7 -8 H-8 L-9 0 H-11 L-12 -9Z"/><path d="M-4 -24 h6 v-4 h-6Z" fill="#b0283a"/></g>`;
 const birdV=(x,y,s)=>`<path d="M${x-6*s} ${y} Q${x-3*s} ${y-4*s} ${x} ${y} Q${x+3*s} ${y-4*s} ${x+6*s} ${y}" fill="none" stroke="#2a1a3a" stroke-width="${1.3*s}" stroke-linecap="round"/>`;
-function openNur(){ const row=(a,b)=>`<tr><td style="padding:4px 8px 4px 0">${a}</td><td style="padding:4px 0;text-align:right;color:var(--gold2);white-space:nowrap">${b}</td></tr>`;
+function openNur(){ if(R2){ const i=nurLv(), nx=NURLV[i+1];
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">NŪR · نور</p><h3>Lyset ditt: ${NURLV[i][1]}</h3>
+  <p>Nur betyr <b>lys</b>. Det er lyset du samler når du er med Koranen. Det kan ikke brukes opp, ikke selges og ikke kjøpes. Det bare vokser. Du har <b style="color:var(--gold2)">${S.nur} nur</b>.</p>
+  ${nx?`<div style="height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;margin:6px 0"><div style="height:100%;width:${Math.round(100*(S.nur-NURLV[i][0])/(nx[0]-NURLV[i][0]))}%;background:var(--gold2)"></div></div><p style="font-size:13px;color:var(--muted)">${nx[0]-S.nur} nur til ${nx[1]}.</p>`:'<p>Du har nådd det høyeste lyset.</p>'}
+  <p style="font-size:14px">«Allah er himlenes og jordens lys.» (24:35)</p>
+  <h4>Lysets trinn</h4><p style="font-size:14px;line-height:1.7">${NURLV.map((l,k)=>`${k<=i?'✦':'·'} ${l[1]} <span style="color:var(--muted)">(${l[0]})</span>`).join('<br>')}</p>
+  <p style="font-size:13px;color:var(--muted)">Ting i markedet bytter du med det hagen gir: melk, ull, egg, frukt og honning.</p>
+  <button class="btn" id="nurOk">Fint</button>`); $('nurOk').onclick=closeSheet; return; }
+  const row=(a,b)=>`<tr><td style="padding:4px 8px 4px 0">${a}</td><td style="padding:4px 0;text-align:right;color:var(--gold2);white-space:nowrap">${b}</td></tr>`;
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">NŪR · نور</p><h3>Hva er nur?</h3>
   <p>Nur betyr <b>lys</b>. I Rawdah er det lyset du samler når du er med Koranen og steller hagen. Nur er hagens valuta. Den kan bare tjenes, aldri kjøpes for ekte penger. Du har <b style="color:var(--gold2)">${S.nur} nur</b>.</p>
   <h4>Slik tjener du nur</h4><table style="width:100%;font-size:14px;border-collapse:collapse">${row('Hovedøkt med vers','10 (15 for sjeldne)')}${row('Hifz-økt i Lysets tårn','15')}${row('Kort økt','4')}${row('Dagens ord','3')}${row('Hver av Dagens oppgaver','5, bonus 10 for alle tre')}${row('Vanne fra elva','2')}${row('Rydde én ting','1')}${row('Al-Khwarizmis oppgave','5 om dagen')}${row('Selge ull, melk, egg, frukt og honning','på Markedet')}</table>
@@ -3870,7 +3918,9 @@ function automationHTML(url){
 }
 
 /* ================= START ================= */
-function renderTop(){ $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
+const NURLV=[[0,'Glød'],[40,'Talglys'],[120,'Lampe'],[260,'Lykt'],[480,'Fakkel'],[800,'Fullmåne'],[1300,'Morgenrøde']];
+function nurLv(n){ n=n==null?S.nur:n; let i=0; NURLV.forEach((l,k)=>{ if(n>=l[0]) i=k; }); return i; }
+function renderTop(){ if(R2){ $('bookLbl').textContent='Dagbok'; { const l=$('shopBtn').querySelector('.ibl'); if(l) l.textContent='Marked'; } const i=nurLv(); $('nur').textContent=S.nur; if(!$('nurLv')) $('nurChip').innerHTML='<b id="rest">0%</b> · ✦ <b id="nurLv"></b><b id="nur" hidden>0</b>'; $('nurLv').textContent=NURLV[i][1]; if(S.nurLv!=null&&i>S.nurLv){ S.nurLv=i; save(); setTimeout(()=>toast(`Lyset ditt har vokst: ${NURLV[i][1]} ✦`,3600),1200); } else if(S.nurLv==null){ S.nurLv=i; save(); } } $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
 function renderAll(){ updateGates(); updHikmaPill(); if(KAHWA) $('kahwaBtn').style.display=S.active?'none':''; if(JABAL) updJabalBtn(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
 stage.classList.toggle('showtl',!!S.settings.tl); $('aTl').classList.toggle('on',!!S.settings.tl); $('qTlB').classList.toggle('on',!!S.settings.tl);
 S.farm=S.farm||{fence:0,stall:false,trau:false}; S.young=S.young||[]; S.korn=S.korn??0; S.fiskemat=S.fiskemat??5; S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
