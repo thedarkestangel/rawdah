@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "noxiphone", "who": "noxp (iPhone)", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "skip": true, "resetv": 2, "build": "bygg 27.11.2026 · b6ca097"};(function(){var k="rawdah_resetv_noxiphone",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_noxiphone","jabal_noxiphone_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_noxiphone_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "noxiphone", "who": "noxp (iPhone)", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "skip": true, "resetv": 2, "build": "bygg 27.11.2026 · cc687e0"};(function(){var k="rawdah_resetv_noxiphone",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_noxiphone","jabal_noxiphone_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_noxiphone_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -947,7 +947,7 @@ function cowSvg(x,y,s,k){
   </g></g></g>`;
 }
 const isF=()=>S.settings.gender==='f';
-const keeper=()=>'– vismannen';
+const keeper=()=>(window.JABAL||window.KAHWA)?'– Shaykh Nūr':'– vismannen';
 function hudArt(){ return `
   <path d="M-12 8 Q-34 10 -42 2 Q-30 -2 -14 0Z" fill="#1e1626"/><path d="M-40 2 l-6 -2 M-38 6 l-6 2" stroke="#f4ead2" stroke-width="2.2" stroke-linecap="round"/>
   <path d="M-18 4 Q-20 -14 0 -16 Q18 -16 20 0 Q16 16 -2 16 Q-16 14 -18 4Z" fill="#e9a35a"/>
@@ -2635,7 +2635,7 @@ function finish(refl){
     if(flockN()<farmCap()){ if(Math.random()<.25){ addYoung('kalv'); logEvent('En kalv er født på beitet.'); msgs.push('en kalv er født'); } else { addYoung('lam'); logEvent('Et lam er født på beitet.'); msgs.push('et lam er født'); } } else msgs.push('beitet er fullt: bygg gjerde eller stall for å få plass til flere'); }
   if(restored('frukt')){ if(!doneToday()){ const g=S.fruit.filter(t=>t.h==='ok'&&t.st<3); if(g.length) rnd(g).st++; }
     if(!S.fruit.length||(S.vs-AT.frukt)%4===0){ if(S.fruit.length<12&&a.kind!=='hifz'){ const type=FRUITS[S.fruit.length%FRUITS.length]; S.fruit.push({type,st:1,h:'ok'}); msgs.push(`et ${FRUITNAME[type].toLowerCase()} er plantet`);} } }
-  if(JABAL&&!doneToday()){ const d=jDay()+1; if(d===3&&new Date().getDay()!==5) jPush('teaser'); if(d===4&&!jt().baytOpen) jPush('teaser'); if(JABAL.skip&&(d===5||d===7)){ jt().av=Math.max(jt().av||1,d===5?2:3); jPush('lys'); } if(d===7){ jt().freeze=S.vs; jPush('finale'); } }
+  if(JABAL&&!doneToday()){ const d=jDay()+1; if(d===3&&new Date().getDay()!==5) jPush('teaser'); if(d===4&&!jt().baytOpen) jPush('teaser'); if((d===5||d===7)&&TSCH().length>=(d===5?2:3)){ jt().av=Math.max(jt().av||1,d===5?2:3); jPush('lys'); } if(d===7){ jt().freeze=S.vs; jPush('finale'); } }
   kMark('okt'); if(KAHWA){ if(S.vs===1){ kt().q=(kt().q||[]).concat(['okt','apne']); save(); } }
   markDone(); endSessionUI(); updateGates(); setTimeout(dayCheck,6000);
   const rw=a._gain&&a.kind!=='hifz';
@@ -2966,7 +2966,7 @@ function suqScene(first){ if($('suqScn')) return; const i=first?0:(dayDiff('2026
   d.querySelectorAll('.sjar').forEach(j=>j.onclick=()=>{ haptic(6); j.classList.remove('jig'); void j.getBoundingClientRect(); j.classList.add('jig'); say(`<div class="sqsay">${esc(['Rosevann fra Taif.','Honning fra fjellene. Ekte, ikke blandet.','Indigo til farging.','Safran. Dyrt, men verdt det.','Dadler fra Madinah, ʿajwa.','Granateplesirup.'][+j.dataset.j])}</div>`); }); }
 
 /* ================= PÅSKEEGG (bare noxp): kamelen som gråt ================= */
-const EGGON=()=>!!(window.JABAL&&JABAL.skip);
+const EGGON=()=>!!(window.JABAL&&(JABAL.skip||JABAL.egg));
 let _ctN=0,_ctT=0;
 function camelTap(){ if(!EGGON()||S.active) return hzTap('suq'); const t=Date.now(); if(t-_ctT>2500) _ctN=0; _ctT=t; _ctN++; haptic(8);
   if(_ctN<3){ snd.chime([196+_ctN*20],.05); return; } _ctN=0; if(S.egg) return toast('Kamelen hviler nå trygt på beitet.',2400); camelScene(); }
@@ -2985,9 +2985,9 @@ function camelScene(){ if($('egScn')) return; closeSheet(); const d=document.cre
     cap('Abū Dāwūd 2549','Profeten ﷺ gikk inn i en hage som tilhørte en mann fra Anṣār. Der sto en kamel. Da den så ham, stønnet den og tårene rant. Han gikk bort og strøk den bak ørene, og den ble rolig.','Ṣaḥīḥ ifølge al-Albānī'); await next();
     cap('Abū Dāwūd 2549','Så spurte han hvem som eide kamelen, og sa til den unge mannen: «Frykter du ikke Allah når det gjelder dette dyret som Allah har gitt deg? Den klaget til meg over at du sulter den og sliter den ut.»'); await next();
     cap(WN(),'Selv en kamel visste hvem den kunne gå til. Dyrene i hagen din hører deg også. Fra i dag får hun bo på beitet ditt.'); await next('Alḥamdulillāh');
-    S.egg=dayStr(); save(); d.classList.remove('on'); setTimeout(()=>{ d.remove(); renderSection(); toast('Kamelen har flyttet inn på beitet 🐪',3000); },500); })(); }
+    S.egg=dayStr(); save(); d.classList.remove('on'); setTimeout(()=>{ d.remove(); renderSection(); toast('Kamelen har flyttet inn på beitet 🐪',3000); const a=window._afterEgg; window._afterEgg=null; if(a) setTimeout(a,3400); },500); })(); }
 function eggReveal(then){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN · ET SISTE ORD</p><h3>Du gikk forbi noe …</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Det var gjemt noe i hagen som ingen fortalte deg om. Ved suqen bak Beitet står to kameler. Trykker du tre ganger på en av dem, kommer hun bort til deg med en fortelling fra Profeten ﷺ. Vil du se?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><button class="btn" id="egGo">Vis meg</button><button class="btn ghost" id="egL">Neste gang</button>`);
-  $('egGo').onclick=()=>{ closeSheet(); setTimeout(()=>{ enterQuad(QUADS.findIndex(q=>q.id==='beite')); renderAll(); setTimeout(camelScene,900); },300); };
+  $('egGo').onclick=()=>{ closeSheet(); window._afterEgg=then; setTimeout(()=>{ enterQuad(QUADS.findIndex(q=>q.id==='beite')); renderAll(); setTimeout(camelScene,900); },300); };
   $('egL').onclick=()=>{ closeSheet(); then&&setTimeout(then,400); }; }
 
 /* ================= 2.0: ÉN TING OM GANGEN (markører) ================= */
@@ -3214,8 +3214,8 @@ const QTOUR={
   beite:()=>restored('beite')?[{svg:[230,560,260,180],zoom:1.5,k:'BEITET',t:'Dyrene er tilbake',d:R2?'Trykk på dyrene for å gi dem mat, ellers blir de sultne. Mette dyr får unger og gir melk, ull og egg. Det bytter du i markedet bak beitet.':'Gi dyrene mat i stell-delen av økten, ellers blir de sultne. Mette dyr får unger, og de gir melk og ull du kan selge i Basaren.'}]
     :[{svg:[180,640,180,120],zoom:1.9,k:'BEITET',t:'Beitet ligger i ruiner',d:`Her ved bålet er deg, gjeter${isF()?'innen':'en'}. Etter ${AT.beite} vers-økter kommer dyrene tilbake (${Math.min(S.vs,AT.beite)}/${AT.beite}). Trykker du på deg selv, får du hjelp med dagens oppgaver.`}],
   frukt:()=>[{svg:[195,560,280,200],zoom:1.5,k:'FRUKTHAGEN',t:restored('frukt')?'Trær som bærer frukt':'Frukthagen venter',d:restored('frukt')?(R2?'Når frukten er moden, trykker du for å høste et kort: daddel gir hadith, oliven Allahs navn, granateple duʿāʾ og druer fortellinger. Kortene samles i Skatter.':'Nye trær plantes etter hvert som du gjør økter. Når frukten er moden, trykker du for å høste den og får nur.'):`Etter ${AT.frukt} vers-økter kan de første trærne plantes her (${Math.min(S.vs,AT.frukt)}/${AT.frukt}). Til da er det bare ruiner og håp.`}]};
-let _tourT=0;
-function tourCheck(){ if(S.active||busy||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
+let _tourT=0; setInterval(()=>{ if(sheetBusy()&&$('toast').classList.contains('on')) $('toast').classList.remove('on'); },250);
+function tourCheck(){ if(S.active||busy||sheetBusy()||document.querySelector('.hdl,#fnScn,#suqScn,#egScn')||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
   if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<3200) return; _tourT=0;
   if(!S.tour1){ S.tour1=1; save(); return; }
   if(R2&&S.vs>=1&&!S.starNudge&&view==='sec'&&QUADS[curQ].id==='roser'&&document.querySelector('#beacons .bstar')){ S.starNudge=1; save(); const F=isF()?'gjeterinne':'gjeter', st='#beacons .bstar';
@@ -3336,7 +3336,7 @@ const SCH={
   ok:()=>['«Mashallah! Du hadde vært en god byggmester.»','«Riktig! Vi bygger videre.»','«Ja! Klapp i hendene for deg.»'],no:()=>['«Ikke helt. Vi tar et skritt tilbake og prøver igjen.»','«Nesten. Se på tegningene en gang til.»'],qt:'Bygg med Fāṭima',q0:'«Vi starter med grunnmuren. Tre spørsmål!»',qn:'«Neste stein!»',leave:''}};
 const OBS={ijliyya:[['al-Khwārizmī','Stjernen står 30 grader over horisonten! Hehe, enkelt!','khwarizmi'],['al-ʿIjliyya','31 og et halvt.','ijliyya'],['al-Khwārizmī','30 … omtrent?','khwarizmi'],['al-ʿIjliyya','31 og et halvt.','ijliyya'],['al-Khwārizmī','Hahaha! Du vinner, du vinner!','khwarizmi'],['al-ʿIjliyya','Å. Vi har besøk.','ijliyya']],
  fihri:[['Fāṭima al-Fihrī','Hvis vi setter kuppelen her, faller lyset rett på bøkene.','fihri'],['al-ʿIjliyya','Klokka ni om morgenen. Om vinteren halv ti.','ijliyya'],['Fāṭima al-Fihrī','Du har målt det?','fihri'],['al-ʿIjliyya','Selvfølgelig.','ijliyya'],['Fāṭima al-Fihrī','Oi! En gjest! Kom inn, kom inn!','fihri']]};
-const TSCH=()=>KAHWA?['khwarizmi','ijliyya']:(JABAL&&JABAL.skip)?['khwarizmi','ijliyya','fihri']:['khwarizmi'];
+const TSCH=()=>KAHWA?['khwarizmi','ijliyya']:(JABAL&&JABAL.skip)?['khwarizmi','ijliyya','fihri']:(JABAL&&JABAL.sch===2)?['khwarizmi','ijliyya']:['khwarizmi'];
 const tMet=()=>kt().met||(kt().bayt?1:0);
 function tAvail(){ if(KAHWA) return kt().k2?2:1; if(!JABAL||!(S.jb&&S.jb.baytOpen)) return 0; return Math.min(TSCH().length,jt().av||1); }
 /* bevegelser: hver lærd har sin måte */
@@ -3361,10 +3361,10 @@ async function baytScene(mode,done,si=0){ if($('baytScene')) return; closeSheet(
   const tl=(ms,fn)=>new Promise(r=>{ if(reduce){ fn(1); return r(); } const t0=performance.now(); (function f(n){ if(!alive) return r(); const k=Math.min(1,(n-t0)/ms); fn(k); if(k<1) requestAnimationFrame(f); else r(); })(t0); });
   const cap=(who,txt)=>{ const c=$$('bsCap'); c.classList.remove('on'); setTimeout(()=>{ c.innerHTML=`<b>${esc(who)}</b><span>${esc(txt.replace(/[«»]/g,''))}</span>`; c.classList.add('on'); },120); };
   const btns=(list)=>new Promise(r=>{ const b=$$('bsBtns'); b.innerHTML=list.map((x,i)=>`<button class="${i===list.length-1?'btn':'btn ghost'}" data-i="${i}">${esc(x)}</button>`).join(''); b.classList.add('on'); b.querySelectorAll('button').forEach(x=>x.onclick=()=>{ b.classList.remove('on'); b.innerHTML=''; r(+x.dataset.i); }); });
-  const lr=(a,b,k)=>a+(b-a)*k, W='Vismannen', fx=$$('bsFx');
+  const lr=(a,b,k)=>a+(b-a)*k, W=WN(), fx=$$('bsFx');
   const g=$$('bsShep'); g.innerHTML=wiseFig('bsWise'); const wise=o=>sagePose('bsWise',Object.assign({x:120,y:650,s:2.3},o));
   /* 1. Vandringen med vismannen */
-  wise({}); cap(W,si===0?'Følg meg. Det jeg så, var like bak hagemuren, i tåka …':'Lyset er tilbake. Kom, vi går dit igjen.');
+  wise({}); cap(W,si===0?'Følg meg. Det jeg så, var like bak '+(R2?'Frukthagen':'hagemuren')+', i tåka …':'Lyset er tilbake. Kom, vi går dit igjen.');
   await tl(5600,k=>{ $$('bsFar').setAttribute('transform',`translate(${-150*k} 0)`); $$('bsNear').setAttribute('transform',`translate(${-560*k} 0)`);
     $$('bsHouse').setAttribute('transform',`translate(${lr(560,0,ease(Math.max(0,(k-.3)/.7)))} 0)`); const sw=Math.sin(k*28); wise({y:650-Math.abs(sw)*5,al:sw*16,ar:-sw*10}); if(k>.62&&k<.64) cap(W,si===0?'Der! Ser du kuppelen?':'Der er det. Det lyser fortsatt.'); });
   if(!alive) return; wise({});
@@ -3897,7 +3897,15 @@ function openNur(){ if(R2){ const i=nurLv(), nx=NURLV[i+1];
   <p style="font-size:13px;color:var(--muted)">Forlater du en økt i mer enn 5 minutter, mister du 5 nur. Alt kjøpes i Basaren (veske-ikonet øverst).</p>
   <button class="btn" id="nurShop">Gå til Basaren</button>`);
   $('nurShop').onclick=()=>{ closeSheet(); if(unl('basar')) openShop('varer'); else toast(`Basaren åpnes etter ${GATE.basar} økter`); }; }
-function openGuide(){ const st=[
+function openGuide(){ const st=R2?[
+ ['✦','Trykk på stjernen i Rosehagen','Den siste flammen fra lykta gir deg ett vers om dagen. Et nytt kommer ved midnatt. Du velger det ikke selv, og det er litt av poenget.'],
+ ['①','Lytt og les','Hør verset med oversettelse og uttale.'],
+ ['②','Bygg verset','Sett verset sammen ord for ord. Etterpå kan du skrive hva som traff deg.'],
+ ['🌹','Rosene','Hvert vers blir en rose. Vann dagens knopp ved å fylle inn ordet som mangler. Henger en gammel rose med hodet, er det tid for å repetere.'],
+ ['✧','Nur','Nur er lyset ditt. Det vokser med hver økt og brukes aldri opp. Trykk på lyset øverst for å se trinnene.'],
+ ['🐪','Suqen og Beitet','Dyrene gir melk, ull og egg. Bak Beitet ligger suqen, der du bytter varer og kan gi bort.'],
+ ['🕌','Shaykh Nūr','Vismannen sitter i Rosehagen. Han leser Koranen om dagen og sitter ved bålet om kvelden. Trykk på ham når du lurer på noe.'],
+ ['🕊','Mer etter hvert','Hærfuglen kommer med brev, Frukthagen gir kunnskap, og noe skjuler seg i tåka. Hagen gjemmer mer enn du tror.']]:[
  ['✦','Trykk på stjernen','Stjernen er hærfuglen. Den gir deg ett tilfeldig vers om dagen, og et nytt kommer ved midnatt. Du velger det ikke selv, og det er litt av poenget.'],
  ['①','Lytt og les','Verset spilles seks ganger med oversettelse. Midt i viser vi også uttalen. Lange vers spilles tre ganger.'],
  ['②','Lær','Bygg verset ord for ord i tre runder: lett, middels og hele verset.'],
@@ -4476,7 +4484,7 @@ function jCaveNudge(){ if(!JABAL||S.active||(S.signs||{}).hund) return false; co
   else if(wd===5){ t='Jumuʿa mubārak!'; x='«Det er fredag i dag! Steinen foran hulen på Beitet har flyttet seg. Gå og se, helt ute til venstre.»'; }
   else if(jDay()>=7){ t='Hulen står åpen'; x='«Du rakk ikke innom hulen på fredag, men se: steinen har flyttet seg likevel, bare for deg. Gå til Beitet, helt ute til venstre.»'; }
   if(!t) return false;
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>${t}</h3><p style="font-style:italic">${x}</p><p style="font-size:12px;color:var(--gold2);margin-top:0">– ${esc(keeper())}</p>${wd===4?'':'<button class="btn" id="cvGo">Gå til Beitet</button>'}<button class="btn ghost" id="cvOk">${wd===4?'In shā\' Allāh':'Senere'}</button>`);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>${t}</h3><p style="font-style:italic">${x}</p><p style="font-size:12px;color:var(--gold2);margin-top:0">${esc(keeper())}</p>${wd===4?'':'<button class="btn" id="cvGo">Gå til Beitet</button>'}<button class="btn ghost" id="cvOk">${wd===4?'In shā\' Allāh':'Senere'}</button>`);
   if($('cvGo')) $('cvGo').onclick=()=>{ closeSheet(); setTimeout(()=>enterQuad(bi),50); }; $('cvOk').onclick=closeSheet; return true; }
 function jQueue(){ if(!JABAL) return false; if(!jt().welcome){ jWelcome(); return true; } const q=jt().q||[]; if(!q.length) return jCaveNudge(); const k=q.shift(); jt().q=q; save();
   setTimeout(()=>({teaser:jTeaser,finale:jFinale,lys:jLys})[k]&&({teaser:jTeaser,finale:jFinale,lys:jLys})[k](),500); return true; }
@@ -4485,7 +4493,7 @@ function updJabalBtn(){ const b=$('jabalBtn'); if(!b||!JABAL) return; b.style.di
 function jWelcome(){ jt().welcome=1; save();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">⛰️ RAWDAH JABAL · 7-DAGERS TEST</p><h3>Velkommen, ${esc(JABAL.who||'')}!</h3>
   <p>Dette er den fulle Rawdah-appen, slik den skal være. Du får ett nytt vers om dagen, og målet er å bruke appen i <b>7 dager</b>, gjerne på rad. Det er vanen vi tester.</p>
-  <div class="card"><p style="margin:0;font-size:14px;line-height:1.6"><b style="color:var(--gold2)">Dette er en forenklet versjon.</b> I løpet av uka kan det dukke opp ting du ikke venter. Hold øynene åpne, og lytt til vismannen. I den ekte appen er det mye mer, og det kommer over flere måneder.</p></div>
+  <div class="card"><p style="margin:0;font-size:14px;line-height:1.6"><b style="color:var(--gold2)">Dette er en forenklet versjon.</b> I løpet av uka kan det dukke opp ting du ikke venter. Hold øynene åpne, og lytt til ${R2?'Shaykh Nūr':'vismannen'}. I den ekte appen er det mye mer, og det kommer over flere måneder.</p></div>
   <div class="card" style="margin-top:8px"><p style="margin:0;font-size:14px;line-height:1.6">⛰️ <b>Dag-telleren</b> nede til venstre viser hvor langt du har kommet.<br>🔔 <b>Sett opp en påminnelse</b>, så du ikke glemmer appen. Det er det viktigste rådet.<br>📱 <b>Legg appen på hjemskjermen</b> (Del → «Legg til på Hjem-skjerm»).<br>🔊 <b>Skru opp lyden</b> og slå av lydløs.<br>🔒 <b>Ingen data lagres hos noen.</b> Alt du gjør, blir på telefonen din: ingen konto, ingen server, ingen sporing.</p></div>
   <button class="btn" id="jwR">🔔 Sett opp påminnelse</button><button class="btn ghost" id="jwOk">Senere</button>`); $('jwR').onclick=jRemind; $('jwOk').onclick=closeSheet; }
 function jIcs(hh,mm){ const now=new Date(), st=new Date(now.getFullYear(),now.getMonth(),now.getDate(),hh,mm); if(st<=now) st.setDate(st.getDate()+1);
@@ -4505,7 +4513,7 @@ function jRemind(){ const times=[['07:00','Morgen'],['08:30','Frokost'],['12:30'
 function openJabal(){ const d=jDay(), nsg=SIGNS.filter(g=>!g.fri&&!g.bonus&&(S.signs||{})[g.id]).length, bits=[S.rihla?['Brev fra hærfuglen',String(Math.min(S.rihla,2))]:null,jt().baytOpen?['Huset i tåka',kt().bayt?'besøkt':'venter på deg']:null,nsg?['Skjulte tegn funnet',String(nsg)]:null,(S.signs||{}).hund?['Hulen','funnet']:null].filter(Boolean); if(!bits.length) bits.push(['Oppdagelser','ingen ennå … hold øynene åpne']);
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">⛰️ RAWDAH JABAL · ${esc(JABAL.build||'')}</p><h3>Dag ${Math.min(d,7)} av 7</h3>
   <div class="card"><div style="display:flex;gap:6px;justify-content:space-between">${[1,2,3,4,5,6,7].map(k=>`<div style="flex:1;text-align:center;font-size:12px"><div style="width:28px;height:28px;margin:0 auto 3px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:${k<=d?'var(--gold2)':'rgba(255,255,255,.1)'};color:${k<=d?'#2a1a06':'inherit'};font-weight:700">${k<=d?'✓':k}</div>dag ${k}</div>`).join('')}</div></div>
-  <p style="font-size:14px">${d>=7?'Du har fullført testuka. Mashallah! Du kan fortsette med dagens vers og stell, men ingenting nytt låses opp i testen.':d===0?'Fullfør dagens vers for å starte uka.':doneToday()?'Dagens vers er fullført. Kom tilbake i morgen.':'Dagens vers venter.'}</p>
+  <p style="font-size:14px">${d>=7?'Du har fullført testuka. Mashallah! Du kan fortsette med dagens vers og hagen, men ingenting nytt låses opp i testen.':d===0?'Fullfør dagens vers for å starte uka.':doneToday()?'Dagens vers er fullført. Kom tilbake i morgen.':'Dagens vers venter.'}</p>
   <div class="card">${bits.map(([a,b])=>`<div style="display:flex;justify-content:space-between;font-size:14px;padding:3px 0"><span>${a}</span><span style="color:var(--gold2)">${b}</span></div>`).join('')}</div>
   <p style="font-size:12.5px;color:var(--muted)">Dette er en forenklet versjon. I den ekte appen er det mye mer å oppdage, og det kommer over flere måneder.</p>
   <button class="btn ghost" id="jbR">🔔 Påminnelse${jt().rem?' ('+esc(jt().rem)+')':''}</button>${JABAL.form&&d>=7?'<a class="btn" href="'+JABAL.form+'" target="_blank" rel="noopener" style="text-decoration:none">Gi tilbakemelding</a>':''}<button class="btn ghost" id="jbOk">Lukk</button>`);
@@ -4515,13 +4523,13 @@ function openJabal(){ const d=jDay(), nsg=SIGNS.filter(g=>!g.fri&&!g.bonus&&(S.s
     $('jbSkip').onclick=()=>{ if(!doneToday()&&!confirm('Du har ikke tatt dagens vers. Da teller ikke denne dagen. Hoppe likevel?')) return; jJump(1); };
     $('jbReset').onclick=()=>{ if(!confirm('Slette all fremgang og starte helt fra begynnelsen?')) return; if(TCFG&&TCFG.notes&&nList().length&&confirm('Slette alle notatene i «?» også?')) localStorage.removeItem('rawdah_notes_'+TCFG.name); localStorage.removeItem(KEY); localStorage.removeItem('jabal_'+JABAL.name+'_off'); location.reload(); }; } }
 function jTeaser(){ jt().baytOpen=1; save(); updHikmaPill(); const lib=wiseIcon();
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Jeg så noe i tåka …</h3><div class="card mod">${lib}<div style="flex:1"><p style="margin:0;font-style:italic">«Da jeg gikk tur bak ${R2?'Frukthagen':'hagemuren'} i går, så jeg noe stort og skyggelagt i tåka. Et hus, tror jeg, med en kuppel og lys i ett vindu. Det er på tide at du ser det selv. Skal vi ta en tur og sjekke?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– ${esc(keeper())}</p></div></div>
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">VISMANNEN</p><h3>Jeg så noe i tåka …</h3><div class="card mod">${lib}<div style="flex:1"><p style="margin:0;font-style:italic">«Da jeg gikk tur bak ${R2?'Frukthagen':'hagemuren'} i går, så jeg noe stort og skyggelagt i tåka. Et hus, tror jeg, med en kuppel og lys i ett vindu. Det er på tide at du ser det selv. Skal vi ta en tur og sjekke?»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">${esc(keeper())}</p></div></div>
   <button class="btn" id="jtGo">Ta en tur og sjekk</button><button class="btn ghost" id="jtL">Senere</button>`);
   $('jtGo').onclick=()=>{ jt().baytOpen=1; save(); updHikmaPill(); (R2?goBayt():(toOverview(), setTimeout(()=>openHikma(),600))); }; $('jtL').onclick=()=>{ jt().baytOpen=1; save(); updHikmaPill(); closeSheet(); toast(HZTXT(),3600); }; }
 function jFinale(){ if(EGGON()&&!S.egg&&!jt().eggR){ jt().eggR=1; save(); return eggReveal(jFinale); } snd.chime([523,659,784,1047,1319],.07); sparkle(); jt().finale=1; save();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">⛰️ 7 DAGER</p><h3>Mashallah, du klarte hele uka!</h3>
-  <p>Du har fullført dagens vers 7 dager. Hærfuglen kom hjem med et siste brev, og det ligger i Samling → Rihla.</p>
-  <div class="card"><p style="margin:0;font-size:14px;line-height:1.55"><b style="color:var(--gold2)">Du kan fortsette å bruke appen.</b> Dagens vers og stell i hagen virker som før, men i testen låses ingenting nytt opp etter dag 7: ingen nye kapitler, brev eller lærde. I den ekte appen fortsetter reisen i månedsvis.</p></div>
+  <p>Du har fullført dagens vers 7 dager. Hærfuglen kom hjem med et siste brev, og det ligger i ${R2?'Dagbok → Brev':'Samling → Rihla'}.</p>${R2&&TCFG&&TCFG.notes?'<div class="card"><p style="margin:0;font-size:14.5px">🔓 Nå kan du sende notatene dine til Ibrahim: trykk på <b style="color:var(--gold2)">?</b>-knappen og send.</p></div>':''}
+  <div class="card"><p style="margin:0;font-size:14px;line-height:1.55"><b style="color:var(--gold2)">Du kan fortsette å bruke appen.</b> Dagens vers og hagen virker som før, men i testen låses ingenting nytt opp etter dag 7: ingen nye kapitler, brev eller lærde. I den ekte appen fortsetter reisen i månedsvis.</p></div>
   ${JABAL.form?`<p>Nå har du testet Rawdah i 7 dager, og jeg håper du har lyst til å gi tilbakemelding. Hva fikk deg til å komme tilbake? Glemte du den noen dager? Alt hjelper.</p><a class="btn" href="${JABAL.form}" target="_blank" rel="noopener" style="text-decoration:none">Gi tilbakemelding</a>`:''}
   <button class="btn ghost" id="jfOk">Fortsett i hagen</button>`); $('jfOk').onclick=closeSheet; }
 /* Utviklerpanel (bare i Ibrahims versjon) */
@@ -4575,7 +4583,7 @@ function nAll(){ const L=nList(), nNew=L.filter(x=>!x.sent).length;
   ${L.length?`<button class="btn" id="naSh">💬 Send valgte til Ibrahim på WhatsApp</button><button class="btn ghost" id="naDel">Del valgte på annen måte</button><button class="btn ghost" id="naCp">Kopier valgte</button>${L.some(x=>x.sent)?'<button class="btn ghost" id="naClr">Slett alle som er sendt</button>':''}`:''}<button class="btn ghost" id="naOk">Lukk</button>`);
   $('naOk').onclick=closeSheet; if(!L.length) return;
   const sel=()=>[...$('sheet').querySelectorAll('[data-ck]')].filter(c=>c.checked).map(c=>+c.dataset.ck);
-  const upd=()=>{ const n=sel().length; $('naSh').textContent=n?`💬 Send ${n} valgt${n===1?'':'e'} til Ibrahim på WhatsApp`:'Huk av noe å sende'; ['naSh','naDel','naCp'].forEach(k=>$(k).disabled=!n); };
+  const lock=!!(TCFG.noteLock&&JABAL&&jDay()<7&&!jt().finale); const upd=()=>{ const n=sel().length; $('naSh').textContent=lock?'🔒 Kan sendes når testuka er ferdig (dag 7)':n?`💬 Send ${n} valgt${n===1?'':'e'} til Ibrahim på WhatsApp`:'Huk av noe å sende'; ['naSh','naDel','naCp'].forEach(k=>$(k).disabled=lock||!n); };
   $('sheet').querySelectorAll('[data-ck]').forEach(c=>c.onchange=upd); upd();
   const markSent=S2=>{ const L2=nList(); S2.forEach(i=>{ if(L2[i]) L2[i].sent=Date.now(); }); nSave(L2); nUpd(); };
   const after=S2=>{ markSent(S2); setTimeout(()=>{ toast(`${S2.length} notat${S2.length===1?'':'er'} merket som sendt. Telleren er nullstilt.`,3200); nAll(); },600); };
@@ -4592,8 +4600,8 @@ if(TCFG&&TCFG.notes){ const nb=document.createElement('button'); nb.id='noteBtn'
   nb.addEventListener('pointermove',e=>{ if(!dr) return; if(!moved&&Math.hypot(e.clientX-dr.x0,e.clientY-dr.y0)<8) return; moved=true; nb.classList.add('drag'); place(e.clientX-dr.dx,e.clientY-dr.dy); });
   nb.addEventListener('pointerup',()=>{ if(dr&&moved){ try{ localStorage.setItem(PK,JSON.stringify([parseFloat(nb.style.left),parseFloat(nb.style.top)])); }catch(_){} } dr=null; nb.classList.remove('drag'); });
   nb.addEventListener('pointercancel',()=>{ dr=null; nb.classList.remove('drag'); });
-  let _niT=0; setInterval(()=>{ if(S.noteIntro||busy||$('verse').classList.contains('on')||!S.introSeen||!(KAHWA?kt().welcome:jt().welcome)||SQ.length||(_niT=_niT||Date.now(),Date.now()-_niT<4000)||S.active||$('tour')||$('baytScene')||$('intro').classList.contains('on')||$('title').classList.contains('on')||$('sheet').classList.contains('on')) return; S.noteIntro=1; save(); nb.classList.add('ping');
-    openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DIN TESTKNAPP</p><h3>«?» er notatblokka di</h3><p>Den gule knappen med spørsmålstegn er laget for deg som tester. Bruk den <b style="color:var(--gold2)">med en gang</b> du merker noe:</p><div class="card"><p style="margin:0;font-size:14px;line-height:1.7">🐞 noe som er feil, henger eller glitcher<br>🤔 noe som var forvirrende eller uklart<br>✨ noe du ville lagt til eller gjort annerledes<br>💬 alt annet du tenker</p></div><p>Skriv noen ord og trykk Lagre. Appen husker selv hvor du var, så du trenger ikke forklare det. Små ting teller også, det er ofte de som gjør mest.</p><p style="font-size:13px;color:var(--muted)">Når du vil, trykker du «Se alle og send» → «Send til Ibrahim på WhatsApp» og velger Ibrahim. Du kan også dra knappen dit den passer deg.</p><button class="btn" id="niOk">Skjønner</button>`); $('niOk').onclick=()=>{ nb.classList.remove('ping'); closeSheet(); }; },1500);
+  let _niT=0; setInterval(()=>{ if(S.noteIntro||busy||$('verse').classList.contains('on')||!S.introSeen||!(KAHWA?kt().welcome:jt().welcome)||SQ.length||(_niT=_niT||Date.now(),Date.now()-_niT<4000)||S.active||sheetBusy()||document.querySelector('.hdl')||$('intro').classList.contains('on')||$('title').classList.contains('on')) return; S.noteIntro=1; save(); nb.classList.add('ping');
+    openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">DIN TESTKNAPP</p><h3>«?» er notatblokka di</h3><p>Den gule knappen med spørsmålstegn er laget for deg som tester. Bruk den <b style="color:var(--gold2)">med en gang</b> du merker noe:</p><div class="card"><p style="margin:0;font-size:14px;line-height:1.7">🐞 noe som er feil, henger eller glitcher<br>🤔 noe som var forvirrende eller uklart<br>✨ noe du ville lagt til eller gjort annerledes<br>💬 alt annet du tenker</p></div><p>Skriv noen ord og trykk Lagre. Appen husker selv hvor du var, så du trenger ikke forklare det. Små ting teller også, det er ofte de som gjør mest.</p><p style="font-size:13px;color:var(--muted)">${TCFG.noteLock?'Notatene samles gjennom hele testuka. Når uka er ferdig (dag 7), trykker du «Se alle og send» → «Send til Ibrahim på WhatsApp».':'Når du vil, trykker du «Se alle og send» → «Send til Ibrahim på WhatsApp» og velger Ibrahim.'} Du kan også dra knappen dit den passer deg.</p><button class="btn" id="niOk">Skjønner</button>`); $('niOk').onclick=()=>{ nb.classList.remove('ping'); closeSheet(); }; },1500);
   nb.onclick=e=>{ if(moved){ moved=false; e.preventDefault(); return; } nOpen(); };
   addEventListener('resize',()=>{ if(nb.style.left) place(parseFloat(nb.style.left),parseFloat(nb.style.top)); }); nUpd(); setTimeout(nFlush,4000); addEventListener('online',nFlush); }
 if(JABAL){ $('jabalBtn').onclick=openJabal; $('devBtn').onclick=openDev; updJabalBtn(); if(JABAL.dev&&localStorage.getItem('jabal_'+JABAL.name+'_auto')){ localStorage.removeItem('jabal_'+JABAL.name+'_auto'); setTimeout(()=>{ if(titleOn) $('title').click(); setTimeout(devComplete,1200); },900); } }
