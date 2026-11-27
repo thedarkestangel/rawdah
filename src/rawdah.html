@@ -4454,6 +4454,7 @@ function kFinished(){ snd.chime([523,659,784,1047,1319],.07); sparkle();
   if(R2){ openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🎉 RAWDAH KAHWA 7142</p><h3>Gratulerer! Nå er du virkelig ferdig.</h3>
   <p>Du fant mannen med rosinhodet, møtte Rūmī og så hagen bli spart. Håper du har likt din egen versjon av Rawdah.</p>
   <div class="card"><p style="margin:0;font-size:14.5px;line-height:1.55">Som nevnt underveis er dette en <b style="color:var(--gold2)">forenklet versjon</b> av appen som kommer etter hvert, in shā' Allāh. Håper du har fått skrevet ned feil, bugs og ting som kan bli bedre i <b style="color:var(--gold2)">?</b>-funksjonen. Har du ikke sendt det til Ibrahim ennå, kan du gjøre det nå.</p></div>
+  <p style="font-size:13px;color:var(--muted)">PS: Elefanten, mannen med rosinhodet og Rūmī er bare med i denne testversjonen. De finnes ikke i den ekte appen.</p>
   <p style="font-size:14px">Jazāk Allāhu khayran for tiden din. 🤍</p><button class="btn" id="kfN">Skriv tilbakemelding</button><button class="btn ghost" id="kfX">Klikk meg litt rundt</button>`);
   $('kfX').onclick=closeSheet; $('kfN').onclick=()=>{ closeSheet(); setTimeout(()=>$('noteBtn')&&$('noteBtn').click(),400); }; return; }
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">🎉 RAWDAH KAHWA 7142</p><h3>Gratulerer, du har fullført testversjonen!</h3>
