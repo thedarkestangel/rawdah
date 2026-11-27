@@ -4390,6 +4390,7 @@ function finalLetter(){ snd.hoopoe&&snd.hoopoe(); kMark('brev');
   $('flGo').onclick=()=>{ closeSheet(); setTimeout(kDoneCall,500); }; }
 if(window.KAHWA&&KAHWA.kskip) for(let i=KDONE.length-1;i>=0;i--) if(KAHWA.kskip.includes(KDONE[i][0])) KDONE.splice(i,1);
 if(window.KAHWA&&KAHWA.kfinal){ const _kf=setInterval(()=>{ if(kt().fin){ clearInterval(_kf); return; } if(!S.tour0||S.active||stageBusy()||$('sheet').classList.contains('on')||$('tour')) return; clearInterval(_kf); if((kt().d||{}).brev) return; kt().finQ=1; save(); window.__evAt=Date.now(); letterCall(finalLetter); },2000); }
+if(window.KAHWA) setInterval(()=>{ if(!R2||!S.tour0||kt().fin||(kt().d||{}).brev||_postShow||EVQ.some(e=>e.k==='final')) return; if(!KDONE.filter(([x])=>x!=='rosin'&&x!=='brev').every(([x])=>(kt().d||{})[x])) return; kt().finQ=1; save(); evPush(()=>{ if(!(kt().d||{}).brev&&!_postShow) letterCall(finalLetter); },'final'); },4000);
 function kDoneCall(){ if(!KAHWA||kt().fin) return; snd.chime([523,659,784,1047],.07); sparkle(); window.__lt=Date.now();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0" id="kdK">🎉 RAWDAH KAHWA 7142</p><h3 id="kdH">Gratulerer, du har nå<span id="kdD"></span></h3><p id="kdP">&nbsp;</p><div id="kdB"></div>`);
   let n=0; const dt=setInterval(()=>{ const d=$('kdD'); if(!d){ clearInterval(dt); return; } d.textContent=' '+'.'.repeat(++n); if(n>=8){ clearInterval(dt); kRumble(); } },330); }
