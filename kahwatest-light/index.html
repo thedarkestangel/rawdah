@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.KAHWA={"name": "light", "who": "Ibrahim", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "resetv": 2, "build": "bygg 27.11.2026 · eeca552"};(function(){var k="rawdah_resetv_light",v="2";if(localStorage.getItem(k)!==v){["rawdah_kahwa_light","kahwa_light_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("kahwa_light_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.KAHWA={"name": "light", "who": "Ibrahim", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "resetv": 2, "build": "bygg 27.11.2026 · 7f1b283"};(function(){var k="rawdah_resetv_light",v="2";if(localStorage.getItem(k)!==v){["rawdah_kahwa_light","kahwa_light_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("kahwa_light_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -474,6 +474,7 @@ body:has(.sheet.on) #bellBtn,body:has(#baytScene) #bellBtn,body:has(#tour) #bell
 .tspot{position:fixed;box-shadow:0 0 0 9999px rgba(5,4,18,.74),0 0 0 2px #e7c26b,0 0 26px 8px rgba(231,194,107,.5);transition:left .55s cubic-bezier(.3,.7,.2,1),top .55s cubic-bezier(.3,.7,.2,1),width .55s cubic-bezier(.3,.7,.2,1),height .55s cubic-bezier(.3,.7,.2,1),border-radius .55s;pointer-events:none}
 .tcard{position:fixed;left:14px;right:14px;max-width:440px;margin:0 auto;background:#17133a;border:1px solid rgba(231,194,107,.55);border-radius:18px;padding:14px;color:#efe6d2;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;box-shadow:0 10px 30px rgba(0,0,0,.5)}.tcard.on{opacity:1;transform:none}
 .tk{display:flex;justify-content:space-between;color:#e7c26b;font-size:11.5px;letter-spacing:1px}.tk span{color:var(--muted)}.tcard h4{margin:4px 0 6px;font-family:var(--serif);font-size:20px;color:var(--gold2);font-weight:600}.tcard p{margin:0 0 12px;font-size:14.5px;line-height:1.5}.tcard b{color:#ffe6a6}.tlock{display:block;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.efog{animation:efog 26s ease-in-out infinite alternate}.efog.f2{animation-duration:34s;animation-direction:alternate-reverse}@keyframes efog{from{transform:translateX(-40px)}to{transform:translateX(40px)}}.ecrow{animation:ecrow 5s ease-in-out infinite;transform-box:fill-box}@keyframes ecrow{0%,86%,100%{opacity:1}90%{opacity:.6}}
 .starfly{position:fixed;z-index:30;font-size:46px;color:#fff3cf;text-shadow:0 0 18px #ffd27a,0 0 40px #ffb347;pointer-events:none;line-height:1}
 .startrail{position:fixed;z-index:29;width:6px;height:6px;margin:-3px;border-radius:3px;background:#ffe6a6;box-shadow:0 0 10px #ffd27a;pointer-events:none;animation:strl .9s ease-out forwards}@keyframes strl{to{opacity:0;transform:scale(.2) translateY(10px)}}
 .bstar.nudge .sp{animation:nud .7s ease-in-out}@keyframes nud{0%,100%{transform:scale(1)}30%{transform:scale(1.45) rotate(12deg)}60%{transform:scale(.9) rotate(-8deg)}}
@@ -1490,8 +1491,9 @@ function renderSection(){
   let h='', b='';
   if(q.id==='roser'){ h+=depth(S.roses.map((p,i)=>[SLOTS[p.s].y,`<g class="rz${S.sprout===p.s&&q.id==='roser'?' sprout':''}${R2&&S.droop&&S.droop.i===i&&!S.droop.done?' droop':''}" data-r="${i}">${roseSvg(p,SLOTS[p.s])}</g>`])); if(q.id==='roser'&&S.sprout!=null&&!S.active){ const sp=S.sprout; setTimeout(()=>{ if(S.sprout===sp){ S.sprout=null; save(); const g=document.querySelector('.rz.sprout'); if(g){ const r=g.getBoundingClientRect(), sr=stage.getBoundingClientRect(); fxBurst(r.left+r.width/2-sr.left,r.top+r.height/2-sr.top,['#e46a8a','#ffe6a6','#7fd36a'],18,40,4,12); fxRing(r.left+r.width/2-sr.left,r.top+r.height-sr.top); } } },2900); }
     if(!S.roses.length) b+=beacon(110,560,'Hver økt planter en rose her',24); }
-  if(q.id==='taarn'){ const Lr=hifzLearned(); h+=depth(SLOTS.filter(s=>s.x<150||s.x>240).slice(0,Math.min(Lr.length,20)).map((sl,i)=>[sl.y,cyp(sl.x,sl.y,(36+Lr[i].lv*10)*sl.sc,9*sl.sc,'bush2')]))+towerScene();
-    if(R2) h+=towerShadow(); else if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en surah',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
+  setGround(); if(q.id==='taarn'&&R2){ setGround('#121722','#040509'); h+=eerieBack()+towerR2(); }
+  else if(q.id==='taarn'){ const Lr=hifzLearned(); h+=depth(SLOTS.filter(s=>s.x<150||s.x>240).slice(0,Math.min(Lr.length,20)).map((sl,i)=>[sl.y,cyp(sl.x,sl.y,(36+Lr[i].lv*10)*sl.sc,9*sl.sc,'bush2')]))+towerScene();
+    if(!S.hifz.current) b+=beacon(195,560,'Trykk for å velge en surah',-30); else if(!S.active) b+=beacon(250,560,'Trykk på tårnet for neste vers',-26); }
   if(q.id==='beite'){
     if(!ok){ h+=rubble(90,600,1.4)+rubble(260,640,1.6)+`<path d="M60 560 l40 -6 M110 552 l30 4 M250 570 l50 -8" stroke="#5a4a3a" stroke-width="3"/>`+`<g class="campf"><path d="M150 672 l20 -6 M152 666 l18 6" stroke="#4a3020" stroke-width="3.5" stroke-linecap="round"/><path class="flm" d="M161 668 Q154 656 160 644 Q163 652 166 648 Q170 658 161 668Z" fill="#ffb347"/><path class="flm b" d="M161 668 Q157 660 161 653 Q165 660 161 668Z" fill="#ffe6a6"/><circle cx="161" cy="660" r="26" fill="#ffb347" opacity=".12"/></g><g class="keeper" style="cursor:pointer">${shepherdSvg(196,676).replace('class="walk"','')}</g>`; }
     else { const F=S.flock, sl=SLOTS.filter(s=>s.y>470&&s.y<720).slice(0,(F.sheep||0)+(F.cows||0)+(F.goats||0)+(F.hens||0)), L2=[]; let k=0;
@@ -1522,7 +1524,7 @@ function renderSection(){
   if(!doneToday()&&S.hud&&S.hud.day===dayStr()&&S.hud.show&&!S.hud.seen&&!S.active&&!busy&&S.vs>=2){ h+=hudSvg(168,452); b+=beacon(168,416,'En hærfugl har kommet',-22); }
   $('rainbow').innerHTML=(S.streak>0&&S.streak%7===0&&doneToday())?`<g opacity=".55">${['#e46a6a','#f2a14e','#f2d94e','#7fd36a','#6aa8e0','#9a7ae0'].map((c,i)=>`<path d="M-30 340 A230 230 0 0 1 420 340" fill="none" stroke="${c}" stroke-width="7" transform="translate(${i*3.5} ${i*7}) scale(${1-i*.018})"/>`).join('')}</g>`:'';
   if(inStell()&&q.id!=='beite') h+=`<g class="helper keeper">${shepherdSvg(318,660)}</g>`;
-  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+wiseLayer(q.id)+r2Layer(q.id)+(KAHWA?raisinLayer(q.id)+rumiLayer(q.id):'')+weatherLayer(); }
+  { const LL=lifeLayer(q.id), EG=eggLayer(q.id); h=(R2&&q.id==='beite'?pastureBack():'')+LL.back+EG.back+fishLayer()+h+LL.front+EG.sky+(restored(q.id)?perchLayer(q.id):'')+signLayer(q.id)+wiseLayer(q.id)+r2Layer(q.id)+(KAHWA?raisinLayer(q.id)+rumiLayer(q.id):'')+weatherLayer()+(R2&&q.id==='taarn'?eerieFront():''); }
   b+=r2Beacons(q.id); $('items').innerHTML=h; $('beacons').innerHTML=b; requestAnimationFrame(placeStar);
   $('prevQ').style.visibility=curQ>0?'visible':'hidden'; $('nextQ').style.visibility=curQ<3?'visible':'hidden';
 }
@@ -2852,6 +2854,39 @@ function postLayer(q){ if(q!=='roser'||S.active||!_postShow) return ''; return `
 function postTap(){ const f=_postShow; _postShow=null; renderSection(); if(f) f(); }
 /* Tårnet i skyggen */
 const shadowOp=()=>{ const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length, T=SIGNS.filter(g=>!g.fri).length||1; return Math.max(.25,.85-.6*n/T); };
+
+/* ---- Beitet: et skikkelig beite ---- */
+function setGround(a,b){ const st=document.querySelectorAll('#ground stop'); if(st.length<2) return; st[0].style.stopColor=a||''; st[1].style.stopColor=b||''; if(!a){ st[0].style.stopColor='var(--ground1)'; st[1].style.stopColor='var(--ground2)'; } }
+function sRnd(seed){ let x=seed; return ()=>{ x=(x*16807)%2147483647; return (x-1)/2147483646; }; }
+function pastureBack(){ const n=skyKey==='natt', d=skyKey==='kveld'||skyKey==='morgen', P=n?['#22361f','#16261a','#0e1a12','#2e4626','#3a5530']:d?['#4f6e34','#3a5628','#26401d','#628040','#79964c']:['#6f9a44','#56803a','#3d6630','#86ad55','#a3c46a'], r=sRnd(7);
+  setGround(P[0],P[2]);
+  let h=`<path d="M0 352 Q60 326 130 342 Q200 356 260 336 Q330 318 390 340 V380 H0Z" fill="${P[3]}" opacity=".9"/>
+  <path d="M0 372 Q90 352 170 368 Q250 382 320 362 Q360 352 390 360 V400 H0Z" fill="${P[1]}" opacity=".85"/>`;
+  for(let i=0;i<5;i++) h+=`<path d="M0 ${430+i*62} Q195 ${414+i*62} 390 ${430+i*62}" stroke="${P[4]}" stroke-opacity="${n?.05:.12}" stroke-width="24" fill="none"/>`;
+  h+=`<path d="M300 760 Q280 640 250 560 Q232 500 236 440" stroke="${n?'#3a3020':'#a88a5a'}" stroke-opacity=".55" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+  for(let i=0;i<70;i++){ const y=390+r()*360, x=r()*390, sc=.5+(y-390)/360*1.1; if(Math.abs(x-195)<22+ (y-330)*.1) continue; h+=`<path d="M${x} ${y} l${-2*sc} ${-7*sc} M${x} ${y} l0 ${-9*sc} M${x} ${y} l${2.4*sc} ${-7*sc}" stroke="${r()<.5?P[3]:P[4]}" stroke-width="${1.1*sc}" stroke-linecap="round" opacity="${n?.55:.9}"/>`; }
+  if(!n) for(let i=0;i<26;i++){ const y=400+r()*340, x=r()*390, sc=.5+(y-390)/360; if(Math.abs(x-195)<30) continue; h+=`<circle cx="${x}" cy="${y}" r="${1.6*sc}" fill="${['#f4efe2','#f2d94e','#e9a3c8','#f4efe2'][i%4]}" opacity=".85"/>`; }
+  const bale=(x,y,sc)=>`<g transform="translate(${x} ${y}) scale(${sc})"><ellipse cx="0" cy="12" rx="22" ry="4" fill="rgba(0,0,0,.25)"/><rect x="-20" y="-12" width="40" height="24" rx="6" fill="${n?'#6a5a30':'#d9b86a'}" stroke="#1a1030" stroke-width="1.6"/><path d="M-12 -12 V12 M12 -12 V12" stroke="${n?'#4a3e20':'#a8873e'}" stroke-width="2"/><path d="M-16 -6 h8 M2 2 h10 M-14 6 h6" stroke="${n?'#7a6a3a':'#efd58a'}" stroke-width="1"/></g>`;
+  h+=bale(236,512,.75)+bale(362,560,.85);
+  h+=`<g transform="translate(320 520)"><path d="M-26 0 h52 l-6 14 h-40Z" fill="${n?'#3a2a1a':'#7a5230'}" stroke="#1a1030" stroke-width="1.6"/><rect x="-22" y="1" width="44" height="4" fill="${n?'#2a3a5a':'#7ab0d8'}" opacity=".8"/></g>`;
+  return h; }
+
+/* ---- Lysets tårn: i skyggen ---- */
+function eerieBack(){ const o=shadowOp(), n=skyKey==='natt';
+  return `<defs><radialGradient id="eeV" cx=".5" cy=".55" r=".75"><stop offset=".35" stop-color="#05060d" stop-opacity="0"/><stop offset="1" stop-color="#020208" stop-opacity=".9"/></radialGradient><linearGradient id="eeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151a24"/><stop offset="1" stop-color="#05060a"/></linearGradient><radialGradient id="eeM"><stop offset="0" stop-color="#cfe0e6" stop-opacity=".9"/><stop offset=".25" stop-color="#9fb4c2" stop-opacity=".35"/><stop offset="1" stop-color="#9fb4c2" stop-opacity="0"/></radialGradient></defs>
+  <rect width="390" height="760" fill="#0b0f18" opacity="${(.7*o+.12).toFixed(2)}"/>
+  <circle cx="200" cy="300" r="120" fill="url(#eeM)" opacity="${(.5*o).toFixed(2)}"/><circle cx="200" cy="300" r="22" fill="#dfe8ea" opacity="${(.55*o).toFixed(2)}"/><circle cx="208" cy="294" r="20" fill="#0d1020" opacity="${(.5*o).toFixed(2)}"/>
+  ${[[38,520,1.1],[350,500,1],[70,660,1.4],[330,690,1.3]].map(([x,y,sc],i)=>`<g transform="translate(${x} ${y}) scale(${sc})" opacity="${(.6+.4*o).toFixed(2)}"><path d="M0 0 V-70 M0 -40 l-18 -16 l-6 -12 M-18 -56 l-10 -2 M0 -52 l16 -18 l4 -12 M16 -70 l10 -4 M0 -66 l-8 -14 M0 -24 l12 -10" stroke="#07070d" stroke-width="${i%2?3:3.6}" stroke-linecap="round" fill="none"/><path d="M-6 0 Q0 -4 6 0" stroke="#07070d" stroke-width="5"/></g>`).join('')}`; }
+function towerR2(){ const o=shadowOp();
+  return `<g><ellipse cx="195" cy="702" rx="78" ry="10" fill="rgba(0,0,0,.55)"/>
+  <path d="M158 700 V470 L150 462 V420 L164 412 V330 L172 318 L178 330 L186 300 L194 316 L200 296 L208 322 L216 310 L226 336 V412 L240 420 V462 L232 470 V700Z" fill="#0b0a14" stroke="#4a4c60" stroke-opacity=".55" stroke-width="1.2"/>
+  <path d="M172 360 l8 22 l-6 18 M214 450 l-10 26 l8 20 M180 560 l12 18 l-4 24" stroke="#2a2c3c" stroke-width="1.2" fill="none"/>
+  ${[[195,360],[182,440],[208,440],[195,520],[195,600]].map(([x,y],i)=>`<path d="M${x-7} ${y} V${y-12} Q${x} ${y-22} ${x+7} ${y-12} V${y}Z" fill="#030308" stroke="#2a2c3c" stroke-width=".8"/>`).join('')}
+  <path d="M150 462 Q170 520 160 600 Q176 650 166 700 M232 470 Q218 540 230 620" stroke="#1d2a1e" stroke-width="3" fill="none" opacity=".9"/>
+  ${[[168,318,1],[214,312,.9],[236,418,1.1],[152,420,.8]].map(([x,y,s],i)=>`<g class="ecrow" style="animation-delay:${i*1.3}s" transform="translate(${x} ${y}) scale(${s})"><path d="M-6 0 Q-4 -7 2 -6 L7 -9 L5 -4 Q7 1 2 2 L-2 2 L-8 4Z" fill="#050508"/></g>`).join('')}
+  </g>`; }
+function eerieFront(){ const o=shadowOp();
+  return `<g style="pointer-events:none" opacity="${(.35+.65*o).toFixed(2)}"><g class="efog f1"><ellipse cx="120" cy="640" rx="200" ry="34" fill="#9aa8b8" opacity=".16"/><ellipse cx="330" cy="700" rx="180" ry="28" fill="#9aa8b8" opacity=".14"/></g><g class="efog f2"><ellipse cx="260" cy="560" rx="220" ry="26" fill="#b4c0cc" opacity=".1"/><ellipse cx="40" cy="720" rx="160" ry="30" fill="#9aa8b8" opacity=".18"/></g><rect width="390" height="760" fill="url(#eeV)"/></g>`; }
 function towerShadow(){ return `<defs><radialGradient id="tShG" cx=".5" cy=".55" r=".55"><stop offset="0" stop-color="#05040f" stop-opacity=".95"/><stop offset=".7" stop-color="#0b0920" stop-opacity=".7"/><stop offset="1" stop-color="#0b0920" stop-opacity="0"/></radialGradient></defs><g class="tshadow" style="opacity:${shadowOp().toFixed(2)};pointer-events:none"><ellipse cx="180" cy="470" rx="150" ry="250" fill="url(#tShG)"/></g>`; }
 function towerInfo(){ const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length;
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">LYSETS TÅRN · I SKYGGEN</p><h3>Tårnet sover</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Hver gang du finner et av tegnene fra Koranens fortellinger, letter skyggen litt. En dag skal lyset tennes her igjen, in shā' Allāh.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p>Tegn funnet: <b style="color:var(--gold2)">${n}</b>. Tegnene dukker opp her i tårnhagen når vismannen har sett dem.</p><p style="font-size:12.5px;color:var(--muted)">🚧 Lysets tårn er under arbeid og åpner i en senere versjon.</p><button class="btn" id="tiOk">Fint</button>`); $('tiOk').onclick=closeSheet; }
