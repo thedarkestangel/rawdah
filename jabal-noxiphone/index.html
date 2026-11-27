@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "noxiphone", "who": "noxp (iPhone)", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "skip": true, "resetv": 2, "build": "bygg 27.11.2026 · 2422722"};(function(){var k="rawdah_resetv_noxiphone",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_noxiphone","jabal_noxiphone_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_noxiphone_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "noxiphone", "who": "noxp (iPhone)", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "skip": true, "resetv": 2, "build": "bygg 27.11.2026 · 378a2ad"};(function(){var k="rawdah_resetv_noxiphone",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_noxiphone","jabal_noxiphone_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_noxiphone_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1496,12 +1496,16 @@ function openSigns(){ bookTab='tegn'; const F=S.signs||{}, got=SIGNS.filter(g=>F
   $('sheet').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ bookTab=b.dataset.b; bookTab==='album'?openAlbum():bookTab==='rihla'?openRihla():bookTab==='tegn'?openSigns():openBook(); });
   $('sheet').querySelectorAll('[data-sg]').forEach(c=>c.onclick=()=>{ const g=SIGNS.find(x=>x.id===c.dataset.sg); openSheet(`<h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(g.id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgB">Tilbake</button>`); $('sgB').onclick=openSigns; }); }
 function signLayer(q){ if(S.active) return ''; return SIGNS.filter(g=>g.q===q&&(!g.when||g.when())&&signVisible(g)&&!(R2&&!g.fri&&(S.signs||{})[g.id])).map(g=>`<g class="sign${!(S.signs||{})[g.id]&&!g.fri?' glim':''}" onclick="signTap('${g.id}')" style="cursor:pointer" transform="translate(${g.x} ${g.y})">${signArt(g.fri&&!caveOpen()?'hule':g.id)}<rect x="-46" y="-76" width="92" height="100" fill="transparent"/></g>`).join(''); }
+function signToChest(id,n=0){ if(sheetBusy()&&n<150) return setTimeout(()=>signToChest(id,n+1),400); const el=[...document.querySelectorAll('#items .sign')].find(x=>(x.getAttribute('onclick')||'').includes("'"+id+"'")), to=$('learnBtn'); if(!el||!to){ renderSection(); return; }
+  const a=el.getBoundingClientRect(), b=to.getBoundingClientRect(), f=document.createElement('div'); f.className='starfly'; f.textContent='✦'; f.style.left=(a.left+a.width/2)+'px'; f.style.top=(a.top+a.height/2)+'px'; document.body.appendChild(f); el.style.opacity='0';
+  const an=f.animate([{transform:'translate(-50%,-50%) scale(1.4)',opacity:1},{transform:`translate(-50%,-50%) translate(${(b.left+b.width/2)-(a.left+a.width/2)}px,${(b.top+b.height/2)-(a.top+a.height/2)}px) scale(.4)`,opacity:.9}],{duration:1100,easing:'cubic-bezier(.5,0,.3,1)',fill:'forwards'});
+  an.onfinish=()=>{ f.remove(); to.classList.remove('ping'); void to.offsetWidth; to.classList.add('ping'); setTimeout(()=>to.classList.remove('ping'),1600); renderSection(); }; }
 function signTap(id){ if(S.active) return; const g=SIGNS.find(x=>x.id===id); if(!g) return;
   if(g.fri&&!caveOpen()){ snd.chime([392,494],.05); haptic(8); openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN STEIN FORAN EN HULE</p><h3>Hva skjuler seg her, mon tro?</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt('hule')}</svg></div><p>Kom tilbake på fredag og finn ut, in shā' Allāh.</p><p style="font-size:13px;color:var(--muted)">Hint: Allah lærer oss i samme surah å aldri si «jeg gjør det i morgen» uten å legge til «in shā' Allāh» (18:23–24).</p><button class="btn" id="sgOk">In shā' Allāh</button>`); $('sgOk').onclick=closeSheet; return; }
   if(g.fri) return kahfTap(g);
-  S.signs=S.signs||{}; kMark('tegn'); const first=!S.signs[id]; S.signs[id]=dayStr(); save(); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
+  S.signs=S.signs||{}; kMark('tegn'); const first=!S.signs[id]; S.signs[id]=dayStr(); save(); if(R2&&first&&!g.fri) setTimeout(()=>signToChest(id),60); snd.chime(first?[523,659,784,1047]:[523,659],.06); haptic(first?[15,30,15]:8);
   const n=Object.keys(S.signs).length;
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${signFound()} AV ${SIGNN()}${g.bonus?' · SJELDEN BONUS':''}</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p><button class="btn ghost" id="sgRead">Les verset</button>`);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${first?'DU FANT ET SKJULT TEGN':'ET SKJULT TEGN'} · ${signFound()} AV ${SIGNN()}${g.bonus?' · SJELDEN BONUS':''}</p><h3>${esc(g.t)}</h3><div style="text-align:center"><svg viewBox="-34 -54 68 66" width="150" height="140">${signArt(id)}</svg></div><p>${esc(g.d)}</p><p style="font-size:13px;color:var(--gold2)">Koranen ${esc(g.ref)}</p>${R2?'<p style="font-size:13px;color:var(--muted)">✦ Tegnet legges i Skatter → Tegn.</p>':''}<button class="btn ghost" id="sgRead">Les verset</button>`);
   $('sgRead').onclick=()=>openVerseRef(g.ref.replace('–','-'),'KORANEN '+g.ref); }
 function renderSection(){
   const q=QUADS[curQ], ok=restored(q.id);
@@ -1655,7 +1659,7 @@ function renderCarpet(){
   $('carpet').innerHTML=h+b;
   { const t=[...$('carpet').querySelectorAll('text')].find(x=>x.getAttribute('y')==='66'), rc=$('carpet').querySelector('rect[y="53"]'); if(t&&rc){ let L=t.getComputedTextLength(); if(L>366){ t.setAttribute('textLength',366); t.setAttribute('lengthAdjust','spacingAndGlyphs'); L=366; } rc.setAttribute('x',(195-L/2-10).toFixed(1)); rc.setAttribute('width',(L+20).toFixed(1)); } }
   $('carpet').querySelectorAll('.quad').forEach(g=>g.onclick=()=>enterQuad(+g.dataset.q));
-  $('fountain').onclick=()=>{ if(S.active) enterQuad(Math.max(0,QUADS.findIndex(q=>q.id===S.active.q))); else { enterQuad(0); setTimeout(()=>spin(),650); } };
+  $('fountain').onclick=()=>{ if(S.active) enterQuad(Math.max(0,QUADS.findIndex(q=>q.id===S.active.q))); else { enterQuad(0); if(!R2) setTimeout(()=>spin(),650); } };
 }
 function needs(id){
   if(id==='taarn'){ if(!S.active&&canClean(id)) return 'Rydd her'; if(!S.hifz.current) return 'I ruiner'; if(hifzLearned().some(t=>t.dim)) return 'Repeter'; return ''; }
@@ -2506,7 +2510,7 @@ function spin(force){
   $('vSec').classList.add('swirl'); $('beacons').innerHTML='';
   spinFx(cat,spName).then(()=>{ $('vSec').classList.remove('swirl'); busy=false; startSession({kind:'spin',cat:cat.id,ref,q:QUADS[curQ].id,short:pendingShort&&!force},pre); pendingShort=false; });
 }
-function starHit(e){ const g=document.querySelector('#beacons .bstar path'); if(!g) return false; const r=g.getBoundingClientRect(); if(!r.width) return false; return Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<Math.max(62,r.width*1.5); }
+function starHit(e){ const g=document.querySelector('#beacons .bstar path'); if(!g) return false; const r=g.getBoundingClientRect(); if(!r.width) return false; return Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<(R2&&doneToday()?Math.max(30,r.width*.8):Math.max(62,r.width*1.5)); }
 function starFly(then){ const g=document.querySelector('#beacons .bstar'), p=g&&g.querySelector('path'); if(!p||fxOff()) return then();
   const r=p.getBoundingClientRect(), f=document.createElement('div'); f.className='starfly'; f.textContent='✦'; f.style.left=(r.left+r.width/2)+'px'; f.style.top=(r.top+r.height/2)+'px'; document.body.appendChild(f); g.style.visibility='hidden'; snd.chime([784,988,1175],.05); haptic(8);
   const dx=(Math.random()<.5?-1:1)*(40+Math.random()*50), an=f.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:'translate(-50%,-50%) translate(0,14px) scale(1.5)',opacity:1,offset:.18},{transform:`translate(-50%,-50%) translate(${dx*.6}px,-${r.top*.55}px) scale(.8)`,opacity:.9,offset:.6},{transform:`translate(-50%,-50%) translate(${dx}px,-${r.top+40}px) scale(.25)`,opacity:0}],{duration:1500,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'});
@@ -3136,7 +3140,7 @@ function towerFlashback(){ return new Promise(res=>{ const d=document.createElem
    <div class="bsCap" id="tfCap"></div><div class="bsBtns" id="tfBtns"></div>`;
   document.body.appendChild(d); requestAnimationFrame(()=>d.classList.add('on')); snd.chime([392,494,587],.07);
   const $$=i=>document.getElementById(i);
-  const cap=t=>{ const c=$$('tfCap'); c.classList.remove('on'); setTimeout(()=>{ c.innerHTML=`<b>VISMANNEN · FOR LENGE SIDEN</b><span>${esc(t)}</span>`; c.classList.add('on'); },150); };
+  const cap=t=>{ const c=$$('tfCap'); c.classList.remove('on'); setTimeout(()=>{ c.innerHTML=`<b>${WNU()} · FOR LENGE SIDEN</b><span>${esc(t)}</span>`; c.classList.add('on'); },150); };
   const next=l=>new Promise(r=>{ const b=$$('tfBtns'); setTimeout(()=>{ b.innerHTML=`<button class="btn">${esc(l||'…')}</button>`; b.classList.add('on'); b.querySelector('button').onclick=()=>{ b.classList.remove('on'); b.innerHTML=''; r(); }; },1400); });
   const mt=setInterval(()=>{ const n=performance.now(), m=$$('tfMotes'); if(m) m.setAttribute('transform',`translate(${Math.sin(n/2000)*6} ${-(n/70)%40})`); },40);
   (async()=>{ await new Promise(r=>setTimeout(r,900));
@@ -3147,6 +3151,21 @@ function towerFlashback(){ return new Promise(res=>{ const d=document.createElem
     await new Promise(r=>setTimeout(r,900)); $$('tfDark').style.transition='opacity 1.6s'; $$('tfDark').setAttribute('opacity','1'); $$('tfDark').style.opacity=1;
     await new Promise(r=>setTimeout(r,1800)); clearInterval(mt); d.classList.remove('on'); setTimeout(()=>{ d.remove(); res(); },500); })(); }); }
 function tour0(){ const q=id=>QUADS.findIndex(x=>x.id===id), F=isF()?'gjeterinne':'gjeter', W=t=>`«${t}»`;
+  const T2=[
+   {q:'roser',center:1,w:1,k:WNU(),t:'Velkommen til Rawdah',d:W(`As-salāmu ʿalaykum, ${F}. Jeg heter Shaykh Nūr. Velkommen til hagen, eller det som er igjen av den. Kom, så går vi en runde, så du vet hva du kan gjøre i hver hage.`)},
+   {q:'roser',el:'#items .wise',pad:12,round:30,w:1,k:'ROSEHAGEN',t:'Her finner du meg',d:W('Om dagen sitter jeg her og leser Koranen, om kvelden ved bålet. Trykk på meg når du lurer på noe.')},
+   {q:'roser',svg:[195,560,240,170],zoom:1.5,w:1,k:'ROSEHAGEN',t:'Rosene dine',d:W('Hvert vers du leser, blir en rose her. Hver dag kommer en knopp: vann den ved å fylle inn ordet som mangler. Henger en gammel rose med hodet, er det tid for å repetere den. Når 36 roser har blomstret, bindes de til en bukett.')},
+   {q:'roser',center:1,w:1,k:'ROSEHAGEN',t:'Hageporten',d:W('Her lander hærfuglen når han har med et brev fra reisen. Da får du beskjed, og han kommer med brevet til deg.')},
+   {q:'roser',el:'#taskPill',if:()=>$('taskPill').style.display!=='none',pad:6,w:1,k:'DAGENS OPPGAVER',t:'Små ting hver dag',d:W('Her står det du kan gjøre i dag. Dagens vers står alltid øverst. Trykk på en oppgave, så viser jeg deg hvor den er.')},
+   {q:'beite',svg:[214,575,240,170],zoom:1.5,w:1,k:'BEITET',t:'Bare kua ble igjen',d:W('Her gikk flokken en gang. Nå står bare kua igjen blant knuste gjerder. Du kan reparere gjerdet, trauet og skuret med hendene, tre ting om dagen. Når hagen får liv igjen, kommer flokken hjem. Da gir du dyrene mat, og de gir melk, ull og egg.')},
+   {q:'beite',svg:[205,296,210,96],zoom:1.8,w:1,k:'BEITET',t:'Suqen',d:W('Der borte ligger markedet. Hos kjøpmannen bytter du det hagen gir mot det dyrene og hagen trenger, og du kan gi bort til den som trenger det.')},
+   {q:'frukt',svg:[195,560,300,220],zoom:1.3,w:1,k:'FRUKTHAGEN',t:'Trær som bærer kunnskap',d:W('Når trærne bærer, høster du kort: dadler gir hadith, oliven Allahs navn, granatepler duʿāʾ og druer fortellinger. Kortene samles i Skatter. Gjør du en god gjerning, får du et frø du kan plante her.')},
+   {q:'frukt',svg:[200,290,200,120],zoom:1.7,w:1,k:'FRUKTHAGEN',t:'Noe i tåka',d:W('Og der, bak hagen, i tåka … det har stått et hus der en gang. Vi får se om tåka letter.')},
+   {q:'taarn',svg:[195,290,150,220],zoom:1.5,w:1,k:'LYSETS TÅRN',t:'Manāraen i tåka',d:W('Tårnet sover i tåka. Rundt i alle hagene ligger tegn fra Koranens fortellinger. Finner du dem, letter tåka litt, og tegnene samles i Skatter.')},
+   {q:'taarn',center:1,w:1,k:'LYSETS TÅRN',t:'Tårnet',d:W('Du lurer på hva tårnet var? La meg fortelle deg.'),btn:'Fortell'},
+   {q:'taarn',pre:towerFlashback,svg:[195,290,150,220],zoom:1.5,w:1,k:'LYSETS TÅRN',t:'Slik står det nå',d:W('Mørkt. Stille. Men steinene står fortsatt.')},
+   null,null,
+   {q:'roser',el:'#beacons .bstar path',pad:30,round:80,w:1,k:'STJERNEN',t:'Alt begynner med ett vers',d:W('Ser du stjernen? Det er den siste flammen fra lykta, satt på himmelen av hærfuglen. Hver dag gir den deg ett vers. Trykk på den når du er klar.'),last:'Bismillāh'}];
   const steps=[
    {q:'roser',center:1,w:1,k:WNU(),t:'Velkommen til Rawdah',d:W(`As-salāmu ʿalaykum, ${F}. ${R2?'Jeg heter Shaykh Nūr. ':''}Velkommen til hagen, eller det som er igjen av den. Kom, så viser jeg deg rundt.`)},
    {q:'roser',el:'#items .wise',pad:12,round:30,w:1,k:WNU(),t:'Her finner du meg',d:W('Som regel sitter jeg her med Koranen. Trykk på meg når du lurer på noe.')},
@@ -3162,6 +3181,7 @@ function tour0(){ const q=id=>QUADS.findIndex(x=>x.id===id), F=isF()?'gjeterinne
    {q:'taarn',center:1,w:1,k:'VISMANNENS DUʿĀʾ',t:'Allāhumma-jʿali l-Qurʾāna rabīʿa qulūbinā',d:'<span style="display:block;font-family:var(--ar);direction:rtl;font-size:20px;line-height:1.8;color:#ffe6a6;text-align:center">اللَّهُمَّ اجْعَلِ الْقُرْآنَ رَبِيعَ قُلُوبِنَا وَنُورَ صُدُورِنَا</span>«Å Allah, gjør Koranen til våren i hjertene våre og lyset i brystet vårt.» <span style="color:var(--muted);font-size:12px">(Ahmad)</span><br><br>'+W('Og vis oss veien, så tårnet kan lyse igjen.'),btn:'Āmīn'},
    {q:'taarn',center:1,k:'🚧 UNDER ARBEID',t:'Lysets tårn bygges',d:'Denne delen av Rawdah er under arbeid. Den åpner i en senere versjon, in shā\' Allāh. Til da står tårnet i skyggen, og vismannen ber for det.'},
    {q:'roser',el:'#beacons .bstar path',pad:30,round:80,w:1,k:'STJERNEN',t:'Alt begynner med ett vers',d:W('Ser du stjernen? Det er den siste flammen fra lykta, satt på himmelen av hærfuglen. Hver dag gir den deg ett vers. Trykk på den når du er klar.'),last:'Bismillāh'}];
+  if(R2){ T2[12]=steps[11]; T2[13]=steps[12]; steps.splice(0,steps.length,...T2); }
   S.tour1=1; S.tour0=1; save();
   tourRun(steps,()=>{ const g=document.querySelector('#beacons .bstar'); if(g){ g.classList.remove('nudge'); void g.getBoundingClientRect(); g.classList.add('nudge'); } }); }
 
@@ -3178,7 +3198,7 @@ function tourRun(steps,done){ if($('tour')) return; steps=steps.filter(st=>!st.i
     if(st.pre){ d.style.visibility='hidden'; unzoom(); await st.pre(); d.style.visibility=''; }
     if(st.q){ const qi=QUADS.findIndex(x=>x.id===st.q); if(qi>=0&&(view!=='sec'||curQ!==qi)){ unzoom(); $('tCard').classList.remove('on'); enterQuad(qi); await new Promise(r=>setTimeout(r,650)); } }
     if(st.scroll){ const e=typeof st.el==='function'?st.el():document.querySelector(st.el), sh=$('sheet'); if(e&&sh){ sh.scrollTop+=e.getBoundingClientRect().top-sh.getBoundingClientRect().top-sh.clientHeight*.45; } }
-    let r=st.center?{x:innerWidth/2,y:innerHeight*.42,w:0,h:0}:tourRect(st); if(!r){ i++; if(i<steps.length) return show(); return end(); }
+    let r; if(st.center) r={x:innerWidth/2,y:innerHeight*.42,w:0,h:0}; else { const oT=sv.style.transform, oTr=sv.style.transition; sv.style.transition='none'; sv.style.transform=''; r=tourRect(st); sv.style.transform=oT; void sv.offsetWidth; sv.style.transition=oTr; } if(!r){ i++; if(i<steps.length) return show(); return end(); }
     let s=1; if(st.zoom){ s=st.zoom; const vr=$('vSec').getBoundingClientRect(), cx=r.x+r.w/2, cy=r.y+r.h/2; sv.style.willChange='transform'; sv.style.transition='transform .9s cubic-bezier(.3,.7,.2,1)'; sv.style.transformOrigin=`${cx-vr.left}px ${cy-vr.top}px`; sv.style.transform=`scale(${s})`; r={x:cx-r.w*s/2,y:cy-r.h*s/2,w:r.w*s,h:r.h*s}; } else unzoom();
     const pad=st.center?0:st.pad==null?8:st.pad, sp=$('tSpot'), c=$('tCard'), W=innerWidth, H=innerHeight;
     const R={x:Math.max(4,r.x-pad),y:Math.max(4,r.y-pad)}; R.w=Math.min(W-8,r.w+pad*2); R.h=Math.min(H-8,r.h+pad*2);
