@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "noxiphone", "who": "noxp (iPhone)", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "skip": true, "resetv": 2, "build": "bygg 27.11.2026 · c5c6446"};(function(){var k="rawdah_resetv_noxiphone",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_noxiphone","jabal_noxiphone_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_noxiphone_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "noxiphone", "who": "noxp (iPhone)", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "skip": true, "resetv": 2, "build": "bygg 27.11.2026 · 5453451"};(function(){var k="rawdah_resetv_noxiphone",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_noxiphone","jabal_noxiphone_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_noxiphone_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2520,7 +2520,7 @@ function starFly(then){ const g=document.querySelector('#beacons .bstar'), p=g&&
   for(let k=0;k<7;k++) setTimeout(()=>{ const t=document.createElement('i'); t.className='startrail'; const b=f.getBoundingClientRect(); t.style.left=(b.left+b.width/2)+'px'; t.style.top=(b.top+b.height/2)+'px'; document.body.appendChild(t); setTimeout(()=>t.remove(),900); },120+k*150);
   an.onfinish=()=>{ f.remove(); then(); setTimeout(()=>{ if(g.isConnected) g.style.visibility=''; },1200); }; }
 function starTap(){ if(doneToday()&&!pendingShort&&!(KAHWA&&kt().allowOnce)) return starFly(()=>spin()); spin(); }
-$('tap').onclick=e=>{ if(S.active) return; if(starHit(e)) return starTap(); const g=document.querySelector('#beacons .bstar'); if(g){ g.classList.remove('nudge'); void g.getBoundingClientRect(); g.classList.add('nudge'); }
+$('tap').onclick=e=>{ if(starHit(e)&&!S.active) return starTap(); { const t=$('tap'); t.style.pointerEvents='none'; const el=document.elementFromPoint(e.clientX,e.clientY); t.style.pointerEvents=''; const h=el&&el.closest&&el.closest('#items [onclick], #beacons [onclick]'); if(h){ h.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:e.clientX,clientY:e.clientY})); return; } } if(S.active) return; const g=document.querySelector('#beacons .bstar'); if(g){ g.classList.remove('nudge'); void g.getBoundingClientRect(); g.classList.add('nudge'); }
   if(!doneToday()||pendingShort) toast('Trykk på den glødende stjernen for å få dagens vers',2400); };
 
 /* ================= LYD ================= */
@@ -4248,7 +4248,6 @@ const KDONE=(window.JABAL||window.KAHWA)?[['okt','Fullfør en vers-økt','Trykk 
  ['kjonn','Prøv både gjeter og gjeterinne','Bruk knappen «Prøv gjeterinne-versjonen» under.'],
  ['dag','Hopp til en ny dag','Bruk «⏭ Neste dag» under. Se hva som har skjedd i hagen.'],
  ['fre','Hopp til fredag og finn hulen','Bruk «📅 Til fredag», gå til Beitet og se etter hulen helt til venstre.'],
- ['lek','Lek deg rundt i appen','Trykk litt rundt i hagene. Kanskje du får deg en overraskelse eller to …'],
  ['brev','Åpne det siste brevet','Når alt annet er gjort, kommer hærfuglen med et siste brev.'],
  ['rosin','???','']]:[['okt','Fullfør en vers-økt','Trykk på den glødende stjernen i en av hagene for å starte dagens vers.'],
  ['rose','Trykk på en rose','Hver rose i Rosehagen er et vers du har fått. Gå til Rosehagen og trykk på en rose.'],
