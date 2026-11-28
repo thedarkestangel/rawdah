@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "luqman", "who": "Luqman", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "noteLock": true, "sch": 2, "egg": true, "resetv": 2, "build": "bygg 27.11.2026 · a8bd641"};(function(){var k="rawdah_resetv_luqman",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_luqman","jabal_luqman_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_luqman_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "luqman", "who": "Luqman", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "noteLock": true, "sch": 2, "egg": true, "resetv": 2, "build": "bygg 28.11.2026 · 0b2b1cc"};(function(){var k="rawdah_resetv_luqman",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_luqman","jabal_luqman_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_luqman_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -3763,6 +3763,17 @@ function wellDay(){ S.well=S.well||{goal:6,log:{}}; const d=dayStr(); S.well.log
   const ks=Object.keys(S.well.log).sort(); if(ks.length>21) ks.slice(0,ks.length-21).forEach(k=>delete S.well.log[k]); return S.well.log[d]; }
 function wellTabs(on){ return `<div class="tabs"><button data-mt="hage"${on==='hage'?' class="on"':''}>Din hage</button><button data-mt="well"${on==='well'?' class="on"':''}>Velvære</button></div>`; }
 function wireMegTabs(){ $('sheet').querySelectorAll('[data-mt]').forEach(b=>b.onclick=()=>b.dataset.mt==='well'?openWell():openMeg()); }
+/* ---- Mandags- og torsdagsfaste (sunnah) ---- */
+function hijri(d){ try{ const P=new Intl.DateTimeFormat('en-u-ca-islamic-umalqura',{day:'numeric',month:'numeric'}).formatToParts(d); return {m:+P.find(x=>x.type==='month').value,d:+P.find(x=>x.type==='day').value}; }catch(e){ return null; } }
+function fastOk(dt){ const h=hijri(dt); if(!h) return true; if(h.m===9) return false; if(h.m===10&&h.d===1) return false; if(h.m===12&&h.d>=10&&h.d<=13) return false; return true; }
+const FASTDAY=dt=>[1,4].includes(dt.getDay());
+const FASTSRC='Profeten ﷺ fastet ofte mandag og torsdag. Om mandagen sa han: «Det er dagen jeg ble født, og dagen åpenbaringen kom til meg» (Muslim 1162). Og: «Gjerningene legges fram mandag og torsdag, og jeg liker at mine legges fram mens jeg faster» (at-Tirmidhī 747).';
+const FASTHEALTH='Fasten er sunnah, ikke farḍ. Er du syk, gravid eller ammer, bruker du medisiner som må tas med mat, eller tåler kroppen det ikke, skal du ikke faste. Spør legen hvis du er usikker.';
+function fastRemind(){ if(!R2||!S.fastRem||S.active) return; const now=new Date(), tm=new Date(now.getTime()+864e5); if(!FASTDAY(tm)||!fastOk(tm)||S.fastAsk===dayStr()) return; S.fastAsk=dayStr(); save();
+  evPush(()=>{ const dn=tm.getDay()===1?'mandag':'torsdag';
+    openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">SHAYKH NŪR · I MORGEN ER DET ${dn.toUpperCase()}</p><h3>Vil du faste i morgen?</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«I morgen er det ${dn}. Jeg pleier å faste da, slik Profeten ﷺ gjorde. Det er sunnah, ikke farḍ, så gjør det bare hvis du kan.»</p></div></div><p style="font-size:13.5px">${FASTSRC}</p><p style="font-size:12.5px;color:var(--muted)">${FASTHEALTH}</p><button class="btn" id="fsY">In shā' Allāh</button><button class="btn ghost" id="fsN">Ikke denne gangen</button>`);
+    $('fsY').onclick=()=>{ closeSheet(); toast('Spis suḥūr før fajr. Må Allah gjøre det lett for deg.',3200); }; $('fsN').onclick=()=>{ closeSheet(); toast('Helt i orden. Kanskje neste gang.',2400); }; },'fast'); }
+setInterval(fastRemind,15000);
 const MOVES=[
  ['En rolig gåtur','Gå ti minutter ute, gjerne etter en bønn. Se på himmelen og trærne underveis.'],
  ['Strekk deg mot himmelen','Stå med beina litt fra hverandre, strekk armene opp og pust dypt fem ganger.'],
@@ -3784,6 +3795,7 @@ function openWell(){ kMark('well'); if(KAHWA&&!kt().n_well){ kt().q=(kt().q||[])
   openSheet(`<h3>Velvære</h3><p>En muslim trenger også hvile. Ta vare på kroppen du har fått låne, så orker du mer av det som betyr noe.</p>
   <div class="card" style="border-color:rgba(231,194,107,.5)"><p style="margin:0;font-family:var(--serif);font-size:17px;line-height:1.4">${esc(q[0])}</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">${esc(q[1])}</p></div>
   ${R2?(()=>{ const m=MOVES[(dayDiff('2026-01-01',dayStr())%MOVES.length+MOVES.length)%MOVES.length]; return `<h4>🚶 Dagens bevegelse</h4><div class="card"><b style="color:var(--gold2)">${esc(m[0])}</b><p style="margin:4px 0 8px;font-size:14px">${esc(m[1])}</p><button class="gb${L.mv?' gold':''}" id="wlMv" style="width:100%">${L.mv?'✓ Gjort i dag':'Jeg har gjort det'}</button></div>`; })():''}
+  ${R2?(()=>{ const now=new Date(), isF=FASTDAY(now)&&fastOk(now), dn=now.getDay()===1?'mandag':'torsdag'; return `<h4>🌙 Mandag og torsdag</h4>${isF?`<div class="card" style="border-color:rgba(231,194,107,.5)"><b style="color:var(--gold2)">I dag er det ${dn}</b><p style="margin:4px 0 8px;font-size:14px">En sunnah-dag for faste. Suḥūr før fajr, iftar ved maghrib.</p><button class="gb${L.fast?' gold':''}" id="wlF" style="width:100%">${L.fast?'✓ Jeg faster i dag':'Jeg faster i dag'}</button>${L.fast?`<p style="margin:8px 0 0;font-size:13.5px">Ved iftar: <i>«Dhahaba aẓ-ẓamaʾ wabtallatil-ʿurūq wa thabatal-ajru in shā' Allāh»</i>: Tørsten er borte, årene er fuktet, og lønnen er sikker, om Allah vil. <span style="color:var(--muted);font-size:12px">(Abū Dāwūd 2357)</span></p>`:''}</div>`:''}<button class="gb${S.fastRem?' gold':''}" id="wlFR" style="width:100%">${S.fastRem?'✓ Påminnelse dagen før er på':'Minn meg på mandags- og torsdagsfaste'}</button><p style="font-size:12.5px;color:var(--muted)">Du får et lite kort dagen før når du åpner appen. Ingen telling, ingen dårlig samvittighet. ${FASTHEALTH} Ingen påminnelse i Ramadan, på ʿĪd eller i tashrīq-dagene (beregnet etter Umm al-Qurā-kalenderen, som kan avvike en dag fra din moské).</p>`; })():''}
   <h4>🕌 Bønnen</h4><p style="font-size:13.5px;margin-top:0">Bønnen er ikke bare en plikt, den er også hvile. Profeten ﷺ sa til Bilāl: «Gi oss ro med den.»</p>
   <div class="qrow" id="wlP" style="flex-wrap:wrap${L.free?';opacity:.4;pointer-events:none':''}">${SALAH.map(([k,n])=>`<button class="gb${L.p[k]?' gold':''}" data-p="${k}" style="flex:1 1 30%">${L.p[k]?'✓ ':''}${n}</button>`).join('')}</div>
   ${isF()?`<button class="gb${L.free?' gold':''}" id="wlFree" style="width:100%;margin-top:6px">${L.free?'✓ ':''}Fri fra bønn i dag (mens eller nifās)</button>`:''}
@@ -3806,6 +3818,8 @@ function openWell(){ kMark('well'); if(KAHWA&&!kt().n_well){ kt().q=(kt().q||[])
   $('wlW').onclick=()=>{ L.w++; save(); haptic(10); snd.splash&&snd.splash(); if(L.w===G) toast('Dagens vannmål er nådd. Alḥamdulillāh',2200); openWell(); };
   $('wlWm').onclick=e=>{ e.preventDefault(); if(L.w>0){ L.w--; save(); openWell(); } };
   $('wlG').onclick=e=>{ e.preventDefault(); const opts=[4,6,8,10]; S.well.goal=opts[(opts.indexOf(G)+1)%opts.length]; save(); openWell(); };
+  if($('wlF')) $('wlF').onclick=()=>{ L.fast=!L.fast; save(); haptic(8); openWell(); };
+  if($('wlFR')) $('wlFR').onclick=()=>{ S.fastRem=!S.fastRem; save(); haptic(8); toast(S.fastRem?'Du får en påminnelse søndag og onsdag':'Påminnelsen er slått av',2400); openWell(); };
   if($('wlMv')) $('wlMv').onclick=()=>{ L.mv=!L.mv; save(); haptic(8); if(L.mv) snd.chime([523,659,784],.04); openWell(); };
   $('wlP').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{ const k=b.dataset.p; L.p[k]=!L.p[k]; save(); haptic(8); if(L.p[k]) snd.chime([523,659],.04); openWell(); });
   if($('wlFree')) $('wlFree').onclick=()=>{ L.free=!L.free; save(); haptic(8); openWell(); };
