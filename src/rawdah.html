@@ -3030,6 +3030,16 @@ function bqEnd(){ const L=(_bq||[]).filter(x=>!/^Rydd|Rydd /.test(x.l||'')); _bq
   info.forEach(x=>{ if(!shown.some(y=>Math.hypot(y.x-x.x,y.y-x.y)<80)) shown.push(x); });
   return shown.map(x=>x.h).join(''); }
 
+/* ================= 2.0: VEILEDEREN SIER FRA NÅR EN HAGE VÅKNER ================= */
+const WAKE={beite:['BEITET','Flokken har kommet hjem','«Hører du bjellene? Flokken har funnet veien hjem til Beitet. Trykk på dyrene for å gi dem mat. Mette dyr gir melk, ull og egg, og det kan du bytte i suqen.»'],
+ frukt:['FRUKTHAGEN','Frukthagen har våknet','«Kjenner du duften? Trærne i Frukthagen bærer igjen. Når frukten er moden, trykker du for å høste et kort med kunnskap. Gode gjerninger gir frø du kan så.»']};
+if(R2&&S.qTour) Object.keys(WAKE).forEach(id=>{ S.wake=S.wake||{}; if(S.qTour[id]&&restored(id)) S.wake[id]=1; });
+function wakeCall(id){ const W=WAKE[id]; window.__evAt=Date.now();
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${W[0]}</p><div style="display:flex;gap:10px;align-items:flex-start;margin-top:4px">${wiseIcon()}<div style="flex:1"><h3 style="margin:0 0 4px">${W[1]}</h3><p style="margin:0">${W[2]}</p><p style="margin:6px 0 0;font-size:12.5px;color:var(--muted)">– ${WN()}</p></div></div><button class="btn" id="wkGo">Ta meg dit</button><button class="btn ghost" id="wkL">Senere</button>`);
+  $('wkGo').onclick=()=>{ closeSheet(); setTimeout(()=>{ enterQuad(QUADS.findIndex(x=>x.id===id)); renderAll(); },300); };
+  $('wkL').onclick=closeSheet; snd.chime([523,659,784]); }
+if(R2) setInterval(()=>{ if(!S.introSeen||!S.tour0||performance.now()<9000) return; S.wake=S.wake||{}; Object.keys(WAKE).forEach(id=>{ if(restored(id)&&!S.wake[id]) evPush(()=>{ if(S.wake[id]) return; S.wake[id]=1; save(); wakeCall(id); },'wake_'+id); }); },3000);
+
 /* ================= 2.0: BREV FRA HÆRFUGLEN ================= */
 function letterCall(show){ _postShow=show; renderSection();
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">RIHLA · ET BREV</p><h3>Hærfuglen har landet på hageporten</h3><div style="text-align:center;margin:4px 0 8px"><svg viewBox="-50 -40 100 70" width="110" height="77">${hudArt()}</svg></div><p>Han har med et brev til deg fra reisen.</p><button class="btn" id="lcGo">Ta meg dit</button><button class="btn ghost" id="lcL">Senere</button>`);
@@ -3269,7 +3279,7 @@ function tourCheck(){ if(S.active||busy||sheetBusy()||(R2&&Date.now()-(window.__
   if(!S.tour1){ S.tour1=1; save(); return; }
   if(R2&&S.vs>=1&&!S.starNudge&&S.dayDone===dayStr()&&view==='sec'&&QUADS[curQ].id==='roser'&&document.querySelector('#beacons .bstar')){ S.starNudge=1; save(); window.__evAt=Date.now(); const st='#beacons .bstar';
     return tourRun([{q:'roser',el:()=>document.querySelector(st),pad:14,round:40,w:1,k:WNU(),t:'Hm?',d:'«Hm? Stjernen lyser fortsatt … Den pleier å slukne når verset er gitt. Prøv å trykke på den igjen, da.»',last:'Ok'}]); }
-  if(view!=='sec') return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
+  if(view!=='sec'||R2) return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
 setInterval(tourCheck,700);
 
 /* ================= VARSLER: én om gangen + Meldinger (🔔) ================= */
