@@ -490,6 +490,7 @@ body:has(#suqScn) #noteBtn,body:has(#suqScn) #bellBtn{display:none!important}#su
 #stage.quake,#sheet.quake{animation:quake .9s}@keyframes quake{10%,50%,90%{transform:translate(-5px,2px)}30%,70%{transform:translate(5px,-2px)}100%{transform:none}}
 .lpost{transform-box:fill-box;transform-origin:50% 100%;transition:transform .55s cubic-bezier(.5,0,.75,1.5)}.lpost.fall{transform:rotate(-84deg)}.lpost.fall.r{transform:rotate(84deg)}.ecrow.flee,.ecirc.flee{opacity:0!important;transition:opacity .8s}
 .manbody{transform-box:fill-box;transform-origin:50% 100%}.manbody.hit{animation:mhit .7s}@keyframes mhit{20%{transform:rotate(-2.6deg)}45%{transform:rotate(2deg)}70%{transform:rotate(-1deg)}}.mcrack{opacity:0;transition:opacity .4s}.manbody.cracked .mcrack{opacity:.9}
+.bdrop{position:fixed;width:6px;height:9px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#9fd3ff;z-index:40;pointer-events:none;animation:bdrop .9s ease-in forwards}@keyframes bdrop{from{transform:translateY(0);opacity:0}20%{opacity:1}to{transform:translateY(70px);opacity:0}}
 .efog{animation:efog 26s ease-in-out infinite alternate}.efog.f2{animation-duration:34s;animation-direction:alternate-reverse}@keyframes efog{from{transform:translateX(-40px)}to{transform:translateX(40px)}}.ecrow{animation:ecrow 5s ease-in-out infinite;transform-box:fill-box}@keyframes ecrow{0%,86%,100%{opacity:1}90%{opacity:.6}}
 .starfly{position:fixed;z-index:30;font-size:46px;color:#fff3cf;text-shadow:0 0 18px #ffd27a,0 0 40px #ffb347;pointer-events:none;line-height:1}
 .startrail{position:fixed;z-index:29;width:6px;height:6px;margin:-3px;border-radius:3px;background:#ffe6a6;box-shadow:0 0 10px #ffd27a;pointer-events:none;animation:strl .9s ease-out forwards}@keyframes strl{to{opacity:0;transform:scale(.2) translateY(10px)}}
@@ -681,7 +682,7 @@ const QUADS=[
   {id:'beite',name:'Beitet',ar:'المرعى',river:['#d9a441','#6a4512']},
   {id:'frukt',name:'Frukthagen',ar:'البستان',river:['#9a3050','#3a0c1e']},
 ];
-const AT={fountain:3,beite:5,frukt:(window.JABAL||window.KAHWA)?6:12}; // antall vers-økter før gjenoppretting
+const AT={fountain:3,beite:5,frukt:(window.JABAL||window.KAHWA)?4:12}; // antall vers-økter før gjenoppretting
 const FRUITS=['daddel','oliven','fiken','granateple','drue'];
 const FRUITNAME={daddel:'Daddelpalme',oliven:'Oliventre',fiken:'Fikentre',granateple:'Granatepletre',drue:'Vinranke'};
 const REFLECT=['Håp','Ro','Anger','Takknemlighet','Styrke','Trenger mer tid'];
@@ -1391,7 +1392,7 @@ function rewardSeq(nur0,gain,rose){ flyNur(nur0,gain);
 const GREET=[['As-salāmu ʿalaykum!','Fred være med deg.'],['Bismillāh','I Guds navn. Godt å se deg i hagen.'],['Alḥamdulillāh','Takk og lov for en ny dag.'],['Subḥān Allāh','Se hvor vakkert det vokser!'],['Rabbi zidnī ʿilmā','Herre, øk meg i kunnskap. (20:114)'],['Lā ḥawla wa lā quwwata illā billāh','Det finnes ingen styrke uten hos Gud.'],['Bārak Allāhu fīk','Gud velsigne deg for at du kom.']];
 function keeperTap(e){ kLek('gjeter'); const [a,n]=rnd(GREET); haptic(8); snd.chime([440,554],.05); const old=document.getElementById('kpB'); if(old) old.remove();
   const d=document.createElement('div'); d.id='kpB'; d.className='kbub'; d.innerHTML=`<b>${esc(a)}</b><span>${esc(n)}</span><i>${esc(keeper())}</i>`; d.style.left=Math.min(Math.max(e.clientX,120),stage.clientWidth-120)+'px'; d.style.top=(e.clientY-20)+'px'; stage.appendChild(d); setTimeout(()=>d.remove(),4200); }
-async function roseTap(i){ if(R2&&S.roses[i]&&S.roses[i].bud){ if(S.roses[i].day===dayStr()) return toast('Knoppen trenger en natt. Vann den i morgen.',2600); return budTap(i); } if(R2&&S.droop&&S.droop.i===i&&!S.droop.done) return droopTap(i); kMark('rose'); const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
+async function roseTap(i){ if(R2&&S.roses[i]&&S.roses[i].bud){ if(S.roses[i].day===dayStr()) return toast('Knoppen trenger en natt. I morgen kan du vanne den.',2600); return budTap(i); } if(R2&&S.droop&&S.droop.i===i&&!S.droop.done) return droopTap(i); kMark('rose'); const p=S.roses[i]; if(!p) return; const cat=catById(p.c)||{name:'',ar:''}; snd.chime([659,784],.05);
   openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">EN ROSE FRA ${esc((p.day||'').split('-').reverse().join('.'))}</p><h3>${esc(cat.name)}${p.rare?' · sjelden':''}</h3><div id="rzV"><p style="color:var(--muted)">Henter verset …</p></div><button class="btn ghost" id="rzPlay">Hør verset</button>`);
   let vs=null; try{ vs=await fetchVerse(p.ref); }catch(e){}
   const el=$('rzV'); if(!el) return;
@@ -2269,7 +2270,7 @@ function openRihla(){ const n=S.rihla||0;
   $('sheet').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{ S.horizon=b.dataset.h||null; save(); renderAll(); openRihla(); }); }
 
 /* ================= GRADVIS OPPLÅSING ================= */
-const GATE={dagbok:1,basar:1,ord:3,hifz:(window.JABAL||window.KAHWA)?99999:5,beite:5,vern:7,hikma:10,bygg:12};
+const GATE={dagbok:1,basar:1,ord:(window.JABAL||window.KAHWA)?1:3,hifz:(window.JABAL||window.KAHWA)?99999:5,beite:5,vern:7,hikma:10,bygg:12};
 const unl=f=>!!S.settings.allOpen||vsEff()>=GATE[f];
 const UNLOCK_TXT={
   dagbok:['Dagbok av vers','Hvert vers du fullfører lagres nå i dagboken, sammen med det som traff deg. Finn den under Samling øverst.'],
@@ -2320,7 +2321,7 @@ function taskPool(){ const V=[], w=(x,n)=>{ for(let i=0;i<n;i++) V.push(x); };
   return V; }
 function makeTasksR2(){ const L=[{id:'vers',text:'Les og bygg dagens vers',goal:1,core:1}], P=[];
   if(unl('ord')) L.push({id:'ord',text:'Les dagens arabiske ord i Skatter',goal:1});
-  if(S.roses.some(p=>p.bud&&p.day!==dayStr())) L.push({id:'knopp',text:'Vann knoppen fra i går i Rosehagen',goal:1});
+  if([1,4].includes(new Date().getDay())&&(S.lamp||{}).d!==dayStr()) L.push({id:'lampe',text:'I kveld: tenn lampen til Shaykh Nūr',goal:1});
   if(!restored('beite')&&PFIX.some(x=>!(S.pfix||{})[x[0]])) P.push({id:'fix',text:'Reparer noe på Beitet',goal:1});
   if(restored('beite')) P.push({id:'dyr',text:'Hjelp dagens dyr på beitet',goal:1});
   droopPick(); if(S.droop&&S.droop.i>=0) P.push({id:'rose',text:'Få en rose til å rette seg opp',goal:1});
@@ -2755,6 +2756,7 @@ function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser')
   if(id==='lytt'){ if(!doneToday()) return taskGo('vers'); closeSheet(); return setTimeout(comeBackTomorrow,300); }
   if(id==='vis') return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på den vise mannen helt til venstre');
   if(id==='rose'){ const ri=QUADS.findIndex(q=>q.id==='roser'); return goTend(ri,R2?'En rose henger med hodet. Trykk på den':'Trykk på en av rosene dine for å lese verset igjen'); }
+  if(id==='lampe') return lampDue()?goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på lampen ved Shaykh Nūr'):toast('Lampen hans tennes når det blir kveld. Kom tilbake etter maghrib.',3200);
   if(id==='knopp') return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på knoppen i bedet');
   if(id==='fix') return goTend(QUADS.findIndex(q=>q.id==='beite'),'Trykk på det som er knust');
   if(id==='dyr') return goTend(QUADS.findIndex(q=>q.id==='beite'),'Trykk på dyret som trenger hjelp');
@@ -2849,7 +2851,17 @@ async function verseQuiz(ref,title,kick,onOk){ const [s,a]=String(ref).split(':'
   const i=1+Math.floor(Math.random()*(w.length-1)), opts=[w[i].ar].concat(w.filter((x,k)=>k!==i&&x.ar!==w[i].ar).sort(()=>Math.random()-.5).slice(0,2).map(x=>x.ar)).sort(()=>Math.random()-.5);
   $('sheet').querySelector('#vqW').outerHTML=`<p style="margin-top:0">Hvilket ord mangler? <span style="color:var(--muted);font-size:12.5px">(${s}:${a})</span></p><div class="card" style="direction:rtl;text-align:center;font-family:var(--arq);font-size:24px;line-height:2">${w.map((x,k)=>k===i?'<span style="display:inline-block;min-width:60px;border-bottom:2px dashed var(--gold)">&nbsp;</span>':esc(x.ar)).join(' ')}</div><div class="qrow" style="flex-wrap:wrap;direction:rtl">${opts.map(o=>`<button class="gb" data-vq="${esc(o)}" style="font-family:var(--arq);font-size:22px">${esc(o)}</button>`).join('')}</div><p id="vqM" style="min-height:22px;font-size:14px;margin:6px 0 0"></p>`;
   $('sheet').querySelectorAll('[data-vq]').forEach(b=>b.onclick=()=>{ if(b.dataset.vq===w[i].ar){ b.classList.add('gold'); haptic(10); snd.chime([659,784,988],.05); $('vqM').textContent=`Riktig: ${w[i].ar}${w[i].en?' ('+w[i].en+')':''}`; setTimeout(()=>{ closeSheet(); onOk(); },1100); } else { b.style.opacity=.35; haptic(20); $('vqM').textContent='Ikke helt. Prøv igjen.'; } }); }
-function budTap(i){ const p=S.roses[i]; if(!p||!p.bud) return; verseQuiz(p.ref,'Vann knoppen','DAGENS KNOPP',()=>{ p.bud=0; p.n=Date.now(); save(); renderSection(); toast('Knoppen blomstret 🌹',2200); taskHit('knopp'); kMark('knopp'); setTimeout(bouquetCheck,2600); }); }
+const budReady=()=>S.roses.map((p,i)=>[p,i]).filter(([p])=>p&&p.bud&&p.day!==dayStr()).map(([,i])=>i);
+function budTap(){ budCall(true); }
+function budCall(tap){ const B=budReady(); if(!B.length) return; if(!tap) S.budAsk=dayStr(); save();
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">ROSEHAGEN</p><h3>${B.length>1?'Knoppene fra de siste dagene':'Knoppen fra i går'}</h3><p>Verset ditt fra ${B.length>1?'de siste dagene':'i går'} står som ${B.length>1?`${B.length} knopper`:'en knopp'} i bedet. Gi ${B.length>1?'dem':'den'} vann, så springer ${B.length>1?'de':'den'} ut.</p><button class="btn" id="bdW">💧 Vann</button><button class="btn ghost" id="bdL">Senere</button>`);
+  $('bdW').onclick=()=>{ closeSheet(); setTimeout(()=>{ const ri=QUADS.findIndex(q=>q.id==='roser'); if(view!=='sec'||curQ!==ri){ enterQuad(ri); renderAll(); } setTimeout(()=>budWater(B),700); },300); };
+  $('bdL').onclick=()=>{ closeSheet(); toast('Knoppen venter i Rosehagen.',2200); }; }
+function budWater(B){ const els=B.map(i=>document.querySelector(`#items .rz[data-r="${i}"]`)).filter(Boolean); haptic([10,40,10]);
+  els.forEach(el=>{ const r=el.getBoundingClientRect(); for(let k=0;k<9;k++){ const d=document.createElement('i'); d.className='bdrop'; d.style.left=(r.left+r.width/2+(Math.random()-.5)*r.width*.9)+'px'; d.style.top=(r.top-40-Math.random()*30)+'px'; d.style.animationDelay=(k*70)+'ms'; document.body.appendChild(d); setTimeout(()=>d.remove(),1500); } });
+  snd.chime([784,880,988],.03);
+  setTimeout(()=>{ B.forEach(i=>{ const p=S.roses[i]; if(p){ p.bud=0; p.n=Date.now(); } }); save(); renderSection(); B.forEach(i=>{ const el=document.querySelector(`#items .rz[data-r="${i}"]`); if(el){ el.classList.add('sprout'); const r=el.getBoundingClientRect(); sparkle&&sparkle(r.left+r.width/2,r.top+r.height/3); } }); snd.chime([523,659,784,1047],.05); haptic([8,30,8]); toast(B.length>1?'Knoppene sprang ut 🌹':'Knoppen sprang ut 🌹',2400); taskHit('knopp'); kMark('knopp'); setTimeout(bouquetCheck,2600); },1300); }
+setInterval(()=>{ if(!R2||!S.tour0||S.budAsk===dayStr()||!budReady().length) return; S.budAsk=dayStr(); save(); evPush(()=>budCall(false),'bud'); },6000);
 function droopPick(){ const t=dayStr(); if(S.droop&&S.droop.d===t) return; const C=S.roses.map((p,i)=>[p,i]).filter(([p])=>p.h==='ok'&&!p.bud&&p.day!==t&&dayDiff(p.rev||p.day,t)>=3); S.droop={d:t,i:C.length?rnd(C)[1]:-1,done:0}; save(); }
 function droopTap(i){ const p=S.roses[i]; if(!p) return; verseQuiz(p.ref,'Husker du dette verset?','EN ROSE HENGER MED HODET',()=>{ p.rev=dayStr(); S.droop.done=1; save(); renderSection(); toast('Rosen retter seg opp igjen',2200); taskHit('rose'); }); }
 function bouquetCheck(){ if(S.roses.length<MAXROSE||S.roses.some(p=>p.bud)) return; const n=(S.bouquets||[]).length+1; S.bouquets=(S.bouquets||[]).concat([{n,d:dayStr(),v:S.roses.map(p=>p.ref).filter(Boolean)}]); S.roses=[]; save();
@@ -2874,8 +2886,8 @@ function wiseSeated(){ const eve=isEve(); return `<ellipse cx="0" cy="3" rx="22"
   <path d="M-14 0 Q-15 -16 -8 -24 Q0 -28 8 -24 Q15 -16 14 0Z" fill="#d9d0b8" stroke="rgba(0,0,0,.3)" stroke-width=".6"/><g class="${eve?'':'trock'}"><ellipse cx="0" cy="-32" rx="6" ry="7" fill="#b58a62"/><path d="M-6 -31 Q-6 -22 0 -21 Q6 -22 6 -31 Q3 -27 0 -27 Q-3 -27 -6 -31Z" fill="#ece8de"/><ellipse cx="0" cy="-37" rx="7.6" ry="4.4" fill="#ece8de"/></g>
   <path d="M5 -6 L-10 -26" stroke="#6a4a2a" stroke-width="2" stroke-linecap="round"/>${eve?'':`<g transform="translate(0 4)"><path d="M-9 6 L9 -4 M9 6 L-9 -4" stroke="#6a4a2a" stroke-width="1.7"/><path d="M-10 -5 L0 -2 L10 -5 L10 -1 L0 2 L-10 -1Z" fill="#f4efe2" stroke="#a08a5e" stroke-width=".5"/></g>`}`; }
 function wiseLayer(q){ if(q!=='roser'||S.active) return ''; const lamp=lampDue(); return `<g class="wise" style="cursor:pointer" transform="translate(46 486) scale(1.05)">${wiseSeated()}<rect x="-24" y="-48" width="58" height="56" fill="transparent"/></g>${lamp?`<g onclick="event.stopPropagation();lampTap()" style="cursor:pointer" transform="translate(82 486)"><path d="M-4 -10 h8 l3 4 v9 l-3 4 h-8 l-3 -4 v-9Z" fill="#2a1a0e" stroke="#d9b25f" stroke-width=".8"/><rect x="-26" y="-30" width="52" height="44" fill="transparent"/></g>`:''}`; }
-function lampTap(){ S.lamp={d:dayStr()}; save(); renderSection(); haptic([8,30,8]); snd.chime([659,784,988],.05);
-  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">KVELDSLAMPEN</p><h3>Lyset ditt tente lampen hans</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Takk, gjeter. Måtte Allah lyse opp hjertet ditt slik du lyste opp natten min, og gjøre Koranen til lyset i brystet ditt.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p style="font-size:13px;color:var(--muted)">Du mistet ingen nur. Lys blir ikke mindre av å deles.</p><button class="btn" id="lpOk">Āmīn</button>`); $('lpOk').onclick=closeSheet; }
+function lampTap(){ S.lamp={d:dayStr()}; taskHit('lampe'); save(); renderSection(); haptic([8,30,8]); snd.chime([659,784,988],.05);
+  openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">KVELDSLAMPEN</p><h3>Lyset ditt tente lampen hans</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«Takk, ${isF()?'gjeterinne':'gjeter'}. Måtte Allah lyse opp hjertet ditt slik du lyste opp natten min, og gjøre Koranen til lyset i brystet ditt.»</p><p style="margin:6px 0 0;font-size:12px;color:var(--gold2)">– vismannen</p></div></div><p style="font-size:13px;color:var(--muted)">Du mistet ingen nur. Lys blir ikke mindre av å deles.</p><button class="btn" id="lpOk">Āmīn</button>`); $('lpOk').onclick=closeSheet; }
 /* Hærfuglen er postbudet: sitter på hageporten når et brev har kommet */
 let _postShow=null;
 function postLayer(q){ if(q!=='roser'||S.active||!_postShow) return ''; return `<g onclick="event.stopPropagation();postTap()" style="cursor:pointer" transform="translate(320 440) scale(.75)">${hudSvg(0,0).replace('class="hud"',`class="hudpost${window._pfly?'':' hfly'}"`)}${(window._pfly=1,'')}<g transform="translate(22 -4)">${typeof scrollSvg==='function'?scrollSvg(.7):''}</g></g>`; }
@@ -4250,7 +4262,7 @@ function kNote(k){ if(!KAHWA||kt()['n_'+k]) return; const [t,x]=KNOTES[k]; if($(
 function kQueue(){ if(!KAHWA) return; if(!kt().welcome) return kWelcome(); if(kt().allDone===1){ kt().allDone=2; save(); return setTimeout(kCelebrate,500); } const q=kt().q||[]; if(!q.length) return; const k=q.shift(); kt().q=q; save(); setTimeout(()=>kNote(k),600); }
 /* Sjekklisten (skriftrullen) */
 const KDONE=(window.JABAL||window.KAHWA)?[['okt','Fullfør en vers-økt','Trykk på den glødende stjernen i Rosehagen for å starte dagens vers.'],
- ['knopp','Vann en knopp','Dagen etter et vers står det en knopp i Rosehagen. Hopp til neste dag, trykk på knoppen og fyll inn ordet som mangler.'],
+ ['knopp','Vann en knopp','Dagen etter et vers står verset som en knopp i Rosehagen. Hopp til neste dag, så spør appen om du vil vanne den.'],
  ['rydd','Reparer noe på Beitet','Trykk på det knuste gjerdet, trauet eller skuret på Beitet. Du kan fikse tre ting om dagen.'],
  ['basar','Bytt noe i suqen','Gå til Beitet og trykk på markedet i horisonten. Hils på kjøpmannen og bytt til deg noe.'],
  ['rihla','Åpne et brev fra hærfuglen','Når hærfuglen lander på hageporten, trykk «Ta meg dit» og åpne brevet. Brevene samles under Dagbok → Brev.'],
