@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-<script>window.JABAL={"name": "haroon", "who": "Haroon", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "noteLock": true, "sch": 2, "egg": true, "resetv": 2, "build": "bygg 28.11.2026 · cf5049a"};(function(){var k="rawdah_resetv_haroon",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_haroon","jabal_haroon_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_haroon_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
+<script>window.JABAL={"name": "haroon", "who": "Haroon", "form": "https://docs.google.com/forms/d/e/1FAIpQLSfhQfSX3VhlaC9TOgYXpMutZIooLstS9pAyjfBrbaF47s3lwQ/viewform", "notes": true, "noteLock": true, "sch": 2, "egg": true, "resetv": 2, "build": "bygg 28.11.2026 · 7762004"};(function(){var k="rawdah_resetv_haroon",v="2";if(localStorage.getItem(k)!==v){["rawdah_jabal_haroon","jabal_haroon_off"].forEach(function(x){localStorage.removeItem(x);});localStorage.setItem(k,v);}})();(function(){var o=+(localStorage.getItem("jabal_haroon_off")||0);if(!o)return;var D=Date,sh=o*864e5;class F extends D{constructor(...a){if(a.length)super(...a);else super(D.now()+sh);}static now(){return D.now()+sh;}}window.Date=F;})();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -492,6 +492,7 @@ body:has(#suqScn) #noteBtn,body:has(#suqScn) #bellBtn{display:none!important}#su
 .lpost{transform-box:fill-box;transform-origin:50% 100%;transition:transform .55s cubic-bezier(.5,0,.75,1.5)}.lpost.fall{transform:rotate(-84deg)}.lpost.fall.r{transform:rotate(84deg)}.ecrow.flee,.ecirc.flee{opacity:0!important;transition:opacity .8s}
 .manbody{transform-box:fill-box;transform-origin:50% 100%}.manbody.hit{animation:mhit .7s}@keyframes mhit{20%{transform:rotate(-2.6deg)}45%{transform:rotate(2deg)}70%{transform:rotate(-1deg)}}.mcrack{opacity:0;transition:opacity .4s}.manbody.cracked .mcrack{opacity:.9}
 .bdrop{position:fixed;width:6px;height:9px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#9fd3ff;z-index:40;pointer-events:none;animation:bdrop .9s ease-in forwards}@keyframes bdrop{from{transform:translateY(0);opacity:0}20%{opacity:1}to{transform:translateY(70px);opacity:0}}
+#iProg{position:absolute;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,rgba(231,194,107,.2),#e7c26b);z-index:5;opacity:0;pointer-events:none}
 .efog{animation:efog 26s ease-in-out infinite alternate}.efog.f2{animation-duration:34s;animation-direction:alternate-reverse}@keyframes efog{from{transform:translateX(-40px)}to{transform:translateX(40px)}}.ecrow{animation:ecrow 5s ease-in-out infinite;transform-box:fill-box}@keyframes ecrow{0%,86%,100%{opacity:1}90%{opacity:.6}}
 .starfly{position:fixed;z-index:30;font-size:46px;color:#fff3cf;text-shadow:0 0 18px #ffd27a,0 0 40px #ffb347;pointer-events:none;line-height:1}
 .startrail{position:fixed;z-index:29;width:6px;height:6px;margin:-3px;border-radius:3px;background:#ffe6a6;box-shadow:0 0 10px #ffd27a;pointer-events:none;animation:strl .9s ease-out forwards}@keyframes strl{to{opacity:0;transform:scale(.2) translateY(10px)}}
@@ -513,7 +514,7 @@ body:has(#rumiScn) #items .wise{opacity:0}
 .bsBtns{position:absolute;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);max-width:460px;margin:0 auto;opacity:0;transition:opacity .35s;pointer-events:none}.bsBtns.on{opacity:1;pointer-events:auto}.nrow.sent{opacity:.6}.btn:disabled{opacity:.45}
 .bsBtns .btn.ghost{background:rgba(15,12,36,.88)}
 .bsX{position:absolute;right:12px;top:calc(env(safe-area-inset-top,0px) + 10px);background:rgba(0,0,0,.35);border:0;color:#efe6d2;width:34px;height:34px;border-radius:17px;font-size:16px}
-body:has(#tour) #noteBtn,body:has(#tfScn) #noteBtn{display:none}
+body:has(#tour:not(.tnote)) #noteBtn,body:has(#tfScn) #noteBtn,body.pre0:not(:has(#tour.tnote)) #noteBtn{display:none}
 #noteBtn.ping{animation:hkp 2s infinite}
 #noteBtn.drag{transform:scale(1.15);opacity:.85}
 #noteBtn{touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;right:10px;top:42%;z-index:120;width:40px;height:40px;border-radius:50%;background:#e7c26b;color:#2a1a06;font-size:22px;font-weight:800;border:2px solid #fff3cf;box-shadow:0 4px 14px rgba(0,0,0,.45)}#noteBtn b{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:#c0392b;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
@@ -650,7 +651,7 @@ body:has(#tour) #noteBtn,body:has(#tfScn) #noteBtn{display:none}
       <div class="dust" id="dust"></div>
     </div>
     <div class="idots" id="idots"></div>
-    <button class="iskip" id="iSkip">Hopp over</button>
+    <button class="iskip" id="iSkip">Hopp over</button><div id="iProg"></div>
     <div class="iband"></div>
     <div class="icap" id="icap"></div>
     <div id="iModes"></div>
@@ -825,7 +826,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const catById=id=>CATS.find(c=>c.id===id)||CATS[0];
 const doneToday=()=>S.doneDays.includes(dayStr());
 const TQ=[];
-function toast(t,ms=2600,force){const el=$('toast'); if(!force&&Date.now()-(window.__lt||0)>2500&&typeof stageBusy==='function'&&stageBusy(true)){ if(!TQ.some(x=>x[0]===t)&&TQ.length<6) TQ.push([t,ms]); return; } if(el.classList.contains('on')&&toast.cur!==t&&Date.now()<toast.until-400){ if(!TQ.some(x=>x[0]===t)&&TQ.length<4) TQ.push([t,ms]); return; } toast.cur=t; toast.until=Date.now()+ms;el.style.top=$('sheet').classList.contains('on')?'calc(var(--safe-t) + 70px)':'';el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>{ el.classList.remove('on'); toast.cur=''; },ms);}
+function toast(t,ms=2600,force){ t=femTxt(t); const el=$('toast'); if(!force&&Date.now()-(window.__lt||0)>2500&&typeof stageBusy==='function'&&stageBusy(true)){ if(!TQ.some(x=>x[0]===t)&&TQ.length<6) TQ.push([t,ms]); return; } if(el.classList.contains('on')&&toast.cur!==t&&Date.now()<toast.until-400){ if(!TQ.some(x=>x[0]===t)&&TQ.length<4) TQ.push([t,ms]); return; } toast.cur=t; toast.until=Date.now()+ms;el.style.top=$('sheet').classList.contains('on')?'calc(var(--safe-t) + 70px)':'';el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>{ el.classList.remove('on'); toast.cur=''; },ms);}
 function logEvent(text){S.events.unshift({ts:Date.now(),text});S.events=S.events.slice(0,50);S.unseen++;}
 function expandRef(ref){ if(!String(ref).includes(':')) return [String(ref)]; const [s,a]=ref.split(':');if(a.includes('-')){const [x,y]=a.split('-').map(Number);return Array.from({length:y-x+1},(_,i)=>`${s}:${x+i}`);}return [ref];}
 const vsEff=()=>(JABAL&&S.jb&&S.jb.freeze!=null)?Math.min(S.vs,S.jb.freeze):S.vs;
@@ -834,7 +835,7 @@ const fountainOK=()=>vsEff()>=AT.fountain;
 const flowing=()=>fountainOK()&&doneToday();
 function starBeacon(x,y){ const pts=Array.from({length:16},(_,k)=>{ const r=k%2?7:22, a=Math.PI*k/8-Math.PI/2; return (x+r*Math.cos(a)).toFixed(1)+' '+(y+r*Math.sin(a)).toFixed(1); }).join(' L');
   return `<g class="bstar" style="pointer-events:none"><circle cx="${x}" cy="${y}" r="46" fill="url(#lglow)" opacity=".9"/><path class="sp" d="M${pts}Z" fill="#ffe6a6" stroke="#e7c26b" stroke-width="1.5"/><text x="${x}" y="${y+48}">Trykk på stjernen</text><text x="${x}" y="${y+66}" style="font-size:11px;font-weight:500;opacity:.85">Hærfuglen kommer med et vers</text></g>`; }
-function beacon(x,y,label,dy=-24){ const _h=`<g class="beacon" transform="translate(${x} ${y})"><circle class="r" r="12"/><circle class="r r2" r="12"/><circle class="dot" r="3.5"/>${label?`<text y="${dy}">${esc(label)}</text>`:''}</g>`; if(_bq){ _bq.push({x,y,l:label||'',h:_h}); return ''; } return _h; }
+function beacon(x,y,label,dy=-24){ label=femTxt(label); const _h=`<g class="beacon" transform="translate(${x} ${y})"><circle class="r" r="12"/><circle class="r r2" r="12"/><circle class="dot" r="3.5"/>${label?`<text y="${dy}">${esc(label)}</text>`:''}</g>`; if(_bq){ _bq.push({x,y,l:label||'',h:_h}); return ''; } return _h; }
 function hifzLearned(){ const out=[]; for(const s in S.hifz.prog) for(const a in S.hifz.prog[s]) if(S.hifz.prog[s][a]>=1) out.push({s:+s,a:+a,lv:S.hifz.prog[s][a],dim:needsReview(+s,+a)}); return out; }
 const INTERVALS=[1,3,7,21,45];
 function reviewDays(s,a){ return INTERVALS[Math.min((S.hifz.rev||{})[s+':'+a]||0,INTERVALS.length-1)]; }
@@ -948,7 +949,7 @@ function cowSvg(x,y,s,k){
   </g></g></g>`;
 }
 const isF=()=>S.settings.gender==='f';
-const keeper=()=>(window.JABAL||window.KAHWA)?'– Shaykh Nūr':'– vismannen';
+const keeper=()=>(window.JABAL||window.KAHWA)?'– '+(typeof WN==='function'?WN():'Shaykh Nūr'):'– vismannen';
 function hudArt(){ return `
   <path d="M-12 8 Q-34 10 -42 2 Q-30 -2 -14 0Z" fill="#1e1626"/><path d="M-40 2 l-6 -2 M-38 6 l-6 2" stroke="#f4ead2" stroke-width="2.2" stroke-linecap="round"/>
   <path d="M-18 4 Q-20 -14 0 -16 Q18 -16 20 0 Q16 16 -2 16 Q-16 14 -18 4Z" fill="#e9a35a"/>
@@ -2322,7 +2323,7 @@ function taskPool(){ const V=[], w=(x,n)=>{ for(let i=0;i<n;i++) V.push(x); };
   return V; }
 function makeTasksR2(){ const L=[{id:'vers',text:'Les og bygg dagens vers',goal:1,core:1}], P=[];
   if(unl('ord')) L.push({id:'ord',text:'Les dagens arabiske ord i Skatter',goal:1});
-  if([1,4].includes(new Date().getDay())&&(S.lamp||{}).d!==dayStr()) L.push({id:'lampe',text:'I kveld: tenn lampen til Shaykh Nūr',goal:1});
+  if([1,4].includes(new Date().getDay())&&(S.lamp||{}).d!==dayStr()) L.push({id:'lampe',text:'I kveld: tenn lampen til '+WN(),goal:1});
   if(!restored('beite')&&PFIX.some(x=>!(S.pfix||{})[x[0]])) P.push({id:'fix',text:'Reparer noe på Beitet',goal:1});
   if(restored('beite')) P.push({id:'dyr',text:'Hjelp dagens dyr på beitet',goal:1});
   droopPick(); if(S.droop&&S.droop.i>=0) P.push({id:'rose',text:'Få en rose til å rette seg opp',goal:1});
@@ -2735,7 +2736,7 @@ $('qListen').onclick=()=>{ plIdx=0; userPaused=false; playCurrent(); };
 $('qPeek').onclick=()=>{ $('verse').classList.add('on'); $('tr').classList.remove('on'); setTimeout(()=>{ if(sess&&sess._ph===2) $('verse').classList.remove('on'); $('tr').classList.add('on'); },3000); };
 
 /* ================= ARK ================= */
-function _openSheet(html){ if(R2) html=html.replace(/>VISMANNEN</g,'>SHAYKH NŪR<').replace(/>VISMANNEN ·/g,'>SHAYKH NŪR ·').replace(/– vismannen/g,'– Shaykh Nūr'); $('sheet').innerHTML='<div class="grab"></div>'+html; $('sheet').dataset.nid=''; $('sheet').classList.add('on'); $('scrim').classList.add('on'); $('sheet').scrollTop=0; }
+function _openSheet(html){ if(R2) html=femTxt(html.replace(/>VISMANNEN</g,'>SHAYKH NŪR<').replace(/>VISMANNEN ·/g,'>SHAYKH NŪR ·').replace(/– vismannen/g,'– Shaykh Nūr')); $('sheet').innerHTML='<div class="grab"></div>'+html; $('sheet').dataset.nid=''; $('sheet').classList.add('on'); $('scrim').classList.add('on'); $('sheet').scrollTop=0; }
 /* ================= BASAR-GUIDE + VERKTØYHJELP + OPPGAVER SOM LEDER DEG ================= */
 function junkQuad(types){ for(let i=0;i<QUADS.length;i++){ const L=(S.junk||{})[QUADS[i].id]||[]; if(L.some(j=>!types||types.includes(j.type))) return i; } return -1; }
 function needTool(){ const c={}; for(const q in S.junk||{}) for(const j of S.junk[q]){ const k=TOOLFOR[j.type]; if(k&&!tLvl(k)) c[k]=(c[k]||0)+1; } const k=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]; return k||null; }
@@ -2757,7 +2758,7 @@ function taskGo(id){ const pulse=()=>{ goTend(QUADS.findIndex(q=>q.id==='roser')
   if(id==='lytt'){ if(!doneToday()) return taskGo('vers'); closeSheet(); return setTimeout(comeBackTomorrow,300); }
   if(id==='vis') return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på den vise mannen helt til venstre');
   if(id==='rose'){ const ri=QUADS.findIndex(q=>q.id==='roser'); return goTend(ri,R2?'En rose henger med hodet. Trykk på den':'Trykk på en av rosene dine for å lese verset igjen'); }
-  if(id==='lampe') return lampDue()?goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på lampen ved Shaykh Nūr'):toast('Lampen hans tennes når det blir kveld. Kom tilbake etter maghrib.',3200);
+  if(id==='lampe') return lampDue()?goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på lampen ved '+WN()):toast((FEMW()?'Lampen hennes':'Lampen hans')+' tennes når det blir kveld. Kom tilbake etter maghrib.',3200);
   if(id==='knopp') return goTend(QUADS.findIndex(q=>q.id==='roser'),'Trykk på knoppen i bedet');
   if(id==='fix') return goTend(QUADS.findIndex(q=>q.id==='beite'),'Trykk på det som er knust');
   if(id==='dyr') return goTend(QUADS.findIndex(q=>q.id==='beite'),'Trykk på dyret som trenger hjelp');
@@ -2883,8 +2884,11 @@ function seedTap(){ if(!(S.seeds>0)||S.fruit.length>=12) return; S.seeds--; cons
 /* Vismannen i bakgrunnen: leser om dagen, sitter ved bålet om kvelden */
 const isEve=()=>{ const h=new Date().getHours(); return h>=18||h<6; };
 function lampDue(){ const d=new Date(); return isEve()&&[1,4].includes(d.getDay())&&(S.lamp||{}).d!==dayStr(); }
-function wiseSeated(){ const eve=isEve(); return `<ellipse cx="0" cy="3" rx="22" ry="4" fill="rgba(0,0,0,.3)"/>${eve?`<g transform="translate(26 0)"><path d="M-7 2 l14 -4 M-6 -3 l12 5" stroke="#4a3020" stroke-width="2.6" stroke-linecap="round"/><path class="flm" d="M0 -1 Q-5 -9 0 -18 Q2 -11 4 -14 Q7 -6 0 -1Z" fill="#ffb347"/><circle cx="0" cy="-6" r="20" fill="#ffb347" opacity=".14"/></g>`:''}
+function wiseSeated(){ const eve=isEve(); if(FEMW()) return nuraSeated(eve); return `<ellipse cx="0" cy="3" rx="22" ry="4" fill="rgba(0,0,0,.3)"/>${eve?`<g transform="translate(26 0)"><path d="M-7 2 l14 -4 M-6 -3 l12 5" stroke="#4a3020" stroke-width="2.6" stroke-linecap="round"/><path class="flm" d="M0 -1 Q-5 -9 0 -18 Q2 -11 4 -14 Q7 -6 0 -1Z" fill="#ffb347"/><circle cx="0" cy="-6" r="20" fill="#ffb347" opacity=".14"/></g>`:''}
   <path d="M-14 0 Q-15 -16 -8 -24 Q0 -28 8 -24 Q15 -16 14 0Z" fill="#d9d0b8" stroke="rgba(0,0,0,.3)" stroke-width=".6"/><g class="${eve?'':'trock'}"><ellipse cx="0" cy="-32" rx="6" ry="7" fill="#b58a62"/><path d="M-6 -31 Q-6 -22 0 -21 Q6 -22 6 -31 Q3 -27 0 -27 Q-3 -27 -6 -31Z" fill="#ece8de"/><ellipse cx="0" cy="-37" rx="7.6" ry="4.4" fill="#ece8de"/></g>
+  <path d="M5 -6 L-10 -26" stroke="#6a4a2a" stroke-width="2" stroke-linecap="round"/>${eve?'':`<g transform="translate(0 4)"><path d="M-9 6 L9 -4 M9 6 L-9 -4" stroke="#6a4a2a" stroke-width="1.7"/><path d="M-10 -5 L0 -2 L10 -5 L10 -1 L0 2 L-10 -1Z" fill="#f4efe2" stroke="#a08a5e" stroke-width=".5"/></g>`}`; }
+function nuraSeated(eve){ const sk='#4a2c1e'; return `<ellipse cx="0" cy="3" rx="22" ry="4" fill="rgba(0,0,0,.3)"/>${eve?`<g transform="translate(26 0)"><path d="M-7 2 l14 -4 M-6 -3 l12 5" stroke="#4a3020" stroke-width="2.6" stroke-linecap="round"/><path class="flm" d="M0 -1 Q-5 -9 0 -18 Q2 -11 4 -14 Q7 -6 0 -1Z" fill="#ffb347"/><circle cx="0" cy="-6" r="20" fill="#ffb347" opacity=".14"/></g>`:''}
+  <path d="M-15 0 Q-16 -16 -8 -24 Q0 -28 8 -24 Q16 -16 15 0Z" fill="#3e4f6e" stroke="rgba(0,0,0,.3)" stroke-width=".6"/><g class="${eve?'':'trock'}"><path d="M-9 -26 Q-10 -38 -5 -40 Q0 -42 5 -40 Q10 -38 9 -26 Q11 -19 14 -16 Q0 -12 -14 -16 Q-11 -19 -9 -26Z" fill="#e8dcc4" stroke="rgba(0,0,0,.25)" stroke-width=".5"/><ellipse cx="0" cy="-31" rx="4.6" ry="5.6" fill="${sk}"/></g>
   <path d="M5 -6 L-10 -26" stroke="#6a4a2a" stroke-width="2" stroke-linecap="round"/>${eve?'':`<g transform="translate(0 4)"><path d="M-9 6 L9 -4 M9 6 L-9 -4" stroke="#6a4a2a" stroke-width="1.7"/><path d="M-10 -5 L0 -2 L10 -5 L10 -1 L0 2 L-10 -1Z" fill="#f4efe2" stroke="#a08a5e" stroke-width=".5"/></g>`}`; }
 function wiseLayer(q){ if(q!=='roser'||S.active) return ''; const lamp=lampDue(); return `<g class="wise" style="cursor:pointer" transform="translate(46 486) scale(1.05)">${wiseSeated()}<rect x="-24" y="-48" width="58" height="56" fill="transparent"/></g>${lamp?`<g onclick="event.stopPropagation();lampTap()" style="cursor:pointer" transform="translate(82 486)"><path d="M-4 -10 h8 l3 4 v9 l-3 4 h-8 l-3 -4 v-9Z" fill="#2a1a0e" stroke="#d9b25f" stroke-width=".8"/><rect x="-26" y="-30" width="52" height="44" fill="transparent"/></g>`:''}`; }
 function lampTap(){ S.lamp={d:dayStr()}; taskHit('lampe'); save(); renderSection(); haptic([8,30,8]); snd.chime([659,784,988],.05);
@@ -2896,7 +2900,10 @@ function postTap(){ if(R2) return hudDeliver(); const f=_postShow; _postShow=nul
 /* Tårnet i skyggen */
 const shadowOp=()=>{ if(KAHWA&&kt().heal) return .25; const n=SIGNS.filter(g=>!g.fri&&(S.signs||{})[g.id]).length, T=SIGNS.filter(g=>!g.fri).length||1; return Math.max(.25,.85-.6*n/T); };
 
-function WN(){ return R2?'Shaykh Nūr':'Vismannen'; } function WNU(){ return R2?'SHAYKH NŪR':'VISMANNEN'; }
+function FEMW(){ return !!(R2&&!KAHWA&&S&&S.settings&&S.settings.gender==='f'); }
+function WN(){ return R2?(FEMW()?'Umm Nūra':'Shaykh Nūr'):'Vismannen'; } function WNU(){ return R2?(FEMW()?'UMM NŪRA':'SHAYKH NŪR'):'VISMANNEN'; }
+const FEMSWAP=[['SHAYKH NŪR','UMM NŪRA'],['Shaykh Nūr','Umm Nūra'],['Lampen hans','Lampen hennes'],['lampen hans','lampen hennes'],['Trykk på ham når du lurer','Trykk på henne når du lurer'],['Han leser Koranen','Hun leser Koranen'],['den vise mannen','den vise kvinnen'],['Vismannen sitter','Umm Nūra sitter'],['Jeg pleier å faste da','Jeg pleier å faste da']];
+function femTxt(t){ if(typeof t!=='string'||!FEMW()) return t; FEMSWAP.forEach(([a,b])=>{ t=t.split(a).join(b); }); return t; }
 /* ================= 2.0: BYGG I HORISONTEN ================= */
 const FRI=()=>QUADS.findIndex(x=>x.id==='frukt');
 function suqSvg(){ const lamps=[[128,299],[150,304],[172,307],[228,305],[252,301],[274,297]];
@@ -3170,7 +3177,7 @@ function tour0(){ const q=id=>QUADS.findIndex(x=>x.id===id), F=isF()?'gjeterinne
   const T2=[
    {q:'roser',center:1,w:1,k:WNU(),t:'Velkommen til Rawdah',d:W(`As-salāmu ʿalaykum, ${F}. Jeg heter Shaykh Nūr. Velkommen til hagen, eller det som er igjen av den. Kom, så går vi en runde, så du vet hva du kan gjøre i hver hage.`)},
    {q:'roser',el:'#items .wise',pad:12,round:30,w:1,k:'ROSEHAGEN',t:'Her finner du meg',d:W('Om dagen sitter jeg her og leser Koranen, om kvelden ved bålet. Trykk på meg når du lurer på noe.')},
-   {q:'roser',full:1,w:1,k:'ROSEHAGEN',t:'Rosene dine',d:W('Hvert vers du leser, blir en rose her. Dagen etter kommer den som en knopp: vann den ved å fylle inn ordet som mangler. Henger en gammel rose med hodet, er det tid for å repetere den. Når 36 roser har blomstret, bindes de til en bukett.')},
+   {q:'roser',full:1,w:1,k:'ROSEHAGEN',t:'Rosene dine',d:W('Hvert vers du leser, blir en rose her. Dagen etter står den som en knopp, og når du vanner den, springer den ut. Henger en gammel rose med hodet, er det tid for å repetere den. Når 36 roser har blomstret, bindes de til en bukett.')},
    {q:'roser',center:1,w:1,k:'ROSEHAGEN',t:'Hageporten',d:W('Her lander hærfuglen når han har med et brev fra reisen. Da får du beskjed, og han kommer med brevet til deg.')},
    {q:'roser',el:'#learnBtn',pad:6,w:1,k:'SKATTER',t:'Dagens ord',d:W('Her oppe ligger Skatter. Der venter et nytt arabisk ord fra Koranen hver dag, og alt du finner i hagen samles der.')},
    {q:'roser',el:'#taskPill',if:()=>$('taskPill').style.display!=='none',pad:6,w:1,k:'DAGENS OPPGAVER',t:'Små ting hver dag',d:W('Her står det du kan gjøre i dag. Dagens vers står alltid øverst. Trykk på en oppgave, så viser jeg deg hvor den er.')},
@@ -3185,7 +3192,7 @@ function tour0(){ const q=id=>QUADS.findIndex(x=>x.id===id), F=isF()?'gjeterinne
    {q:'roser',el:'#noteBtn',if:()=>!!(TCFG&&TCFG.notes&&$('noteBtn')),pad:8,round:30,w:1,k:'NOTATBOKA',t:'Før du begynner',d:W('Du tester en tidlig versjon. Ser du feil, blir forvirret eller får en idé, trykk på spørsmålstegnet og skriv det ned med én gang. Appen husker selv hvor du var.')+(TCFG&&TCFG.noteLock?' Notatene sendes til Ibrahim når testuka er ferdig.':'')},
    {q:'roser',el:'#beacons .bstar path',pad:30,round:80,w:1,k:'STJERNEN',t:'Alt begynner med ett vers',d:W('Ser du stjernen? Det er den siste flammen fra lykta, satt på himmelen av hærfuglen. Hver dag gir den deg ett vers. Trykk på den når du er klar.'),last:'Bismillāh'}];
   const steps=[
-   {q:'roser',center:1,w:1,k:WNU(),t:'Velkommen til Rawdah',d:W(`As-salāmu ʿalaykum, ${F}. ${R2?'Jeg heter Shaykh Nūr. ':''}Velkommen til hagen, eller det som er igjen av den. Kom, så viser jeg deg rundt.`)},
+   {q:'roser',center:1,w:1,k:WNU(),t:'Velkommen til Rawdah',d:W(`As-salāmu ʿalaykum, ${F}. ${R2?'Jeg heter '+WN()+'. ':''}Velkommen til hagen, eller det som er igjen av den. Kom, så viser jeg deg rundt.`)},
    {q:'roser',el:'#items .wise',pad:12,round:30,w:1,k:WNU(),t:'Her finner du meg',d:W('Som regel sitter jeg her med Koranen. Trykk på meg når du lurer på noe.')},
    {q:'roser',svg:[195,560,240,170],zoom:1.5,w:1,k:'ROSEHAGEN',t:'Her skal rosene dine vokse',d:W('Hver rose er et vers du har lest og bygd. Det er plass til 36. Du kan alltid trykke på en rose for å høre verset igjen.')},
    {q:'roser',el:'#taskPill',if:()=>$('taskPill').style.display!=='none',pad:6,w:1,k:'DAGENS OPPGAVER',t:'Tre små ting hver dag',d:W('Den viktigste står alltid øverst: dagens vers. Nederst står dagens gode gjerning. Den er mellom deg og Allah.')},
@@ -3218,13 +3225,13 @@ function tourRun(steps,done,opt){ opt=opt||{}; if($('tour')) return; steps=steps
     if(st.pre){ d.style.visibility='hidden'; unzoom(); await st.pre(); d.style.visibility=''; }
     if(st.q){ const qi=QUADS.findIndex(x=>x.id===st.q); if(qi>=0&&(view!=='sec'||curQ!==qi)){ unzoom(); $('tCard').classList.remove('on'); if(opt.walk){ d.classList.add('walking'); if(wx>-50) await walk(440,1300); } enterQuad(qi); await new Promise(r=>setTimeout(r,650)); if(opt.walk){ wx=-70; wPlace(); await walk(70,1700); d.classList.remove('walking'); } } else if(opt.walk&&wx<0){ d.classList.add('walking'); await walk(70,1500); d.classList.remove('walking'); } }
     if(st.scroll){ const e=typeof st.el==='function'?st.el():document.querySelector(st.el), sh=$('sheet'); if(e&&sh){ sh.scrollTop+=e.getBoundingClientRect().top-sh.getBoundingClientRect().top-sh.clientHeight*.45; } }
-    d.classList.toggle('full',!!st.full); let r; if(st.center||st.full) r={x:innerWidth/2,y:innerHeight*.42,w:0,h:0}; else { const oT=sv.style.transform, oTr=sv.style.transition; sv.style.transition='none'; sv.style.transform=''; r=tourRect(st); sv.style.transform=oT; void sv.offsetWidth; sv.style.transition=oTr; } if(!r){ i++; if(i<steps.length) return show(); return end(); }
+    d.classList.toggle('full',!!st.full); d.classList.toggle('tnote',st.el==='#noteBtn'); let r; if(st.center||st.full) r={x:innerWidth/2,y:innerHeight*.42,w:0,h:0}; else { const oT=sv.style.transform, oTr=sv.style.transition; sv.style.transition='none'; sv.style.transform=''; r=tourRect(st); sv.style.transform=oT; void sv.offsetWidth; sv.style.transition=oTr; } if(!r){ i++; if(i<steps.length) return show(); return end(); }
     let s=1; if(st.zoom){ s=st.zoom; const vr=$('vSec').getBoundingClientRect(), cx=r.x+r.w/2, cy=r.y+r.h/2; sv.style.willChange='transform'; sv.style.transition='transform .9s cubic-bezier(.3,.7,.2,1)'; sv.style.transformOrigin=`${cx-vr.left}px ${cy-vr.top}px`; sv.style.transform=`scale(${s})`; r={x:cx-r.w*s/2,y:cy-r.h*s/2,w:r.w*s,h:r.h*s}; } else unzoom();
     const pad=st.center?0:st.pad==null?8:st.pad, sp=$('tSpot'), c=$('tCard'), W=innerWidth, H=innerHeight;
     const R={x:Math.max(4,r.x-pad),y:Math.max(4,r.y-pad)}; R.w=Math.min(W-8,r.w+pad*2); R.h=Math.min(H-8,r.h+pad*2);
     Object.assign(sp.style,{left:R.x+'px',top:R.y+'px',width:R.w+'px',height:R.h+'px',borderRadius:(st.round||Math.min(18,R.h/2))+'px'});
     c.classList.remove('on'); setTimeout(()=>{
-      c.innerHTML=`<div class="tk">${esc(st.k||'')}<span>${i+1} / ${steps.length}</span></div>${st.w?`<div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:0 0 40px;margin-top:2px">${wiseIcon().replace('width="46" height="80"','width="40" height="70"')}</div><div style="flex:1"><h4>${esc(st.t)}</h4><p>${st.d}</p></div></div>`:`<h4>${esc(st.t)}</h4><p>${st.d}</p>`}<button class="btn" id="tNext">${st.btn||(i===steps.length-1?(st.last||'Skjønner!'):'Neste')}</button>`;
+      const sx={...st,k:femTxt(st.k),t:femTxt(st.t),d:femTxt(st.d)}; c.innerHTML=`<div class="tk">${esc(sx.k||'')}<span>${i+1} / ${steps.length}</span></div>${sx.w?`<div style="display:flex;gap:10px;align-items:flex-start"><div style="flex:0 0 40px;margin-top:2px">${wiseIcon().replace('width="46" height="80"','width="40" height="70"')}</div><div style="flex:1"><h4>${esc(sx.t)}</h4><p>${sx.d}</p></div></div>`:`<h4>${esc(sx.t)}</h4><p>${sx.d}</p>`}<button class="btn" id="tNext">${sx.btn||(i===steps.length-1?(sx.last||'Skjønner!'):'Neste')}</button>`;
       const below=!st.center&&!st.full&&R.y+R.h/2<H*.52; if(st.center||st.full){ c.style.top=Math.max(20,H*.42-c.offsetHeight/2)+'px'; c.style.bottom=''; c.classList.add('on'); $('tNext').onclick=()=>{ haptic(6); i++; i<steps.length?show():end(); }; return; } c.style.top=below?Math.min(H-c.offsetHeight-12,R.y+R.h+14)+'px':''; c.style.bottom=below?'':Math.max(12,H-R.y+14)+'px';
       if(!below&&H-(H-R.y+14)-c.offsetHeight<10){ c.style.bottom=''; c.style.top='calc(env(safe-area-inset-top,0px) + 12px)'; }
       c.classList.add('on'); $('tNext').onclick=()=>{ haptic(6); const a=st.act; i++; if(i<steps.length) show(); else end(a); }; },st.zoom?650:220); };
@@ -3260,7 +3267,7 @@ let _tourT=0; setInterval(()=>{ if(sheetBusy()&&$('toast').classList.contains('o
 function tourCheck(){ if(S.active||busy||sheetBusy()||(R2&&Date.now()-(window.__evAt||0)<evGap())||document.querySelector('.hdl,#fnScn,#suqScn,#egScn')||!S.introSeen||$('tour')||$('baytScene')||$('sheet').classList.contains('on')||$('toast').classList.contains('on')||TQ.length||$('kpB')||document.querySelector('.coin,.starfly')||SQ.length||$('intro').classList.contains('on')||document.querySelector('.veil,.kbub.thanks,.coin')) { _tourT=0; return; }
   if(!_tourT){ _tourT=Date.now(); return; } if(Date.now()-_tourT<3200) return; _tourT=0;
   if(!S.tour1){ S.tour1=1; save(); return; }
-  if(R2&&S.vs>=1&&!S.starNudge&&view==='sec'&&QUADS[curQ].id==='roser'&&document.querySelector('#beacons .bstar')){ S.starNudge=1; save(); window.__evAt=Date.now(); const st='#beacons .bstar';
+  if(R2&&S.vs>=1&&!S.starNudge&&S.dayDone===dayStr()&&view==='sec'&&QUADS[curQ].id==='roser'&&document.querySelector('#beacons .bstar')){ S.starNudge=1; save(); window.__evAt=Date.now(); const st='#beacons .bstar';
     return tourRun([{q:'roser',el:()=>document.querySelector(st),pad:14,round:40,w:1,k:WNU(),t:'Hm?',d:'«Hm? Stjernen lyser fortsatt … Den pleier å slukne når verset er gitt. Prøv å trykke på den igjen, da.»',last:'Ok'}]); }
   if(view!=='sec') return; const id=QUADS[curQ].id; S.qTour=S.qTour||{}; if(QTOUR[id]&&!S.qTour[id]){ S.qTour[id]=1; save(); tourRun(QTOUR[id]()); } }
 setInterval(tourCheck,700);
@@ -3289,7 +3296,9 @@ function openInbox(){ if(sqNext()) return; const L=S.inbox||[], f=d=>{ try{ retu
     _openSheet(e.html+`<p style="font-size:12px;color:var(--muted)">Fra Meldinger · ${f(e.d)}</p><button class="btn" id="ibBack">Tilbake til Meldinger</button><button class="btn ghost" id="ibX">Lukk</button>`); $('ibBack').onclick=openInbox; $('ibX').onclick=closeSheet; }); }
 
 /* ================= ROLLER: du er gjeteren, vismannen er en egen figur ================= */
-function wiseFig(id){ return sageSvg(id,'#d9d0b8','#8a7a5a','#b58a62',['#ece8de',12],TURBAN('#ece8de')).replace(`id="${id}_aR" transform="translate(8 -37)">`,`id="${id}_aR" transform="translate(8 -37)"><path d="M1 -16 L1 44" stroke="#6a4a2a" stroke-width="2.2" stroke-linecap="round"/>`); }
+const KHIMAR=(c,skin)=>`<path d="M-8.6 3 Q-10 -9 -4.5 -10.6 Q0 -12.4 4.5 -10.6 Q10 -9 8.6 3 Q10.5 10 14 15 Q0 19 -14 15 Q-10.5 10 -8.6 3Z" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width=".5"/><ellipse cx="0" cy=".6" rx="4.5" ry="5.6" fill="${skin}"/><path d="M-4.8 -3 Q0 -6.5 4.8 -3" stroke="rgba(0,0,0,.15)" fill="none"/>`;
+function nuraFig(id){ const sk='#4a2c1e'; return sageSvg(id,'#3e4f6e','#d9b25f',sk,[sk,3],KHIMAR('#e8dcc4',sk)).replace(`id="${id}_aR" transform="translate(8 -37)">`,`id="${id}_aR" transform="translate(8 -37)"><path d="M1 -16 L1 44" stroke="#6a4a2a" stroke-width="2.2" stroke-linecap="round"/>`); }
+function wiseFig(id){ if(FEMW()) return nuraFig(id); return sageSvg(id,'#d9d0b8','#8a7a5a','#b58a62',['#ece8de',12],TURBAN('#ece8de')).replace(`id="${id}_aR" transform="translate(8 -37)">`,`id="${id}_aR" transform="translate(8 -37)"><path d="M1 -16 L1 44" stroke="#6a4a2a" stroke-width="2.2" stroke-linecap="round"/>`); }
 function wiseTap(e){ if(KAHWA&&R2&&kt().finW&&!kt().fin) return kFinaleCall(); kLek('gjeter'); taskHit('vis'); keeperTap(e); }
 function wiseIcon(){ return `<svg viewBox="-24 -70 48 76" width="46" height="80" style="flex:0 0 46px">${wiseFig('wIc'+Math.random().toString(36).slice(2,6))}</svg>`; }
 /* Trykk på deg selv: hjelp med dagens oppgaver */
@@ -3783,7 +3792,7 @@ const FASTSRC='Profeten ﷺ fastet ofte mandag og torsdag. Om mandagen sa han: �
 const FASTHEALTH='Fasten er sunnah, ikke farḍ. Er du syk, gravid eller ammer, bruker du medisiner som må tas med mat, eller tåler kroppen det ikke, skal du ikke faste. Spør legen hvis du er usikker.';
 function fastRemind(){ if(!R2||!S.fastRem||S.active) return; const now=new Date(), tm=new Date(now.getTime()+864e5); if(!FASTDAY(tm)||!fastOk(tm)||S.fastAsk===dayStr()) return; S.fastAsk=dayStr(); save();
   evPush(()=>{ const dn=tm.getDay()===1?'mandag':'torsdag';
-    openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">SHAYKH NŪR · I MORGEN ER DET ${dn.toUpperCase()}</p><h3>Vil du faste i morgen?</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«I morgen er det ${dn}. Jeg pleier å faste da, slik Profeten ﷺ gjorde. Det er sunnah, ikke farḍ, så gjør det bare hvis du kan.»</p></div></div><p style="font-size:13.5px">${FASTSRC}</p><p style="font-size:12.5px;color:var(--muted)">${FASTHEALTH}</p><button class="btn" id="fsY">In shā' Allāh</button><button class="btn ghost" id="fsN">Ikke denne gangen</button>`);
+    openSheet(`<p style="color:var(--gold);letter-spacing:1px;font-size:12px;margin:0">${WNU()} · I MORGEN ER DET ${dn.toUpperCase()}</p><h3>Vil du faste i morgen?</h3><div class="card mod">${wiseIcon()}<div style="flex:1"><p style="margin:0;font-style:italic">«I morgen er det ${dn}. Jeg pleier å faste da, slik Profeten ﷺ gjorde. Det er sunnah, ikke farḍ, så gjør det bare hvis du kan.»</p></div></div><p style="font-size:13.5px">${FASTSRC}</p><p style="font-size:12.5px;color:var(--muted)">${FASTHEALTH}</p><button class="btn" id="fsY">In shā' Allāh</button><button class="btn ghost" id="fsN">Ikke denne gangen</button>`);
     $('fsY').onclick=()=>{ closeSheet(); toast('Spis suḥūr før fajr. Må Allah gjøre det lett for deg.',3200); }; $('fsN').onclick=()=>{ closeSheet(); toast('Helt i orden. Kanskje neste gang.',2400); }; },'fast'); }
 setInterval(fastRemind,15000);
 const MOVES=[
@@ -4157,7 +4166,7 @@ function playIntro(){
   let st='';for(let i=0;i<70;i++) st+=`<i style="top:${(Math.random()*100).toFixed(1)}%;width:${(20+Math.random()*60).toFixed(0)}px;animation-duration:${(.5+Math.random()*.8).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s"></i>`; $('storm').innerHTML=st;
   let du='';for(let i=0;i<40;i++) du+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*60).toFixed(1)}%;animation-duration:${(6+Math.random()*6).toFixed(1)}s;animation-delay:-${(Math.random()*6).toFixed(1)}s"></i>`; $('dust').innerHTML=du;
   $('idots').innerHTML=''; $('iModes').innerHTML='';
-  introMode='intro'; $('iSkip').style.display='none'; iStep=0; $('intro').className='on'; camSet(ISTEPS[0].from,true); prologue(()=>showStep());
+  introMode='intro'; $('iSkip').style.display=''; $('iNext').style.visibility='hidden'; iStep=0; $('intro').className='on'; camSet(ISTEPS[0].from,true); prologue(()=>showStep());
 }
 function camSet(c,instant){ const g=$('iScene'), [s,cx,cy]=c; g.style.transition=instant?'none':''; g.style.transform=`translate(${(195-cx*s).toFixed(1)}px,${(300-cy*s).toFixed(1)}px) scale(${s})`; if(instant){ void g.getBoundingClientRect(); g.style.transition=''; } }
 function showStep(){ const P=ISTEPS[iStep], el=$('intro'); el.className='on '+P.v;
@@ -4165,17 +4174,21 @@ function showStep(){ const P=ISTEPS[iStep], el=$('intro'); el.className='on '+P.
   if(P.you) $('iYou').style.transform=`translate(${P.you[0]}px,${P.you[1]}px) scale(1.15)`; if(P.wise) $('iWiseI').style.transform=`translate(${P.wise[0]}px,${P.wise[1]}px) scale(.95)`;
   const cap=$('icap'); cap.classList.remove('on');
   setTimeout(()=>{ let h=P.cap; if(P.choose&&!S.settings.gender) h+=`<span class="ichoose"><span>Hvem kommer gående over hagen?</span><button class="gb gold igb" data-g="m">En gjeter</button><button class="gb gold igb" data-g="f">En gjeterinne</button></span>`;
-    cap.innerHTML=h; cap.classList.add('on'); cap.querySelectorAll('[data-g]').forEach(b=>b.onclick=ev=>{ ev.stopPropagation(); S.settings.gender=b.dataset.g; save(); $('iYou').innerHTML=shepherdSvg(0,0).replace('class="walk"',''); snd.chime([523,659,784],.05); iStep++; showStep(); }); },iStep?700:300);
+    cap.innerHTML=h; cap.classList.add('on'); cap.querySelectorAll('[data-g]').forEach(b=>b.onclick=ev=>{ ev.stopPropagation(); S.settings.gender=b.dataset.g; save(); $('iYou').innerHTML=shepherdSvg(0,0).replace('class="walk"',''); { const w=$('iWiseI'); if(w){ const tmp=document.createElementNS('http://www.w3.org/2000/svg','g'); tmp.innerHTML=wiseFig('iWm'); const old=w.querySelector('#iWm'); if(old) old.replaceWith(tmp.firstChild); } } snd.chime([523,659,784],.05); iStep++; showStep(); }); },iStep?700:300);
   if(P.chime) setTimeout(()=>snd.chime([523,659,784,1047],.08),2600);
-  iShownAt=Date.now(); { const nb=$('iNext'), w=iDwell(); nb.classList.add('wait'); clearTimeout(nb._t); nb._t=setTimeout(()=>nb.classList.remove('wait'),w); nb.style.visibility=(P.choose&&!S.settings.gender)?'hidden':''; }
+  iShownAt=Date.now(); iAuto(); { const nb=$('iNext'), w=iDwell(); nb.classList.add('wait'); clearTimeout(nb._t); nb._t=setTimeout(()=>nb.classList.remove('wait'),w); nb.style.visibility=(P.choose&&!S.settings.gender)?'hidden':''; }
   if(P.v.startsWith('s3')){ snd.puff(); setTimeout(()=>snd.puff(),700); setTimeout(()=>snd.puff(),1400); }
   $('iNext').textContent=P.last?'Bli med vismannen':'Trykk for å fortsette'; }
 let iTapT=0, iShownAt=0; window.__iGo=n=>{ iStep=n; showStep(); };
+function iAutoDur(){ const P=ISTEPS[iStep]; if(!P) return 0; const L=P.cap.replace(/<span class="iva">.*?<\/span>/g,'').replace(/<[^>]+>/g,'').length, ar=/class="iva"/.test(P.cap); return Math.min(15000,2000+L*50+(ar?3500:0)+(P.v.startsWith('s3')?1200:0)); }
+function iAuto(){ clearTimeout(window._iAuto); const pr=$('iProg'); if(introMode!=='intro'){ if(pr) pr.style.opacity=0; return; } const P=ISTEPS[iStep]; if(!P||(P.choose&&!S.settings.gender)){ if(pr){ pr.style.transition='none'; pr.style.width='0'; pr.style.opacity=0; } return; }
+  const d=iAutoDur(), me=iStep; if(pr){ pr.style.transition='none'; pr.style.width='0'; pr.style.opacity=1; void pr.offsetWidth; pr.style.transition=`width ${d}ms linear`; pr.style.width='100%'; }
+  window._iAuto=setTimeout(()=>{ if(introMode!=='intro'||iStep!==me||!$('intro').classList.contains('on')) return; if(iStep<ISTEPS.length-1){ iStep++; showStep(); } else endIntro(); },d); }
 function iDwell(){ const P=ISTEPS[iStep]; if(!P) return 0; if(window.__iFast&&!(P.choose&&!S.settings.gender)) return 0; if(P.choose&&!S.settings.gender) return 9e9; const L=P.cap.replace(/<span class="iva">.*?<\/span>/g,'').replace(/<[^>]+>/g,'').length; return Math.max(P.v.startsWith('s3')?3600:0,Math.min(7000,1500+L*24)); }
-$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(introMode==='intro'&&Date.now()-iShownAt<iDwell()) return; if(iStep<ISTEPS.length-1){ iStep++; showStep(); } else endIntro(); };
+$('iNext').onclick=ev=>{ if(ev) ev.stopPropagation(); if(Date.now()-iTapT<450) return; iTapT=Date.now(); if(introMode==='chapter') return endChapter(); if(introMode==='intro'&&(Date.now()-iShownAt<900||(ISTEPS[iStep]&&ISTEPS[iStep].choose&&!S.settings.gender))) return; if(iStep<ISTEPS.length-1){ iStep++; showStep(); } else endIntro(); };
 
 $('intro').addEventListener('click',e=>{ if(!$('intro').classList.contains('on')||e.target.closest('#iSkip,a,input,select,.ichoose')) return; $('iNext').onclick(); });
-$('iSkip').onclick=()=>introMode==='chapter'?endChapter():endIntro();
+$('iSkip').onclick=ev=>{ if(ev) ev.stopPropagation(); if(introMode==='chapter') return endChapter(); clearTimeout(window._iAuto); if(introMode==='intro'&&!S.settings.gender){ iStep=ISTEPS.findIndex(p=>p.choose); return showStep(); } endIntro(); };
 const CHAPTERS=[
   ['Hærfuglen flyr ut igjen.','Rosene blomstrer, og hærfuglen har begynt å reise. Den kommer hjem med brev fra fjerne land. (25 %)'],
   ['Fontenen synger igjen.','Vannet finner veien gjennom kanalene, og lyktene tennes én etter én. (50 %)'],
@@ -4190,7 +4203,7 @@ function playChapter(n){ introMode='chapter'; $('iSkip').style.display=''; $('in
   const cap=$('icap'); cap.classList.remove('on'); setTimeout(()=>{ cap.innerHTML=`<span style="font-size:13px;letter-spacing:1px;color:var(--gold)">KAPITTEL ${n+1}</span><br>${CHAPTERS[n-1][0]}<small>${CHAPTERS[n-1][1]}</small>`; cap.classList.add('on'); },500);
   $('iNext').textContent='Fortsett'; snd.chime([523,659,784,1047],.08); logEvent(`Kapittel ${n+1}: ${CHAPTERS[n-1][0]}`); }
 function endChapter(){ introMode='intro'; $('iScene').style.filter=''; $('intro').className=''; renderAll(); if(S._hintPend){ S._hintPend=false; setTimeout(()=>{ if(!$('sheet').classList.contains('on')) maybeSignHint(); else S._hintPend=true; },1200); } }
-function endIntro(){ $('intro').className=''; introMode=null; S.introSeen=true; if(!S.settings.gender) S.settings.gender='m'; save();
+function endIntro(){ clearTimeout(window._iAuto); $('iNext').style.visibility=''; $('intro').className=''; introMode=null; S.introSeen=true; if(!S.settings.gender) S.settings.gender='m'; save();
   const ri=QUADS.findIndex(q=>q.id==='roser'); enterQuad(ri); renderAll();
   if(!S.tour0) setTimeout(tour0,900); }
 
@@ -4240,7 +4253,7 @@ function automationHTML(url){
 const NURLV=[[0,'Glød'],[40,'Talglys'],[120,'Lampe'],[260,'Lykt'],[480,'Fakkel'],[800,'Fullmåne'],[1300,'Morgenrøde']];
 const PALV=[0,0,1,2,2,3,4]; function palSync(i){ const t=PALV[i]||0; if(R2&&t>(S.palace||0)){ S.palace=t; save(); drawHorizon(); evPush(()=>{ snd.chime([523,659,784,1047],.07); toast(`Lyset ditt bygger: palasset har fått trinn ${t} av 4 🕌`,3800); },'pal'+t); } }
 function nurLv(n){ n=n==null?S.nur:n; let i=0; NURLV.forEach((l,k)=>{ if(n>=l[0]) i=k; }); return i; }
-function renderTop(){ if(R2){ document.body.classList.add('r2'); $('bookLbl').textContent='Dagbok'; { const l=$('learnBtn').querySelector('.ibl'); if(l) l.textContent='Skatter'; } const i=nurLv(); $('nur').textContent=S.nur; if(!$('nurLv')) $('nurChip').innerHTML='<b id="rest">0%</b> · ✦ <b id="nurLv"></b><b id="nur" hidden>0</b>'; $('nurLv').textContent=NURLV[i][1]; palSync(i); if(S.nurLv!=null&&i>S.nurLv){ S.nurLv=i; save(); setTimeout(()=>toast(`Lyset ditt har vokst: ${NURLV[i][1]} ✦`,3600),1200); } else if(S.nurLv==null){ S.nurLv=i; save(); } } $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
+function renderTop(){ document.body.classList.toggle('pre0',!!(R2&&!S.tour0)); if(R2){ document.body.classList.add('r2'); $('bookLbl').textContent='Dagbok'; { const l=$('learnBtn').querySelector('.ibl'); if(l) l.textContent='Skatter'; } const i=nurLv(); $('nur').textContent=S.nur; if(!$('nurLv')) $('nurChip').innerHTML='<b id="rest">0%</b> · ✦ <b id="nurLv"></b><b id="nur" hidden>0</b>'; $('nurLv').textContent=NURLV[i][1]; palSync(i); if(S.nurLv!=null&&i>S.nurLv){ S.nurLv=i; save(); setTimeout(()=>toast(`Lyset ditt har vokst: ${NURLV[i][1]} ✦`,3600),1200); } else if(S.nurLv==null){ S.nurLv=i; save(); } } $('nur').textContent=S.nur; $('rest').textContent=restorePct()+' %'; }
 function renderAll(){ updateGates(); updHikmaPill(); if(KAHWA) $('kahwaBtn').style.display=S.active?'none':''; if(JABAL) updJabalBtn(); renderTasks(); renderTop(); drawLanterns(); updatePings(); if(view==='over') renderCarpet(); else renderSection(); }
 stage.classList.toggle('showtl',!!S.settings.tl); $('aTl').classList.toggle('on',!!S.settings.tl); $('qTlB').classList.toggle('on',!!S.settings.tl);
 S.farm=S.farm||{fence:0,stall:false,trau:false}; S.young=S.young||[]; S.korn=S.korn??0; S.fiskemat=S.fiskemat??5; S.daysTotal=S.daysTotal??(S.doneDays||[]).length; rOrder(); S.feed=S.feed??10; S.eggs=S.eggs||{}; S.oil=S.oil??5; S.goods=Object.assign({ull:0,melk:0,egg:0,frukt:0,honning:0},S.goods||{}); S.picks=S.picks||[]; S.themes=S.themes||{}; S.upg=S.upg||{}; S.palace=S.palace||0; S.fish=S.fish||0; S.flock.hens=S.flock.hens||0; S.flock.goats=S.flock.goats||0;
